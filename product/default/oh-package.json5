@@ -1,0 +1,12 @@
+{
+  "name": "default",
+  "version": "1.0.0",
+  "description": "随易App",
+  "main": "Index.ets",
+  "author": "闫东阳",
+  "license": "",
+  "dependencies": {
+      "@ohos/common": "file:../../common",
+      "@ohos/setting": "file:../../feature/setting"
+  }
+}

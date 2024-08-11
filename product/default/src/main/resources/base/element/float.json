@@ -1,0 +1,76 @@
+{
+  "float": [
+    {
+      "name": "card_title_font_size",
+      "value": "14fp"
+    },
+    {
+      "name": "item_font_size",
+      "value": "12fp"
+    },
+    {
+      "name": "maximum_padding",
+      "value": "12vp"
+    },
+    {
+      "name": "item_margin_top",
+      "value": "2vp"
+    },
+    {
+      "name": "image_margin_bottom",
+      "value": "8vp"
+    },
+    {
+      "name": "info_column_padding",
+      "value": "12vp"
+    },
+    {
+      "name": "info_column_width",
+      "value": "106vp"
+    },
+    {
+      "name": "info_column_height",
+      "value": "120vp"
+    },
+    {
+      "name": "image_border_radius",
+      "value": "8vp"
+    },
+    {
+      "name": "image_width",
+      "value": "56vp"
+    },
+    {
+      "name": "image_height",
+      "value": "56vp"
+    },
+    {
+      "name": "login_font_size",
+      "value": "18fp"
+    },
+    {
+      "name": "login_height",
+      "value": "24vp"
+    },
+    {
+      "name": "login_padding_left",
+      "value": "12vp"
+    },
+    {
+      "name": "login_margin_top",
+      "value": "24vp"
+    },
+    {
+      "name": "login_area_height",
+      "value": "80vp"
+    },
+    {
+      "name": "main_padding_left",
+      "value": "12vp"
+    },
+    {
+      "name": "main_padding_right",
+      "value": "12vp"
+    }
+  ]
+}

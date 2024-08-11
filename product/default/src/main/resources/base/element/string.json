@@ -1,0 +1,132 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "随易APP"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "UIAbility组件"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "label"
+    },
+    {
+      "name": "page_name1",
+      "value": "EasyRandom"
+    },
+    {
+      "name": "DefaultFormAbility_desc",
+      "value": "form_description"
+    },
+    {
+      "name": "DefaultFormAbility_label",
+      "value": "form_label"
+    },
+    {
+      "name": "CardRandomColor_desc",
+      "value": "A Card For RandomColor Page"
+    },
+    {
+      "name": "CardRandomColor_display_name",
+      "value": "CardRandomColor"
+    },
+    {
+      "name": "card_title",
+      "value": "Title"
+    },
+    {
+      "name": "introduction",
+      "value": "Introduction"
+    },
+    {
+      "name": "widget_desc",
+      "value": "This is a service widget."
+    },
+    {
+      "name": "widget_display_name",
+      "value": "widget"
+    },
+    {
+      "name": "login",
+      "value": "Sign in/Sign up>"
+    },
+    {
+      "name": "personalInfo",
+      "value": "Personal info"
+    },
+    {
+      "name": "avatar",
+      "value": "Profile picture"
+    },
+    {
+      "name": "nickname",
+      "value": "Nickname"
+    },
+    {
+      "name": "inputNickname",
+      "value": "Set"
+    },
+    {
+      "name": "inputPhone",
+      "value": "Authorize"
+    },
+    {
+      "name": "phone",
+      "value": "Mobile number"
+    },
+    {
+      "name": "dearUser",
+      "value": "Dear user>"
+    },
+    {
+      "name": "hwid_no_internet_connect",
+      "value": "No Internet connection. Check your network settings."
+    },
+    {
+      "name": "hwid_text_button_known",
+      "value": "OK"
+    },
+    {
+      "name": "agree",
+      "value": "I have read and agree to "
+    },
+    {
+      "name": "privacy",
+      "value": "Privacy Policy"
+    },
+    {
+      "name": "and",
+      "value": " and "
+    },
+    {
+      "name": "protocols",
+      "value": "User Service Agreement"
+    },
+    {
+      "name": "others",
+      "value": "Sign in another way"
+    },
+    {
+      "name": "end",
+      "value": "."
+    },
+    {
+      "name": "appName",
+      "value": "随易"
+    },
+    {
+      "name": "appDesc",
+      "value": "随时随地 轻松容易"
+    },
+    {
+      "name": "Form_RollBlessings_desc",
+      "value": "祝福木鱼."
+    },
+    {
+      "name": "Form_RollBlessings_display_name",
+      "value": "获得祝福的木鱼"
+    }
+  ]
+}

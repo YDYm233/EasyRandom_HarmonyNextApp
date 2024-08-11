@@ -1,0 +1,48 @@
+{
+  "forms": [
+    {
+      "name": "widget",
+      "displayName": "$string:widget_display_name",
+      "description": "$string:widget_desc",
+      "src": "./ets/widget/pages/Form_RollWheel.ets",
+      "uiSyntax": "arkts",
+      "window": {
+        "designWidth": 720,
+        "autoDesignWidth": true
+      },
+      "colorMode": "auto",
+      "isDynamic": true,
+      "isDefault": true,
+      "updateEnabled": false,
+      "scheduledUpdateTime": "10:30",
+      "updateDuration": 1,
+      "defaultDimension": "2*2",
+      "supportDimensions": [
+        "2*2",
+        "4*4"
+      ]
+    },
+    {
+      "name": "Form_RollBlessings",
+      "displayName": "$string:Form_RollBlessings_display_name",
+      "description": "$string:Form_RollBlessings_desc",
+      "src": "./ets/form_rollblessings/pages/Form_RollBlessingsCard.ets",
+      "uiSyntax": "arkts",
+      "window": {
+        "designWidth": 720,
+        "autoDesignWidth": true
+      },
+      "colorMode": "auto",
+      "isDynamic": true,
+      "isDefault": false,
+      "updateEnabled": false,
+      "scheduledUpdateTime": "10:30",
+      "updateDuration": 1,
+      "defaultDimension": "2*2",
+      "supportDimensions": [
+        "2*2",
+        "4*4"
+      ]
+    }
+  ]
+}

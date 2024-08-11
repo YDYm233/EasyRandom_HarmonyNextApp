@@ -1,0 +1,65 @@
+{
+  "app": {
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "storePassword": "000000195B60A356A3B473F3A5740784C912CA04C9A516FCFEA49331BE69B83016AEED97B2EE7F26B5",
+          "certpath": "D:/WorkSpace/Product/签名/EasyRandom.cer",
+          "keyAlias": "EasyRandom_P12",
+          "keyPassword": "00000019193203DEEB22D70AB27AF4F289B78CE485E2889DF8B7B5FBCFD5E6ADCC84CB52A5A73064F3",
+          "profile": "D:/WorkSpace/Product/签名/随易APPRelease.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "D:/WorkSpace/Product/签名/EasyRandom.p12"
+        }
+      }
+    ],
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "default",
+        "compatibleSdkVersion": "5.0.0(12)",
+        "runtimeOS": "HarmonyOS",
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug",
+      },
+      {
+        "name": "release"
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "default",
+      "srcPath": "./product/default",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "common",
+      "srcPath": "./common",
+    },
+    {
+      "name": "setting",
+      "srcPath": "./feature/setting",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    }
+  ]
+}
