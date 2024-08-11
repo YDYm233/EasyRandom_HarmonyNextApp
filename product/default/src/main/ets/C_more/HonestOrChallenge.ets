@@ -217,7 +217,7 @@ struct HonestOrChallenge{
           this.HorC=false
           promptAction.openCustomDialog({
             builder: () => {
-              this.customDialogBuilder()
+              this.customDialogBuilder()//22
             },
             showInSubWindow: false,
             alignment:DialogAlignment.Center,
