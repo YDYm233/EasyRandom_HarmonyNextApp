@@ -116,7 +116,7 @@ struct YangYao {
 }
 
 @Component
-struct Can {
+struct Kan {
   build() {
     Column() {
       YinYao().layoutWeight(1)
@@ -127,7 +127,78 @@ struct Can {
     }.backgroundColor($r("app.color.Yang")).aspectRatio(4 / 3)
   }
 }
-
+@Component
+struct Kun{
+  build() {
+    Column() {
+      YinYao().layoutWeight(1)
+      Row().layoutWeight(1)
+      YinYao().layoutWeight(1)
+      Row().layoutWeight(1)
+      YinYao().layoutWeight(1)
+    }.backgroundColor($r("app.color.Yang")).aspectRatio(4 / 3)
+  }
+}
+@Component
+struct Zhen{
+  build() {
+    Column() {
+      YangYao().layoutWeight(1)
+      Row().layoutWeight(1)
+      YinYao().layoutWeight(1)
+      Row().layoutWeight(1)
+      YinYao().layoutWeight(1)
+    }.backgroundColor($r("app.color.Yang")).aspectRatio(4 / 3)
+  }
+}
+@Component
+struct Xun{
+  build() {
+    Column() {
+        YinYao().layoutWeight(1)
+        Row().layoutWeight(1)
+        YangYao().layoutWeight(1)
+        Row().layoutWeight(1)
+        YangYao().layoutWeight(1)
+    }.backgroundColor($r("app.color.Yang")).aspectRatio(4 / 3)
+  }
+}
+@Component
+struct Qian{
+  build() {
+    Column() {
+      YangYao().layoutWeight(1)
+      Row().layoutWeight(1)
+      YangYao().layoutWeight(1)
+      Row().layoutWeight(1)
+      YangYao().layoutWeight(1)
+    }.backgroundColor($r("app.color.Yang")).aspectRatio(4 / 3)
+  }
+}
+@Component
+struct Dui{
+  build() {
+    Column() {
+      YangYao().layoutWeight(1)
+      Row().layoutWeight(1)
+      YangYao().layoutWeight(1)
+      Row().layoutWeight(1)
+      YinYao().layoutWeight(1)
+    }.backgroundColor($r("app.color.Yang")).aspectRatio(4 / 3)
+  }
+}
+@Component
+struct Gen{
+  build() {
+    Column() {
+      YinYao().layoutWeight(1)
+      Row().layoutWeight(1)
+      YinYao().layoutWeight(1)
+      Row().layoutWeight(1)
+      YangYao().layoutWeight(1)
+    }.backgroundColor($r("app.color.Yang")).aspectRatio(4 / 3)
+  }
+}
 @Component
 struct Li {
   build() {
@@ -147,7 +218,8 @@ struct Bagua {
   @State widthPer: string = this.widthRate.toString() + '%';
   @State heightMargin:string = 3+'%'
   @State widthMargin: string = ((100 - this.widthRate) / 2).toString() + '%';
-  @State angles: Array<number> = [0, 45, 90, 135, 180, 225, 270, 315];
+  @State all:Array<string>=['坎','坤','震','巽','太极','乾','兑','艮','离']
+  @State angles: Array<number> = [180, 45, 270, 315, 135, 90, 225, 0];
   @State isRoll: boolean = false;
   @State duration: number = 5000;
   @State angle: number = 0;
@@ -162,11 +234,11 @@ struct Bagua {
         .width('100%')
         .height('100%')
         .position({ top: 0, left: 0 })
-        .rotate({ angle: this.angles[0] })
+        .rotate({ angle: 0})
 
 
         Row() {
-          Can()
+          Kan()
             .width(this.widthPer)
             .position({ y: this.heightMargin, x: this.widthMargin })
         }
@@ -185,7 +257,7 @@ struct Bagua {
 
 
         Row() {
-          Li()
+          Kun()
             .width(this.widthPer)
             .position({ y: this.heightMargin, x: this.widthMargin })
         }
@@ -202,7 +274,7 @@ struct Bagua {
 
 
         Row() {
-          Can()
+          Zhen()
             .width(this.widthPer)
             .position({ y: this.heightMargin, x: this.widthMargin })
         }
@@ -220,7 +292,7 @@ struct Bagua {
 
 
         Row() {
-          Can()
+          Xun()
             .width(this.widthPer)
             .position({ y: this.heightMargin, x: this.widthMargin })
         }
@@ -237,7 +309,7 @@ struct Bagua {
 
 
         Row() {
-          Can()
+          Qian()
             .width(this.widthPer)
             .position({ y: this.heightMargin, x: this.widthMargin })
         }
@@ -254,7 +326,7 @@ struct Bagua {
 
 
         Row() {
-          Can()
+          Dui()
             .width(this.widthPer)
             .position({ y: this.heightMargin, x: this.widthMargin })
         }
@@ -272,7 +344,7 @@ struct Bagua {
 
 
         Row() {
-          Can()
+          Gen()
             .width(this.widthPer)
             .position({ y: this.heightMargin, x: this.widthMargin })
         }
@@ -289,7 +361,7 @@ struct Bagua {
 
 
         Row() {
-          Can()
+          Li()
             .width(this.widthPer)
             .position({ y: this.heightMargin, x: this.widthMargin })
         }
@@ -297,13 +369,6 @@ struct Bagua {
         .height('100%')
         .position({ top: 0, left: 0 })
         .rotate({ angle: this.angles[7] })
-        .border({
-          width: 1,
-          color: 0xFF0000,
-          radius: 10,
-          style: BorderStyle.Dotted
-        })
-
       }
       .width('90%')
       .margin('5%')
@@ -315,11 +380,9 @@ struct Bagua {
       .onClick(() => {
         this.duration=3000
         this.isRoll = true;
-        this.angle = Random(0, 7, true) * 45 + 360 * 8;
+        this.angle =this.angle+this.angles[ Random(0, 7, true) ] + 360 * 8;
         setTimeout(() => {
-          this.duration=0
           this.isRoll = false;
-          this.angle=this.angle-360*8;
         }, this.duration)
       })
     }
