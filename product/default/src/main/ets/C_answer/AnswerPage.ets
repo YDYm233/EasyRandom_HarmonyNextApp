@@ -19,6 +19,13 @@ struct AnswerBook{
   @State Bvisiable:Visibility=Visibility.Visible
   @State answers:string[]=['对','不对']
   @State answer:string=this.answers[Random(0,this.answers.length-1,true)]
+  onDestory(){
+    this.angle=-180;
+    this.duration=2000
+    this.ForB=false
+    this.Fvisiable=Visibility.None
+    this.Bvisiable=Visibility.Visible
+  }
   build(){
     Column(){
       Row(){Text('请在心中默念您的问题').fontWeight(800)//.fontSize('120%')}.margin({bottom:'5%'})
