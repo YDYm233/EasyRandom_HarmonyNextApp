@@ -246,14 +246,7 @@ struct Bagua {
         .height('100%')
         .position({ top: 0, left: 0 })
         .rotate({ angle: this.angles[0] })
-        .border({
-          width: 1,
-          color: 0xFF0000,
-          radius: 10,
-          style: BorderStyle.Dotted
-        })
 
-        //.backgroundColor('#f1f3f5')
 
 
         Row() {
@@ -265,12 +258,7 @@ struct Bagua {
         .height('100%')
         .position({ top: 0, left: 0 })
         .rotate({ angle: this.angles[1] })
-        .border({
-          width: 1,
-          color: 0xFF0000,
-          radius: 10,
-          style: BorderStyle.Dotted
-        })
+
 
 
         Row() {
@@ -282,12 +270,7 @@ struct Bagua {
         .height('100%')
         .position({ top: 0, left: 0 })
         .rotate({ angle: this.angles[2] })
-        .border({
-          width: 1,
-          color: 0xFF0000,
-          radius: 10,
-          style: BorderStyle.Dotted
-        })
+
 
 
 
@@ -300,12 +283,6 @@ struct Bagua {
         .height('100%')
         .position({ top: 0, left: 0 })
         .rotate({ angle: this.angles[3] })
-        .border({
-          width: 1,
-          color: 0xFF0000,
-          radius: 10,
-          style: BorderStyle.Dotted
-        })
 
 
         Row() {
@@ -317,12 +294,6 @@ struct Bagua {
         .height('100%')
         .position({ top: 0, left: 0 })
         .rotate({ angle: this.angles[4] })
-        .border({
-          width: 1,
-          color: 0xFF0000,
-          radius: 10,
-          style: BorderStyle.Dotted
-        })
 
 
         Row() {
@@ -334,12 +305,6 @@ struct Bagua {
         .height('100%')
         .position({ top: 0, left: 0 })
         .rotate({ angle: this.angles[5] })
-        .border({
-          width: 1,
-          color: 0xFF0000,
-          radius: 10,
-          style: BorderStyle.Dotted
-        })
 
 
 
@@ -352,12 +317,6 @@ struct Bagua {
         .height('100%')
         .position({ top: 0, left: 0 })
         .rotate({ angle: this.angles[6] })
-        .border({
-          width: 1,
-          color: 0xFF0000,
-          radius: 10,
-          style: BorderStyle.Dotted
-        })
 
 
         Row() {
