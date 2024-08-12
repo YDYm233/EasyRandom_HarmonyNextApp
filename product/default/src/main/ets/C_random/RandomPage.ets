@@ -99,6 +99,9 @@ let Apps:Array<AppItem>=[
   new AppItem('掷骰子',$r("app.media.icon_RollDices"),
     'C_random/RollDices','',[[0x00beff,0],[0xffeb00,0.5],[0xffff00,1]]),
 
+  new AppItem('吃什么',$r("app.media.icon_RollNumbers"),
+    'C_random/RandomFoods','',[[0x00beff,0],[0xffeb00,0.5],[0xffff00,1]]),
+
   new AppItem('随机数',$r("app.media.icon_RollNumbers"),
     'C_random/RandomNumbers','',[[0x00beff,0],[0xffeb00,0.5],[0xffff00,1]]),
 

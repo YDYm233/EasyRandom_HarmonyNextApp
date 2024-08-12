@@ -55,7 +55,7 @@ let rolls: Array<Roll> = [                                //所有转盘
     new RollItem('6','7', 3, '#ffecb609'),
   ]),
 ]
-AppStorage.setOrCreate('allRolls', rolls);
+//AppStorage.setOrCreate('allRolls', rolls);
 
 //所有轮盘
 @Entry
@@ -77,7 +77,8 @@ struct OptBoxs {
             radius: 24,
             style: BorderStyle.Solid
           })
-        }, (item: Roll) => item.index)
+        },)
+          //(item: Roll) => item.index)
         ListItem() {
           Row(){
             Button(){
@@ -86,8 +87,9 @@ struct OptBoxs {
           }.width('100%').aspectRatio(5).alignItems(VerticalAlign.Center).justifyContent(FlexAlign.Center)
           .onClick(()=>{
             let afterData = AppStorage.get('allRolls') as Array<Roll>;
-            let tailData:Roll=new Roll(afterData.length.toString(),'新转盘',[new RollItem('0','请输入',1,'#00beff')])
+            let tailData:Roll=new Roll((Number(afterData[afterData.length-1].index)+1).toString(),'新转盘',[new RollItem('0','请输入',1,'#00beff')])
             this.boxsList.push(tailData)
+            AppStorage.setAndLink('allroos',this.boxsList)
           })
         }
         .aspectRatio(5)
@@ -159,7 +161,7 @@ aboutToAppear(): void {
 
     Column() {
       Row() {
-        Text(this.optsList.rollName + this.rollIndex)
+        Text(this.optsList.rollName + this.rollIndex+'ok')
         Button() {
           Image($r("app.media.func_detail")).width('100%').aspectRatio(1)
         }
@@ -191,6 +193,9 @@ aboutToAppear(): void {
               }
               .height('60%')
               .onClick(() => {
+                let afterData=this.boxsList.filter(item => item.index != this.optsList.index);
+                this.boxsList=afterData
+                AppStorage.setAndLink('allrolls',afterData)
               })
               Button() {
                 Text('添加选项')
