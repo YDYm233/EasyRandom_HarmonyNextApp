@@ -41,6 +41,7 @@ struct DevineBaGua {
       .height('100%')
       .margin({ left: 12, right: 12 })
     }.height('100%').backgroundColor($r("app.color.view_bgc_2"))
+    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
 

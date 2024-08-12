@@ -40,6 +40,7 @@ struct RandomColors {
       .margin({ left: 12, right: 12 })
       .padding({top:$r("app.string.header_height")})
     }.height('100%').backgroundColor($r("app.color.view_bgc_2"))
+    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
 

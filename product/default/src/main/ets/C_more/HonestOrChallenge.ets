@@ -238,5 +238,6 @@ struct HonestOrChallenge{
       .padding({top:$r("app.string.header_height")})
     }.height('100%')
     .backgroundColor(this.honestColor)
+    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }

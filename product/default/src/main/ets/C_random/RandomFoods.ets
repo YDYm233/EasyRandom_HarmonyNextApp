@@ -43,6 +43,7 @@ struct RandomFoods {
       .padding({top:$r("app.string.header_height")})
     }.height('100%')
     .backgroundColor($r("app.color.view_bgc_2"))
+    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
 @Component
@@ -74,7 +75,8 @@ struct Dices{
             },60)
           })
       }.height('20%')
+
     }.aspectRatio(1).backgroundColor($r("app.color.view_bgc_1")).borderRadius(24)
-    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+
   }
 }
