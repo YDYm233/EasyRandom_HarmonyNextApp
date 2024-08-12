@@ -16,7 +16,7 @@ class AppItem{
   }
 }
 let Apps:Array<AppItem>=[
-  new AppItem('八卦',$r("app.media.icon_RandomPlaces"),
+  new AppItem('八卦',$r("app.media.icon_DevineBaGua"),
     'C_more/DevineBaGua','',[[0x00beff,0],[0xffeb00,0.5],[0xffff00,1]]),
 
   new AppItem('祝福木鱼',$r("app.media.MuYu"),
