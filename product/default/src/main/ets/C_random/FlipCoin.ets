@@ -84,7 +84,7 @@ struct Coin{
         }
         .width('40%')
         .aspectRatio(1)
-        .backgroundColor(0xbbffcc)
+        //.backgroundColor(0xbbffcc)
         .borderRadius('50%')
         .clip(true)
         .margin({ bottom: '10%' })
