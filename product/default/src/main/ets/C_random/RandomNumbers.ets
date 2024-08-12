@@ -8,7 +8,7 @@ struct RandomNames {
 
   build() {
     Column() {
-      Header({ title: '抽签' })
+      Header({ title: '随机数' })
       GridRow({
         columns: {
           sm: 4,
