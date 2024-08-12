@@ -207,11 +207,13 @@ struct HonestOrChallenge{
               .backgroundColor(0x00beff)
               .position(this.currentBreakpoint.value == 'sm' ? null : { right: 50, bottom: 50 })
               .margin(this.currentBreakpoint.value == 'sm' ? {bottom:100} :null)
+              .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
           }.width('100%').height('100%').alignItems(VerticalAlign.Bottom).justifyContent(FlexAlign.Center)
           }
           .width('100%')
         .height(this.currentBreakpoint.value=='sm'?'50%':'100%')
         .backgroundColor(this.challengeColor)
+        .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
         .onClick(() => {
           this.selectedText=this.challenges[Random(0,this.challenges.length-1,true)]
           this.HorC=false
@@ -236,6 +238,7 @@ struct HonestOrChallenge{
       }
       .height('100%')
       .padding({top:$r("app.string.header_height")})
+      .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
     }.height('100%')
     .backgroundColor(this.honestColor)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
