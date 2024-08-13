@@ -103,9 +103,7 @@ struct Setting {
           ListItem() {
             this.SettingItem(aboutUs)
           }
-          .onClick(()=>{
-            this.pageInfos.pushPath({ name: '开发者团队'})
-          })
+
           ListItemGroup({ header: this.itemHead('通用') }) {
             ListItem() {
               this.SettingItem(options)
