@@ -282,7 +282,9 @@ struct RollBoxs {
     .bindSheet($$this.isSheetShow,this.neirong() , {
       dragBar:true,  blurStyle:BlurStyle.Thin,       title:{title:'编辑'},enableOutsideInteractive:true,
       mode:SheetMode.EMBEDDED,
-
+      borderWidth:2,
+      borderColor:0x20000000,
+      borderStyle:BorderStyle.Solid,
       height:this.currentBreakpoint.value == 'sm' ?SheetSize.LARGE: SheetSize.FIT_CONTENT,
       detents:this.currentBreakpoint.value=='sm'?[SheetSize.LARGE,SheetSize.MEDIUM]:null,
       preferType: this.currentBreakpoint.value == 'sm' ?SheetType.BOTTOM: (this.currentBreakpoint.value =='md'  ? SheetType.CENTER: SheetType.POPUP),

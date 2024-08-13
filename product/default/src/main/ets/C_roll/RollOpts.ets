@@ -74,20 +74,22 @@ struct OptBoxs {
           }
           .width('100%')
           .border({
-            width: 1,
+            width: 0,
             color: 0xff0000,
-            radius: 24,
+            radius: 12,
             style: BorderStyle.Solid
           })
+          .clip(true)
         },
         //)
           (item: Roll) => item.index)
         ListItem() {
           Row(){
             Button(){
-            Image($r("app.media.func_plus"))
+            Image($r("app.media.func_plus")).fillColor(0x88333333).width('80%').margin('10%')
             }.height('70%').backgroundColor(0xf1f3f5).aspectRatio(1).borderRadius('50%')
           }.width('100%').aspectRatio(5).alignItems(VerticalAlign.Center).justifyContent(FlexAlign.Center)
+          .backgroundColor(0xffffff)
           .onClick(()=>{
             let afterData = AppStorage.get('allRolls') as Array<Roll>;
             let tailData:Roll=new Roll((Number(afterData[afterData.length-1].index)+1).toString(),'新转盘',[new RollItem('0','请输入',1,'#00beff')])
@@ -98,27 +100,34 @@ struct OptBoxs {
         .aspectRatio(5)
         .width('100%')
         .border({
-          width: 1,
+          width: 0,
           color: 0xff0000,
-          radius: 24,
+          radius:12,
           style: BorderStyle.Solid
         })
+        .clip(true)
       }
+      .backgroundColor(0xf1f3f5)
       .alignListItem(ListItemAlign.Center)
       .height('100%')
       .width('100%')
       .border({
-        width: 2,
+        width: 0,
         color: 0x20000000,
-        radius: 24,
+        radius: 12,
         style: BorderStyle.Solid
       })
-      .padding('2%')
+      .clip(true)
+      .padding('5%')
 
       Row() {
         Button() {
-          Text('刷新')
+          Text('刷新').fontColor(0xffffff).fontWeight(800)
         }
+        .backgroundColor($r("app.color.control_bgc_1"))
+        .height('80%')
+        .aspectRatio(2)
+        .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
         .onClick(() => {
           let afterData = AppStorage.get('allRolls') as Array<Roll>;
           for (let i = 0; i < afterData.length; i++) {
@@ -130,16 +139,20 @@ struct OptBoxs {
             }
           }
         })
-        .width('30%').aspectRatio(2)
 
         Button() {
-          Text('应用')
+          Text('应用').fontColor(0xffffff).fontWeight(800)
         }
         .onClick(() => {
           router.pushUrl({ url: 'pages/Index' })
         })
-        .width('30%').aspectRatio(2)
-      }.height(50).justifyContent(FlexAlign.SpaceAround).width('100%').alignItems(VerticalAlign.Center).backgroundColor(0xff0000)
+        .height('80%')
+        .backgroundColor($r("app.color.control_bgc_1"))
+        .aspectRatio(2)
+        .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+      }.height(60).justifyContent(FlexAlign.SpaceAround).
+      width('100%').alignItems(VerticalAlign.Center)
+      //.backgroundColor(0xff0000)
 .position({bottom:-60,left:0})
     }.width('100%').backgroundColor($r("app.color.view_bgc_1"))
     .height('100%')
@@ -164,23 +177,21 @@ aboutToAppear(): void {
     Column() {
       Row() {
         Text(this.optsList.rollName )
-        Text( this.rollIndex)
         Button() {
-          Image($r("app.media.func_detail")).width('100%').aspectRatio(1)
+          Image($r("app.media.func_detail")).fillColor(0x88333333).width('80%').margin('10%')        .rotate({z:1,angle:this.isShow?0:-90})
         }
         .height('60%')
         .backgroundColor(0xf1f3f5)
         .aspectRatio(1)
-        .rotate({z:1,angle:this.isShow?0:-90})
+
         .animation({duration:400,curve:Curve.EaseIn})
         .onClick(() => {
           this.isShow = !this.isShow
         })
-      }.aspectRatio(5).width('100%').justifyContent(FlexAlign.SpaceBetween).padding({left:'4%',right:'4%'})
-
+      }.aspectRatio(5).width('100%').justifyContent(FlexAlign.SpaceBetween).padding({left:'4%',right:'4%'})      .backgroundColor(0xffffff)
+      .borderRadius(12)
       if (this.isShow) {
         Column() {
-          Divider()
           ForEach(this.optsList.rollItems, (item: RollItem) => {
             ListItem() {
               Opt({ optLink: item, rollIndex: this.rollIndex })
@@ -192,8 +203,10 @@ aboutToAppear(): void {
           Row() {
             Row() {
               Button() {
-                Text('删除列表')
+                Text('删除列表').fontColor($r("app.color.warning")).decoration({type: TextDecorationType.Underline,color:$r("app.color.warning")})
+
               }
+              .backgroundColor('rgba(0,0,0,0)')
               .height('60%')
               .onClick(() => {
                 let afterData=this.boxsList.filter(item => item.index != this.optsList.index);
@@ -201,8 +214,9 @@ aboutToAppear(): void {
                 //AppStorage.setAndLink('allrolls',afterData)
               })
               Button() {
-                Text('添加选项')
+                Text('新建选项').fontColor($r("app.color.control_bgc_1")).decoration({type: TextDecorationType.Underline,color:$r("app.color.control_bgc_1")})
               }
+              .backgroundColor('rgba(0,0,0,0)')
               .height('60%')
               .onClick(() => {
                 let tailData = new RollItem(this.optsList.rollItems.length.toString(), '请输入', 1, '#00beff')
@@ -222,17 +236,17 @@ aboutToAppear(): void {
             .justifyContent(FlexAlign.SpaceBetween)
             .aspectRatio(6)
             .width('100%')
-            .padding({ left: '3%', right: '3%' })
+            .padding({ left: '15%', right: '15%' })
             .clip(true)
             .border({
-              width: 1,
+              width: 0,
               color: 0x00fff0,
               radius: 8,
               style: BorderStyle.Solid
             })
           }
           Divider()
-        }.width('90%').margin({ left: '5%', right: '5%' })
+        }.width('90%').margin({ left: '5%', right: '5%' })      .backgroundColor(0xf1f3f5)
       }
     }
   }
@@ -301,7 +315,7 @@ struct Opt {
               Row()
                 .height('40%')
                 .aspectRatio(1)
-                .border({ color: this.optData.color, style: BorderStyle.Solid, width: 1 })
+                .border({ color: this.optData.color, style: BorderStyle.Solid, width:0 })
                 .backgroundColor(this.optData.color)
                 .onClick(() => {
                   let rgb: string = '#00beff'
@@ -350,11 +364,11 @@ struct Opt {
       .padding({ left: '3%', right: '3%' })
       .clip(true)
       .border({
-        width: 1,
-        color: 0x00fff0,
+        width: 0,
+        color: 0xf1f3f5,
         radius: 8,
         style: BorderStyle.Solid
-      })
+      })      .backgroundColor(0xffffff)
     }
   }
 }
