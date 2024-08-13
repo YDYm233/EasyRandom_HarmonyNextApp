@@ -1,5 +1,5 @@
 import router from '@ohos.router';
-import  '@ohos/setting/src/main/ets/pages/Index'
+//import  '@ohos/setting/src/main/ets/pages/Index'
 @Component
 export default struct Header {
   @Prop title: string

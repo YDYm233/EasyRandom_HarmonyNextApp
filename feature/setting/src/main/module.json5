@@ -17,10 +17,10 @@
       {
         "name": "SettingsAbility",
         "srcEntry": "./ets/settingsability/SettingsAbility.ets",
-        "description": "$string:SettingsAbility_desc",
-        "icon": "$media:layered_image",
+        "description": "设置模块",
+        "icon": "$media:app_icon",
         "label": "$string:SettingsAbility_label",
-        "startWindowIcon": "$media:startIcon",
+        "startWindowIcon": "$media:app_icon",
         "startWindowBackground": "$color:start_window_background",
         "exported": true
       }

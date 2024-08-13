@@ -2,22 +2,29 @@ import router from '@ohos.router';
 import AboutUs from '../components/AboutUs'
 import Options from '../components/Options'
 import PrivacyPolicy from '../components/PrivacyPolicy'
-import Agreement from '../components/Agreement'
+import Illustrate from '../components/Illustrate'
 import CopyRight from '../components/CopyRight'
+import AddOil  from '../components/AddOil'
 class Item{
   title:string
   icon:Resource
-  constructor(title:string,icon:Resource) {
+  color:Color
+  constructor(title:string,icon:Resource,color:Color) {
     this.title=title
     this.icon=icon
+    this.color=color
   }
 }
-let aboutUs = new Item('开发者团队',$r("app.media.page_icon3"))
-let options = new Item('通用设置',$r("app.media.page_icon3"))
-let privacyPolicy = new Item('隐私政策',$r("app.media.page_icon3"))
-let agreement = new Item('用户协议',$r("app.media.page_icon3"))
-let copyRight = new Item('版权声明',$r("app.media.page_icon3"))
-let donateUs = new Item('赞赏我们',$r("app.media.page_icon3"))
+let aboutUs = new Item('开发者团队',$r("app.media.aboutus_fill"),0xfff05)
+let contactUs = new Item('问题反馈',$r("app.media.contactus_fill"),0xf10ff5)
+
+let options = new Item('通用设置',$r("app.media.func_setting"),0x01f3ff)
+
+let privacyPolicy = new Item('隐私政策',$r("app.media.privacypolicy"),0x00beff)
+let copyRight = new Item('版权声明',$r("app.media.addoil_thumb"),0xfebb00)
+let illustrate = new Item('更多信息',$r("app.media.illustrate"),0xbeff00)
+
+let addOil = new Item('赞赏我们',$r("app.media.addoil_flower"),0xffbe00)
 @Entry({ routeName: 'Setting' })
 @Component
 struct Setting {
@@ -27,16 +34,16 @@ struct Setting {
   PageMap(name: string) {
        if (name == "通用设置") {
          OptionsView()
+       }else if (name == "使用说明") {
+         IllustrateView()
        }else if (name == "隐私政策") {
          PrivacyPolicyView()
-       }else if (name == "用户协议") {
-         AgreementView()
        }else if (name == "版权声明") {
          CopyRightView()
        }else if (name == "赞赏我们") {
-         AboutUsView()
+         AddOilView()
        }
-       else{
+       else{//默认开发者团队页面
          AboutUsView()
        }
   }
@@ -49,21 +56,36 @@ struct Setting {
   }
 @Builder SettingItem(item:Item){
     Row(){
-      Image(item.icon)
+      Row() {
+        Image(item.icon).fillColor(0xffffff).width('70%').margin('15%')
+      }
         .aspectRatio(1)
-        .height('40%')
+        .height('60%')
+        .borderRadius('50%')
+      .backgroundColor(item.color)
+
     Text( item.title)
-    .width("80%")
+    .width("60%")
     .height('100%')
     .fontSize(16)
     .fontWeight(500)
-    .textAlign(TextAlign.End)
+    .textAlign(TextAlign.Start)
+      .margin({left:8})
 
-}    .onClick(()=>{
+      Row() {
+        Image($r("app.media.func_next")).width('60%').margin('20%')      .fillColor(0x885e5e5e)
+      }
+      .aspectRatio(1)
+      .height('60%')
+      .borderRadius('50%')
+
+
+
+    }    .onClick(()=>{
       this.pageInfos.pushPath({ name:  item.title})
       console.log('name'+item.title)
     })
-.width('100%')       .height(72)    .borderRadius(24).padding({left:24,right:24})
+.width('100%')       .height(50)    .borderRadius(12).padding({left:24,right:24})
 .backgroundColor('#FFFFFF').justifyContent(FlexAlign.SpaceBetween).alignItems(VerticalAlign.Center)
   }
   build() {
@@ -100,34 +122,45 @@ struct Setting {
           }
           .align(Alignment.Center)
 
-          ListItem() {
-            this.SettingItem(aboutUs)
-          }
 
-          ListItemGroup({ header: this.itemHead('通用') }) {
+          ListItemGroup({ header: this.itemHead('关于') ,space:8}) {
+            ListItem() {
+              this.SettingItem(aboutUs)
+            }
+              ListItem() {
+                this.SettingItem(contactUs)
+              }
+            }
+
+          ListItemGroup({ header: this.itemHead('通用') ,space:8}) {
             ListItem() {
               this.SettingItem(options)
             }
           }
 
-          ListItemGroup({ header: this.itemHead('关于') }) {
+          ListItemGroup({ header: this.itemHead('声明'),space:8 }) {
             ListItem() {
               this.SettingItem(privacyPolicy)
             }
-
-            ListItem() {
-              this.SettingItem(agreement)
-            }
-
             ListItem() {
               this.SettingItem(copyRight)
+            }
+            ListItem() {
+              this.SettingItem(illustrate)
+            }
+          }
+
+          ListItemGroup({ header: this.itemHead('更多'),space:8 }) {
+            ListItem() {
+              this.SettingItem(addOil)
             }
           }
 
         }
+        .padding({left:12,right:12})
         .width("100%")
         .height('100%')
-        .margin({ top: 12 })
+        //.margin({ top: 12 })
       }
       .mode(NavigationMode.Auto)
       .navDestination(this.PageMap)
@@ -136,6 +169,7 @@ struct Setting {
     }
     .height('100%')
     .width('100%')
+
     .backgroundColor('#F1F3F5')
   }
 }
@@ -158,11 +192,11 @@ export struct AboutUsView {
 
 // Agreement.ets
 @Component
-export struct AgreementView {
+export struct  IllustrateView {
   @Consume('pageInfos') pageInfos: NavPathStack;
   build() {
     NavDestination() {
-      Agreement().width('100%').height('100%')
+      Illustrate().width('100%').height('100%')
     }.title("用户协议")
     .onBackPressed(() => {
       const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
@@ -209,6 +243,21 @@ export struct PrivacyPolicyView {
     NavDestination() {
       PrivacyPolicy().width('100%').height('100%')
     }.title(privacyPolicy.title)
+    .onBackPressed(() => {
+      const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
+      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
+      return true
+    })
+  }
+}
+// AddOils.ets
+@Component
+export struct AddOilView {
+  @Consume('pageInfos') pageInfos: NavPathStack;
+  build() {
+    NavDestination() {
+      AddOil().width('100%').height('100%')
+    }.title(addOil.title)
     .onBackPressed(() => {
       const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
       console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
