@@ -55,15 +55,13 @@ let rolls: Array<Roll> = [                                //所有转盘
     new RollItem('6','7', 3, '#ffecb609'),
   ]),
 ]
-AppStorage.setOrCreate('allRolls', rolls);
+//AppStorage.setOrCreate('allRolls', rolls);
 
 //所有轮盘
 @Entry
 @Component
 struct OptBoxs {
   @StorageLink('allRolls') boxsList: Roll[] = rolls;
- // @State boxsList:Roll[]=AppStorage.get('allrolls') as Roll[]
-
   build() {
     Column() {
       List({space:12}) {
@@ -79,9 +77,8 @@ struct OptBoxs {
             radius: 24,
             style: BorderStyle.Solid
           })
-        },
-        //)
-          (item: Roll) => item.index)
+        },)
+          //(item: Roll) => item.index)
         ListItem() {
           Row(){
             Button(){
@@ -149,10 +146,11 @@ struct OptBoxs {
 }
 
 //单个轮盘
-@Reusable
+//@Reusable
 @Component
 struct Opts {
   @StorageLink('allRolls') boxsList: Roll[] = rolls
+  @StorageLink('confirmRolls') newRolls: Roll[] = rolls
   @Prop optsList: Roll
   @State rollIndex: string = this.optsList.index
   @State isShow: boolean = false
@@ -163,8 +161,7 @@ aboutToAppear(): void {
 
     Column() {
       Row() {
-        Text(this.optsList.rollName )
-        Text( this.rollIndex)
+        Text(this.optsList.rollName + this.rollIndex+'ok')
         Button() {
           Image($r("app.media.func_detail")).width('100%').aspectRatio(1)
         }
@@ -198,7 +195,7 @@ aboutToAppear(): void {
               .onClick(() => {
                 let afterData=this.boxsList.filter(item => item.index != this.optsList.index);
                 this.boxsList=afterData
-                //AppStorage.setAndLink('allrolls',afterData)
+                AppStorage.setAndLink('allrolls',afterData)
               })
               Button() {
                 Text('添加选项')

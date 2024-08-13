@@ -1,22 +1,69 @@
 import router from '@ohos.router';
-
+import AboutUs from '../components/AboutUs'
+import Options from '../components/Options'
+import PrivacyPolicy from '../components/PrivacyPolicy'
+import Agreement from '../components/Agreement'
+import CopyRight from '../components/CopyRight'
+class Item{
+  title:string
+  icon:Resource
+  constructor(title:string,icon:Resource) {
+    this.title=title
+    this.icon=icon
+  }
+}
+let aboutUs = new Item('开发者团队',$r("app.media.page_icon3"))
+let options = new Item('通用设置',$r("app.media.page_icon3"))
+let privacyPolicy = new Item('隐私政策',$r("app.media.page_icon3"))
+let agreement = new Item('用户协议',$r("app.media.page_icon3"))
+let copyRight = new Item('版权声明',$r("app.media.page_icon3"))
+let donateUs = new Item('赞赏我们',$r("app.media.page_icon3"))
 @Entry({ routeName: 'Setting' })
 @Component
 struct Setting {
   @Provide('pageInfos') pageInfos: NavPathStack = new NavPathStack()
-  private arr: number[] = [1, 2, 3];
 
   @Builder
   PageMap(name: string) {
-       if (name === "NavDestinationTitle2") {
-      pageTwoTmp()
-    } else if (name === "NavDestinationTitle3") {
-      pageThreeTmp()
-    }   else {
-      pageOneTmp()
-    }
-  }
+       if (name === "通用设置") {
+      Options()
+    } else if (name === "隐私政策") {
+      PrivacyPolicy()
+    }  else if (name === "用户协议") {
+         Agreement()
+       }else if (name === "版权声明") {
+         CopyRight()
+       }else if (name === "赞赏我们") {
 
+       }
+       else{
+         AboutUs()
+       }
+  }
+  @Builder
+  itemHead(text: string) {
+    Text(text)
+      .fontSize(20)
+      .width("100%")
+      .padding(10)
+  }
+@Builder SettingItem(item:Item){
+    Row(){
+      Image(item.icon)
+        .aspectRatio(1)
+        .height('40%')
+    Text( item.title)
+    .width("80%")
+    .height('100%')
+    .fontSize(16)
+    .fontWeight(500)
+    .textAlign(TextAlign.End)
+    .onClick(()=>{
+      this.pageInfos.pushPath({ name:  item.title})
+    })
+}.width('100%')       .height(72)    .borderRadius(24).padding({left:24,right:24})
+.backgroundColor('#FFFFFF').justifyContent(FlexAlign.SpaceBetween).alignItems(VerticalAlign.Center)
+  }
   build() {
     Column() {
       Navigation(this.pageInfos) {
@@ -37,21 +84,33 @@ struct Setting {
         .width('100%')
         .height($r("app.string.header_height")).alignItems(VerticalAlign.Center).justifyContent(FlexAlign.SpaceBetween)
         List({ space: 12 }) {
-          ForEach(this.arr, (item:string) => {
+          ListItem() {
+           Image($r("app.media.app_icon")).width('30%').aspectRatio(1).margin({left:'35%',right:'35%',top:'10%',bottom:'10%'})
+          }
+          .align(Alignment.Center)
+
             ListItem() {
-              Text("NavRouter" + item)
-                .width("100%")
-                .height(72)
-                .backgroundColor('#FFFFFF')
-                .borderRadius(24)
-                .fontSize(16)
-                .fontWeight(500)
-                .textAlign(TextAlign.Center)
-                .onClick(()=>{
-                  this.pageInfos.pushPath({ name: "NavDestinationTitle" + item})
-                })
+              this.SettingItem(aboutUs)
             }
-          }, (item:string):string => item)
+
+          ListItemGroup({ header: this.itemHead('通用')}) {
+            ListItem() {
+              this.SettingItem(options)
+            }
+            }
+
+          ListItemGroup({ header: this.itemHead('关于')}) {
+            ListItem() {
+              this.SettingItem(privacyPolicy)
+            }
+            ListItem() {
+              this.SettingItem(agreement)
+            }
+            ListItem() {
+              this.SettingItem(copyRight)
+            }
+          }
+
         }
         .width("90%")
         .margin({ top: 12 })
