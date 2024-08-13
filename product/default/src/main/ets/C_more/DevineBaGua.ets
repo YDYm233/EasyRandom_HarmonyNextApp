@@ -337,15 +337,16 @@ struct Bagua {
       .borderRadius('50%')
       .animation({ duration: this.duration, curve: Curve.Ease})
       .rotate({ angle: this.angle })
-      .onClick(() => {
-        this.duration=3000
-        this.isRoll = true;
-        this.angle =this.angle+this.angles[ Random(0, 7, true) ] + 360 * 8;
-        setTimeout(() => {
-          this.isRoll = false;
-        }, this.duration)
-      })
+
     }
+    .onClick(() => {
+      this.duration=3000
+      this.isRoll = true;
+      this.angle =this.angle+this.angles[ Random(0, 7, true) ] + 360 * 8;
+      setTimeout(() => {
+        this.isRoll = false;
+      }, this.duration)
+    })
     .backgroundColor(0xffffff)
     .width('100%')
     .aspectRatio(1)
