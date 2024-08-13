@@ -1,6 +1,6 @@
 import { Random,Randoms } from '@ohos/common'
 import  Header from '../Component/Header'
-import { promptAction } from '@kit.ArkUI'
+import { PromptAction, promptAction } from '@kit.ArkUI'
 import { BreakpointState, BreakpointSystem } from '@ohos/common';
 import { CounterType, CounterComponent } from '@kit.ArkUI';
 @Entry
@@ -81,11 +81,25 @@ struct HonestOrChallenge{
       Header({ title: '真心话大冒险' })
       Row(){
         Column(){
-          Text('111')
+          Row() {
+                  Image($r("app.media.point"))
+                    .width('100%')
+                    .height(90)
+                    .position({left:0,top:-40})
+                    .fillColor(0xffffff)
+          }
+          .clip(false)
+          .backgroundColor(0xffffff)
+          .width('80%')
+          .margin('10%')
+          .borderRadius('50%')
+          .aspectRatio(1)
+          .rotate({z:1,angle:this.currentBreakpoint.value=='sm'?this.pointAngle+90:this.pointAngle})
+            .animation({ duration: this.duration, curve: Curve.Ease })
         }
         .onClick(()=>{
           this.duration=1000;
-          let target=Random(1,360,true)+360*2;
+          let target=Random(1,360,true)+360*1;
           this.pointAngle=this.pointAngle+target
           console.log(this.pointAngle.toString())
           if(this.pointAngle>3600000){
@@ -94,6 +108,9 @@ struct HonestOrChallenge{
           let angle = this.pointAngle%360
           if(angle==0||angle==180){
             console.log('无事发生')
+            promptAction.showToast({
+              message:'无事发生'
+            })
           }
           else {
             if(angle>0&&angle<180){
@@ -104,27 +121,30 @@ struct HonestOrChallenge{
               this.HorC=true
               this.selectedText=this.honests[Random(0,this.challenges.length-1,true)]
             }
-            promptAction.openCustomDialog({
-              builder: () => {
-                this.customDialogBuilder()
-              },
-              showInSubWindow: false,
-              offset: { dx: 5, dy: 5 },
-              backgroundColor: 0xd9ffffff,
-              cornerRadius: 24,
-              backgroundBlurStyle: BlurStyle.Regular,
-              width: this.currentBreakpoint.value == 'sm' ? '80%' :
-                (this.currentBreakpoint.value == 'md' ? '50%' : '30%'),
-              height: this.currentBreakpoint.value == 'sm' ? '20%' :
-                (this.currentBreakpoint.value == 'md' ? '20%' : '20%'),
+            setTimeout(()=>{
+              promptAction.openCustomDialog({
+                builder: () => {
+                  this.customDialogBuilder()
+                },
+                showInSubWindow: false,
+                offset: { dx: 5, dy: 5 },
+                backgroundColor: 0xd9ffffff,
+                cornerRadius: 24,
+                backgroundBlurStyle: BlurStyle.Regular,
+                width: this.currentBreakpoint.value == 'sm' ? '80%' :
+                  (this.currentBreakpoint.value == 'md' ? '50%' : '30%'),
+                height: this.currentBreakpoint.value == 'sm' ? '20%' :
+                  (this.currentBreakpoint.value == 'md' ? '20%' : '20%'),
 
-            }).then((dialogId: number) => {
-              this.customDialogId = dialogId
-            })
+              }).then((dialogId: number) => {
+                this.customDialogId = dialogId
+              })
+            },this.duration)
+
+
           }
         })
-        .animation({ duration: this.duration, curve: Curve.Ease })
-        .rotate({z:1,angle:this.currentBreakpoint.value=='sm'?this.pointAngle+90:this.pointAngle})
+
         .height('80%')
         .aspectRatio(1)
         .backgroundColor(0x00beff)
@@ -158,7 +178,7 @@ struct HonestOrChallenge{
               .height((this.currentBreakpoint.value == 'sm' ? 100 : 420))
               .fontSize((this.currentBreakpoint.value == 'sm' ? 100 : 120))
               .fontColor(0xffffff)
-              .backgroundColor(0x00beff)
+            //  .backgroundColor(0x00beff)
               .position(this.currentBreakpoint.value == 'sm' ? null : { left: 50, top: 50 })
               .margin(this.currentBreakpoint.value == 'sm' ? {top:100} :null)
 
@@ -204,7 +224,7 @@ struct HonestOrChallenge{
               .height((this.currentBreakpoint.value == 'sm' ? 100 : 420))
               .fontSize((this.currentBreakpoint.value == 'sm' ? 100 : 120))
               .fontColor(0xffffff)
-              .backgroundColor(0x00beff)
+            //  .backgroundColor(0x00beff)
               .position(this.currentBreakpoint.value == 'sm' ? null : { right: 50, bottom: 50 })
               .margin(this.currentBreakpoint.value == 'sm' ? {bottom:100} :null)
               .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
