@@ -2,7 +2,6 @@
 @Component
 struct AboutUs {
   @State message: string = 'Hello World';
-
   build() {
     RelativeContainer() {
       Text(this.message)

@@ -25,19 +25,19 @@ struct Setting {
 
   @Builder
   PageMap(name: string) {
-       if (name === "通用设置") {
-      Options()
-    } else if (name === "隐私政策") {
-      PrivacyPolicy()
-    }  else if (name === "用户协议") {
-         Agreement()
-       }else if (name === "版权声明") {
-         CopyRight()
-       }else if (name === "赞赏我们") {
-
+       if (name == "通用设置") {
+         OptionsView()
+       }else if (name == "隐私政策") {
+         PrivacyPolicyView()
+       }else if (name == "用户协议") {
+         AgreementView()
+       }else if (name == "版权声明") {
+         CopyRightView()
+       }else if (name == "赞赏我们") {
+         AboutUsView()
        }
        else{
-         AboutUs()
+         AboutUsView()
        }
   }
   @Builder
@@ -58,10 +58,12 @@ struct Setting {
     .fontSize(16)
     .fontWeight(500)
     .textAlign(TextAlign.End)
-    .onClick(()=>{
+
+}    .onClick(()=>{
       this.pageInfos.pushPath({ name:  item.title})
+      console.log('name'+item.title)
     })
-}.width('100%')       .height(72)    .borderRadius(24).padding({left:24,right:24})
+.width('100%')       .height(72)    .borderRadius(24).padding({left:24,right:24})
 .backgroundColor('#FFFFFF').justifyContent(FlexAlign.SpaceBetween).alignItems(VerticalAlign.Center)
   }
   build() {
@@ -72,7 +74,8 @@ struct Setting {
             Image($r("app.media.func_back")).height(24).width(24)
           }.height('100%').aspectRatio(1).alignItems(VerticalAlign.Center).justifyContent(FlexAlign.Center)
           .onClick(()=>{
-              router.back({ url: 'default/src/main/ets/pages/Index' })
+            router.pushNamedRoute({
+              name: 'Index'})
           })
           Row(){
             Text('设置').height(24).fontWeight(800).textAlign(TextAlign.Center)
@@ -85,34 +88,47 @@ struct Setting {
         .height($r("app.string.header_height")).alignItems(VerticalAlign.Center).justifyContent(FlexAlign.SpaceBetween)
         List({ space: 12 }) {
           ListItem() {
-           Image($r("app.media.app_icon")).width('30%').aspectRatio(1).margin({left:'35%',right:'35%',top:'10%',bottom:'10%'})
+            Image($r("app.media.app_icon"))
+              .width('30%')
+              .aspectRatio(1)
+              .margin({
+                left: '35%',
+                right: '35%',
+                top: '10%',
+                bottom: '10%'
+              })
           }
           .align(Alignment.Center)
 
-            ListItem() {
-              this.SettingItem(aboutUs)
-            }
-
-          ListItemGroup({ header: this.itemHead('通用')}) {
+          ListItem() {
+            this.SettingItem(aboutUs)
+          }
+          .onClick(()=>{
+            this.pageInfos.pushPath({ name: '开发者团队'})
+          })
+          ListItemGroup({ header: this.itemHead('通用') }) {
             ListItem() {
               this.SettingItem(options)
             }
-            }
+          }
 
-          ListItemGroup({ header: this.itemHead('关于')}) {
+          ListItemGroup({ header: this.itemHead('关于') }) {
             ListItem() {
               this.SettingItem(privacyPolicy)
             }
+
             ListItem() {
               this.SettingItem(agreement)
             }
+
             ListItem() {
               this.SettingItem(copyRight)
             }
           }
 
         }
-        .width("90%")
+        .width("100%")
+        .height('100%')
         .margin({ top: 12 })
       }
       .mode(NavigationMode.Auto)
@@ -128,14 +144,12 @@ struct Setting {
 
 // PageOne.ets
 @Component
-export struct pageOneTmp {
+export struct AboutUsView {
   @Consume('pageInfos') pageInfos: NavPathStack;
   build() {
     NavDestination() {
-      Column() {
-        Text("NavDestinationContent1")
-      }.width('100%').height('100%')
-    }.title("NavDestinationTitle1")
+          AboutUs().width('100%').height('100%')
+    }.title("开发者团队")
     .onBackPressed(() => {
       const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
       console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
@@ -144,6 +158,66 @@ export struct pageOneTmp {
   }
 }
 
+// Agreement.ets
+@Component
+export struct AgreementView {
+  @Consume('pageInfos') pageInfos: NavPathStack;
+  build() {
+    NavDestination() {
+      Agreement().width('100%').height('100%')
+    }.title("用户协议")
+    .onBackPressed(() => {
+      const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
+      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
+      return true
+    })
+  }
+}
+// CopyRight.ets
+@Component
+export struct CopyRightView {
+  @Consume('pageInfos') pageInfos: NavPathStack;
+  build() {
+    NavDestination() {
+      CopyRight().width('100%').height('100%')
+    }.title("版权声明")
+    .onBackPressed(() => {
+      const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
+      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
+      return true
+    })
+  }
+}
+// Options.ets
+@Component
+export struct OptionsView {
+  @Consume('pageInfos') pageInfos: NavPathStack;
+  build() {
+    NavDestination() {
+      Options().width('100%').height('100%')
+    }.title(options.title)
+    .onBackPressed(() => {
+      const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
+      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
+      return true
+    })
+  }
+}
+// Options.ets
+@Component
+export struct PrivacyPolicyView {
+  @Consume('pageInfos') pageInfos: NavPathStack;
+  build() {
+    NavDestination() {
+      PrivacyPolicy().width('100%').height('100%')
+    }.title(privacyPolicy.title)
+    .onBackPressed(() => {
+      const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
+      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
+      return true
+    })
+  }
+}
 // PageTwo.ets
 @Component
 export struct pageTwoTmp {

@@ -105,7 +105,7 @@ let Apps:Array<AppItem>=[
   new AppItem('随机数',$r("app.media.icon_RollNumbers"),
     'C_random/RandomNumbers','',[[0x00beff,0],[0xffeb00,0.5],[0xffff00,1]]),
 
-  new AppItem('人生必去的100个地方',$r("app.media.avatar"),
+  new AppItem('人生必去的100个地方',$r("app.media.icon_RandomPlaces"),
     'C_random/RandomPlaces','',[[0x00beff,0],[0xffeb00,0.5],[0xffff00,1]]),
 ]
 @Component

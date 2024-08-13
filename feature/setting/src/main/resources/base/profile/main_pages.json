@@ -1,10 +1,6 @@
 {
   "src": [
-    "pages/Index",
-    "components/AboutUs",
-    "components/Options",
-    "components/Agreement",
-    "components/CopyRight",
-    "components/PrivacyPolicy"
+    "pages/Index"
+
   ]
 }

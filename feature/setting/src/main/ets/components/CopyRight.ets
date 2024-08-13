@@ -1,8 +1,8 @@
-@Entry
+
 @Component
 struct CopyRight {
   @State message: string = 'Hello World';
-
+  @Consume('pageInfos') pageInfos: NavPathStack;
   build() {
     RelativeContainer() {
       Text(this.message)

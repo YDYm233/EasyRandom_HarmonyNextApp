@@ -3,7 +3,8 @@ import RollPage from '../C_roll/RollPage'
 import MorePage from '../C_more/MorePage'
 import AnswerPage from '../C_answer/AnswerPage'
 import router from '@ohos.router';
-@Entry
+import  '@ohos/setting/src/main/ets/pages/Index'
+@Entry({ routeName: 'Index' })
 @Component
 struct TabBar {
   @State currentIndex: number = 0;
