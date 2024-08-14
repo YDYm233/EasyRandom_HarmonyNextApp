@@ -114,7 +114,7 @@ struct Coin{
               this.F = 1;
               this.B = 0;
             }
-            console.log(this.duration / (this.angle / 180) + '正反？' + this.ForB);
+            //console.log(this.duration / (this.angle / 180) + '正反？' + this.ForB);
             this.ForB = !this.ForB;
 
             if(index==3){

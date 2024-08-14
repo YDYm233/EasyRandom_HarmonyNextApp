@@ -308,13 +308,13 @@ aboutToAppear(): void {
     {
       Canvas(this.context)
           .onSizeChange((oldValue:SizeOptions,newValue:SizeOptions)=>{
-          console.log('boxWidth=='+this.boxWidth)
-          console.log('SizeChange===old:'+oldValue.width+'  ----new:'+newValue.width)
+          //console.log('boxWidth=='+this.boxWidth)
+        //  console.log('SizeChange===old:'+oldValue.width+'  ----new:'+newValue.width)
           //this.boxWidth=Number(newValue.width)
           })
         .onAreaChange((oldValue: Area, newValue: Area) => {
           //this.boxWidth=Number(newValue.width)
-          console.log('AreaChange===old:'+oldValue.width+'  ----new:'+newValue.width)
+          //console.log('AreaChange===old:'+oldValue.width+'  ----new:'+newValue.width)
         })
         .onReady(() => {
           let ctx = this.context;

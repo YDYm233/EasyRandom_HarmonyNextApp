@@ -36,8 +36,11 @@ export default struct Header {
             Image($r("app.media.func_setting")).height(24).width(24)
           }
           .onClick(()=>{
-            router.pushNamedRoute({
-              name: 'Setting'})
+            router.pushUrl({
+              url: 'C_setting/SettingPage'
+            }).then(() => {
+              console.info("success.");
+            })
           })
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .width('100%')

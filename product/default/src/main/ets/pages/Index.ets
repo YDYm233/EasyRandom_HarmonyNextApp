@@ -3,7 +3,7 @@ import RollPage from '../C_roll/RollPage'
 import MorePage from '../C_more/MorePage'
 import AnswerPage from '../C_answer/AnswerPage'
 import router from '@ohos.router';
-//import  '@ohos/setting/src/main/ets/pages/Index'
+import { BusinessError } from '@kit.BasicServicesKit';
 @Entry({ routeName: 'Index' })
 @Component
 struct TabBar {
@@ -77,8 +77,13 @@ struct TabBar {
           .alignItems(VerticalAlign.Center)
           .padding({ right: 12 })
           .onClick(()=>{
-            router.pushNamedRoute({
-              name: 'Setting'})
+            router.pushUrl({
+              url: 'C_setting/SettingPage'
+            }).then(() => {
+              console.info("success.");
+           }).catch((err: BusinessError) => {
+              console.error(`err, code is ${err.code}, message is ${err.message}.`);
+           })
           })
         }
       }

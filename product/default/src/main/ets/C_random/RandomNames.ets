@@ -145,8 +145,8 @@ struct NamesBox {
                 const filterArray = valueArray.filter(line => line.trim() !== '');
                 this.max=filterArray.length;
                 this.indexs=Randoms(0,filterArray.length-1,true,this.number,false)
-                console.log('valueArray:'+filterArray)
-                console.log('indexs:'+this.indexs.toString())
+                //console.log('valueArray:'+filterArray)
+               // console.log('indexs:'+this.indexs.toString())
                 let i:number=0;
                 while(i<this.number){
                   let x:number=this.indexs[i]
