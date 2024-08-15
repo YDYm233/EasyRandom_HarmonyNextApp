@@ -2,20 +2,10 @@
 @Component
 struct Addoil {
   @State message: string = 'Hello World';
-  @Consume('pageInfos') pageInfos: NavPathStack;
   build() {
-    RelativeContainer() {
-      Text('加油')
-        .id('PrivacyPolicyHelloWorld')
-        .fontSize(50)
-        .fontWeight(FontWeight.Bold)
-        .alignRules({
-          center: { anchor: '__container__', align: VerticalAlign.Center },
-          middle: { anchor: '__container__', align: HorizontalAlign.Center }
-        })
+    Column(){
+      Text('充电 赞赏')
     }
-    .height('100%')
-    .width('100%')
   }
 }
 export default Addoil

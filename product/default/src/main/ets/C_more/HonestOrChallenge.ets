@@ -2,11 +2,11 @@ import { Random,Randoms } from '@ohos/common'
 import  Header from '../Component/Header'
 import { PromptAction, promptAction } from '@kit.ArkUI'
 import { BreakpointState, BreakpointSystem } from '@ohos/common';
-import { CounterType, CounterComponent } from '@kit.ArkUI';
+import {challenges,honests}from './challenges'
 @Entry
 @Component
 struct HonestOrChallenge{
-  private customDialogComponentId: number = 0
+
 @State customDialogId:number=0
   @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
   aboutToAppear() {
@@ -17,18 +17,18 @@ struct HonestOrChallenge{
     BreakpointSystem.getInstance().attach(this.currentBreakpoint)
     BreakpointSystem.getInstance().stop()
   }
-  @State honests:string[]=['真心话1','真心话2','真心话3','真心话4']
-  @State challenges:string[]=['大冒险1','大冒险2','大冒险3','大冒险4']
+  @State honests:string[]=honests
+  @State challenges:string[]=challenges
   @State selectedText:string=this.challenges[Random(0,this.challenges.length-1,true)]
   @State HorC:boolean=true;
   @State pointAngle:number=0;
   @State duration:number=1000
   @State index:number=0
-  @State honestColor:Color=0xff0000
-  @State challengeColor:Color=0x0000ff
+  @State honestColor:Color=0xFF7299
+  @State challengeColor:Color=0x23ADE5
   @Builder customDialogBuilder() {
   Column() {
-    Text(this.selectedText).height('70%').fontWeight(800).fontSize(24)
+    Text(this.selectedText).height('70%').fontWeight(700).fontSize(20).margin({left:'5%',right:'5%'}).textAlign(TextAlign.Center)
     Row() {
       Button(this.HorC==true?'换大冒险':'换真心话').onClick(() => {
         if(this.HorC==true){
@@ -147,7 +147,7 @@ struct HonestOrChallenge{
 
         .height('80%')
         .aspectRatio(1)
-        .backgroundColor(0x00beff)
+        .backgroundColor(0xffffff)
         .borderRadius('50%')
       }
       .width(this.currentBreakpoint.value=='sm'?'20%':'16%')

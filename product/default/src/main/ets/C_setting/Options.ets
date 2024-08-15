@@ -4,18 +4,9 @@ struct Options {
   @State message: string = 'Hello World';
   @Consume('pageInfos') pageInfos: NavPathStack;
   build() {
-    RelativeContainer() {
-      Text(this.message)
-        .id('OptionsHelloWorld')
-        .fontSize(50)
-        .fontWeight(FontWeight.Bold)
-        .alignRules({
-          center: { anchor: '__container__', align: VerticalAlign.Center },
-          middle: { anchor: '__container__', align: HorizontalAlign.Center }
-        })
+    Column(){
+      Text('火速开发中')
     }
-    .height('100%')
-    .width('100%')
   }
 }
 export default Options

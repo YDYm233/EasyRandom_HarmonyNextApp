@@ -2,7 +2,7 @@ import{Random}from'@ohos/common'
 import router from '@ohos.router';
 import OptBoxs from './RollOpts'
 import { BreakpointState, BreakpointSystem } from '@ohos/common';
-
+import { preferences } from '@kit.ArkData';
 @Entry
 @Component
 struct RollPage {
@@ -27,18 +27,17 @@ struct RollPage {
 
 
 class RollItem {                                                     //转盘子选项
-  index: string
+  id: string
   text: string
   weight: number
   color: string
-  constructor(index:string,text: string, weight: number, color: string) {
+  constructor(id:string,text: string, weight: number, color: string) {
+    this.id=id
     this.text = text;
     this.weight = weight;
     this.color = color;
-    this.index=index
   }
 }
-
 class Roll {                                                            //转盘
   index: string
   rollName: string
@@ -49,19 +48,20 @@ class Roll {                                                            //转盘
     this.rollItems = rollItems;
   }
 }
-let rolls: Array<Roll> = [                                //所有转盘
-  new Roll('0', '随机一个颜色吧啦啦啦啦啦啦', [
-    new RollItem('0','粉色', 2, '#ffff007a'),
-    new RollItem('1','蓝色', 3, '#ff0cdec5'),
-  ]),
-  new Roll('1', '吃啥？', [
-    new RollItem('0','梅菜扣肉', 2, '#ff05f80b'),
-    new RollItem('1','西湖醋鱼', 3, '#ff5f16e1'),
+ let rolls: Array<Roll> = [                                //所有转盘
+
+  new Roll('0', '吃啥？', [
+    new RollItem('0','梅菜扣肉', 2, '#ffcba50b'),
+    new RollItem('1','西湖醋鱼', 3, '#ffa87cf4'),
     new RollItem('2','西红柿炒鸡蛋', 2, '#ffe81b58'),
-    new RollItem('3','海带炖肉', 3, '#ffecb609'),
-    new RollItem('4','穿过你的黑发我的手', 2, '#499821'),
+    new RollItem('3','海带炖肉', 3, '#ff38ed44'),
+    new RollItem('4','穿过你的黑发我的手', 2, '#fff7942c'),
     new RollItem('5','蚂蚁上树', 3, '#ff68ead0'),
   ]),
+   new Roll('1', '随机一个颜色', [
+     new RollItem('0','粉色', 2, '#ffff007a'),
+     new RollItem('1','蓝色', 3, '#ff0cdec5'),
+   ]),
   new Roll('2', '周几', [
     new RollItem('0','1', 2, '#ff05f80b'),
     new RollItem('1','2', 3, '#ff5f16e1'),
@@ -72,8 +72,7 @@ let rolls: Array<Roll> = [                                //所有转盘
     new RollItem('6','7', 3, '#ffecb609'),
   ]),
 ]
-
-
+AppStorage.setOrCreate('allRolls', rolls);
 @Component
 struct RollBoxs {
   @StorageLink('allRolls')dataList:Roll[]=rolls
@@ -86,6 +85,7 @@ struct RollBoxs {
   @State isSheetShow:boolean=false
   @State isDialogShow:boolean=false
   @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
+
   private swiperController: SwiperController = new SwiperController()
   aboutToAppear() {
     BreakpointSystem.getInstance().attach(this.currentBreakpoint)

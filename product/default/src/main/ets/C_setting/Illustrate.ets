@@ -4,18 +4,9 @@ struct Agreement {
   @State message: string = 'Hello World';
   @Consume('pageInfos') pageInfos: NavPathStack;
   build() {
-    RelativeContainer() {
-      Text(this.message)
-        .id('AgreementHelloWorld')
-        .fontSize(50)
-        .fontWeight(FontWeight.Bold)
-        .alignRules({
-          center: { anchor: '__container__', align: VerticalAlign.Center },
-          middle: { anchor: '__container__', align: HorizontalAlign.Center }
-        })
+    Column(){
+      Text('该版本目前为单机')
     }
-    .height('100%')
-    .width('100%')
   }
 }
 export default Agreement

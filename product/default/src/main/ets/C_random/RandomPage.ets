@@ -38,10 +38,10 @@ class AppItem{
 }
 let Swipers:Array<AppItem>=[
   new AppItem('真心话大冒险',$r("app.media.icon_HonestOrChallenge"),
-    'C_more/HonestOrChallenge','',[[0x00beff,0],[0xffeb00,0.5],[0xffff00,1]]),
+    'C_more/HonestOrChallenge','',[[0xFF6347, 0], [0xFFD700, 0.5], [0xFFA500, 1]]),
 
   new AppItem('幸运转盘',$r("app.media.icon_Rolls"),
-    'pages/Index','',[[0x00beff,0],[0xffeb00,0.5],[0xffff00,1]]),
+    'pages/Index','',[[0x00BFFF, 0], [0x1E90FF, 0.5], [0x00008B, 1]]),
 
   new AppItem('答案之书',$r("app.media.icon_RandomPlaces"),
     'C_random/RandomColors','',[[0x00beff,0],[0xffeb00,0.5],[0xffff00,1]]),
@@ -88,25 +88,25 @@ let Swipers:Array<AppItem>=[
 
 let Apps:Array<AppItem>=[
   new AppItem('颜色搭配',$r("app.media.icon_RandomColors"),
-    'C_random/RandomColors','',[[0x00beff,0],[0xffeb00,0.5],[0xffff00,1]]),
+    'C_random/RandomColors','',[[0xDDA0DD, 0], [0xEE82EE, 0.5], [0x9400D3, 1]] ),
 
   new AppItem('扔硬币',$r("app.media.icon_FlipCoin"),
-    'C_random/FlipCoin','',[[0x00beff,0],[0xffeb00,0.5],[0xffff00,1]]),
+    'C_random/FlipCoin','', [[0xFF6347, 0], [0xFFD700, 0.5], [0xFFA500, 1]] ),
 
   new AppItem('抽签',$r("app.media.icon_RandomNames"),
-    'C_random/RandomNames','',[[0x00beff,0],[0xffeb00,0.5],[0xffff00,1]]),
+    'C_random/RandomNames','', [[0x98FB98, 0], [0x32CD32, 0.5], [0x006400, 1]]),
 
   new AppItem('掷骰子',$r("app.media.icon_RollDices"),
-    'C_random/RollDices','',[[0x00beff,0],[0xffeb00,0.5],[0xffff00,1]]),
+    'C_random/RollDices','', [[0x6A5ACD, 0], [0x483D8B, 0.5], [0x0000FF, 1]]),
 
   new AppItem('吃什么',$r("app.media.icon_RollNumbers"),
-    'C_random/RandomFoods','',[[0x00beff,0],[0xffeb00,0.5],[0xffff00,1]]),
+    'C_random/RandomFoods','',[[0xADFF2F, 0], [0x7FFF00, 0.5], [0x008000, 1]]),
 
   new AppItem('随机数',$r("app.media.icon_RollNumbers"),
-    'C_random/RandomNumbers','',[[0x00beff,0],[0xffeb00,0.5],[0xffff00,1]]),
+    'C_random/RandomNumbers','', [[0xFFDAB9, 0], [0xFFE4B5, 0.5], [0xB8860B, 1]]),
 
-  new AppItem('人生必去的100个地方',$r("app.media.icon_RandomPlaces"),
-    'C_random/RandomPlaces','',[[0x00beff,0],[0xffeb00,0.5],[0xffff00,1]]),
+  new AppItem('人生必去的100个地方',$r("app.media.icon_RandomNames"),
+    'C_random/RandomPlaces','' , [[0x87CEEB, 0], [0x4682B4, 0.5], [0x000080, 1]]),
 ]
 @Component
 struct AppList{

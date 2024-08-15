@@ -1,5 +1,6 @@
 import router from '@ohos.router';
 import AboutUs from './AboutUs'
+import ContactUs from './ContactUs'
 import Options from './Options'
 import PrivacyPolicy from './PrivacyPolicy'
 import Illustrate from './Illustrate'
@@ -32,7 +33,9 @@ struct Setting {
 
   @Builder
   PageMap(name: string) {
-       if (name == "通用设置") {
+    if(name=="问题反馈"){
+            ContactUsView()
+      }else if (name == "通用设置") {
          OptionsView()
        }else if (name == "使用说明") {
          IllustrateView()
@@ -257,6 +260,21 @@ export struct AddOilView {
     NavDestination() {
       AddOil().width('100%').height('100%')
     }.title(addOil.title)
+    .onBackPressed(() => {
+      const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
+      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
+      return true
+    })
+  }
+}
+// ContactUs.ets
+@Component
+export struct  ContactUsView {
+  @Consume('pageInfos') pageInfos: NavPathStack;
+  build() {
+    NavDestination() {
+      ContactUs().width('100%').height('100%')
+    }.title( contactUs.title)
     .onBackPressed(() => {
       const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
       console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))

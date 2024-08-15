@@ -1,5 +1,5 @@
 import { Random } from '@ohos/common';
-//import{Roll,RollItem}from'./RollPage'
+import {rolls} from'./RollPage'
 import router from '@ohos.router';
 
 class RollItem { //转盘子选项
@@ -7,7 +7,6 @@ class RollItem { //转盘子选项
   text: string
   weight: number
   color: string
-
   constructor(id: string, text: string, weight: number, color: string) {
     this.text = text;
     this.weight = weight;
@@ -15,13 +14,10 @@ class RollItem { //转盘子选项
     this.id = id
   }
 }
-
-//@Observed class RollItems extends Array<RollItem>{}
 class Roll { //转盘
   index: string
   rollName: string
   rollItems: RollItem[] //所有转盘子选项
-
   constructor(index: string, rollName: string, rollItems: RollItem[]) {
     this.index = index;
     this.rollName = rollName;
@@ -29,33 +25,8 @@ class Roll { //转盘
   }
 }
 
-//@Observed class Rolls extends Array<Roll>{}
 
 
-let rolls: Array<Roll> = [                                //所有转盘
-  new Roll('0', '随机一个颜色吧啦啦啦啦啦啦', [
-    new RollItem('0','粉色', 2, '#ffff007a'),
-    new RollItem('1','蓝色', 3, '#ff0cdec5'),
-  ]),
-  new Roll('1', '吃啥？', [
-    new RollItem('0','梅菜扣肉', 2, '#ff05f80b'),
-    new RollItem('1','西湖醋鱼', 3, '#ff5f16e1'),
-    new RollItem('2','西红柿炒鸡蛋', 2, '#ffe81b58'),
-    new RollItem('3','海带炖肉', 3, '#ffecb609'),
-    new RollItem('4','穿过你的黑发我的手', 2, '#499821'),
-    new RollItem('5','蚂蚁上树', 3, '#ff68ead0'),
-  ]),
-  new Roll('2', '周几', [
-    new RollItem('0','1', 2, '#ff05f80b'),
-    new RollItem('1','2', 3, '#ff5f16e1'),
-    new RollItem('2','3', 1, '#ffe81b58'),
-    new RollItem('3','4', 3, '#ffecb609'),
-    new RollItem('4','5', 5, '#499821'),
-    new RollItem('5','6', 3, '#ffde6e12'),
-    new RollItem('6','7', 3, '#ffecb609'),
-  ]),
-]
-AppStorage.setOrCreate('allRolls', rolls);
 
 //所有轮盘
 @Entry

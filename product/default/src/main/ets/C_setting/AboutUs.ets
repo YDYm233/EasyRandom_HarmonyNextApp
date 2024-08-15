@@ -1,20 +1,48 @@
-@Entry
 @Component
-struct AboutUs {
-  @State message: string = 'Hello World';
-  build() {
-    RelativeContainer() {
-      Text(this.message)
-        .id('AboutUsHelloWorld')
-        .fontSize(50)
-        .fontWeight(FontWeight.Bold)
-        .alignRules({
-          center: { anchor: '__container__', align: VerticalAlign.Center },
-          middle: { anchor: '__container__', align: HorizontalAlign.Center }
-        })
-    }
-    .height('100%')
-    .width('100%')
+struct Container{
+  build(){
+    Column()
   }
 }
+@Component
+struct AboutUs {
+  build() {
+    Column() {
+      GridRow({
+        columns: {
+          sm: 4,
+          md: 8,
+          lg: 12
+        },
+        gutter: 12
+      }) {
+        GridCol({
+          span: {
+            sm: 4,
+            md: 4,
+            lg: 4
+          },
+          offset: {
+            sm: 0,
+            md: 2,
+            lg: 4
+          }
+        }) {
+          Row() {
+           Container()
+          }
+          .width('100%')
+          .height('100%')
+          .alignItems(VerticalAlign.Center)
+        }
+        .height('100%')
+      }
+      .height('100%')
+      .margin({ left: 12, right: 12 })
+    }.height('100%').backgroundColor($r("app.color.view_bgc_2"))
+  }
+}
+
+
+
 export default AboutUs
