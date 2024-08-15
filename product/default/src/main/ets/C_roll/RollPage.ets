@@ -58,19 +58,28 @@ class Roll {                                                            //转盘
     new RollItem('4','穿过你的黑发我的手', 2, '#fff7942c'),
     new RollItem('5','蚂蚁上树', 3, '#ff68ead0'),
   ]),
-   new Roll('1', '随机一个颜色', [
+   new Roll('1', '随机颜色', [
      new RollItem('0','粉色', 2, '#ffff007a'),
      new RollItem('1','蓝色', 3, '#ff0cdec5'),
    ]),
-  new Roll('2', '周几', [
-    new RollItem('0','1', 2, '#ff05f80b'),
-    new RollItem('1','2', 3, '#ff5f16e1'),
-    new RollItem('2','3', 1, '#ffe81b58'),
-    new RollItem('3','4', 3, '#ffecb609'),
-    new RollItem('4','5', 5, '#499821'),
-    new RollItem('5','6', 3, '#ffde6e12'),
-    new RollItem('6','7', 3, '#ffecb609'),
+  new Roll('2', '抽奖', [
+    new RollItem('0','三等奖', 4, '#ff05f80b'),
+    new RollItem('1','二等奖', 3, '#ff5f16e1'),
+    new RollItem('2','一等奖', 2, '#ffe81b58'),
+    new RollItem('3','特等奖', 1, '#ffecb609'),
+    new RollItem('4','感谢参与', 5, '#499821'),
+    new RollItem('5','三等奖', 1, '#ffde6e12'),
+    new RollItem('6','儿等奖', 1, '#ffecb609'),
   ]),
+   new Roll('3', '幸运嘉宾', [
+     new RollItem('0','小红', 1, '#ff05f80b'),
+     new RollItem('1','小明', 1, '#ff5f16e1'),
+     new RollItem('2','小绿', 1, '#ffe81b58'),
+     new RollItem('3','小岑', 1, '#ffecb609'),
+     new RollItem('4','王哥', 1, '#499821'),
+     new RollItem('5','小阳', 1, '#ffde6e12'),
+     new RollItem('6','夏树', 1, '#ffecb609'),
+   ]),
 ]
 AppStorage.setOrCreate('allRolls', rolls);
 @Component

@@ -1,12 +1,15 @@
-
+import { webview } from '@kit.ArkWeb';
 
 @Component
 struct PrivacyPolicy {
-  @State message: string = 'Hello World';
-  @Consume('pageInfos') pageInfos: NavPathStack;
+@State src:string|Resource='http://www.m233.top/easyrandom/privacypolicy.html'
+  controller: webview.WebviewController = new webview.WebviewController();
   build() {
     Column(){
-      Text('发明人:闫东阳\n发明项目：nextApp')
+      Web({src:this.src,controller:this.controller})
+        .onErrorReceive(()=>{
+          this.src=$rawfile("privacypolicy.html")
+        })
     }
   }
 }

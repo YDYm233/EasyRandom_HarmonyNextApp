@@ -1,8 +1,6 @@
 
 @Component
 struct Addoil {
-  @State message: string = 'Hello World';
-  @Consume('pageInfos') pageInfos: NavPathStack;
   build() {
     RelativeContainer() {
       Text('加油')

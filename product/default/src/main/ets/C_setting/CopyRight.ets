@@ -1,21 +1,16 @@
 
+import { webview } from '@kit.ArkWeb';
 @Component
 struct CopyRight {
-  @State message: string = 'Hello World';
-  @Consume('pageInfos') pageInfos: NavPathStack;
+  @State src:string|Resource='http://www.m233.top/easyrandom/copyright.html'
+  controller: webview.WebviewController = new webview.WebviewController();
   build() {
-    RelativeContainer() {
-      Text(this.message)
-        .id('CopyRightHelloWorld')
-        .fontSize(50)
-        .fontWeight(FontWeight.Bold)
-        .alignRules({
-          center: { anchor: '__container__', align: VerticalAlign.Center },
-          middle: { anchor: '__container__', align: HorizontalAlign.Center }
+    Column(){
+      Web({src:this.src,controller:this.controller})
+        .onErrorReceive(()=>{
+          this.src=$rawfile("copyright.html")
         })
     }
-    .height('100%')
-    .width('100%')
   }
 }
 export default CopyRight
