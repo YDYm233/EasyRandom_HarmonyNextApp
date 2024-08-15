@@ -61,7 +61,7 @@ struct NumbersBox {
 
       Badge({
         count: index+1,
-        style: {badgeColor:0x220000},
+        style: {},
         position: BadgePosition.RightTop,
       }) {
         Text(title.toString())
@@ -71,12 +71,12 @@ struct NumbersBox {
           .textAlign(TextAlign.Center)
           .width('100%')
           .height('100%')
+          .fontWeight(800)
       }
       .width('100%')
-      .padding({top:'5%',bottom:'5%'})
-      .margin('5%')
+
       .border({
-        color: Color.Blue,
+        color: 0x20000000,
         width: 1,
         style: BorderStyle.Solid,
         radius: 12
@@ -89,7 +89,7 @@ struct NumbersBox {
               ForEach(this.numbers,(title:number,index:number) => {
                 GridCol({span:3}) {
                   this.ListItem(title,index)
-                }.aspectRatio(1)
+                }.aspectRatio(1)      .margin('2%')
               })
             }.width('100%')
             }

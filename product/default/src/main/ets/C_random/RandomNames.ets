@@ -57,13 +57,26 @@ struct NamesBox {
   @Builder
   ListItem(name:string,index:number) {
     Row() {
-          Text(index+name)
+          Text(index.toString())
+            .width('10%')
+            .aspectRatio(1)
+            .fontSize(16)
+            .backgroundColor(0xf1f3f5)
+            .borderRadius('50%')
+            .margin('2.5%')
+            .textAlign(TextAlign.Center)
+          Text(name)
+            .width('90%')
             .opacity(0.88)
             .fontColor('#000000')
             .fontSize(20)
-    }.width('90%').height('12%').margin('5%')
+            .textAlign(TextAlign.Center)
+    }.width('90%').height('20%')
+    .padding({left:'5%',right:'5%'})
+    //.margin('5%')
     .justifyContent(FlexAlign.Center).alignItems(VerticalAlign.Center)
-    .border({color:Color.Blue,width:1,style:BorderStyle.Solid,radius:12})
+    .border({color:Color.Blue,width:0,style:BorderStyle.Solid,radius:12})
+    .backgroundColor(0xffffff)
 
   }
   build() {
@@ -83,7 +96,7 @@ struct NamesBox {
             lg: 6
           }
         }) {
-         List(){
+         List({space:6}){
            ForEach(this.texts,(name:string,index:number) => {
              ListItem() {
                this.ListItem(name,index)
@@ -92,8 +105,10 @@ struct NamesBox {
          }.alignListItem(ListItemAlign.Center)
           .width('90%')
           .margin('5%')
+         .padding({top:'5%'})
           .aspectRatio(1)
-          .border({width:2,color:0x20808080,radius:12})
+         .backgroundColor(0xf1f3f5)
+          .border({width:4,color:0x20808080,radius:12})
         }.borderRadius(24).backgroundColor($r("app.color.view_bgc_1"))
 
 
