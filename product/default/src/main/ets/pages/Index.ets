@@ -50,7 +50,7 @@ struct TabBar {
       GridRow() {
         GridCol({ span: { sm: 3, md: 2, lg: 1} }) {
           Row() {
-            Image($r("app.media.func_back")).height('24vp').width('24vp')
+           // Image($r("app.media.func_back")).height('24vp').width('24vp')
           }
           .width('100%')
           .height($r("app.string.header_height"))

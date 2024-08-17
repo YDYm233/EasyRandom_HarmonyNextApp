@@ -81,7 +81,7 @@ let Swipers:Array<AppItem>=[
     .itemSpace(10)
     .displayCount(this.currentBreakpoint.value === 'sm' ?1 : (this.currentBreakpoint.value === 'md' ? 2 : 3))
     .width('100%')
-    .padding({ left: 12, right: 12, bottom: 16, top: 16 })
+    .padding({ left: 12, right: 12, bottom: 36, top: 16 })
   }
 }
 
@@ -99,14 +99,12 @@ let Apps:Array<AppItem>=[
   new AppItem('掷骰子',$r("app.media.icon_RollDices"),
     'C_random/RollDices','', [[0x6A5ACD, 0], [0x483D8B, 0.5], [0x0000FF, 1]]),
 
-  new AppItem('吃什么',$r("app.media.icon_RollNumbers"),
+  new AppItem('吃什么',$r("app.media.icon_RandomFoods"),
     'C_random/RandomFoods','',[[0xADFF2F, 0], [0x7FFF00, 0.5], [0x008000, 1]]),
 
   new AppItem('随机数',$r("app.media.icon_RollNumbers"),
     'C_random/RandomNumbers','', [[0xFFDAB9, 0], [0xFFE4B5, 0.5], [0xB8860B, 1]]),
 
-  new AppItem('人生必去的100个地方',$r("app.media.icon_RandomNames"),
-    'C_random/RandomPlaces','' , [[0x87CEEB, 0], [0x4682B4, 0.5], [0x000080, 1]]),
 ]
 @Component
 struct AppList{

@@ -43,6 +43,8 @@ struct Setting {
          PrivacyPolicyView()
        }else if (name == "版权声明") {
          CopyRightView()
+    }else if (name == "更多信息") {
+        IllustrateView()
        }else if (name == "赞赏我们") {
          AddOilView()
        }
@@ -163,16 +165,18 @@ struct Setting {
         .width("100%")
         .height('100%')
         //.margin({ top: 12 })
+        .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
       }
       .mode(NavigationMode.Auto)
       .navDestination(this.PageMap)
       .minContentWidth('420vp')
       .backButtonIcon($r("app.media.func_back"))
+      .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
     }
     .height('100%')
     .width('100%')
-
     .backgroundColor('#F1F3F5')
+    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
 

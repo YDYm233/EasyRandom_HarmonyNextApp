@@ -1,7 +1,10 @@
 @Component
 struct Container{
   build(){
-    Column()
+    Column(){
+      Text('页面火速开发中')
+      Text('这是本人毕业设计的一部分，特别鸣谢给与图标绘画支持的四位画师')
+    }
   }
 }
 @Component
