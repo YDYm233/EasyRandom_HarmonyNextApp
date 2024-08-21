@@ -107,7 +107,7 @@ struct HonestOrChallenge{
           }
           let angle = this.pointAngle%360
           if(angle==0||angle==180){
-            console.log('无事发生')
+          //  console.log('无事发生')
             promptAction.showToast({
               message:'无事发生'
             })

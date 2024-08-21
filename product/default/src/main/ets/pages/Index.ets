@@ -78,7 +78,7 @@ struct TabBar {
           .padding({ right: 12 })
           .onClick(()=>{
             router.pushUrl({
-              url: 'SettingPage/SettingPage'
+              url: 'pages/SettingPage/SettingPage'
             }).then(() => {
               console.info("success.");
            }).catch((err: BusinessError) => {

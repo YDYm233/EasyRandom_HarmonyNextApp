@@ -2,7 +2,7 @@
 import { webview } from '@kit.ArkWeb';
 @Component
 struct CopyRight {
-  @State src:string|Resource='http://www.m233.top/easyrandom/copyright.html'
+  @State src:string|Resource=$rawfile("copyright.html")
   controller: webview.WebviewController = new webview.WebviewController();
   build() {
     Column(){

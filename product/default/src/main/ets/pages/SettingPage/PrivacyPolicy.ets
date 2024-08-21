@@ -6,8 +6,8 @@ struct PrivacyPolicy {
   controller: webview.WebviewController = new webview.WebviewController();
   build() {
     Column(){
-      Web({src:this.src,controller:this.controller})
-    }
+      Web({src:this.src,controller:this.controller}).width("100%")
+    }.width("100%")
   }
 }
 export default PrivacyPolicy

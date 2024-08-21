@@ -37,7 +37,7 @@ export default struct Header {
           }
           .onClick(()=>{
             router.pushUrl({
-              url: 'SettingPage/SettingPage'
+              url: 'pages/SettingPage/SettingPage'
             }).then(() => {
               console.info("success.");
             })

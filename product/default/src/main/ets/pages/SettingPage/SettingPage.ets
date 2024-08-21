@@ -6,6 +6,7 @@ import PrivacyPolicy from './PrivacyPolicy'
 import Illustrate from './Illustrate'
 import CopyRight from './CopyRight'
 import AddOil  from './AddOil'
+import { PromptAction, promptAction } from '@kit.ArkUI'
 class Item{
   title:string
   icon:Resource
@@ -108,6 +109,11 @@ struct Setting {
           }.height('100%').aspectRatio(1).alignItems(VerticalAlign.Center).justifyContent(FlexAlign.Center)
           Row(){
             Image($r("app.media.func_share")).height(24).width(24)
+              .onClick(()=>{
+                promptAction.showToast({
+                  message:'功能开发中'
+                })
+              })
           }.height('100%').aspectRatio(1).alignItems(VerticalAlign.Center).justifyContent(FlexAlign.Center)
         }
         .width('100%')
@@ -248,7 +254,7 @@ export struct PrivacyPolicyView {
   build() {
     NavDestination() {
       PrivacyPolicy().width('100%').height('100%')
-    }.title(privacyPolicy.title)
+    }.title(privacyPolicy.title).width("100%")
     .onBackPressed(() => {
       const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
       console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
