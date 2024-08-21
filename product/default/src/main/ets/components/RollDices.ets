@@ -1,5 +1,5 @@
 import { Random,Randoms } from '@ohos/common'
-import  Header from '../Component/Header'
+import  Header from './Header'
 import { CounterType, CounterComponent } from '@kit.ArkUI';
 @Entry
 @Component
@@ -39,7 +39,7 @@ struct RollDices {
         .height('100%')
       }
       .height('100%')
-      .margin({ left: 12, right: 12 })
+      .margin({ left: 24, right: 24})
       .padding({top:$r("app.string.header_height")})
 
     }.height('100%')

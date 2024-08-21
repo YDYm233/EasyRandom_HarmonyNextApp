@@ -1,5 +1,5 @@
 import {Random} from '@ohos/common'
-import Header from '../Component/Header'
+import Header from './Header'
 @Entry
 @Component
 struct RollBlessings{

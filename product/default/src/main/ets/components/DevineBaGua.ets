@@ -1,5 +1,5 @@
 import { Random } from '@ohos/common'
-import Header from '../Component/Header'
+import Header from './Header'
 
 @Entry
 @Component
@@ -222,7 +222,7 @@ struct Bagua {
   @State all:Array<string>=['坎','坤','震','巽','太极','乾','兑','艮','离']
   @State angles: Array<number> = [180, 45, 270, 315, 135, 90, 225, 0];
   @State isRoll: boolean = false;
-  @State duration: number = 5000;
+  @State duration: number = 3000;
   @State angle: number = 0;
 
   build() {
@@ -347,9 +347,11 @@ struct Bagua {
         this.isRoll = false;
       }, this.duration)
     })
+    .enabled(!this.isRoll)
     .backgroundColor(0xffffff)
     .width('100%')
     .aspectRatio(1)
+    .borderRadius(12)
     .clip(true)
   }
 }

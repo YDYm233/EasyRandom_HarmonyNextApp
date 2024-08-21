@@ -1,7 +1,6 @@
-import {rolls, Roll, RollBox, RollItem } from '../../C_roll/RollPage'
+import {rolls, Roll, RollBox, RollItem } from '../../pages/RollPage/RollPage'
 import { Random } from '@ohos/common'
 import { preferences } from '@kit.ArkData';
-import { emitter } from '@kit.BasicServicesKit';
 let datas: Roll = rolls[0]
 let preferenceTheme: preferences.Preferences | null = null;
 @Entry

@@ -1,8 +1,8 @@
 import { Random,Randoms } from '@ohos/common'
-import  Header from '../Component/Header'
+import  Header from './Header'
 import { PromptAction, promptAction } from '@kit.ArkUI'
 import { BreakpointState, BreakpointSystem } from '@ohos/common';
-import {challenges,honests}from './challenges'
+import {challenges,honests}from '../datas/challenges'
 @Entry
 @Component
 struct HonestOrChallenge{

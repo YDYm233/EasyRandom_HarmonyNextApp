@@ -17,13 +17,13 @@ class AppItem{
 }
 let Apps:Array<AppItem>=[
   new AppItem('八卦',$r("app.media.icon_DevineBaGua"),
-    'C_more/DevineBaGua','',[[0x00beff,0],[0xffeb00,0.5],[0xffff00,1]]),
+    'components/DevineBaGua','',[[0x00beff,0],[0xffeb00,0.5],[0xffff00,1]]),
 
   new AppItem('祝福木鱼',$r("app.media.MuYu"),
-    'C_more/RollBlessings','',[[0x00beff,0],[0xffeb00,0.5],[0xffff00,1]]),
+    'components/RollBlessings','',[[0x00beff,0],[0xffeb00,0.5],[0xffff00,1]]),
 
   new AppItem('人生必去的100个地方',$r("app.media.icon_RandomPlace"),
-    'C_random/RandomPlaces','',[[0x00beff,0],[0xffeb00,0.5],[0xffff00,1]]),
+    'components/RandomFoods','',[[0x00beff,0],[0xffeb00,0.5],[0xffff00,1]]),
 ];
 
 @Entry

@@ -49,17 +49,6 @@
       "name": "common",
       "srcPath": "./common",
     },
-    {
-      "name": "setting",
-      "srcPath": "./feature/setting",
-      "targets": [
-        {
-          "name": "default",
-          "applyToProducts": [
-            "default"
-          ]
-        }
-      ]
-    }
+
   ]
 }

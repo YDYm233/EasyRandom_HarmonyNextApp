@@ -1,7 +1,7 @@
 {
   "name": "default",
   "version": "1.0.0",
-  "description": "随易App",
+  "description": "手机、平板主入口",
   "main": "Index.ets",
   "author": "闫东阳",
   "license": "",

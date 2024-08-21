@@ -1,7 +1,7 @@
-import RandomPage from '../C_random/RandomPage'
-import RollPage from '../C_roll/RollPage'
-import MorePage from '../C_more/MorePage'
-import AnswerPage from '../C_answer/AnswerPage'
+import RandomPage from './RandomPage'
+import RollPage from './RollPage/RollPage'
+import MorePage from './MorePage'
+import AnswerPage from './AnswerPage'
 import router from '@ohos.router';
 import { BusinessError } from '@kit.BasicServicesKit';
 @Entry({ routeName: 'Index' })
@@ -78,7 +78,7 @@ struct TabBar {
           .padding({ right: 12 })
           .onClick(()=>{
             router.pushUrl({
-              url: 'C_setting/SettingPage'
+              url: 'SettingPage/SettingPage'
             }).then(() => {
               console.info("success.");
            }).catch((err: BusinessError) => {

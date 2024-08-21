@@ -1,20 +1,20 @@
 {
   "src": [
     "pages/Index",
-    "C_random/RandomPage",
-    "C_random/RandomColors",
-    "C_random/RandomNames",
-    "C_roll/RollPage",
-    "C_roll/RollOpts",
-    "C_answer/AnswerPage",
-    "C_more/MorePage",
-    "C_more/DevineBaGua",
-    "C_more/RollBlessings",
-    "C_random/FlipCoin",
-    "C_random/RandomNumbers",
-    "C_more/HonestOrChallenge",
-    "C_random/RollDices",
-    "C_random/RandomFoods",
-    "C_setting/SettingPage"
+    "pages/RandomPage",
+    "components/RandomColors",
+    "components/RandomNames",
+    "pages/RollPage/RollPage",
+    "pages/RollPage/RollOpts",
+    "pages/AnswerPage",
+    "pages/MorePage",
+    "components/DevineBaGua",
+    "components/RollBlessings",
+    "components/FlipCoin",
+    "components/RandomNumbers",
+    "components/HonestOrChallenge",
+    "components/RollDices",
+    "components/RandomFoods",
+    "pages/SettingPage/SettingPage"
   ]
 }

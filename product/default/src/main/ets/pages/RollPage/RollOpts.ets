@@ -1,5 +1,5 @@
 import { Random } from '@ohos/common';
-import {rolls} from'./RollPage'
+import {rolls} from '../../datas/rolls'
 import router from '@ohos.router';
 
 class RollItem { //转盘子选项

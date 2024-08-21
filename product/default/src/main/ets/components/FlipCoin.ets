@@ -1,5 +1,5 @@
 import {Random} from '@ohos/common'
-import Header from '../Component/Header'
+import Header from './Header'
 
 @Entry
 @Component
@@ -37,7 +37,7 @@ import Header from '../Component/Header'
         .height('100%')
       }
       .height('100%')
-      .margin({ left: 12, right: 12 })
+      .margin({ left: 24, right: 24 })
       .padding({top:$r("app.string.header_height")})
     }.height('100%').backgroundColor($r("app.color.view_bgc_2"))
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])

@@ -1,10 +1,5 @@
-
-import { Random,Randoms } from '@ohos/common'
-import  Header from '../Component/Header'
-import { CounterType, CounterComponent } from '@kit.ArkUI';
-
-const dishesArray = [
-  //河南美食
+export const foodsArray = [
+//河南美食
   "烩面",
   "胡辣汤",
   "羊肉烩馍",
@@ -43,7 +38,7 @@ const dishesArray = [
   "济源土炒馍",
   "鹤壁淇河鲫鱼",
   "鄢陵腊梅酥饼",
-//鲁菜
+  //鲁菜
   "葱烧海参",
   "烩乌鱼蛋汤",
   "白扒四宝",
@@ -72,7 +67,7 @@ const dishesArray = [
   "糖酱鸡块",
   "油泼豆莛",
   "诗礼银杏",
-//川菜
+  //川菜
   "回锅肉",
   "麻婆豆腐",
   "水煮鱼",
@@ -96,7 +91,7 @@ const dishesArray = [
   "宫保鸡丁",
   "粉蒸牛肉",
   "担担面",
-//粤菜
+  //粤菜
   "白切鸡",
   "烧鹅",
   "烤乳猪",
@@ -125,7 +120,7 @@ const dishesArray = [
   "太爷鸡",
   "赛螃蟹",
   "香芋扣肉",
-//苏菜
+  //苏菜
   "扬州炒饭",
   "清蒸鲈鱼",
   "大煮干丝",
@@ -171,7 +166,7 @@ const dishesArray = [
   "多萨（Dosa）",
   "土耳其煎蛋卷（Menemen）",
   "奶酪饼（Sigara Borek）",
-//面条大全
+  //面条大全
   "陕西biangbiang面",
   "重庆小面",
   "山西刀削面",
@@ -230,7 +225,7 @@ const dishesArray = [
   "海鲜面",
   "西红柿鸡蛋面",
   "打卤面",
-//创新菜
+  //创新菜
   "黑蒜脆皮金玉参",
   "脆皮爆浆虾球",
   "黑松露腩肉海参焖饭",
@@ -281,7 +276,7 @@ const dishesArray = [
   "芒果蛋黄辣子鸡",
   "松露酱糯米山药",
   "新会桑拿海青斑",
-// 法餐
+  // 法餐
   "鹅肝酱 (Foie Gras)",
   "蜗牛 (Escargots)",
   "生蚝 (Huîtres)",
@@ -363,7 +358,7 @@ const dishesArray = [
   "糯米糕 [떡]",
   "红豆饼 [팥빙수]", // 注意：这里按照Patbingsu保留，但原意是红豆刨冰
   "韩式炸鸡 [한식 튀긴닭]",
-//东南亚菜
+  //东南亚菜
   "冬阴功汤 (Tom Yum Goong)",
   "咖喱皇大虾 (Thai Green Curry with Prawns)",
   "红咖喱炒蟹 (Thai Red Curry with Crab)",
@@ -383,81 +378,3 @@ const dishesArray = [
   "卤猪脚 (Lechon Kawali)",
   "菲律宾炒面 (Pancit)"
 ]
-@Entry
-@Component
-struct RandomFoods {
-  build() {
-    Column() {
-      Header({ title: '这顿吃什么？' })
-      GridRow({
-        columns: {
-          sm: 4,
-          md: 8,
-          lg: 12
-        },
-        gutter: 12
-      }) {
-        GridCol({
-          span: {
-            sm: 4,
-            md: 6,
-            lg: 8
-          },
-          offset: {
-            sm: 0,
-            md: 1,
-            lg: 2
-          }
-        }) {
-          Scroll() {
-            Dices().width('100%')
-          }
-          .width('100%')
-          .height('100%')
-          .align(Alignment.Center)
-
-        }
-        .height('100%')
-      }
-      .height('100%')
-      .margin({ left: 12, right: 12 })
-      .padding({top:$r("app.string.header_height")})
-    }.height('100%')
-    .backgroundColor($r("app.color.view_bgc_2"))
-    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
-  }
-}
-@Component
-struct Dices{
-  @State foods:string[]=dishesArray
-  @State food:string=this.foods[Random(0,this.foods.length-1,true)]
-  build(){
-    Column(){
-      Row(){
-        Text(this.food).height('70%').animation({duration:100})
-      }.width('100%').height('80%').alignItems(VerticalAlign.Center).justifyContent(FlexAlign.Center)
-      Row(){
-        Button('开始')
-          .backgroundColor($r("app.color.control_bgc_1"))
-          .height('80%')
-          .fontWeight(800)
-          .aspectRatio(2)
-          .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
-          .onClick(()=>{
-            let selected:string =this.foods[Random(0,this.foods.length-1,true)];
-            let index=0;
-            let loop=setInterval(()=>{
-              this.food =  this.foods[Random(0,this.foods.length-1,true)];
-              if(index>25){
-                this.food=selected
-                clearInterval(loop)
-              }
-              index++;
-            },60)
-          })
-      }.height('20%')
-
-    }.aspectRatio(1).backgroundColor($r("app.color.view_bgc_1")).borderRadius(24)
-
-  }
-}
