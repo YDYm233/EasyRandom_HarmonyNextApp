@@ -1,4 +1,4 @@
-export const answers:string[] = [
+export const answers: string[] = [
   "勇往直前",
   "稍作等待",
   "意外之喜",

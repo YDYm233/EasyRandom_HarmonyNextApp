@@ -1,11 +1,9 @@
-
-import { Randoms } from '@ohos/common';
+iimport { Randoms } from '@ohos/common';
 import Header from './Header';
 import { CounterComponent, CounterType } from '@kit.ArkUI';
 @Entry
 @Component
 struct RandomNames {
-
   build() {
     Column() {
       Header({ title: '随机数' })
@@ -35,13 +33,14 @@ struct RandomNames {
           .width('100%')
           .height('100%')
           .align(Alignment.Center)
+
           //.alignItems(VerticalAlign.Center)
         }
         .height('100%')
       }
       .height('100%')
       .margin({ left: 24, right: 24 })
-      .padding({top:$r("app.string.header_height")})
+      .padding({ top: $r("app.string.header_height") })
     }.height('100%')
     .backgroundColor($r("app.color.view_bgc_2"))
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
@@ -50,141 +49,149 @@ struct RandomNames {
 
 @Component
 struct NumbersBox {
-  @State numbers:number[]=[]
-  @State indexs:number[]=[]
-  @State min:number=0;
-  @State max:number=3;
-  @State number:number=this.max-this.min+1;
-  @State howmany:number=1
+  @State numbers: number[] = []
+  @State indexs: number[] = []
+  @State min: number = 0;
+  @State max: number = 3;
+  @State number: number = this.max - this.min + 1;
+  @State howmany: number = 1
+
   @Builder
-  ListItem(title:number,index:number) {
+  ListItem(title: number, index: number) {
 
-      Badge({
-        count: index+1,
-        style: {},
-        position: BadgePosition.RightTop,
-      }) {
-        Text(title.toString())
-          .opacity(0.88)
-          .fontColor('#000000')
-          .fontSize(20)
-          .textAlign(TextAlign.Center)
-          .width('100%')
-          .height('100%')
-          .fontWeight(800)
-      }
-      .width('100%')
+    Badge({
+      count: index + 1,
+      style: {},
+      position: BadgePosition.RightTop,
+    }) {
+      Text(title.toString())
+        .opacity(0.88)
+        .fontColor(0x000000)
+        .fontSize(20)
+        .textAlign(TextAlign.Center)
+        .width('100%')
+        .height('100%')
+        .fontWeight(800)
+    }
+    .width('100%')
 
-      .border({
-        color: 0x20000000,
-        width: 1,
-        style: BorderStyle.Solid,
-        radius: 12
-      })
+    .border({
+      color: 0x20000000,
+      width: 1,
+      style: BorderStyle.Solid,
+      radius: 12
+    })
   }
+
   build() {
     Column() {
-            Scroll(){
-            GridRow({columns:12}){
-              ForEach(this.numbers,(title:number,index:number) => {
-                GridCol({span:3}) {
-                  this.ListItem(title,index)
-                }.aspectRatio(1)      .margin('2%')
-              })
-            }.width('100%')
+      Scroll() {
+        GridRow({ columns: 12 }) {
+          ForEach(this.numbers, (title: number, index: number) => {
+            GridCol({ span: 3 }) {
+              this.ListItem(title, index)
+            }.aspectRatio(1).margin('2%')
+          })
+        }.width('100%')
+      }
+      .width('100%')
+      .border({ width: 2, color: 0x20808080, radius: 12 })
+      .layoutWeight(5)
+      .clip(true)
+
+      Row() {
+        Row() {
+          Text('最小值:').height('100%').fontWeight(FontWeight.Bold)
+          TextInput({ text: this.min.toString(), placeholder: '最小值' })
+            .padding(0)
+            .height('40%')
+            .width('20%')
+            .fontColor(0x333333)
+            .textAlign(TextAlign.Center)
+            .fontWeight(FontWeight.Bold)
+            .underlineColor(0x333333)
+            .type(InputType.Number)
+            .enterKeyType(EnterKeyType.Done)
+            .onChange((value: string) => {
+              if (Number(value) < this.max) {
+                this.min = Number(value);
+                this.number = this.max - this.min + 1;
+              } else {
+                this.min = 0;
+                this.number = this.max + 1;
+              }
+            })
+        }
+
+        Row() {
+          Text('最大值:').height('100%').fontWeight(FontWeight.Bold)
+          TextInput({ text: this.max.toString(), placeholder: '最小值' })
+            .padding(0)
+            .height('40%')
+            .width('20%')
+            .fontColor(0x333333)
+            .textAlign(TextAlign.Center)
+            .fontWeight(FontWeight.Bold)
+            .underlineColor(0x333333)
+            .type(InputType.Number)
+            .enterKeyType(EnterKeyType.Done)
+            .onChange((value: string) => {
+              if (Number(value) > this.min) {
+                this.max = Number(value);
+                this.number = this.max - this.min + 1;
+              } else {
+                this.max = this.max;
+              }
+            })
+        }
+      }
+      .justifyContent(FlexAlign.SpaceBetween)
+      .width('100%')
+      .layoutWeight(1)
+
+      Row() {
+        Row() {
+          Text('数量:').height('100%').fontWeight(FontWeight.Bold)
+          CounterComponent({
+            options: {
+              type: CounterType.COMPACT,
+              numberOptions: {
+                value: 1,
+                min: 1,
+                max: this.number,
+                step: 1,
+                focusable: true,
+                onChange: (value: number) => {
+                  this.howmany = Number(value)
+                }
+              }
             }
-            .width('100%')
-            .border({width:2,color:0x20808080,radius:12})
-            .layoutWeight(5)
-            .clip(true)
+          }).height('110%').padding({ top: '9%', left: '4%' })
+        }
+        .alignItems(VerticalAlign.Center)
+        .height('100%')
+        .aspectRatio(3)
 
-            Row() {
-              Row() {
-                Text('最小值:').height('100%').fontWeight(FontWeight.Bold)
-                TextInput({ text: this.min.toString(), placeholder: '最小值' })
-                  .padding(0)
-                  .height('40%')
-                  .width('20%')
-                  .fontColor(0x333333)
-                  .textAlign(TextAlign.Center)
-                  .fontWeight(FontWeight.Bold)
-                  .underlineColor(0x333333)
-                  .type(InputType.Number)
-                  .enterKeyType(EnterKeyType.Done)
-                  .onChange((value: string) => {
-                    if(Number(value)<this.max){
-                      this.min = Number(value);
-                      this.number=this.max-this.min+1;
-                    }
-                    else{
-                    this.min=0;
-                    this.number=this.max+1;
-                    }
-                  })
-              }
-              Row() {
-                Text('最大值:').height('100%').fontWeight(FontWeight.Bold)
-                TextInput({ text: this.max.toString(), placeholder: '最小值' })
-                  .padding(0)
-                  .height('40%')
-                  .width('20%')
-                  .fontColor(0x333333)
-                  .textAlign(TextAlign.Center)
-                  .fontWeight(FontWeight.Bold)
-                  .underlineColor(0x333333)
-                  .type(InputType.Number)
-                  .enterKeyType(EnterKeyType.Done)
-                  .onChange((value: string) => {
-                    if(Number(value)>this.min){
-                    this.max = Number(value);
-                    this.number=this.max-this.min+1;
-                    }
-                    else{
-                      this.max=this.max;
-                    }
-                  })
-              }
-            }
-            .justifyContent(FlexAlign.SpaceBetween)
-            .width('100%')
-            .layoutWeight(1)
+        Button() {
+          Text('开始').fontColor($r("app.color.control_fc_1")).fontWeight(FontWeight.Bold)
+        }
+        .onClick(() => {
+          this.numbers = Randoms(this.min, this.max, true, this.howmany, false)
+        })
 
-            Row(){
-              Row(){
-                Text('数量:').height('100%').fontWeight(FontWeight.Bold)
-                CounterComponent({
-                  options: {
-                    type: CounterType.COMPACT,
-                    numberOptions: {
-                      value: 1,
-                      min: 1,
-                      max:this.number,
-                      step: 1,
-                      focusable:true,
-                      onChange:(value:number)=>{this.howmany=Number(value)}
-                    }
-                  }
-                }).height('110%').padding({top:'9%',left:'4%'})
-              }
-              .alignItems(VerticalAlign.Center)
-              .height('100%')
-              .aspectRatio(3)
-              Button() {
-                Text('开始').fontColor($r("app.color.control_fc_1")).fontWeight(FontWeight.Bold)
-              }
-              .onClick(()=>{
-                this.numbers=Randoms(this.min,this.max,true,this.howmany,false)
-              })
-
-              .backgroundColor($r("app.color.control_bgc_1"))
-              .height('80%')
-              .aspectRatio(2)
-              .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
-            }.width('100%').layoutWeight(1)
-            .justifyContent(FlexAlign.SpaceBetween).alignItems(VerticalAlign.Center)
-          }.width('100%').borderRadius(24).padding('5%')
-          .aspectRatio(1).backgroundColor($r("app.color.view_bgc_1"))
+        .backgroundColor($r("app.color.control_bgc_1"))
+        .height('80%')
+        .aspectRatio(2)
+        .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+      }.width('100%').layoutWeight(1)
+      .justifyContent(FlexAlign.SpaceBetween).alignItems(VerticalAlign.Center)
     }
+    .width('100%')
+    .borderRadius(24)
+    .padding('5%')
+    .aspectRatio(1)
+    .backgroundColor($r("app.color.view_bgc_1"))
+  }
 }
 
 export default RandomNames

@@ -6,7 +6,6 @@
   "author": "闫东阳",
   "license": "",
   "dependencies": {
-      "@ohos/common": "file:../../common",
-
+    "@ohos/common": "file:../../common",
   }
 }

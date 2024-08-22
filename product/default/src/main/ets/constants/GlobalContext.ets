@@ -14,9 +14,11 @@
  */
 
 export class GlobalContext {
-  private constructor() { }
   private static instance: GlobalContext;
   private _objects = new Map<string, Object>();
+
+  private constructor() {
+  }
 
   public static getContext(): GlobalContext {
     if (!GlobalContext.instance) {

@@ -1,12 +1,13 @@
 @Component
-struct Container{
-  build(){
-    Column(){
+struct Container {
+  build() {
+    Column() {
       Text('页面火速开发中')
       Text('特别鸣谢给与图标绘画支持的四位画师')
     }
   }
 }
+
 @Component
 struct Illustrate {
   build() {

@@ -7,6 +7,7 @@ class RollItem { //转盘子选项
   text: string
   weight: number
   color: string
+
   constructor(id: string, text: string, weight: number, color: string) {
     this.text = text;
     this.weight = weight;
@@ -14,10 +15,12 @@ class RollItem { //转盘子选项
     this.id = id
   }
 }
+
 class Roll { //转盘
   index: string
   rollName: string
   rollItems: RollItem[] //所有转盘子选项
+
   constructor(index: string, rollName: string, rollItems: RollItem[]) {
     this.index = index;
     this.rollName = rollName;
@@ -26,17 +29,16 @@ class Roll { //转盘
 }
 
 
-
-
 //所有轮盘
 @Component
 struct OptBoxs {
   @StorageLink('allRolls') boxsList: Roll[] = rolls;
- // @State boxsList:Roll[]=AppStorage.get('allrolls') as Roll[]
+
+  // @State boxsList:Roll[]=AppStorage.get('allrolls') as Roll[]
 
   build() {
     Column() {
-      List({space:12}) {
+      List({ space: 12 }) {
         ForEach(this.boxsList, (item: Roll) => {
           ListItem() {
             Opts({ optsList: item })
@@ -51,20 +53,25 @@ struct OptBoxs {
           })
           .clip(true)
         },
-        //)
+          //)
           (item: Roll) => item.index)
         ListItem() {
-          Row(){
-            Button(){
-            Image($r("app.media.func_plus")).fillColor(0x88333333).width('80%').margin('10%')
+          Row() {
+            Button() {
+              Image($r("app.media.func_plus")).fillColor(0x88333333).width('80%').margin('10%')
             }.height('70%').backgroundColor(0xf1f3f5).aspectRatio(1).borderRadius('50%')
-          }.width('100%').aspectRatio(5).alignItems(VerticalAlign.Center).justifyContent(FlexAlign.Center)
+          }
+          .width('100%')
+          .aspectRatio(5)
+          .alignItems(VerticalAlign.Center)
+          .justifyContent(FlexAlign.Center)
           .backgroundColor(0xffffff)
-          .onClick(()=>{
+          .onClick(() => {
             let afterData = AppStorage.get('allRolls') as Array<Roll>;
-            let tailData:Roll=new Roll((Number(afterData[afterData.length-1].index)+1).toString(),'新转盘',[new RollItem('0','请输入',1,'#00beff')])
+            let tailData: Roll = new Roll((Number(afterData[afterData.length-1].index) + 1).toString(), '新转盘',
+              [new RollItem('0', '请输入', 1, '#00beff')])
             this.boxsList.push(tailData)
-            AppStorage.setAndLink('allroos',this.boxsList)
+            AppStorage.setAndLink('allroos', this.boxsList)
           })
         }
         .aspectRatio(5)
@@ -72,7 +79,7 @@ struct OptBoxs {
         .border({
           width: 0,
           color: 0xff0000,
-          radius:12,
+          radius: 12,
           style: BorderStyle.Solid
         })
         .clip(true)
@@ -120,13 +127,16 @@ struct OptBoxs {
         .backgroundColor($r("app.color.control_bgc_1"))
         .aspectRatio(2)
         .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
-      }.height(60).justifyContent(FlexAlign.SpaceAround).
-      width('100%').alignItems(VerticalAlign.Center)
+      }
+      .height(60)
+      .justifyContent(FlexAlign.SpaceAround)
+      .width('100%')
+      .alignItems(VerticalAlign.Center)
       //.backgroundColor(0xff0000)
-.position({bottom:-60,left:0})
+      .position({ bottom: -60, left: 0 })
     }.width('100%').backgroundColor($r("app.color.view_bgc_1"))
     .height('100%')
-    .padding({bottom:60})
+    .padding({ bottom: 60 })
 
   }
 }
@@ -139,27 +149,39 @@ struct Opts {
   @Prop optsList: Roll
   @State rollIndex: string = this.optsList.index
   @State isShow: boolean = false
-aboutToAppear(): void {
-  this.optsList=this.boxsList[Number(this.optsList.index)]
+
+  aboutToAppear(): void {
+    this.optsList = this.boxsList[Number(this.optsList.index)]
   }
+
   build() {
 
     Column() {
       Row() {
-        Text(this.optsList.rollName )
+        Text(this.optsList.rollName)
         Button() {
-          Image($r("app.media.func_detail")).fillColor(0x88333333).width('80%').margin('10%')        .rotate({z:1,angle:this.isShow?0:-90})
+          Image($r("app.media.func_detail"))
+            .fillColor(0x88333333)
+            .width('80%')
+            .margin('10%')
+            .rotate({ z: 1, angle: this.isShow ? 0 : -90 })
         }
         .height('60%')
         .backgroundColor(0xf1f3f5)
         .aspectRatio(1)
 
-        .animation({duration:400,curve:Curve.EaseIn})
+        .animation({ duration: 400, curve: Curve.EaseIn })
         .onClick(() => {
           this.isShow = !this.isShow
         })
-      }.aspectRatio(5).width('100%').justifyContent(FlexAlign.SpaceBetween).padding({left:'4%',right:'4%'})      .backgroundColor(0xffffff)
+      }
+      .aspectRatio(5)
+      .width('100%')
+      .justifyContent(FlexAlign.SpaceBetween)
+      .padding({ left: '4%', right: '4%' })
+      .backgroundColor(0xffffff)
       .borderRadius(12)
+
       if (this.isShow) {
         Column() {
           ForEach(this.optsList.rollItems, (item: RollItem) => {
@@ -169,37 +191,42 @@ aboutToAppear(): void {
             }
             .width('100%')
 
-          },(item: RollItem) => item.id)
+          }, (item: RollItem) => item.id)
           Row() {
             Row() {
               Button() {
-                Text('删除列表').fontColor($r("app.color.warning")).decoration({type: TextDecorationType.Underline,color:$r("app.color.warning")})
+                Text('删除列表')
+                  .fontColor($r("app.color.warning"))
+                  .decoration({ type: TextDecorationType.Underline, color: $r("app.color.warning") })
 
               }
               .backgroundColor('rgba(0,0,0,0)')
               .height('60%')
               .onClick(() => {
-                let afterData=this.boxsList.filter(item => item.index != this.optsList.index);
-                this.boxsList=afterData
+                let afterData = this.boxsList.filter(item => item.index != this.optsList.index);
+                this.boxsList = afterData
                 //AppStorage.setAndLink('allrolls',afterData)
               })
+
               Button() {
-                Text('新建选项').fontColor($r("app.color.control_bgc_1")).decoration({type: TextDecorationType.Underline,color:$r("app.color.control_bgc_1")})
+                Text('新建选项')
+                  .fontColor($r("app.color.control_bgc_1"))
+                  .decoration({ type: TextDecorationType.Underline, color: $r("app.color.control_bgc_1") })
               }
               .backgroundColor('rgba(0,0,0,0)')
               .height('60%')
               .onClick(() => {
                 let tailData = new RollItem(this.optsList.rollItems.length.toString(), '请输入', 1, '#00beff')
                 this.optsList.rollItems.push(tailData)
-                let afterData=AppStorage.get('allRolls')as Array<Roll>
-                afterData[Number(this.optsList.index)]=this.optsList
+                let afterData = AppStorage.get('allRolls') as Array<Roll>
+                afterData[Number(this.optsList.index)] = this.optsList
                 //afterData[Number(this.optsList.index)].rollItems.push(tailData)
-               AppStorage.set('allRolls',afterData)
+                AppStorage.set('allRolls', afterData)
 
-                this.isShow=false;
-                setTimeout(()=>{
-                  this.isShow=true;
-                },20)
+                this.isShow = false;
+                setTimeout(() => {
+                  this.isShow = true;
+                }, 20)
 
               })
             }
@@ -215,8 +242,9 @@ aboutToAppear(): void {
               style: BorderStyle.Solid
             })
           }
+
           Divider()
-        }.width('90%').margin({ left: '5%', right: '5%' })      .backgroundColor(0xf1f3f5)
+        }.width('90%').margin({ left: '5%', right: '5%' }).backgroundColor(0xf1f3f5)
       }
     }
   }
@@ -241,9 +269,14 @@ struct Opt {
       Row() {
         if (this.isEdit) {
           Row() {
-            Button() {//删除
+            Button() { //删除
               Image($r("app.media.func_delete")).fillColor($r("app.color.warning"))
-            }.height('70%').aspectRatio(1).borderRadius('50%').backgroundColor(0xf1f3f5).padding('5%')
+            }
+            .height('70%')
+            .aspectRatio(1)
+            .borderRadius('50%')
+            .backgroundColor(0xf1f3f5)
+            .padding('5%')
             .onClick(() => {
               let oldOpts: RollItem[] = this.boxsList[Number(this.rollIndex)].rollItems
               let oldRolls: Roll[] = this.boxsList
@@ -255,7 +288,7 @@ struct Opt {
               //console.log(oldRolls.toString())
               //console.log(oldOpts.toString())
               //console.log(datastring)
-              this.isShow=false
+              this.isShow = false
             })
           }.height('100%').layoutWeight(1).alignItems(VerticalAlign.Center).justifyContent(FlexAlign.Start)
         }
@@ -277,7 +310,8 @@ struct Opt {
               .borderRadius(2)
               .fontWeight(800)
               .type(InputType.Number)
-              .width('10%').textAlign(TextAlign.Center)
+              .width('10%')
+              .textAlign(TextAlign.Center)
               .onChange((value: string) => {
                 this.newWeight = Number(value)
               })
@@ -285,7 +319,7 @@ struct Opt {
               Row()
                 .height('40%')
                 .aspectRatio(1)
-                .border({ color: this.optData.color, style: BorderStyle.Solid, width:0 })
+                .border({ color: this.optData.color, style: BorderStyle.Solid, width: 0 })
                 .backgroundColor(this.optData.color)
                 .onClick(() => {
                   let rgb: string = '#00beff'
@@ -302,24 +336,39 @@ struct Opt {
             Row() {
               Button() {
                 Image($r("app.media.func_edit"))
-              }.height('70%').aspectRatio(1).borderRadius(12).backgroundColor('rgba(0,0,0,0)').padding('5%')
+              }
+              .height('70%')
+              .aspectRatio(1)
+              .borderRadius(12)
+              .backgroundColor('rgba(0,0,0,0)')
+              .padding('5%')
               .onClick(() => {
                 this.isEdit = !this.isEdit
               }) //修改
             }.height('100%').layoutWeight(1).alignItems(VerticalAlign.Center).justifyContent(FlexAlign.End)
           }
-        }.height('100%').alignItems(VerticalAlign.Center).layoutWeight(7).justifyContent(FlexAlign.SpaceBetween).padding({left:'5%',right:'5%'})
+        }
+        .height('100%')
+        .alignItems(VerticalAlign.Center)
+        .layoutWeight(7)
+        .justifyContent(FlexAlign.SpaceBetween)
+        .padding({ left: '5%', right: '5%' })
 
         if (this.isEdit) {
           Row() {
             Button() {
               Image($r("app.media.func_confirm")).fillColor($r("app.color.control_bgc_1"))
-            }.height('70%').aspectRatio(1).borderRadius('50%').backgroundColor(0xf1f3f5).padding('5%')
+            }
+            .height('70%')
+            .aspectRatio(1)
+            .borderRadius('50%')
+            .backgroundColor(0xf1f3f5)
+            .padding('5%')
             .onClick(() => { //确认
-              let afterData=AppStorage.get('allRolls')as Array<Roll>;
-              let newOpt=new RollItem(this.optData.id,this.newText,this.newWeight,this.newColor)
-              afterData[Number(this.rollIndex)].rollItems[this.optData.id]=newOpt
-              AppStorage.set('allRolls',afterData);
+              let afterData = AppStorage.get('allRolls') as Array<Roll>;
+              let newOpt = new RollItem(this.optData.id, this.newText, this.newWeight, this.newColor)
+              afterData[Number(this.rollIndex)].rollItems[this.optData.id] = newOpt
+              AppStorage.set('allRolls', afterData);
               this.isEdit = !this.isEdit;
 
             })
@@ -327,7 +376,7 @@ struct Opt {
         }
 
       }
-      .animation({duration:800})
+      .animation({ duration: 800 })
       .justifyContent(FlexAlign.SpaceBetween)
       .aspectRatio(6)
       .width('100%')
@@ -338,7 +387,8 @@ struct Opt {
         color: 0xf1f3f5,
         radius: 8,
         style: BorderStyle.Solid
-      })      .backgroundColor(0xffffff)
+      })
+      .backgroundColor(0xffffff)
     }
   }
 }

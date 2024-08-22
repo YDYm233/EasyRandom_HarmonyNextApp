@@ -1,45 +1,57 @@
 import { SymbolGlyphModifier } from '@kit.ArkUI'
+
 @Component
-struct Container{
+struct Container {
   @State text: string = "选择"
   @State index: number = 2
   @State space: number = 8
   @State arrowPosition: ArrowPosition = ArrowPosition.END
-  @State symbolModifier1: SymbolGlyphModifier = new SymbolGlyphModifier($r('sys.symbol.ohos_wifi')).fontColor([Color.Green]);
-  @State symbolModifier2: SymbolGlyphModifier = new SymbolGlyphModifier($r('sys.symbol.ohos_star')).fontColor([Color.Red]);
-  @State symbolModifier3: SymbolGlyphModifier = new SymbolGlyphModifier($r('sys.symbol.ohos_trash')).fontColor([Color.Gray]);
-  @State symbolModifier4: SymbolGlyphModifier = new SymbolGlyphModifier($r('sys.symbol.exposure')).fontColor([Color.Gray]);
-  build(){
-    Column(){
-      Row(){
-      Text('题库强度')
-      Select([{ value: '基础', symbolIcon: this.symbolModifier1 },
-        { value: '热烈', symbolIcon: this.symbolModifier2 },
-        { value: '聚会', symbolIcon: this.symbolModifier3 },
-        { value: '情侣', symbolIcon: this.symbolModifier4 }])
-        .selected(this.index)
-        .value(this.text)
-        .font({ size: 16, weight: 500 })
-        .fontColor('#182431')
-        .selectedOptionFont({ size: 16, weight: 400 })
-        .optionFont({ size: 16, weight: 400 })
-        .space(this.space)
-        .arrowPosition(this.arrowPosition)
-        .menuAlign(MenuAlignType.START, {dx:0, dy:0})
-        .onSelect((index:number, text?: string | undefined)=>{
-          console.info('Select:' + index)
-          this.index = index;
-          if(text){
-            this.text = text;
-          }
-        })
-    }.justifyContent(FlexAlign.SpaceBetween).padding('6%').alignItems(VerticalAlign.Center).backgroundColor(0xffffff).borderRadius(12).width('90%')
+  @State symbolModifier1: SymbolGlyphModifier =
+    new SymbolGlyphModifier($r('sys.symbol.ohos_wifi')).fontColor([Color.Green]);
+  @State symbolModifier2: SymbolGlyphModifier =
+    new SymbolGlyphModifier($r('sys.symbol.ohos_star')).fontColor([Color.Red]);
+  @State symbolModifier3: SymbolGlyphModifier =
+    new SymbolGlyphModifier($r('sys.symbol.ohos_trash')).fontColor([Color.Gray]);
+  @State symbolModifier4: SymbolGlyphModifier =
+    new SymbolGlyphModifier($r('sys.symbol.exposure')).fontColor([Color.Gray]);
+
+  build() {
+    Column() {
+      Row() {
+        Text('题库强度')
+        Select([{ value: '基础', symbolIcon: this.symbolModifier1 },
+          { value: '热烈', symbolIcon: this.symbolModifier2 },
+          { value: '聚会', symbolIcon: this.symbolModifier3 },
+          { value: '情侣', symbolIcon: this.symbolModifier4 }])
+          .selected(this.index)
+          .value(this.text)
+          .font({ size: 16, weight: 500 })
+          .fontColor('#182431')
+          .selectedOptionFont({ size: 16, weight: 400 })
+          .optionFont({ size: 16, weight: 400 })
+          .space(this.space)
+          .arrowPosition(this.arrowPosition)
+          .menuAlign(MenuAlignType.START, { dx: 0, dy: 0 })
+          .onSelect((index: number, text?: string | undefined) => {
+            console.info('Select:' + index)
+            this.index = index;
+            if (text) {
+              this.text = text;
+            }
+          })
+      }
+      .justifyContent(FlexAlign.SpaceBetween)
+      .padding('6%')
+      .alignItems(VerticalAlign.Center)
+      .backgroundColor(0xffffff)
+      .borderRadius(12)
+      .width('90%')
     }.width('100%')
   }
 }
 
 @Component
-struct Options{
+struct Options {
   build() {
     Column() {
       GridRow({

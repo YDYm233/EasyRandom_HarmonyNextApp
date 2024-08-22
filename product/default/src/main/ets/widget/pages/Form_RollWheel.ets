@@ -1,8 +1,10 @@
 import { Roll, RollBox, rolls } from '../../pages/RollPage/RollPage';
 import { Random } from '@ohos/common';
 import { preferences } from '@kit.ArkData';
+
 let datas: Roll = rolls[0]
 let preferenceTheme: preferences.Preferences | null = null;
+
 @Entry
 @Component
 struct WidgetCard {

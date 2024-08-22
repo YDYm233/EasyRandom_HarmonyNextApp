@@ -4,8 +4,6 @@ import { window } from '@kit.ArkUI';
 
 
 export default class EntryAbility extends UIAbility {
-
-
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
   }
@@ -23,9 +21,6 @@ export default class EntryAbility extends UIAbility {
       }
       hilog.info(0x0000, 'testTag', 'Succeeded in loading the content.');
     });
-
-
-
   }
 
   onWindowStageDestroy(): void {
@@ -42,5 +37,4 @@ export default class EntryAbility extends UIAbility {
     // Ability has back to background
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onBackground');
   }
-
 }

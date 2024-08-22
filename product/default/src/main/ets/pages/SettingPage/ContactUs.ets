@@ -1,7 +1,7 @@
 @Component
-struct Container{
-  build(){
-    Column(){
+struct Container {
+  build() {
+    Column() {
       Text('页面火速开发中')
       Text('邮箱：3014551329@qq.com')
       Image($r('app.media.weixin')).width('100%')
@@ -9,6 +9,7 @@ struct Container{
     }
   }
 }
+
 @Component
 struct ContactUs {
   build() {

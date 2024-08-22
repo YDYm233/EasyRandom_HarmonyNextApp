@@ -1,17 +1,19 @@
 import router from '@ohos.router';
+
 //import  '@ohos/setting/src/main/ets/pages/Index'
 @Component
 export default struct Header {
   @Prop title: string
+
   build() {
     Column() {
-      GridRow({columns:{sm:12,md:12,lg:12}}) {
+      GridRow({ columns: { sm: 12, md: 12, lg: 12 } }) {
         GridCol({ span: { sm: 3, md: 2, lg: 1 } }) {
           Row() {
             Image($r("app.media.func_back")).height('24vp').width('24vp')
           }
-          .onClick(()=>{
-            router.back({url:'pages/Index'})
+          .onClick(() => {
+            router.back({ url: 'pages/Index' })
           })
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .width('100%')
@@ -35,7 +37,7 @@ export default struct Header {
           Row() {
             Image($r("app.media.func_setting")).height(24).width(24)
           }
-          .onClick(()=>{
+          .onClick(() => {
             router.pushUrl({
               url: 'pages/SettingPage/SettingPage'
             }).then(() => {
