@@ -49,7 +49,7 @@ struct AnswerBook {
         .backgroundImage($r("app.media.CardBackground"))
         .backgroundImageSize({ width: '100%' })
         .position({ left: 0, top: 0 })
-        .backgroundColor(0x00beff)
+        .backgroundColor(0xffbeff)
         .width('100%')
         .height('100%')
         .visibility(this.backVisible)

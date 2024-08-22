@@ -1,9 +1,9 @@
 {
   "name": "common",
   "version": "1.0.0",
-  "description": "Please describe the basic information.",
+  "description": "公共静态库",
   "main": "Index.ets",
-  "author": "",
+  "author": "闫东阳",
   "license": "Apache-2.0",
 
 }
