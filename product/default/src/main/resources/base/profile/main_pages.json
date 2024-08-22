@@ -2,19 +2,18 @@
   "src": [
     "pages/Index",
     "pages/RandomPage",
-    "components/RandomColors",
-    "components/RandomNames",
     "pages/RollPage/RollPage",
-    "pages/RollPage/RollOpts",
+    "pages/SettingPage/SettingPage",
     "pages/AnswerPage",
     "pages/MorePage",
+    "components/RandomColors",
+    "components/RandomNames",
     "components/DevineBaGua",
     "components/RollBlessings",
     "components/FlipCoin",
     "components/RandomNumbers",
     "components/HonestOrChallenge",
     "components/RollDices",
-    "components/RandomFoods",
-    "pages/SettingPage/SettingPage"
+    "components/RandomFoods"
   ]
 }

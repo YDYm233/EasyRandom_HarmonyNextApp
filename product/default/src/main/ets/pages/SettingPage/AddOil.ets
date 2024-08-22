@@ -1,6 +1,7 @@
 @Component
 struct Container{
-  @State time:string='拒绝'
+  @State time:string='拒绝';
+
   build(){
     Column(){
       Text('页面火速开发中')

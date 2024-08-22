@@ -8,7 +8,6 @@ import { promptAction } from '@kit.ArkUI'
 import { BreakpointState, BreakpointSystem } from '@ohos/common'
 import { webview } from '@kit.ArkWeb'
 import { preferences } from '@kit.ArkData';
-import { common } from '@kit.AbilityKit'
 import CommonConstants from '../constants/CommonConstants';
 import { GlobalContext } from '../constants/GlobalContext';
 import Logger from '../constants/Logger'

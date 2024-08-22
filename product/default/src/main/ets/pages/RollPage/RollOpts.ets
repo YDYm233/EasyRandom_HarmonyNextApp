@@ -29,7 +29,6 @@ class Roll { //转盘
 
 
 //所有轮盘
-@Entry
 @Component
 struct OptBoxs {
   @StorageLink('allRolls') boxsList: Roll[] = rolls;
