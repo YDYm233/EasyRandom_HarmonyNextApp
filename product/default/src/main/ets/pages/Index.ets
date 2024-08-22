@@ -38,17 +38,23 @@ struct TabBar {
         Web({src:$rawfile("privacypolicy.html"),controller:this.controller}).width("100%")
       }.width('100%').height('80%')
       Row(){
-        Hyperlink('http://m233.top/easyrandom/privacypolicy.html','点击查看详细信息'){}.width('100%')
+        Hyperlink('http://www.m233.top/easyrandom/privacypolicy.html','点击查看详细信息'){}.width('100%')
       }.width('100%').height('8%')
       .justifyContent(FlexAlign.Center)
       Row(){
         Button('拒绝').height('80%').aspectRatio(2).backgroundColor($r("app.color.warning")).fontColor($r("app.color.control_fc_1"))
           .onClick(() => {
             promptAction.closeCustomDialog(this.customDialogId)
+            promptAction.showToast({
+              message:'您可前往 设置>隐私政策 查看详情'
+            })
           })
         Button('同意').height('80%').aspectRatio(2).backgroundColor($r("app.color.control_bgc_1")).fontColor($r("app.color.control_fc_1"))
           .onClick(() => {
             this.saveIsPrivacy()
+            promptAction.showToast({
+              message:'您可前往 设置>隐私政策 查看详情'
+            })
             promptAction.closeCustomDialog(this.customDialogId)
           })
       }.width('100%').height('12%').alignItems(VerticalAlign.Center).justifyContent(FlexAlign.SpaceBetween).padding({left:'10%',right:'10%'})
@@ -145,7 +151,7 @@ onPageShow(): void {
         GridCol({ span: { sm: 3, md: 2, lg: 1} }) {
           Row() {
            // Image($r("app.media.func_back")).height('24vp').width('24vp')
-            Text(this.isFirst)
+            //Text(this.isFirst)
           }
           .width('100%')
           .height($r("app.string.header_height"))

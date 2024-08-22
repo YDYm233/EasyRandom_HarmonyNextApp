@@ -1,0 +1,11 @@
+{
+  "app": {
+    "bundleName": "ydy.App.EasyRandom",
+    "patchVersionCode": 2000000,
+    "versionCode": 1000002
+  },
+  "module": {
+    "name": "default",
+    "type": "hotreload"
+  }
+}
