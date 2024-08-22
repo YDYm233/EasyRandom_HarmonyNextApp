@@ -55,13 +55,6 @@ struct Coin {
   @State B: number = 0
   @State isFliping: boolean = false
 
-  @Builder
-  ForeImage() {
-    Column() {
-      Image($r("app.media.goodsIconBImg")).width('100%').aspectRatio(1)
-    }.width('100%').aspectRatio(1)
-  }
-
   build() {
     Column() {
       Row() {
