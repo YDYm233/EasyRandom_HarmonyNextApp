@@ -21,7 +21,7 @@ export class Roll {                                                            /
   }
 }
 export const rolls: Array<Roll> = [                                //所有转盘
-  new Roll('0', '吃啥？', [
+  new Roll('0', '吃什么？', [
     new RollItem('0','梅菜扣肉', 2, '#ffcba50b'),
     new RollItem('1','西湖醋鱼', 3, '#ffa87cf4'),
     new RollItem('2','西红柿炒鸡蛋', 2, '#ffe81b58'),
@@ -35,10 +35,10 @@ export const rolls: Array<Roll> = [                                //所有转�
   ]),
   new Roll('2', '抽奖', [
     new RollItem('0','三等奖', 4, '#ff05f80b'),
-    new RollItem('1','二等奖', 3, '#ff5f16e1'),
-    new RollItem('2','一等奖', 2, '#ffe81b58'),
     new RollItem('3','特等奖', 1, '#ffecb609'),
     new RollItem('4','感谢参与', 5, '#499821'),
+    new RollItem('1','二等奖', 3, '#ff5f16e1'),
+    new RollItem('2','一等奖', 2, '#ffe81b58'),
   ]),
   new Roll('3', '幸运嘉宾', [
     new RollItem('0','小绿', 1, '#ff05f80b'),
