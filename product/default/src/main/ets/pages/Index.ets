@@ -8,6 +8,11 @@ import { promptAction } from '@kit.ArkUI'
 import { BreakpointState, BreakpointSystem } from '@ohos/common'
 import { webview } from '@kit.ArkWeb'
 
+import { preferences } from '@kit.ArkData';
+import { common } from '@kit.AbilityKit'
+import CommonConstants from '../constants/CommonConstants';
+import { GlobalContext } from '../constants/GlobalContext';
+import Logger from '../constants/Logger'
 @Entry({ routeName: 'Index' })
 @Component
 struct TabBar {
@@ -17,6 +22,7 @@ struct TabBar {
   @State titles:Array<Resource>=[$r("app.string.page_name1"),$r("app.string.page_name2"),$r("app.string.page_name3"),$r("app.string.page_name4")]
   @State title:Resource = this.titles[0]
   private tabsController: TabsController = new TabsController();
+  private context?: common.UIAbilityContext;
   @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
   controller: webview.WebviewController = new webview.WebviewController();
   aboutToAppear() {
@@ -31,37 +37,75 @@ struct TabBar {
     Column(){
       Row(){
         Web({src:$rawfile("privacypolicy.html"),controller:this.controller}).width("100%")
-      }.width('100%').height('75%')
+      }.width('100%').height('80%')
       Row(){
-        Hyperlink('http://m233.top','点击查看详细信息'){}.width('100%')
-      }.width('100%').height('10%').backgroundColor(0xff0000)
+        Hyperlink('http://m233.top/easyrandom/privacypolicy.html','点击查看详细信息'){}.width('100%')
+      }.width('100%').height('8%')
       .justifyContent(FlexAlign.Center)
       Row(){
         Button('拒绝').height('80%').aspectRatio(2).backgroundColor($r("app.color.warning")).fontColor($r("app.color.control_fc_1"))
+          .onClick(() => {
+            promptAction.closeCustomDialog(this.customDialogId)
+          })
         Button('同意').height('80%').aspectRatio(2).backgroundColor($r("app.color.control_bgc_1")).fontColor($r("app.color.control_fc_1"))
-      }.width('100%').height('15%').alignItems(VerticalAlign.Center).justifyContent(FlexAlign.SpaceBetween).padding({left:'10%',right:'10%'})
+          .onClick(() => {
+            this.saveIsPrivacy()
+            promptAction.closeCustomDialog(this.customDialogId)
+          })
+      }.width('100%').height('12%').alignItems(VerticalAlign.Center).justifyContent(FlexAlign.SpaceBetween).padding({left:'10%',right:'10%'})
     }.padding(12)
 }
 
+  getDataPreferences(common: Object) {
+    return preferences.getPreferences(getContext(common), CommonConstants.PREFERENCES_FILE_NAME);
+  }
+  saveIsPrivacy() {
+    let preferences: Promise<preferences.Preferences> = this.getDataPreferences(this);
+    preferences.then((result: preferences.Preferences) => {
+      let privacyPut = result.put(CommonConstants.PREFERENCES_KEY_PRIVACY, false);
+      result.flush();
+      privacyPut.then(() => {
+        Logger.info(CommonConstants.LAUNCHER_PAGE_TAG, 'Put the value of startup Successfully.');
+      }).catch((err: Error) => {
+        Logger.error(CommonConstants.LAUNCHER_PAGE_TAG, 'Put the value of startup Failed, err: ' + err);
+      });
+    }).catch((err: Error) => {
+      Logger.error(CommonConstants.LAUNCHER_PAGE_TAG, 'Get the preferences Failed, err: ' + err);
+    });
+  }
+
 onPageShow(): void {
+  this.getDataPreferences(this).then((preferences: preferences.Preferences) => {
+    // 获取隐私协议状态值
+    preferences.get(CommonConstants.PREFERENCES_KEY_PRIVACY, true)
+      .then((value: preferences.ValueType) => {
+        Logger.info(CommonConstants.LAUNCHER_PAGE_TAG, 'onPageShow value: ' + value);
+        if (value) {
+          let isJumpPrivacy: boolean = (GlobalContext.getContext()
+            .getObject('isJumpPrivacy') as boolean) ?? false;
+          if (!isJumpPrivacy) {
+            promptAction.openCustomDialog({
+              builder: () => {
+                this.PrivacyPolicyDialog()
+              },
+              showInSubWindow: false,
+              offset: { dx: 5, dy: 5 },
+              backgroundColor: 0xd9ffffff,
+              cornerRadius: 24,
+              backgroundBlurStyle: BlurStyle.Regular,
+              width: 320,
+              height: 500,
 
-  promptAction.openCustomDialog({
-    builder: () => {
-      this.PrivacyPolicyDialog()
-    },
-    showInSubWindow: false,
-    offset: { dx: 5, dy: 5 },
-    backgroundColor: 0xd9ffffff,
-    cornerRadius: 24,
-    backgroundBlurStyle: BlurStyle.Regular,
-    width: this.currentBreakpoint.value == 'sm' ? '80%' :
-      (this.currentBreakpoint.value == 'md' ? '50%' : '30%'),
-    height: this.currentBreakpoint.value == 'sm' ? '20%' :
-      (this.currentBreakpoint.value == 'md' ? '60%' : '50%'),
+            }).then((dialogId: number) => {
+              this.customDialogId = dialogId
+            })
+          }
+        } else {
+              console.log('非首次')
+        }
+      });
+  });
 
-  }).then((dialogId: number) => {
-    this.customDialogId = dialogId
-  })
 }
   @Builder
   tabBarBuilder(

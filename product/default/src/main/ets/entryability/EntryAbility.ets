@@ -2,7 +2,8 @@ import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
 import display from '@ohos.display';
-
+import dataPreferences from '@ohos.data.preferences';
+let preferences: dataPreferences.Preferences | null = null;
 export default class EntryAbility extends UIAbility {
   private windowObj?: window.Window
   private curBp: string = ''
@@ -39,6 +40,8 @@ export default class EntryAbility extends UIAbility {
   onWindowStageCreate(windowStage: window.WindowStage): void {
     // Main window is created, set main page for this ability
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
+    let options: dataPreferences.Options = { name: 'myStore' };
+    preferences = dataPreferences.getPreferencesSync(this.context, options);
 
     windowStage.loadContent('pages/Index', (err) => {
       if (err.code) {
