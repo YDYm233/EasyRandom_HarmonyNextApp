@@ -1,5 +1,5 @@
-import {rolls, Roll, RollBox, RollItem } from '../../pages/RollPage/RollPage'
-import { Random } from '@ohos/common'
+import { Roll, RollBox, rolls } from '../../pages/RollPage/RollPage';
+import { Random } from '@ohos/common';
 import { preferences } from '@kit.ArkData';
 let datas: Roll = rolls[0]
 let preferenceTheme: preferences.Preferences | null = null;

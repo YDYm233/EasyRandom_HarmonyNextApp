@@ -1,6 +1,5 @@
-import { Random,Randoms } from '@ohos/common'
-import  Header from './Header'
-import { CounterType, CounterComponent } from '@kit.ArkUI';
+import { Random } from '@ohos/common';
+import Header from './Header';
 @Entry
 @Component
 struct RollDices {

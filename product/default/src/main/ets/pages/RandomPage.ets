@@ -1,5 +1,5 @@
-import { BreakpointSystem,Breakpoint,BreakpointOptions,BreakpointType,BreakpointState } from '@ohos/common'
-import { router, RouterOptions } from '@kit.ArkUI'
+import { BreakpointState, BreakpointSystem } from '@ohos/common'
+import { router } from '@kit.ArkUI'
 
 @Entry
 @Component

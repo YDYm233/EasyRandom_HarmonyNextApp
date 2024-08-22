@@ -1,7 +1,6 @@
-import{Random}from '@ohos/common'
-import OptBoxs from './RollOpts'
-import { BreakpointState, BreakpointSystem } from '@ohos/common';
-import {RollItem,Roll,rolls} from '../../datas/rolls'
+import { BreakpointState, BreakpointSystem, Random } from '@ohos/common';
+import OptBoxs from './RollOpts';
+import { Roll, RollItem, rolls } from '../../datas/rolls';
 @Entry
 @Component
 struct RollPage {

@@ -2,17 +2,67 @@ import RandomPage from './RandomPage'
 import RollPage from './RollPage/RollPage'
 import MorePage from './MorePage'
 import AnswerPage from './AnswerPage'
-import router from '@ohos.router';
-import { BusinessError } from '@kit.BasicServicesKit';
+import router from '@ohos.router'
+import { BusinessError } from '@kit.BasicServicesKit'
+import { promptAction } from '@kit.ArkUI'
+import { BreakpointState, BreakpointSystem } from '@ohos/common'
+import { webview } from '@kit.ArkWeb'
+
 @Entry({ routeName: 'Index' })
 @Component
 struct TabBar {
+  @State customDialogId:number=0
   @State currentIndex: number = 0;
   @State isWrap: boolean = true
   @State titles:Array<Resource>=[$r("app.string.page_name1"),$r("app.string.page_name2"),$r("app.string.page_name3"),$r("app.string.page_name4")]
   @State title:Resource = this.titles[0]
   private tabsController: TabsController = new TabsController();
+  @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
+  controller: webview.WebviewController = new webview.WebviewController();
+  aboutToAppear() {
+    BreakpointSystem.getInstance().attach(this.currentBreakpoint)
+    BreakpointSystem.getInstance().start()
+  }
+  aboutToDisappear() {
+    BreakpointSystem.getInstance().attach(this.currentBreakpoint)
+    BreakpointSystem.getInstance().stop()
+  }
+  @Builder PrivacyPolicyDialog(){
+    Column(){
+      Row(){
+        Web({src:$rawfile("privacypolicy.html"),controller:this.controller}).width("100%")
+      }.width('100%').height('75%')
+      Row(){
+        Hyperlink('http://m233.top','点击查看详细信息'){}.width('100%')
+      }.width('100%').height('10%').backgroundColor(0xff0000)
+      .justifyContent(FlexAlign.Center)
+      Row(){
+        Button('拒绝').height('80%').aspectRatio(2).backgroundColor($r("app.color.warning")).fontColor($r("app.color.control_fc_1"))
+        Button('同意').height('80%').aspectRatio(2).backgroundColor($r("app.color.control_bgc_1")).fontColor($r("app.color.control_fc_1"))
+      }.width('100%').height('15%').alignItems(VerticalAlign.Center).justifyContent(FlexAlign.SpaceBetween).padding({left:'10%',right:'10%'})
+    }.padding(12)
+}
 
+onPageShow(): void {
+
+  promptAction.openCustomDialog({
+    builder: () => {
+      this.PrivacyPolicyDialog()
+    },
+    showInSubWindow: false,
+    offset: { dx: 5, dy: 5 },
+    backgroundColor: 0xd9ffffff,
+    cornerRadius: 24,
+    backgroundBlurStyle: BlurStyle.Regular,
+    width: this.currentBreakpoint.value == 'sm' ? '80%' :
+      (this.currentBreakpoint.value == 'md' ? '50%' : '30%'),
+    height: this.currentBreakpoint.value == 'sm' ? '20%' :
+      (this.currentBreakpoint.value == 'md' ? '60%' : '50%'),
+
+  }).then((dialogId: number) => {
+    this.customDialogId = dialogId
+  })
+}
   @Builder
   tabBarBuilder(
     title: Resource,

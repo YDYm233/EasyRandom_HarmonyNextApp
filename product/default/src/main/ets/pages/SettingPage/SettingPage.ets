@@ -1,12 +1,12 @@
 import router from '@ohos.router';
-import AboutUs from './AboutUs'
-import ContactUs from './ContactUs'
-import Options from './Options'
-import PrivacyPolicy from './PrivacyPolicy'
-import Illustrate from './Illustrate'
-import CopyRight from './CopyRight'
-import AddOil  from './AddOil'
-import { PromptAction, promptAction } from '@kit.ArkUI'
+import AboutUs from './AboutUs';
+import ContactUs from './ContactUs';
+import Options from './Options';
+import PrivacyPolicy from './PrivacyPolicy';
+import Illustrate from './Illustrate';
+import CopyRight from './CopyRight';
+import AddOil from './AddOil';
+import { promptAction } from '@kit.ArkUI';
 class Item{
   title:string
   icon:Resource

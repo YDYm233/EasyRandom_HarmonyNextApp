@@ -1,7 +1,6 @@
-
-import { Random,Randoms } from '@ohos/common'
-import  Header from './Header'
-import {foodsArray} from '../datas/foods'
+import { Random } from '@ohos/common'
+import Header from './Header'
+import { foodsArray } from '../datas/foods'
 @Entry
 @Component
 struct RandomFoods {

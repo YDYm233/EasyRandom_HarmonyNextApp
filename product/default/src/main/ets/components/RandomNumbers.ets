@@ -1,7 +1,7 @@
 
-import { Random,Randoms } from '@ohos/common'
-import  Header from './Header'
-import { CounterType, CounterComponent } from '@kit.ArkUI';
+import { Randoms } from '@ohos/common';
+import Header from './Header';
+import { CounterComponent, CounterType } from '@kit.ArkUI';
 @Entry
 @Component
 struct RandomNames {

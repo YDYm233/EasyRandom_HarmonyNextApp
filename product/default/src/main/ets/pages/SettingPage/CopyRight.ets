@@ -1,4 +1,3 @@
-
 import { webview } from '@kit.ArkWeb';
 @Component
 struct CopyRight {

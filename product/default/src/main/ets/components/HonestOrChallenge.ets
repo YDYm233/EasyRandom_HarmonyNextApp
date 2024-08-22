@@ -1,12 +1,10 @@
-import { Random,Randoms } from '@ohos/common'
-import  Header from './Header'
-import { PromptAction, promptAction } from '@kit.ArkUI'
-import { BreakpointState, BreakpointSystem } from '@ohos/common';
-import {challenges,honests}from '../datas/challenges'
+import { BreakpointState, BreakpointSystem, Random } from '@ohos/common';
+import Header from './Header';
+import { promptAction } from '@kit.ArkUI';
+import { challenges, honests } from '../datas/challenges';
 @Entry
 @Component
 struct HonestOrChallenge{
-
 @State customDialogId:number=0
   @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
   aboutToAppear() {
