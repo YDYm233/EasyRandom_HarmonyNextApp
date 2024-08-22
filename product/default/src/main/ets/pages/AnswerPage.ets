@@ -20,7 +20,7 @@ struct AnswerBook{
   @State Bvisiable:Visibility=Visibility.Visible
   @State answers:string[]=answers
   @State answer:string=this.answers[Random(0,this.answers.length-1,true)]
-  onDestory(){
+  aboutToDisappear(){
     this.angle=-180;
     this.duration=2000
     this.ForB=false

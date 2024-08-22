@@ -7,7 +7,6 @@ import { BusinessError } from '@kit.BasicServicesKit'
 import { promptAction } from '@kit.ArkUI'
 import { BreakpointState, BreakpointSystem } from '@ohos/common'
 import { webview } from '@kit.ArkWeb'
-
 import { preferences } from '@kit.ArkData';
 import { common } from '@kit.AbilityKit'
 import CommonConstants from '../constants/CommonConstants';
@@ -19,10 +18,10 @@ struct TabBar {
   @State customDialogId:number=0
   @State currentIndex: number = 0;
   @State isWrap: boolean = true
+  @State isFirst:string='首次'
   @State titles:Array<Resource>=[$r("app.string.page_name1"),$r("app.string.page_name2"),$r("app.string.page_name3"),$r("app.string.page_name4")]
   @State title:Resource = this.titles[0]
   private tabsController: TabsController = new TabsController();
-  private context?: common.UIAbilityContext;
   @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
   controller: webview.WebviewController = new webview.WebviewController();
   aboutToAppear() {
@@ -101,6 +100,7 @@ onPageShow(): void {
             })
           }
         } else {
+              this.isFirst='非首次'
               console.log('非首次')
         }
       });
@@ -145,6 +145,7 @@ onPageShow(): void {
         GridCol({ span: { sm: 3, md: 2, lg: 1} }) {
           Row() {
            // Image($r("app.media.func_back")).height('24vp').width('24vp')
+            Text(this.isFirst)
           }
           .width('100%')
           .height($r("app.string.header_height"))
