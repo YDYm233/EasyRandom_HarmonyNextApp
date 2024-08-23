@@ -211,6 +211,7 @@ struct TabBar {
               console.error(`err, code is ${err.code}, message is ${err.message}.`);
             })
           })
+          .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
         }
       }
       .width('100%')

@@ -119,7 +119,7 @@ struct Setting {
           .onClick(() => {
             router.back({ url: 'pages/Index' })
           })
-
+          .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           Row() {
             Text('设置').height(24).fontWeight(800).textAlign(TextAlign.Center)
           }.height('100%').aspectRatio(1).alignItems(VerticalAlign.Center).justifyContent(FlexAlign.Center)
@@ -148,7 +148,7 @@ struct Setting {
                 bottom: '10%'
               })
           }
-          .align(Alignment.Center)
+          //.align(Alignment.Center)
 
 
           ListItemGroup({ header: this.itemHead('关于'), space: 8 }) {
@@ -194,6 +194,7 @@ struct Setting {
         //.margin({ top: 12 })
         .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
       }
+      .padding(0)
       .mode(NavigationMode.Auto)
       .navDestination(this.PageMap)
       .minContentWidth('420vp')
