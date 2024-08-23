@@ -7,22 +7,18 @@ struct Container {
   @State space: number = 8
   @State arrowPosition: ArrowPosition = ArrowPosition.END
   @State symbolModifier1: SymbolGlyphModifier =
-    new SymbolGlyphModifier($r('sys.symbol.ohos_wifi')).fontColor([Color.Green]);
+    new SymbolGlyphModifier($r('sys.symbol.ohos_star')).fontColor([Color.Green]);
   @State symbolModifier2: SymbolGlyphModifier =
-    new SymbolGlyphModifier($r('sys.symbol.ohos_star')).fontColor([Color.Red]);
+    new SymbolGlyphModifier($r('sys.symbol.ohos_star')).fontColor([Color.Yellow]);
   @State symbolModifier3: SymbolGlyphModifier =
-    new SymbolGlyphModifier($r('sys.symbol.ohos_trash')).fontColor([Color.Gray]);
-  @State symbolModifier4: SymbolGlyphModifier =
-    new SymbolGlyphModifier($r('sys.symbol.exposure')).fontColor([Color.Gray]);
-
+    new SymbolGlyphModifier($r('sys.symbol.heart')).fontColor([Color.Red]);
   build() {
     Column() {
       Row() {
         Text('题库强度')
         Select([{ value: '基础', symbolIcon: this.symbolModifier1 },
           { value: '热烈', symbolIcon: this.symbolModifier2 },
-          { value: '聚会', symbolIcon: this.symbolModifier3 },
-          { value: '情侣', symbolIcon: this.symbolModifier4 }])
+          { value: '情侣', symbolIcon: this.symbolModifier3 }])
           .selected(this.index)
           .value(this.text)
           .font({ size: 16, weight: 500 })
