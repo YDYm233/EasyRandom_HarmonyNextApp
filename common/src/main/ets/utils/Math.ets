@@ -38,7 +38,7 @@ export function Randoms(min:number,max:number,fixed:boolean|null,count: number, 
 }
 
 
-  function rgbaToHex8(rgba: string): string | null {
+export  function rgbaToHex8(rgba: string): string | null {
     const match = rgba.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+),\s*(\d+(?:\.\d+)?)\)$/);
     if (match) {
       const a = parseFloat(match[4] || '1');
@@ -55,7 +55,7 @@ export function Randoms(min:number,max:number,fixed:boolean|null,count: number, 
   }
 
 
-function rgbaToHsla(r: number, g: number, b: number, a: number): string {
+ function rgbaToHsla(r: number, g: number, b: number, a: number): string {
   let max = Math.max(r, g, b);
   let min = Math.min(r, g, b);
   let h: number=0, s: number, l: number;

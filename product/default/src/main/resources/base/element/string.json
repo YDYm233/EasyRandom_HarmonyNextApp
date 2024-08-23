@@ -146,15 +146,16 @@
     },
     {
       "name": "RollWheelCard_desc",
-      "value": "description"
-    },
-    {
-      "name": "RollWheel_desc",
       "value": "帮你做决定"
     },
+
     {
-      "name": "RollWheel_display_name",
-      "value": "轮盘"
+      "name": "BaGuaCard_display_name",
+      "value": "八卦"
+    },
+    {
+      "name": "BaGuaCard_desc",
+      "value": "坎,坤,震,巽,乾,兑,艮,离"
     }
   ]
 }

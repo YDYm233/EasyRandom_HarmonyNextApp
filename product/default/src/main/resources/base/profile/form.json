@@ -43,8 +43,8 @@
     },
     {
       "name": "RollWheelCard",
-      "displayName": "$string:RollWheel_display_name",
-      "description": "$string:RollWheel_desc",
+      "displayName": "$string:RollWheelCard_display_name",
+      "description": "$string:RollWheelCard_desc",
       "src": "./ets/widgets/RollWheelCard.ets",
       "uiSyntax": "arkts",
       "window": {
@@ -61,6 +61,51 @@
       "supportDimensions": [
         "2*2",
         "4*4"
+      ]
+    }
+  ,
+    {
+      "name": "BaGuaCard",
+      "displayName": "$string:BaGuaCard_display_name",
+      "description": "$string:BaGuaCard_desc",
+      "src": "./ets/widgets/BaGuaCard.ets",
+      "uiSyntax": "arkts",
+      "window": {
+        "designWidth": 720,
+        "autoDesignWidth": true
+      },
+      "colorMode": "auto",
+      "isDynamic": true,
+      "isDefault": false,
+      "updateEnabled": false,
+      "scheduledUpdateTime": "10:30",
+      "updateDuration": 1,
+      "defaultDimension": "2*2",
+      "supportDimensions": [
+        "2*2",
+        "4*4"
+      ]
+    }
+  ,
+    {
+      "name": "RandomColorsCard",
+      "displayName": "$string:RandomColorsCard_display_name",
+      "description": "$string:RandomColorsCard_desc",
+      "src": "./ets/widgets/RandomColorsCard.ets",
+      "uiSyntax": "arkts",
+      "window": {
+        "designWidth": 720,
+        "autoDesignWidth": true
+      },
+      "colorMode": "auto",
+      "isDynamic": true,
+      "isDefault": false,
+      "updateEnabled": false,
+      "scheduledUpdateTime": "10:30",
+      "updateDuration": 1,
+      "defaultDimension": "2*2",
+      "supportDimensions": [
+        "2*2"
       ]
     }
   ]

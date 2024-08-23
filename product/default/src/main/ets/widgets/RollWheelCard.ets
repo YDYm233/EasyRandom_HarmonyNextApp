@@ -2,7 +2,7 @@ import {Random} from '@ohos/common'
 import { Roll, RollItem, rolls } from '../datas/rolls';
 @Entry
 @Component
-struct ROllWheelCard {
+struct RollWheelCard {
   readonly FULL_WIDTH_PERCENT: string = '90%';
   @State coinImageArray: Resource[] = [$r("app.media.coin1"), $r("app.media.coin2")]
   @State rotateAngle:number = 0;
@@ -22,7 +22,7 @@ struct ROllWheelCard {
     .width('100%')
     .height('100%')
     .onClick(() => {
-      this.rotateAngle =this.rotateAngle+ Random(0, 360, true) + 360 * 18;
+      this.rotateAngle =this.rotateAngle+this.rotateAngle+ Random(0, 360, true) + 360 * 8;
     })
   }
 }

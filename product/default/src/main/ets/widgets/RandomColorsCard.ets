@@ -1,50 +1,39 @@
+import {Random,ExColor} from '@ohos/common'
 @Entry
 @Component
-struct Widget1Card {
-  /*
-   * The title.
-   */
-  readonly TITLE: string = 'Hello World';
-  /*
-   * The action type.
-   */
-  readonly ACTION_TYPE: string = 'router';
-  /*
-   * The ability name.
-   */
-  readonly ABILITY_NAME: string = 'EntryAbility';
-  /*
-   * The message.
-   */
-  readonly MESSAGE: string = 'add detail';
-  /*
-   * The width percentage setting.
-   */
-  readonly FULL_WIDTH_PERCENT: string = '100%';
-  /*
-   * The height percentage setting.
-   */
-  readonly FULL_HEIGHT_PERCENT: string = '100%';
-
+struct RandomColorsCard {
+  readonly FULL_WIDTH_PERCENT: string = '70%';
+  @State rgba:string = 'rgba(0,0,0,1)'
+  @State color:string = 'rgba(255,255,255,1)'
+  @State title:string =ExColor(this.color)
   build() {
     Row() {
-      Column() {
-        Text(this.TITLE)
-          .fontSize($r('app.float.font_size'))
-          .fontWeight(FontWeight.Medium)
-          .fontColor($r('app.color.item_title_font'))
-      }
-      .width(this.FULL_WIDTH_PERCENT)
+      Text(this.title)
+        .width(this.FULL_WIDTH_PERCENT)
+        .animation({duration:600})
+        .fontColor(this.color)
+        .textCase(TextCase.UpperCase)
+        .fontWeight(700)
+        .textAlign(TextAlign.Center)
     }
-    .height(this.FULL_HEIGHT_PERCENT)
+    .backgroundColor(this.rgba)
+    .justifyContent(FlexAlign.Center)
+    .alignItems(VerticalAlign.Center)
+    .width('100%')
+    .height('100%')
     .onClick(() => {
-      postCardAction(this, {
-        action: this.ACTION_TYPE,
-        abilityName: this.ABILITY_NAME,
-        params: {
-          message: this.MESSAGE
-        }
-      });
+      let RR = Random(0, 255, true)
+      let GG = Random(0, 255, true)
+      let BB = Random(0, 255, true)
+      let AA = Random(0, 255, false)
+      this.rgba = 'rgba(' + RR + ',' + GG + ',' + BB + ',' + (AA / 255).toFixed(2) + ')'
+      this.title=ExColor(this.rgba)
+      if((RR+GG+BB)>=382){
+        this.color='rgba(0,0,0,1)'
+      }
+      else{
+        this.color= 'rgba(255,255,255,1)'
+      }
     })
   }
 }
