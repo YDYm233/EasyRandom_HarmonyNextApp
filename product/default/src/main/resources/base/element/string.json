@@ -14,11 +14,11 @@
     },
     {
       "name": "DefaultFormAbility_desc",
-      "value": "form_description"
+      "value": "卡片Ability"
     },
     {
       "name": "DefaultFormAbility_label",
-      "value": "form_label"
+      "value": "卡片Ability"
     },
     {
       "name": "CardRandomColor_desc",
@@ -123,6 +123,14 @@
     {
       "name": "Form_RollBlessings_display_name",
       "value": "获得祝福的木鱼"
+    },
+    {
+      "name": "widget1_desc",
+      "value": "This is a service widget."
+    },
+    {
+      "name": "widget1_display_name",
+      "value": "widget1"
     }
   ]
 }

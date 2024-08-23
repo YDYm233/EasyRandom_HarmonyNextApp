@@ -22,7 +22,7 @@ struct Container {
           .selected(this.index)
           .value(this.text)
           .font({ size: 16, weight: 500 })
-          .fontColor('#182431')
+          .fontColor(0x182431)
           .selectedOptionFont({ size: 16, weight: 400 })
           .optionFont({ size: 16, weight: 400 })
           .space(this.space)

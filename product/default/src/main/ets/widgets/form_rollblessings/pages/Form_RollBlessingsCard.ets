@@ -1,4 +1,4 @@
-import { Blessings } from '../../components/RollBlessings'
+import { Blessings } from '../../../components/RollBlessings'
 import { Random } from '@ohos/common'
 
 @Entry

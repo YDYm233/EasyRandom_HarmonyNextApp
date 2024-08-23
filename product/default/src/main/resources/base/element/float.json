@@ -71,6 +71,10 @@
     {
       "name": "main_padding_right",
       "value": "12vp"
+    },
+    {
+      "name": "font_size",
+      "value": "14fp"
     }
   ]
 }

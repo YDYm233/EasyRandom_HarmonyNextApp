@@ -1,4 +1,4 @@
-import { Roll, RollBox, rolls } from '../../pages/RollPage/RollPage';
+import { Roll, RollBox, rolls } from '../../../pages/RollPage/RollPage';
 import { Random } from '@ohos/common';
 import { preferences } from '@kit.ArkData';
 

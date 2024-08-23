@@ -123,6 +123,14 @@
     {
       "name": "Form_RollBlessings_display_name",
       "value": "Form_RollBlessings"
+    },
+    {
+      "name": "widget1_desc",
+      "value": "This is a service widget."
+    },
+    {
+      "name": "widget1_display_name",
+      "value": "widget1"
     }
   ]
 }
