@@ -192,7 +192,7 @@ struct Opts {
 
           }, (item: RollItem) => item.id)
           Row() {
-            Row() {
+
               Button() {
                 Text('删除列表')
                   .fontColor($r("app.color.warning"))
@@ -240,7 +240,7 @@ struct Opts {
               radius: 8,
               style: BorderStyle.Solid
             })
-          }
+
 
           Divider()
         }.width('94%').margin({ left: '3%', right: '3%' }).backgroundColor(0xf1f3f5)
@@ -289,7 +289,7 @@ struct Opt {
         }
         Row() {
           TextInput({ text:this.optData.text , placeholder: '请输入您的选项' })
-            .width('65%')
+            .width('55%')
             .padding(0)
             .maxLength(12)
             .onChange((value: string) => {
@@ -322,15 +322,15 @@ struct Opt {
                 .aspectRatio(1)
                 .border({ color: this.optData.color, style: BorderStyle.Solid, width: 0 })
                 .backgroundColor(this.optData.color)
-                .onClick(() => {
-                  let rgb: string = '#00beff'
-                  rgb = 'rgb(' + Random(50, 220, true) + ',' + Random(50, 220, true) + ',' + Random(50, 220, true) + ')'
-                  this.optData.color = rgb
-                  this.newColor = rgb
-                })
             }
+            .onClick(() => {
+              let rgb: string = '#00beff'
+              rgb = 'rgb(' + Random(50, 220, true) + ',' + Random(50, 220, true) + ',' + Random(50, 220, true) + ')'
+              this.optData.color = rgb
+              this.newColor = rgb
+            })
             .height('100%')
-            .width('12%')
+            .width('24%')
             .justifyContent(FlexAlign.Center).alignItems(HorizontalAlign.Center)
 
           } else { //修改按钮

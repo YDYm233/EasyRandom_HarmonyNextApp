@@ -4,7 +4,7 @@
       "name": "widget",
       "displayName": "$string:widget_display_name",
       "description": "$string:widget_desc",
-      "src": "./ets/widgets/widget/pages/Form_RollWheel.ets",
+      "src": "./ets/widgets/RollWheelCard.ets",
       "uiSyntax": "arkts",
       "window": {
         "designWidth": 720,
@@ -26,7 +26,7 @@
       "name": "Form_RollBlessings",
       "displayName": "$string:Form_RollBlessings_display_name",
       "description": "$string:Form_RollBlessings_desc",
-      "src": "./ets/widgets/form_rollblessings/pages/Form_RollBlessingsCard.ets",
+      "src": "./ets/widgets/RollBlessingsCard.ets",
       "uiSyntax": "arkts",
       "window": {
         "designWidth": 720,
@@ -48,7 +48,7 @@
       "name": "widget1",
       "displayName": "$string:widget1_display_name",
       "description": "$string:widget1_desc",
-      "src": "./ets/widgets/widget1/pages/Widget1Card.ets",
+      "src": "./ets/widgets/RandomColorsCard.ets",
       "uiSyntax": "arkts",
       "window": {
         "designWidth": 720,
@@ -63,7 +63,28 @@
       "defaultDimension": "2*2",
       "supportDimensions": [
         "2*2",
-        "6*4"
+        "4*4"
+      ]
+    },
+    {
+      "name": "RollDiceCard",
+      "displayName": "$string:RollDiceCard_display_name",
+      "description": "$string:RollDiceCard_desc",
+      "src": "./ets/widgets/RollDiceCard.ets",
+      "uiSyntax": "arkts",
+      "window": {
+        "designWidth": 720,
+        "autoDesignWidth": true
+      },
+      "colorMode": "auto",
+      "isDynamic": true,
+      "isDefault": false,
+      "updateEnabled": false,
+      "scheduledUpdateTime": "10:30",
+      "updateDuration": 1,
+      "defaultDimension": "2*2",
+      "supportDimensions": [
+        "2*2"
       ]
     }
   ]

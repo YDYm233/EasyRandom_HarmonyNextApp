@@ -14,7 +14,7 @@
 - [x] 颜色 RandomColor 
 - [ ] 抽卡 RandomCards 
 - [x] 骰子 RollDIces
-- [x] 排序  RandomName 
+- [x] 排序  RandomNames 
 - [x] 真心话大冒险 RandomChallenge 
 - [x] 八卦 DevineGua 
 - [x] 祝福木鱼 RollBlessings 
@@ -41,12 +41,13 @@
 
 
 ## 卡片
-> - 颜色卡片 
-> - 转盘卡片 
-> - 八卦卡片
-> - 木鱼卡片 
-> - 骰子卡片
-> - 硬币卡片
+ - 颜色卡片 
+   - From 
+ - 转盘卡片 
+ - 八卦卡片
+ - 木鱼卡片 
+ - 骰子卡片
+ - 硬币卡片
 
 
 

@@ -131,6 +131,14 @@
     {
       "name": "widget1_display_name",
       "value": "widget1"
+    },
+    {
+      "name": "RollDiceCard_desc",
+      "value": "description"
+    },
+    {
+      "name": "RollDiceCard_display_name",
+      "value": "RollDIceCard"
     }
   ]
 }

@@ -88,8 +88,7 @@ struct ColorsBox {
           .aspectRatio(1)
           .backgroundColor(this.bgc)
           .borderRadius(24)
-          .onClick(() => {
-          })
+
         }
 
 

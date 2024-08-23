@@ -19,7 +19,7 @@ struct RandomNames {
         GridCol({
           span: {
             sm: 4,
-            md: 6,
+            md: 8,
             lg: 8
           },
           offset: {
@@ -195,7 +195,7 @@ struct NamesBox {
               })
 
               .backgroundColor($r("app.color.control_bgc_1"))
-              .height('80%')
+              .height('100%')
               .aspectRatio(2)
               .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
             }.width('100%').layoutWeight(1).justifyContent(FlexAlign.SpaceBetween).alignItems(VerticalAlign.Center)

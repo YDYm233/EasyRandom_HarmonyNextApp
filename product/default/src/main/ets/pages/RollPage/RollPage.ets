@@ -252,7 +252,7 @@ struct RollBoxs {
       height: this.currentBreakpoint.value == 'sm' ? SheetSize.LARGE : SheetSize.FIT_CONTENT,
       detents: this.currentBreakpoint.value == 'sm' ? [SheetSize.LARGE, SheetSize.MEDIUM] : null,
       preferType: this.currentBreakpoint.value == 'sm' ? SheetType.BOTTOM :
-        (this.currentBreakpoint.value == 'md' ? SheetType.CENTER : SheetType.POPUP),
+        (this.currentBreakpoint.value == 'md' ? SheetType.CENTER : SheetType.CENTER),
       width: this.currentBreakpoint.value == 'sm' ? '100%' : (this.currentBreakpoint.value == 'md' ? '50%' : '40%'),
 
     })
