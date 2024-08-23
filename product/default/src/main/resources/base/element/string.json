@@ -36,14 +36,7 @@
       "name": "introduction",
       "value": "Introduction"
     },
-    {
-      "name": "widget_desc",
-      "value": "This is a service widget."
-    },
-    {
-      "name": "widget_display_name",
-      "value": "widget"
-    },
+
     {
       "name": "login",
       "value": "Sign in/Sign up>"
@@ -117,6 +110,14 @@
       "value": "随时随地 轻松容易"
     },
     {
+      "name": "RollDiceCard_desc",
+      "value": "掷个骰子"
+    },
+    {
+      "name": "RollDiceCard_display_name",
+      "value": "掷骰子"
+    },
+    {
       "name": "Form_RollBlessings_desc",
       "value": "祝福木鱼."
     },
@@ -133,11 +134,11 @@
       "value": "widget1"
     },
     {
-      "name": "RollDiceCard_desc",
+      "name": "RollWheelCard_desc",
       "value": "description"
     },
     {
-      "name": "RollDiceCard_display_name",
+      "name": "RollWheelCard_display_name",
       "value": "RollDIceCard"
     }
   ]

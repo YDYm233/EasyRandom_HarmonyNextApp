@@ -1,10 +1,10 @@
 {
   "forms": [
     {
-      "name": "widget",
-      "displayName": "$string:widget_display_name",
-      "description": "$string:widget_desc",
-      "src": "./ets/widgets/RollWheelCard.ets",
+      "name": "RollDiceCard",
+      "displayName": "$string:RollDiceCard_display_name",
+      "description": "$string:RollDiceCard_desc",
+      "src": "./ets/widgets/RollDiceCard.ets",
       "uiSyntax": "arkts",
       "window": {
         "designWidth": 720,
@@ -18,7 +18,8 @@
       "updateDuration": 1,
       "defaultDimension": "2*2",
       "supportDimensions": [
-        "2*2"
+        "2*2",
+        "4*4"
       ]
     }
   ]
