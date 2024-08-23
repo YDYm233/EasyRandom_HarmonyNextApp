@@ -121,7 +121,7 @@ struct RollBoxs {
             angle: this.rotateAngle
           })
           .border({
-            width: 1,
+            width:0,
             color: 0xf1f3f5,
             radius: '50%',
             style: BorderStyle.Solid

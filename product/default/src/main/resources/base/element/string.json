@@ -36,7 +36,6 @@
       "name": "introduction",
       "value": "Introduction"
     },
-
     {
       "name": "login",
       "value": "Sign in/Sign up>"
@@ -110,36 +109,52 @@
       "value": "随时随地 轻松容易"
     },
     {
-      "name": "RollDiceCard_desc",
-      "value": "掷个骰子"
-    },
-    {
       "name": "RollDiceCard_display_name",
       "value": "掷骰子"
     },
     {
-      "name": "Form_RollBlessings_desc",
-      "value": "祝福木鱼."
+      "name": "RollDiceCard_desc",
+      "value": "掷个骰子"
+    },
+    {
+      "name": "FlipCoinCard_display_name",
+      "value": "丢硬币"
+    },
+    {
+      "name": "FlipCoinCard_desc",
+      "value": "正还是反？"
     },
     {
       "name": "Form_RollBlessings_display_name",
+      "value": "祝福木鱼"
+    },
+    {
+      "name": "Form_RollBlessings_desc",
       "value": "获得祝福的木鱼"
     },
     {
-      "name": "widget1_desc",
-      "value": "This is a service widget."
+      "name": "RandomColorsCard_display_name",
+      "value": "随机颜色"
     },
     {
-      "name": "widget1_display_name",
-      "value": "widget1"
+      "name": "RandomColorsCard_desc",
+      "value": "搭配好颜色"
+    },
+    {
+      "name": "RollWheelCard_display_name",
+      "value": "幸运转盘"
     },
     {
       "name": "RollWheelCard_desc",
       "value": "description"
     },
     {
-      "name": "RollWheelCard_display_name",
-      "value": "RollDIceCard"
+      "name": "RollWheel_desc",
+      "value": "帮你做决定"
+    },
+    {
+      "name": "RollWheel_display_name",
+      "value": "轮盘"
     }
   ]
 }

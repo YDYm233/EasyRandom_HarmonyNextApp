@@ -21,8 +21,30 @@
         "2*2"
       ]
     },
+
     {
-      "name": "Form_RollBlessings",
+      "name": "FlipCoinCard",
+      "displayName": "$string:FlipCoinCard_display_name",
+      "description": "$string:FlipCoinCard_desc",
+      "src": "./ets/widgets/FlipCoinCardCard.ets",
+      "uiSyntax": "arkts",
+      "window": {
+        "designWidth": 720,
+        "autoDesignWidth": true
+      },
+      "colorMode": "auto",
+      "isDynamic": true,
+      "isDefault": false,
+      "updateEnabled": false,
+      "scheduledUpdateTime": "10:30",
+      "updateDuration": 1,
+      "defaultDimension": "2*2",
+      "supportDimensions": [
+        "2*2"
+      ]
+    },
+    {
+      "name": "RollBlessingsCard",
       "displayName": "$string:Form_RollBlessings_display_name",
       "description": "$string:Form_RollBlessings_desc",
       "src": "./ets/widgets/RollBlessingsCard.ets",
@@ -44,9 +66,9 @@
       ]
     },
     {
-      "name": "widget1",
-      "displayName": "$string:widget1_display_name",
-      "description": "$string:widget1_desc",
+      "name": "RandomColorsCard",
+      "displayName": "$string:RandomColorsCard_display_name",
+      "description": "$string:RandomColorsCard_desc",
       "src": "./ets/widgets/RandomColorsCard.ets",
       "uiSyntax": "arkts",
       "window": {
