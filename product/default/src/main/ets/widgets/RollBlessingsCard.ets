@@ -1,6 +1,6 @@
 @Entry
 @Component
-struct Widget1Card {
+struct RollBlessingsCard {
   /*
    * The title.
    */
@@ -48,3 +48,4 @@ struct Widget1Card {
     })
   }
 }
+export default RollBlessingsCard

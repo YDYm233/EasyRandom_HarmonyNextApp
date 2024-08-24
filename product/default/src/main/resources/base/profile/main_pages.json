@@ -14,6 +14,7 @@
     "components/RandomNumbers",
     "components/HonestOrChallenge",
     "components/RollDices",
-    "components/RandomFoods"
+    "components/RandomFoods",
+    "components/AllasOne"
   ]
 }

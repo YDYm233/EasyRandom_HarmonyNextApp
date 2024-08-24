@@ -138,7 +138,7 @@ struct RollBoxs {
         radius: 10,
         style: BorderStyle.Dotted
       })
-      .cachedCount(2)
+     // .cachedCount(2)
       .loop(true)
       .indicatorInteractive(true)
       .duration(1000)

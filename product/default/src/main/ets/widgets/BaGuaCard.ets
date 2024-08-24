@@ -1,4 +1,6 @@
 import {Random} from '@ohos/common'
+import { DEFAULT } from '@ohos/hypium';
+
 @Entry
 @Component
 struct BaGuaCard {
@@ -26,3 +28,4 @@ struct BaGuaCard {
     })
   }
 }
+export default BaGuaCard

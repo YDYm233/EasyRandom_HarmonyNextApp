@@ -25,3 +25,5 @@ struct FlipCoinCardCard {
     })
   }
 }
+
+export default FlipCoinCardCard

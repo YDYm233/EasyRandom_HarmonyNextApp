@@ -23,3 +23,4 @@ struct RollDiceCard {
      })
   }
 }
+export default RollDiceCard

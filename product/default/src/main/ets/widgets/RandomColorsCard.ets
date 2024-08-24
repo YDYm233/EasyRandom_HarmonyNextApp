@@ -37,3 +37,4 @@ struct RandomColorsCard {
     })
   }
 }
+export default RandomColorsCard

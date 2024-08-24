@@ -4,26 +4,32 @@ import { Roll, RollItem, rolls } from '../datas/rolls';
 @Component
 struct RollWheelCard {
   readonly FULL_WIDTH_PERCENT: string = '90%';
-  @State coinImageArray: Resource[] = [$r("app.media.coin1"), $r("app.media.coin2")]
+  @State dataList:Roll[] = rolls
   @State rotateAngle:number = 0;
   build() {
-    Row() {
-      RollBox({data:rolls[0]})
-        .width(this.FULL_WIDTH_PERCENT)
-        .aspectRatio(1)
-        .animation({duration:600})
-        .rotate({
-          angle: this.rotateAngle
+    Swiper(){
+      ForEach(this.dataList, (item: Roll) => {
+        Row() {
+          RollBox({ data:item})
+            .width(this.FULL_WIDTH_PERCENT)
+            .aspectRatio(1)
+            .animation({ duration: 600 })
+            .rotate({
+              angle: this.rotateAngle
+            })
+            .animation({ duration: 1000, curve: Curve.Ease })
+        }
+        .justifyContent(FlexAlign.Center)
+        .alignItems(VerticalAlign.Center)
+        .width('100%')
+        .height('100%')
+        .onClick(() => {
+          this.rotateAngle = this.rotateAngle + this.rotateAngle + Random(0, 360, true) + 360 * 8;
         })
-        .animation({ duration: 1000, curve: Curve.Ease })
+      }, (item: Roll) => item.index)
     }
-    .justifyContent(FlexAlign.Center)
-    .alignItems(VerticalAlign.Center)
-    .width('100%')
-    .height('100%')
-    .onClick(() => {
-      this.rotateAngle =this.rotateAngle+this.rotateAngle+ Random(0, 360, true) + 360 * 8;
-    })
+    .loop(true)
+    .indicator(false)
   }
 }
 @Component
@@ -90,3 +96,4 @@ struct RollBox {
     })
   }
 }
+export default RollWheelCard
