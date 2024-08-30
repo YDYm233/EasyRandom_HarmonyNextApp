@@ -43,7 +43,6 @@ struct RollBox {
       Canvas(this.context)
         .onReady(() => {
           let ctx = this.context;
-          console.log('ctx.width:' + ctx.width)
           ctx.clearRect(0, 0, ctx.width, ctx.width)
           const contextWidth = ctx.width;
           const r = contextWidth / 2;

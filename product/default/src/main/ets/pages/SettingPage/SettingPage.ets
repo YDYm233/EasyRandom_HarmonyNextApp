@@ -7,6 +7,7 @@ import Illustrate from './Illustrate';
 import CopyRight from './CopyRight';
 import AddOil from './AddOil';
 import { promptAction } from '@kit.ArkUI';
+import { BreakpointState, BreakpointSystem } from '@ohos/common';
 
 class Item {
   title: string
@@ -35,7 +36,17 @@ let addOil = new Item('赞赏我们', $r("app.media.addoil_flower"), 0xffbe00)
 @Component
 struct Setting {
   @Provide('pageInfos') pageInfos: NavPathStack = new NavPathStack()
+  @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
 
+  aboutToAppear() {
+    BreakpointSystem.getInstance().attach(this.currentBreakpoint)
+    BreakpointSystem.getInstance().start()
+  }
+
+  aboutToDisappear() {
+    BreakpointSystem.getInstance().attach(this.currentBreakpoint)
+    BreakpointSystem.getInstance().stop()
+  }
   @Builder
   PageMap(name: string) {
     if (name == "问题反馈") {
@@ -94,20 +105,20 @@ struct Setting {
     }
     .onClick(() => {
       this.pageInfos.pushPath({ name: item.title })
-      console.log('name' + item.title)
-    })
+     // console.log('name' + item.title)
+    })          .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
     .width('100%')
     .height(50)
     .borderRadius(12)
     .padding({ left: 24, right: 24 })
-    .backgroundColor('#FFFFFF')
+    .backgroundColor(0xffffff)
     .justifyContent(FlexAlign.SpaceBetween)
     .alignItems(VerticalAlign.Center)
   }
 
   build() {
-    Column() {
       Navigation(this.pageInfos) {
+        Column(){
         Row() {
           Row() {
             Image($r("app.media.func_back")).height(24).width(24)
@@ -120,35 +131,55 @@ struct Setting {
             router.back({ url: 'pages/Index' })
           })
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+
           Row() {
             Text('设置').height(24).fontWeight(800).textAlign(TextAlign.Center)
           }.height('100%').aspectRatio(1).alignItems(VerticalAlign.Center).justifyContent(FlexAlign.Center)
 
           Row() {
             Image($r("app.media.func_share")).height(24).width(24)
-              .onClick(() => {
-                promptAction.showToast({
-                  message: '功能开发中'
-                })
-              })
-          }.height('100%').aspectRatio(1).alignItems(VerticalAlign.Center).justifyContent(FlexAlign.Center)
+
+          } .onClick(() => {
+            promptAction.showToast({
+              message: '功能开发中'
+            })
+          })          .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+          .height('100%').aspectRatio(1).alignItems(VerticalAlign.Center).justifyContent(FlexAlign.Center)
         }
         .width('100%')
-        .height($r("app.string.header_height")).alignItems(VerticalAlign.Center).justifyContent(FlexAlign.SpaceBetween)
+        .height(56)
+        .alignItems(VerticalAlign.Center)
+        .justifyContent(FlexAlign.SpaceBetween)
+        .backgroundColor(0xffffff)
+        // .backgroundColor('rgba(0,0,0,0)')
 
         List({ space: 12 }) {
           ListItem() {
-            Image($r("app.media.app_icon"))
-              .width('30%')
-              .aspectRatio(1)
+            Column() {
+              Image($r("app.media.app_icon"))
+                .width('40%')
+                .aspectRatio(1)
+                .margin({
+                  left: '30%',
+                  right: '30%',
+                  top: '10%',
+                  bottom: '10%'
+                })
+              Row() {
+                Text($r("app.string.app_info"))
+                  .textAlign(TextAlign.End)
+                  .fontWeight(600)
+                  .fontSize(16)
+              }
+              .justifyContent(FlexAlign.SpaceAround)
+              .alignItems(VerticalAlign.Center)
               .margin({
-                left: '35%',
-                right: '35%',
-                top: '10%',
-                bottom: '10%'
+                bottom: '4%'
               })
+              .height(30)
+              .width('100%')
+            }
           }
-          //.align(Alignment.Center)
 
 
           ListItemGroup({ header: this.itemHead('关于'), space: 8 }) {
@@ -187,58 +218,71 @@ struct Setting {
             }
           }
 
+
+          //列表底部抬高
+          .margin({bottom:120})
         }
-        .padding({ left: 12, right: 12 })
+        .padding({
+          left: 12,
+          right: 12,
+          top: 0,
+          bottom: 0
+        })
         .width("100%")
         .height('100%')
-        //.margin({ top: 12 })
-        .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+      //  .backgroundColor(0x00beff)
+       // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+      }
+      .width('100%')
+        .height('100%')
+        .backgroundColor(0xf1f3f5)
+       // .backgroundColor(0xfff000)
+       // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
       }
       .padding(0)
+      .width('100%')
+      .height('100%')
+      .backgroundColor(0xffffff)
       .mode(NavigationMode.Auto)
       .navDestination(this.PageMap)
+      .hideTitleBar(true)
+      .hideToolBar(true)
       .minContentWidth('420vp')
-      .backButtonIcon($r("app.media.func_back"))
-      .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
-    }
-    .height('100%')
-    .width('100%')
-    .backgroundColor('#F1F3F5')
-    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+      .backButtonIcon(this.currentBreakpoint.value=='sm'?$r("app.media.func_back"):null)
+      .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.BOTTOM])
+     // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
 
-// PageOne.ets
+//AboutUs.ets
 @Component
 export struct AboutUsView {
   @Consume('pageInfos') pageInfos: NavPathStack;
-
   build() {
     NavDestination() {
       AboutUs().width('100%').height('100%')
-    }.title("开发者团队")
-    .onBackPressed(() => {
+    }.title(aboutUs.title)
+     .onBackPressed(() => {
       const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
+      //console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
       return true
     })
   }
 }
 
-// Agreement.ets
+//Illustratet.ets
 @Component
 export struct IllustrateView {
   @Consume('pageInfos') pageInfos: NavPathStack;
-
   build() {
     NavDestination() {
       Illustrate().width('100%').height('100%')
-    }.title("更多信息")
+    }.title(illustrate.title)
     .onBackPressed(() => {
       const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
+      //console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
       return true
-    })
+    })      .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.BOTTOM])
   }
 }
 
@@ -253,9 +297,9 @@ export struct CopyRightView {
     }.title("版权声明")
     .onBackPressed(() => {
       const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
+      //console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
       return true
-    })
+    })      .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.BOTTOM])
   }
 }
 
@@ -263,33 +307,31 @@ export struct CopyRightView {
 @Component
 export struct OptionsView {
   @Consume('pageInfos') pageInfos: NavPathStack;
-
   build() {
     NavDestination() {
       Options().width('100%').height('100%')
     }.title(options.title)
     .onBackPressed(() => {
       const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
+      //console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
       return true
-    })
+    })      .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.BOTTOM])
   }
 }
 
-// Options.ets
+// PrivacyPolicy.ets
 @Component
 export struct PrivacyPolicyView {
   @Consume('pageInfos') pageInfos: NavPathStack;
-
   build() {
     NavDestination() {
       PrivacyPolicy().width('100%').height('100%')
     }.title(privacyPolicy.title).width("100%")
     .onBackPressed(() => {
       const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
+      //console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
       return true
-    })
+    })      .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.BOTTOM])
   }
 }
 
@@ -304,9 +346,9 @@ export struct AddOilView {
     }.title(addOil.title)
     .onBackPressed(() => {
       const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
+      //console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
       return true
-    })
+    })      .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.BOTTOM])
   }
 }
 
@@ -321,48 +363,11 @@ export struct ContactUsView {
     }.title(contactUs.title)
     .onBackPressed(() => {
       const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
+      //console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
       return true
-    })
+    })      .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.BOTTOM])
   }
 }
 
-// PageTwo.ets
-@Component
-export struct pageTwoTmp {
-  @Consume('pageInfos') pageInfos: NavPathStack;
-
-  build() {
-    NavDestination() {
-      Column() {
-        Text("NavDestinationContent2")
-      }.width('100%').height('100%')
-    }.title("NavDestinationTitle2")
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })
-  }
-}
-
-// PageThree.ets
-@Component
-export struct pageThreeTmp {
-  @Consume('pageInfos') pageInfos: NavPathStack;
-
-  build() {
-    NavDestination() {
-      Column() {
-        Text("NavDestinationContent3")
-      }.width('100%').height('100%')
-    }.title("NavDestinationTitle3")
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
-      console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })
-  }
-}
 
 export default Setting

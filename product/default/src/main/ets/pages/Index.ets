@@ -129,7 +129,7 @@ struct TabBar {
             }
           } else {
             this.isFirst = '非首次'
-            console.log('非首次')
+            //console.log('非首次')
           }
         });
     });

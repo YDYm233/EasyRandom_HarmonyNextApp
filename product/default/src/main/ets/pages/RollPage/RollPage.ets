@@ -284,7 +284,7 @@ struct RollBox {
         })
         .onReady(() => {
           let ctx = this.context;
-          console.log('ctx.width:' + ctx.width)
+          //console.log('ctx.width:' + ctx.width)
           ctx.clearRect(0, 0, ctx.width, ctx.width)
           //const contextWidth = Number(newValue.width);
           const contextWidth = ctx.width;

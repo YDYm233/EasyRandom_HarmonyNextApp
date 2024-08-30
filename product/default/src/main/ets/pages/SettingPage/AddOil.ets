@@ -1,16 +1,12 @@
 @Component
 struct Container {
-  @State time: string = '拒绝';
-
   build() {
     Column() {
       Text('页面火速开发中')
-      Text('您可以通过在应用市场评分，或在为我的B站账号充电来鼓励我')
-      Text(this.time)
+      Text('您目前可以通过在应用市场评分，或在为我的B站账号充电来鼓励我')
     }
   }
 }
-
 @Component
 struct AddOil {
   build() {

@@ -97,7 +97,7 @@ struct HonestOrChallenge {
           .backgroundColor(0xffffff)
           .width('80%')
           .margin('10%')
-          .borderRadius('50%')
+          .borderRadius(800)
           .aspectRatio(1)
           .rotate({ z: 1, angle: this.currentBreakpoint.value == 'sm' ? this.pointAngle + 90 : this.pointAngle })
           .animation({ duration: this.duration, curve: Curve.Ease })
@@ -106,7 +106,7 @@ struct HonestOrChallenge {
           this.duration = 1000;
           let target = Random(1, 360, true) + 360 * 1;
           this.pointAngle = this.pointAngle + target
-          console.log(this.pointAngle.toString())
+          //console.log(this.pointAngle.toString())
           if (this.pointAngle > 3600000) {
             this.pointAngle = this.pointAngle - 3600000
           }
@@ -151,7 +151,7 @@ struct HonestOrChallenge {
         .height('80%')
         .aspectRatio(1)
         .backgroundColor(0xffffff)
-        .borderRadius('50%')
+        .borderRadius(800)
       }
       .width(this.currentBreakpoint.value == 'sm' ? '20%' : '16%')
       .height(this.currentBreakpoint.value == 'sm' ? '10%' : '14%')

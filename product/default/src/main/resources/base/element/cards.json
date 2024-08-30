@@ -1,0 +1,54 @@
+{
+  "string": [
+    {
+      "name": "RollDiceCard_display_name",
+      "value": "掷骰子"
+    },
+    {
+      "name": "RollDiceCard_desc",
+      "value": "掷个骰子"
+    },
+    {
+      "name": "FlipCoinCard_display_name",
+      "value": "丢硬币"
+    },
+    {
+      "name": "FlipCoinCard_desc",
+      "value": "正还是反？"
+    },
+
+    {
+      "name": "RandomColorsCard_display_name",
+      "value": "随机颜色"
+    },
+    {
+      "name": "RandomColorsCard_desc",
+      "value": "搭配好颜色"
+    },
+    {
+      "name": "RollWheelCard_display_name",
+      "value": "幸运转盘"
+    },
+    {
+      "name": "RollWheelCard_desc",
+      "value": "帮你做决定"
+    },
+
+    {
+      "name": "BaGuaCard_display_name",
+      "value": "八卦"
+    },
+    {
+      "name": "BaGuaCard_desc",
+      "value": "坎,坤,震,巽,乾,兑,艮,离"
+    },
+    {
+      "name": "RollBlessingsCard_display_name",
+      "value": "祝福木鱼"
+    },
+    {
+      "name": "RollBlessingsCard_desc",
+      "value": "获得祝福的木鱼"
+    }
+  ]
+}

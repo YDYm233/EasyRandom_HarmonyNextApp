@@ -45,8 +45,8 @@
     },
     {
       "name": "RollBlessingsCard",
-      "displayName": "$string:Form_RollBlessings_display_name",
-      "description": "$string:Form_RollBlessings_desc",
+      "displayName": "$string:RollBlessingsCard_display_name",
+      "description": "$string:RollBlessingsCard_desc",
       "src": "./ets/widgets/RollBlessingsCard.ets",
       "uiSyntax": "arkts",
       "window": {
