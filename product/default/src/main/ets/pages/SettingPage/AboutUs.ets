@@ -1,14 +1,127 @@
-import { webview } from '@kit.ArkWeb';
 
 @Component
 struct AboutUs {
-  controller: webview.WebviewController = new webview.WebviewController();
+  @State isShowQR:boolean =false
+  @State qrSrc:string[] = ['http://www.m233.top',"https://www.bilibili.com/opus/971320804050468900?spm_id_from=333.1365.0.0","https://weibo.com/5858421461/OuE5WnqyO"]
+  @State popupTitle:string[]=['个人主页','哔哩哔哩','微博']
+  @State themeColor:Color[] =[0x00BEFF,0xFF7299,0xFFEB00]
+  @State themeIcon:Resource[]=[$r("app.media.link_myself"),$r("app.media.link_bilibili"),$r("app.media.link_weibo")]
+  @State index:number = 0
+  @State linkTitle:string='点击前往'+this.popupTitle[this.index]
+  @Builder QRCodeBox(){
+    Column() {
+      Row() {
+        Text(this.popupTitle[this.index]).fontWeight(700).textAlign(TextAlign.Center)      .width('100%')
+      }
+      .width('100%')
+      .aspectRatio(10)    .justifyContent(FlexAlign.Center)
+      .alignItems(VerticalAlign.Center)
+      Row() {
+        QRCode(this.qrSrc[this.index])      .width('100%')
+      }
+      .width('100%')
+      .aspectRatio(1)
+      Row() {
+        Row(){
+          Hyperlink(this.qrSrc[this.index],this.linkTitle).color(0xffffff)
+        }.backgroundColor(this.themeColor[this.index]).padding(5).borderRadius(12)
+      }
+      .width('100%')
+      .aspectRatio(10)    .justifyContent(FlexAlign.Center)
+      .alignItems(VerticalAlign.Center)
+    }
+    .width(280)
+    .aspectRatio(5/6)
+    .margin(24)
+    .backgroundColor(0xffffff)
+  }
 
   build() {
+    Row(){
     Column() {
-      Web({ src: $rawfile("MyInfo.html"), controller: this.controller })
+      Row() {
+        Image($r("app.media.MuYu"))
+          .width('40%')
+          .aspectRatio(1)
+          .padding(12)
+          .backgroundColor(0xffffff)
+          .margin({ left:'30%',right:'30%',top:'20%',bottom:'10%' })
+          .border({width:5,color:Color.Gray,radius:800})
+          .bindPopup($$this.isShowQR, {
+            builder: this.QRCodeBox(),
+            placement: Placement.Bottom,
+            mask: {color:'#33000000'},
+            popupColor: Color.Yellow,
+            enableArrow: true,
+            showInSubWindow: false,
 
+            onStateChange: (e) => {
+              if (!e.isVisible) {
+                this.isShowQR = false
+              }
+            }
+          })
+      }.width(300)
+      Row(){
+        Text('个人介绍：测试文本、Test Text、测试文本、test text 个人开发者')
+      }
+      .width('100%')
+      .height(80)
+      .padding(12)
+      .justifyContent(FlexAlign.Center)
+      .alignItems(VerticalAlign.Center)
+
+      GridRow({columns:{sm:12,md:12,lg:12},gutter:12}){
+        GridCol({span:{sm:6,md:4,lg:4}}) {
+          Row() {
+            Image(this.themeIcon[0]).width('25%').aspectRatio(1).fillColor(0xffffff)
+            Text(this.popupTitle[0]).height('100%').width('60%').fontColor(0xffffff).textAlign(TextAlign.Center).fontWeight(600)
+          }.width('80%').padding({left:'5%',right:'5%'}).margin({ left:'10%',right:'10%' }).aspectRatio(3).backgroundColor(this.themeColor[0]).borderRadius(12)
+        }.align(Alignment.Center)
+        //.backgroundColor(0xbeff00)
+        .onClick(()=>{
+          this.index=0
+          this.linkTitle='点击前往'+this.popupTitle[this.index]
+            this.isShowQR=true;
+        })
+        GridCol({span:{sm:6,md:4,lg:4}}) {
+          Row() {
+            Image(this.themeIcon[1]).width('25%').aspectRatio(1)
+              //.backgroundColor(0xffffff)
+            Text(this.popupTitle[1]).height('100%').width('60%').fontColor(0xffffff).textAlign(TextAlign.Center).fontWeight(600)
+          }.width('80%').padding({left:'5%',right:'5%'}).margin({ left:'10%',right:'10%' }).aspectRatio(3).backgroundColor(this.themeColor[1]).borderRadius(12)
+        }.align(Alignment.Center)
+        //.backgroundColor(0xbeff00)
+        .onClick(()=>{
+          this.index=1
+          this.linkTitle='点击前往'+this.popupTitle[this.index]
+          this.isShowQR=true;
+        })
+        GridCol({span:{sm:6,md:4,lg:4}}) {
+          Row() {
+            Image(this.themeIcon[2]).width('25%').aspectRatio(1)
+              //.backgroundColor(0xffffff)
+            Text(this.popupTitle[2]).height('100%').width('60%').fontColor(0xffffff).textAlign(TextAlign.Center).fontWeight(600)
+          }.width('80%').padding({left:'5%',right:'5%'}).margin({ left:'10%',right:'10%' }).aspectRatio(3).backgroundColor(this.themeColor[2]).borderRadius(12)
+        }.align(Alignment.Center)
+        //.backgroundColor(0xbeff00)
+        .onClick(()=>{
+          this.index=2
+          this.linkTitle='点击前往'+this.popupTitle[this.index]
+          this.isShowQR=true;
+        })
+}
+      .width('100%')
+     // .backgroundColor(0xffeb00)
     }
+    //.backgroundColor(0x00ff00)
+    .width('100%')
+    }
+    .width('100%').height('100%')
+    .justifyContent(FlexAlign.Center)
+    .alignItems(VerticalAlign.Center)
+    .backgroundColor(0xffffff)
+    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
 

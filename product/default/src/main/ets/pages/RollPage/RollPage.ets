@@ -1,6 +1,7 @@
 import { BreakpointState, BreakpointSystem, Random } from '@ohos/common';
 import OptBoxs from './RollOpts';
 import { Roll, RollItem, rolls } from '../../datas/rolls';
+import { promptAction } from '@kit.ArkUI';
 
 @Entry
 @Component
@@ -218,8 +219,10 @@ struct RollBoxs {
 
           .onClick(() => {
 
-            this.isSheetShow = true;
-
+           // this.isSheetShow = true;
+            promptAction.showToast({
+              message: '功能完善中 未来将支持更改转盘选项'
+            })
 
           })
         }
@@ -254,7 +257,6 @@ struct RollBoxs {
       preferType: this.currentBreakpoint.value == 'sm' ? SheetType.BOTTOM :
         (this.currentBreakpoint.value == 'md' ? SheetType.CENTER : SheetType.CENTER),
       width: this.currentBreakpoint.value == 'sm' ? '100%' : (this.currentBreakpoint.value == 'md' ? '50%' : '40%'),
-
     })
   }
 }
