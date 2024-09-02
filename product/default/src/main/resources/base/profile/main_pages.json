@@ -15,6 +15,7 @@
     "components/HonestOrChallenge",
     "components/RollDices",
     "components/RandomFoods",
-    "components/AllasOne"
+    "components/AllasOne",
+    "components/TransQR"
   ]
 }

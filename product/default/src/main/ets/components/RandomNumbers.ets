@@ -7,42 +7,40 @@ struct RandomNames {
   build() {
     Column() {
       Header({ title: '随机数' })
-      GridRow({
-        columns: {
-          sm: 4,
-          md: 8,
-          lg: 12
-        },
-        gutter: 12
-      }) {
-        GridCol({
-          span: {
+      Scroll() {
+        GridRow({
+          columns: {
             sm: 4,
-            md: 6,
-            lg: 8
+            md: 8,
+            lg: 12
           },
-          offset: {
-            sm: 0,
-            md: 1,
-            lg: 2
-          }
+          gutter: 12
         }) {
-          Scroll() {
-            NumbersBox().width('100%')
+          GridCol({
+            span: {
+              sm: 4,
+              md: 4,
+              lg: 6
+            },
+            offset: {
+              sm: 0,
+              md: 2,
+              lg: 3
+            }
+          }) {
+            Row() {
+              NumbersBox().width('100%')
+            }
+            .width('100%')
+            .justifyContent(FlexAlign.Center)
+            .alignItems(VerticalAlign.Center)
           }
-          .width('100%')
-          .height('100%')
-          .align(Alignment.Center)
-
-          //.alignItems(VerticalAlign.Center)
         }
-        .height('100%')
+        .margin(24)  .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
       }
-      .height('100%')
-      .margin({ left: 24, right: 24 })
-      .padding({ top: $r("app.string.header_height") })
-    }.height('100%')
-    .backgroundColor($r("app.color.view_bgc_2"))
+      .width('100%')
+      .height('100%')  .padding({ top: $r("app.string.header_height") })
+    }.height('100%').backgroundColor($r("app.color.view_bgc_2"))    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }

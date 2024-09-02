@@ -8,48 +8,46 @@ struct RollBlessings {
   build() {
     Column() {
       Header({ title: '祝福木鱼' })
-      GridRow({
-        columns: {
-          sm: 4,
-          md: 8,
-          lg: 12
-        },
-        gutter: 12
-      }) {
-        GridCol({
-          span: {
+      Scroll() {
+        GridRow({
+          columns: {
             sm: 4,
-            md: 4,
-            lg: 6
+            md: 8,
+            lg: 12
           },
-          offset: {
-            sm: 0,
-            md: 2,
-            lg: 3
-          }
+          gutter: 12
         }) {
-          Scroll() {
-            Blessings().width('100%')
+          GridCol({
+            span: {
+              sm: 4,
+              md: 4,
+              lg: 6
+            },
+            offset: {
+              sm: 0,
+              md: 2,
+              lg: 3
+            }
+          }) {
+            Row() {
+              RollBlessingsBox().width('100%')
+            }
+            .width('100%')
+            .justifyContent(FlexAlign.Center)
+            .alignItems(VerticalAlign.Center)
           }
-          .width('100%')
-          .height('100%')
-          .align(Alignment.Center)
-
-          //.alignItems(VerticalAlign.Center)
         }
-        .height('100%')
+        .margin(24)  .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
       }
-      .height('100%')
-      .margin({ left: 12, right: 12 })
-      .padding({ top: $r("app.string.header_height") })
-    }.height('100%')
-    .backgroundColor($r("app.color.view_bgc_2"))
+      .width('100%')
+      .height('100%')  .padding({ top: $r("app.string.header_height") })
+    }.height('100%').backgroundColor($r("app.color.view_bgc_2"))    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
 
 @Component
-export struct Blessings {
+struct RollBlessingsBox {
   @State blessings: string[] = ['幸福', '财力', '智力', '运气', '力量', '勇气', '实力', '美貌', '健康', '快乐']
   @State positions: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   @State durations: number[] = [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000]

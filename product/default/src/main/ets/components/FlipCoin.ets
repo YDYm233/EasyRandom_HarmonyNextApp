@@ -8,39 +8,40 @@ struct RollFlip {
   build() {
     Column() {
       Header({ title: '丢硬币' })
-      GridRow({
-        columns: {
-          sm: 4,
-          md: 8,
-          lg: 12
-        },
-        gutter: 12
-      }) {
-        GridCol({
-          span: {
+      Scroll() {
+        GridRow({
+          columns: {
             sm: 4,
-            md: 4,
-            lg: 4
+            md: 8,
+            lg: 12
           },
-          offset: {
-            sm: 0,
-            md: 2,
-            lg: 4
-          }
+          gutter: 12
         }) {
-          Row() {
-            Coin().width('100%')
+          GridCol({
+            span: {
+              sm: 4,
+              md: 4,
+              lg: 4
+            },
+            offset: {
+              sm: 0,
+              md: 2,
+              lg: 4
+            }
+          }) {
+            Row() {
+             Coin().width('100%')
+            }
+            .width('100%')
+            .justifyContent(FlexAlign.Center)
+            .alignItems(VerticalAlign.Center)
           }
-          .width('100%')
-          .height('100%')
-          .alignItems(VerticalAlign.Center)
         }
-        .height('100%')
+        .margin(24)  .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
       }
-      .height('100%')
-      .margin({ left: 24, right: 24 })
-      .padding({ top: $r("app.string.header_height") })
-    }.height('100%').backgroundColor($r("app.color.view_bgc_2"))
+      .width('100%')
+      .height('100%')  .padding({ top: $r("app.string.header_height") })
+    }.height('100%').backgroundColor($r("app.color.view_bgc_2"))    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }

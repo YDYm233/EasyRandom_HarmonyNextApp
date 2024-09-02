@@ -6,50 +6,47 @@ import Header from './Header';
 struct RollDices {
   build() {
     Column() {
-      Header({ title: '掷筛子' })
-      GridRow({
-        columns: {
-          sm: 4,
-          md: 8,
-          lg: 12
-        },
-        gutter: 12
-      }) {
-        GridCol({
-          span: {
+      Header({ title: '掷骰子' })
+      Scroll() {
+        GridRow({
+          columns: {
             sm: 4,
-            md: 6,
-            lg: 8
+            md: 8,
+            lg: 12
           },
-          offset: {
-            sm: 0,
-            md: 1,
-            lg: 2
-          }
+          gutter: 12
         }) {
-          Scroll() {
-            Dices().width('100%')
+          GridCol({
+            span: {
+              sm: 4,
+              md: 4,
+              lg: 4
+            },
+            offset: {
+              sm: 0,
+              md: 2,
+              lg: 4
+            }
+          }) {
+            Row() {
+              RollDiceBox().width('100%')
+            }
+            .width('100%')
+            .justifyContent(FlexAlign.Center)
+            .alignItems(VerticalAlign.Center)
           }
-          .width('100%')
-          .height('100%')
-          .align(Alignment.Center)
-
-          //.alignItems(VerticalAlign.Center)
         }
-        .height('100%')
+        .margin(24)  .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
       }
-      .height('100%')
-      .margin({ left: 24, right: 24 })
-      .padding({ top: $r("app.string.header_height") })
-
-    }.height('100%')
-    .backgroundColor($r("app.color.view_bgc_2"))
+      .width('100%')
+      .height('100%')  .padding({ top: $r("app.string.header_height") })
+    }.height('100%').backgroundColor($r("app.color.view_bgc_2"))    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
 
 @Component
-struct Dices {
+struct RollDiceBox {
   @State diceImageArray: Resource[] =
     [$r("app.media.dice1"), $r("app.media.dice2"), $r("app.media.dice3"), $r("app.media.dice4"), $r("app.media.dice5"),
       $r("app.media.dice6")]

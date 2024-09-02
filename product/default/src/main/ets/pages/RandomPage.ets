@@ -6,6 +6,7 @@ import { router } from '@kit.ArkUI'
 struct RandomPage {
   build() {
     List() {
+      ListItem().margin({top:24})
       ListItem() {
         Banner()
       }
@@ -14,7 +15,7 @@ struct RandomPage {
         AppList()
       }
     }
-    .width("100%")
+    .width("100%")    .padding({ left:12,right:12})
   }
 }
 
@@ -47,7 +48,7 @@ let Swipers: Array<AppItem> = [
     'pages/Index', '', [[0x00BFFF, 0], [0x1E90FF, 0.5], [0x00008B, 1]]),
 
   new AppItem('答案之书', $r("app.media.icon_RandomPlaces"),
-    'pages/Index', '', [[0x00beff, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
+    'components/TransQR', '', [[0x00beff, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
 ]
 
 @Component

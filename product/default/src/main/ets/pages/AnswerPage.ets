@@ -8,6 +8,7 @@ struct AnswerPage {
     Row() {
       AnswerBook()
     }
+
     .width('100%')
     .height('100%')
     .backgroundColor($r("app.color.view_bgc_2"))
