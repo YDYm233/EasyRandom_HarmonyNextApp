@@ -13,7 +13,7 @@ struct HonestOrChallenge {
   @State selectedText: string = this.challenges[Random(0, this.challenges.length - 1, true)]
   @State HorC: boolean = true;
   @State pointAngle: number = 0;
-  @State duration: number = 1000
+  readonly  duration: number = 1000
   @State index: number = 0
   @State honestColor: Color = 0xFF7299
   @State challengeColor: Color = 0x23ADE5
@@ -26,6 +26,25 @@ struct HonestOrChallenge {
   aboutToDisappear() {
     BreakpointSystem.getInstance().attach(this.currentBreakpoint)
     BreakpointSystem.getInstance().stop()
+  }
+
+  showPopup() {
+    promptAction.openCustomDialog({
+      builder: () => {
+        this.customDialogBuilder()
+      },
+      showInSubWindow: false,
+      offset: { dx: 5, dy: 5 },
+      backgroundColor: 0xd9ffffff,
+      cornerRadius: 24,
+      backgroundBlurStyle: BlurStyle.Regular,
+      width: this.currentBreakpoint.value == 'sm' ? '80%' :
+        (this.currentBreakpoint.value == 'md' ? '50%' : '30%'),
+      height: this.currentBreakpoint.value == 'sm' ? '20%' :
+        (this.currentBreakpoint.value == 'md' ? '20%' : '20%'),
+    }).then((dialogId: number) => {
+      this.customDialogId = dialogId
+    })
   }
 
   @Builder
@@ -103,7 +122,7 @@ struct HonestOrChallenge {
           .animation({ duration: this.duration, curve: Curve.Ease })
         }
         .onClick(() => {
-          this.duration = 1000;
+
           let target = Random(1, 360, true) + 360 * 1;
           this.pointAngle = this.pointAngle + target
           //console.log(this.pointAngle.toString())
@@ -125,23 +144,7 @@ struct HonestOrChallenge {
               this.selectedText = this.honests[Random(0, this.challenges.length - 1, true)]
             }
             setTimeout(() => {
-              promptAction.openCustomDialog({
-                builder: () => {
-                  this.customDialogBuilder()
-                },
-                showInSubWindow: false,
-                offset: { dx: 5, dy: 5 },
-                backgroundColor: 0xd9ffffff,
-                cornerRadius: 24,
-                backgroundBlurStyle: BlurStyle.Regular,
-                width: this.currentBreakpoint.value == 'sm' ? '80%' :
-                  (this.currentBreakpoint.value == 'md' ? '50%' : '30%'),
-                height: this.currentBreakpoint.value == 'sm' ? '20%' :
-                  (this.currentBreakpoint.value == 'md' ? '20%' : '20%'),
-
-              }).then((dialogId: number) => {
-                this.customDialogId = dialogId
-              })
+                  this.showPopup()
             }, this.duration)
 
 
@@ -197,24 +200,7 @@ struct HonestOrChallenge {
         .onClick(() => {
           this.selectedText = this.honests[Random(0, this.challenges.length - 1, true)]
           this.HorC = true
-          promptAction.openCustomDialog({
-            builder: () => {
-              this.customDialogBuilder()
-            },
-            showInSubWindow: false,
-            offset: { dx: 5, dy: 5 },
-            backgroundColor: 0xd9ffffff,
-            cornerRadius: 24,
-            backgroundBlurStyle: BlurStyle.Regular,
-            width: this.currentBreakpoint.value == 'sm' ? '80%' :
-              (this.currentBreakpoint.value == 'md' ? '50%' : '30%'),
-            height: this.currentBreakpoint.value == 'sm' ? '20%' :
-              (this.currentBreakpoint.value == 'md' ? '20%' : '20%'),
-
-          }).then((dialogId: number) => {
-            this.customDialogId = dialogId
-          })
-
+          this.showPopup()
         })
 
         GridCol({
@@ -243,25 +229,7 @@ struct HonestOrChallenge {
         .onClick(() => {
           this.selectedText = this.challenges[Random(0, this.challenges.length - 1, true)]
           this.HorC = false
-          promptAction.openCustomDialog({
-            builder: () => {
-              this.customDialogBuilder() //22
-            },
-            showInSubWindow: false,
-            alignment: DialogAlignment.Center,
-            isModal: true,
-            offset: { dx: 5, dy: 5 },
-            backgroundColor: 0xd9ffffff,
-            cornerRadius: 24,
-            backgroundBlurStyle: BlurStyle.Regular,
-            width: this.currentBreakpoint.value == 'sm' ? '80%' :
-              (this.currentBreakpoint.value == 'md' ? '50%' : '30%'),
-            height: this.currentBreakpoint.value == 'sm' ? '20%' :
-              (this.currentBreakpoint.value == 'md' ? '20%' : '20%'),
-
-          }).then((dialogId: number) => {
-            this.customDialogId = dialogId
-          })
+          this.showPopup()
         })
       }
       .height('100%')
