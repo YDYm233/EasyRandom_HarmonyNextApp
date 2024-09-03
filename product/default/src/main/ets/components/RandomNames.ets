@@ -151,22 +151,21 @@ struct NamesBox {
             Row() {
               Row() {
                 Text('数量:').height('100%').fontWeight(FontWeight.Bold)
-                CounterComponent({
-                  options: {
-                    type: CounterType.COMPACT,
-                    numberOptions: {
-                      value: 1,
-                      min: 1,
-                      max: this.max,
-                      step: 1,
-                      focusable: true,
-                      onChange: (value: number) => {
-                        this.number = value
-                      }
-                    }
+                Counter() {
+                  Text(this.number.toString())
+                }
+                .height('80%')
+                .onInc(() => {
+                  this.number++
+                })
+                .onDec(() => {
+                  this.number--
+                  if(this.number<0){
+                    this.number=0;
                   }
-                }).height('110%').padding({ top: '9%', left: '4%' })
+                })
               }
+              .justifyContent(FlexAlign.SpaceBetween)
               .alignItems(VerticalAlign.Center)
               .height('100%')
               .aspectRatio(3)
