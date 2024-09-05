@@ -11,7 +11,6 @@ import { preferences } from '@kit.ArkData'
 import CommonConstants from '../constants/CommonConstants'
 import { GlobalContext } from '../constants/GlobalContext'
 import Logger from '../constants/Logger'
-
 @Entry({ routeName: 'Index' })
 @Component
 struct TabBar {
@@ -176,6 +175,9 @@ struct TabBar {
             // Image($r("app.media.func_back")).height('24vp').width('24vp')
             //Text(this.isFirst)
           }
+          .onClick(()=>{
+
+          })
           .width('100%')
           .height($r("app.string.header_height"))
           .justifyContent(FlexAlign.Start)

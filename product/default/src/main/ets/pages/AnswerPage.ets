@@ -20,16 +20,15 @@ struct AnswerPage {
 @Component
 struct AnswerBook {
   @State angle: number = -180;
-  @State duration: number = 2000
+  private readonly  duration: number = 1000
   @State ForB: boolean = false
   @State foreVisible: Visibility = Visibility.None
   @State backVisible: Visibility = Visibility.Visible
   @State answers: string[] = answers
   @State answer: string = this.answers[Random(0, this.answers.length - 1, true)]
-
+  @State isRolling:boolean=false
   aboutToDisappear() {
     this.angle = -180;
-    this.duration = 2000
     this.ForB = false
     this.foreVisible = Visibility.None
     this.backVisible = Visibility.Visible
@@ -71,28 +70,31 @@ struct AnswerBook {
       .borderRadius(24)
       .clip(true)
       .rotate({ y: 1, angle: this.angle })
-      .animation({ duration: this.duration })
+      .animation({ duration: this.duration,curve:Curve.EaseInOut })
       .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+      .enabled(!this.isRolling)
       .onClick(() => {
+        this.isRolling=true
         if (this.ForB == false) {
-          this.duration = 2000
           this.ForB = true;
           setTimeout(() => {
             this.foreVisible = Visibility.Visible
             this.backVisible = Visibility.None
+            this.isRolling=false
           }, this.duration / 2)
           this.angle = 0
-
         } else {
-          this.duration = 1200
           this.ForB = false;
           setTimeout(() => {
             this.foreVisible = Visibility.None
             this.backVisible = Visibility.Visible
             this.answer = this.answers[Random(0, this.answers.length - 1, true)]
+            this.isRolling=false
           }, this.duration / 2)
           this.angle = -180
         }
+
+
       })
     }.height('100%').aspectRatio(1 / 2)
 

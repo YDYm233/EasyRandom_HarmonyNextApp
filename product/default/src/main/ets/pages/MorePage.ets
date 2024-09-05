@@ -26,7 +26,11 @@ let Apps: Array<AppItem> = [
     'components/RollBlessings', '', [[0x00beff, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
 
   new AppItem('人生必去的100个地方', $r("app.media.icon_RandomPlace"),
-    'components/RandomFoods', '', [[0x00beff, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
+    'components/RandomPlaces', '', [[0x00beff, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
+
+  new AppItem('二维码转换', $r("app.media.QRcode"),
+    'components/TransQR', '', [[0x00beff, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
+
 ];
 
 @Entry
@@ -99,7 +103,6 @@ struct MorePage {
   build() {
     Column() {
         List() {
-          ListItem().margin({top:24})
           ForEach(this.DataList, (app: AppItem) => {
             ListItem() {
               this.ListItem(app)
@@ -109,7 +112,7 @@ struct MorePage {
         .width('100%')
         .height('100%')
         .lanes(this.currentBreakpoint.value === 'sm' ? 1 : (this.currentBreakpoint.value === 'md' ? 2 : 3))
-         .padding({ left:12,right:12} )
+        .padding({ left:this.currentBreakpoint.value=='sm'?6:12,right:this.currentBreakpoint.value=='sm'?6:12})
     }
 
   }

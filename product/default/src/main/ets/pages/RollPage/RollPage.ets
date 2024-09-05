@@ -6,6 +6,15 @@ import { promptAction } from '@kit.ArkUI';
 @Entry
 @Component
 struct RollPage {
+  @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
+  aboutToAppear() {
+    BreakpointSystem.getInstance().attach(this.currentBreakpoint)
+    BreakpointSystem.getInstance().start()
+  }
+  aboutToDisappear() {
+    BreakpointSystem.getInstance().attach(this.currentBreakpoint)
+    BreakpointSystem.getInstance().stop()
+  }
   build() {
     Scroll() {
       GridRow({ columns: { sm: 4, md: 8, lg: 12 }, gutter: 12 }) {
@@ -17,7 +26,7 @@ struct RollPage {
           .alignItems(VerticalAlign.Center)
         }          .width('100%')
       }
-      .margin(24)
+      .margin(this.currentBreakpoint.value=='sm'?12: 24)
     }.width('100%').height('100%').backgroundColor($r("app.color.view_bgc_2"))
   }
 }

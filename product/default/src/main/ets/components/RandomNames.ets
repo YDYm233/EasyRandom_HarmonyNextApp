@@ -1,7 +1,6 @@
 import { Randoms } from '@ohos/common';
 import Header from './Header';
-import { CounterComponent, CounterType } from '@kit.ArkUI';
-
+import {names}from'../datas/names'
 @Entry
 @Component
 struct RandomNames {
@@ -48,11 +47,11 @@ struct RandomNames {
 
 @Component
 struct NamesBox {
-  @State textValue: string = '小红\n小兰\n小明'
+  @State textValue: string =names
   @State texts: string[] = []
   @State indexs: number[] = []
   @State number: number = 1;
-  @State max: number = 3;
+  @State max: number = 4;
 
   @Builder
   ListItem(name: string, index: number) {
@@ -151,19 +150,26 @@ struct NamesBox {
             Row() {
               Row() {
                 Text('数量:').height('100%').fontWeight(FontWeight.Bold)
+                Row() {
                 Counter() {
                   Text(this.number.toString())
                 }
-                .height('80%')
                 .onInc(() => {
                   this.number++
+                  if (this.number > this.max) {
+                    this.number = this.max;
+                  }
                 })
                 .onDec(() => {
                   this.number--
-                  if(this.number<0){
-                    this.number=0;
+                  if (this.number < 0) {
+                    this.number = 0;
                   }
                 })
+                  .height('80%')
+                  .aspectRatio(3)
+              }
+                .height('80%')
               }
               .justifyContent(FlexAlign.SpaceBetween)
               .alignItems(VerticalAlign.Center)

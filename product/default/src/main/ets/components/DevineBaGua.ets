@@ -221,16 +221,15 @@ struct Li {
 
 @Component
 struct BaGuaBox {
-  @State widthRate: number = 20
-  @State widthPer: string = this.widthRate.toString() + '%';
-  @State heightMargin: string = 3 + '%'
-  @State widthMargin: string = ((100 - this.widthRate) / 2).toString() + '%';
-  @State all: Array<string> = ['坎', '坤', '震', '巽', '太极', '乾', '兑', '艮', '离']
-  @State angles: Array<number> = [180, 45, 270, 315, 135, 90, 225, 0];
-  @State isRoll: boolean = false;
-  @State duration: number = 3000;
+  readonly  widthRate: number = 20
+  readonly widthPer: string = this.widthRate.toString() + '%';
+  readonly  heightMargin: string = 3 + '%'
+  readonly  widthMargin: string = ((100 - this.widthRate) / 2).toString() + '%';
+  readonly  all: Array<string> = ['坎', '坤', '震', '巽', '太极', '乾', '兑', '艮', '离']
+  readonly  angles: Array<number> = [180, 45, 270, 315, 135, 90, 225, 0];
+  readonly  duration: number = 2000;
   @State angle: number = 0;
-
+  @State isRoll: boolean = false;
   build() {
     Column() {
       Row() {
@@ -341,7 +340,6 @@ struct BaGuaBox {
 
     }
     .onClick(() => {
-      this.duration = 3000
       this.isRoll = true;
       this.angle = this.angle + this.angles[Random(0, 7, true)] + 360 * 8;
       setTimeout(() => {

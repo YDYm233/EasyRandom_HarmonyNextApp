@@ -16,6 +16,8 @@
     "components/RollDices",
     "components/RandomFoods",
     "components/AllasOne",
-    "components/TransQR"
+    "components/TransQR",
+    "components/RandomPlaces",
+    "components/TextMarquee"
   ]
 }

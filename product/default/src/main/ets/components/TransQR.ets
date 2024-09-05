@@ -7,7 +7,7 @@ import { CounterComponent, CounterType } from '@kit.ArkUI';
 struct TransQR {
   build() {
     Column() {
-      Header({ title: '转换二维码' })
+      Header({ title: '二维码转换' })
       Scroll() {
         GridRow({
           columns: {
@@ -68,7 +68,7 @@ struct NamesBox {
           }
         }) {
           Row(){
-            QRCode(this.QrCode).width('100%')
+            QRCode(this.QrCode).width('90%').margin('5%')
           }
           .justifyContent(FlexAlign.Center)
           .alignItems(VerticalAlign.Center)

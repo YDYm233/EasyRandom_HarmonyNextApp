@@ -54,7 +54,7 @@ struct Foods {
   build() {
     Column() {
       Row() {
-        Text(this.food).height('70%').animation({ duration: 100 })
+        Text(this.food).height('70%').animation({ duration: 100 }).fontSize(24).fontWeight(500)
       }.width('100%').height('80%').alignItems(VerticalAlign.Center).justifyContent(FlexAlign.Center)
 
       Row() {

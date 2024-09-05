@@ -4,9 +4,20 @@ import { router } from '@kit.ArkUI'
 @Entry
 @Component
 struct RandomPage {
+  @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
+
+  aboutToAppear() {
+    BreakpointSystem.getInstance().attach(this.currentBreakpoint)
+    BreakpointSystem.getInstance().start()
+  }
+
+  aboutToDisappear() {
+    BreakpointSystem.getInstance().attach(this.currentBreakpoint)
+    BreakpointSystem.getInstance().stop()
+  }
   build() {
     List() {
-      ListItem().margin({top:24})
+      ListItem().margin({top:12})
       ListItem() {
         Banner()
       }
@@ -15,7 +26,8 @@ struct RandomPage {
         AppList()
       }
     }
-    .width("100%")    .padding({ left:12,right:12})
+    .width("100%")
+    .padding({ left:this.currentBreakpoint.value=='sm'?12:24,right:this.currentBreakpoint.value=='sm'?12:24})
   }
 }
 
@@ -47,8 +59,8 @@ let Swipers: Array<AppItem> = [
   new AppItem('幸运转盘', $r("app.media.icon_Rolls"),
     'pages/Index', '', [[0x00BFFF, 0], [0x1E90FF, 0.5], [0x00008B, 1]]),
 
-  new AppItem('答案之书', $r("app.media.icon_RandomPlaces"),
-    'components/TransQR', '', [[0x00beff, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
+  new AppItem('人生必去的100个地方', $r("app.media.icon_RandomPlaces"),
+    'components/RandomPlaces', '', [[0x00beff, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
 ]
 
 @Component
@@ -90,10 +102,10 @@ struct Banner {
     .displayCount(this.currentBreakpoint.value === 'sm' ? 1 : (this.currentBreakpoint.value === 'md' ? 2 : 3))
     .width('100%')
     .padding({
-      left: 12,
-      right: 12,
+     // left: 12,
+      //right: 12,
       bottom: 36,
-      top: 16
+      //top: 16
     })
   }
 }
@@ -180,6 +192,9 @@ struct AppList {
     }
     .width('100%')
     .height(this.currentBreakpoint.value === 'lg' ? 338 : 218)
-    .padding({ bottom: 8, left: 12, right: 12 })
+    .padding({ bottom: 8,
+      //left: 12,
+    //  right: 12
+      })
   }
 }

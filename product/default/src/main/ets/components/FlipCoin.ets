@@ -64,20 +64,13 @@ struct Coin {
             .width('100%')
             .aspectRatio(1)
             .position({ top: 0, left: 0 })
-            .translate({ z: 1 })
-            .opacity(this.B)
+              .opacity(this.B)
           Image($r("app.media.coin2"))
             .width('100%')
             .aspectRatio(1)
-            .zIndex(5)
             .position({ top: 0, left: 0 })
-            .opacity(this.F)// .overlay(this.ForeImage(), {
-              // align: Alignment.Center,
-              // offset: { x: 0, y: 0 }
-              //})
-            .translate({ z: -1 })
+           .opacity(this.F)
             .objectFit(ImageFit.Contain)
-          // Image($r("app.media.goodsIconYImg")).width('100%').aspectRatio(1).position({top:0,left:0}).opacity(1).translate({z:-1})
         }
         .width('40%')
         .aspectRatio(1)
