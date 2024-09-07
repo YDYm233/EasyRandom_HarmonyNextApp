@@ -1,49 +1,389 @@
-@Component
-struct Container {
-  build() {
-    Column() {
-      Text('页面火速开发中')
-      Text('特别鸣谢给与图标绘画支持的四位画师')
-    }
+import { BreakpointState, BreakpointSystem } from '@ohos/common';
+import { productViewManager } from '@kit.StoreKit';
+import { hilog } from '@kit.PerformanceAnalysisKit';
+import type { common, Want } from '@kit.AbilityKit';
+import { BusinessError } from '@kit.BasicServicesKit';
+import { promptAction, PromptAction } from '@kit.ArkUI';
+class AppItem {
+  name: string|Resource
+  img: Resource
+  url: string
+  params: string | null
+  color:  null | Color
+  constructor(name: string|Resource, img: Resource, url: string, params: string | null,
+    color:  null | Color) {
+    this.name = name;
+    this.img = img;
+    this.url = url
+    this.params = params
+    this.color = color
   }
 }
 
+function startBrowsableAbility(context: common.UIAbilityContext,src:string): void {
+  let want: Want = {
+    action: 'ohos.want.action.viewData',
+    entities: ['entity.system.browsable'],
+    uri:src
+  };
+  context.startAbility(want)
+    .then(() => {
+
+    })
+    .catch((err: BusinessError) => {
+      console.error(`Failed to startAbility. Code: ${err.code}, message: ${err.message}`);
+    });
+}
 @Component
 struct Illustrate {
+  private readonly  Apps: Array<AppItem> = [
+  new AppItem('联系我们', $r("app.media.contactus_fill"),
+    '', '',0xf10ff5),
+  new AppItem('微博留言', $r("app.media.link_weibo"),
+    'https://weibo.com/5858421461/OuE5WnqyO', '', 0xffff00),
+  new AppItem('B站留言', $r("app.media.link_bilibili"),
+    'https://www.bilibili.com/opus/971320804050468900?spm_id_from=333.1365.0.0', '', 0xFF7299),
+  new AppItem('官方网站', $r("app.media.link_myself"),
+    'http://www.m233.top', '', 0x00BEFF),
+    new AppItem('给个好评', $r("app.media.addoil_thumb"),
+      '', '', 0x00BEFF),
+    new AppItem('赞赏我们', $r("app.media.addoil_flower"),
+      '', '', 0x00BEFF),
+    new AppItem($r("app.string.app_link"), $r("sys.media.ohos_ic_public_express"),
+      '', '', 0x00BEFF),
+    new AppItem('版权声明', $r("app.media.illustrate"),
+      '', '', 0x00BEFF),
+];
+  @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
+  @State fontSize: number = 16;
+  aboutToAppear() {
+    BreakpointSystem.getInstance().attach(this.currentBreakpoint)
+    BreakpointSystem.getInstance().start()
+  }
+
+  aboutToDisappear() {
+    BreakpointSystem.getInstance().attach(this.currentBreakpoint)
+    BreakpointSystem.getInstance().stop()
+  }
+
+  @Builder
+  itemHead(text: string) {
+    Text(text)
+      .fontSize(20)
+      .width("100%")
+      .padding(10)
+  }
+  @Consume('pageInfos') pageInfos: NavPathStack;
   build() {
+    NavDestination() {
     Column() {
-      GridRow({
-        columns: {
-          sm: 4,
-          md: 8,
-          lg: 12
-        },
-        gutter: 12
-      }) {
-        GridCol({
-          span: {
-            sm: 4,
-            md: 4,
-            lg: 4
-          },
-          offset: {
-            sm: 0,
-            md: 2,
-            lg: 4
+      List() {
+        ListItemGroup({ header: this.itemHead('问题反馈'), space: 8 }) {
+          ////微信群
+          ListItem() {
+            Column(){
+              Row(){
+                Row() {
+                  Image(this.Apps[0].img).width('60%').fillColor(0xffffff)
+                }.height('70%').aspectRatio(1).borderRadius('50%').backgroundColor(this.Apps[0].color)
+                .justifyContent(FlexAlign.Center)
+                .alignItems(VerticalAlign.Center)         .clip(true)
+              }.width('100%').height('70%')
+              .justifyContent(FlexAlign.Center)
+              .alignItems(VerticalAlign.Center)
+              Row(){
+                Text(this.Apps[0].name)
+              }
+              .width('100%').height('30%')
+              .justifyContent(FlexAlign.Center)
+              .alignItems(VerticalAlign.Top)
+            }
+            .width('90%')
+            .aspectRatio(1)
+            .margin('5%')
+            .borderRadius(16)
+            .clip(true)
+            .backgroundColor(0xffffff)
+            .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+            .onClick(()=>{
+              this.pageInfos.pushPath({ name: '问题反馈' })
+            })
           }
-        }) {
-          Row() {
-            Container()
+          ////微博
+          ListItem() {
+            Column(){
+              Row(){
+                Row() {
+                  Image(this.Apps[1].img).width('70%')
+                    //.fillColor(0xffffff)
+                }.height('70%').aspectRatio(1).borderRadius('50%')
+                .backgroundColor(this.Apps[1].color)
+                .justifyContent(FlexAlign.Center)
+                .alignItems(VerticalAlign.Center)         .clip(true)
+              }.width('100%').height('70%')
+              .justifyContent(FlexAlign.Center)
+              .alignItems(VerticalAlign.Center)
+              Row(){
+                Text(this.Apps[1].name)
+              }
+              .width('100%').height('30%')
+              .justifyContent(FlexAlign.Center)
+              .alignItems(VerticalAlign.Top)
+            }
+            .width('90%')
+            .aspectRatio(1)
+            .margin('5%')
+            .borderRadius(16)
+            .clip(true)
+            .backgroundColor(0xffffff)
           }
-          .width('100%')
-          .height('100%')
-          .alignItems(VerticalAlign.Center)
+          .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+          .onClick(()=>{
+            const context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
+            const uri:string = this.Apps[1].url
+            startBrowsableAbility(context,uri)
+          })
+          ////
+          ListItem() {
+            Column(){
+              Row(){
+                Row() {
+                  Image(this.Apps[2].img).width('70%').fillColor(0xffffff)
+                }.height('70%').aspectRatio(1).borderRadius('50%').backgroundColor(this.Apps[2].color)
+                .justifyContent(FlexAlign.Center)
+                .alignItems(VerticalAlign.Center)         .clip(true)
+              }.width('100%').height('70%')
+              .justifyContent(FlexAlign.Center)
+              .alignItems(VerticalAlign.Center)
+              Row(){
+                Text(this.Apps[2].name)
+              }
+              .width('100%').height('30%')
+              .justifyContent(FlexAlign.Center)
+              .alignItems(VerticalAlign.Top)
+            }
+            .width('90%')
+            .aspectRatio(1)
+            .margin('5%')
+            .borderRadius(16)
+            .clip(true)
+            .backgroundColor(0xffffff)
+          }
+          .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+          .onClick(()=>{
+            const context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
+            const uri:string = 'http://www.m233.top'
+            startBrowsableAbility(context,uri)
+          })
+          ////
+          ListItem() {
+            Column(){
+              Row(){
+                Row() {
+                  Image(this.Apps[3].img).width('70%').fillColor(0xffffff)
+                }.height('70%').aspectRatio(1).borderRadius('50%').backgroundColor(this.Apps[3].color)
+                .justifyContent(FlexAlign.Center)
+                .alignItems(VerticalAlign.Center)         .clip(true)
+              }.width('100%').height('70%')
+              .justifyContent(FlexAlign.Center)
+              .alignItems(VerticalAlign.Center)
+              Row(){
+                Text(this.Apps[3].name)
+              }
+              .width('100%').height('30%')
+              .justifyContent(FlexAlign.Center)
+              .alignItems(VerticalAlign.Top)
+            }
+            .width('90%')
+            .aspectRatio(1)
+            .margin('5%')
+            .borderRadius(16)
+            .clip(true)
+            .backgroundColor(0xffffff)
+          }
+          .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+          .onClick(()=>{
+            const context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
+            const uri:string = 'http://www.m233.top'
+            startBrowsableAbility(context,uri)
+          })
         }
-        .height('100%')
+
+
+
+        ListItemGroup({ header: this.itemHead('赞赏我们'), space: 8 }) {
+          ////
+          ListItem() {
+            Column(){
+              Row(){
+                Row() {
+                  Image(this.Apps[4].img).width('60%').fillColor(0xffffff)
+                }.height('70%').aspectRatio(1).borderRadius('50%').backgroundColor(this.Apps[4].color)
+                .justifyContent(FlexAlign.Center)
+                .alignItems(VerticalAlign.Center)         .clip(true)
+              }.width('100%').height('70%')
+              .justifyContent(FlexAlign.Center)
+              .alignItems(VerticalAlign.Center)
+              Row(){
+                Text(this.Apps[4].name)
+              }
+              .width('100%').height('30%')
+              .justifyContent(FlexAlign.Center)
+              .alignItems(VerticalAlign.Top)
+            }
+            .width('90%')
+            .aspectRatio(1)
+            .margin('5%')
+            .borderRadius(16)
+            .clip(true)
+            .backgroundColor(0xffffff)
+            .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+            .onClick(()=>{
+              const uiContext = getContext(this) as common.UIAbilityContext
+              const wantParam: Want = {
+                parameters: {
+                  // 此处填入要加载的应用包名，例如： bundleName: 'com.huawei.hmsapp.books'
+                  bundleName: 'com.atomicservice.5765880207854873613'
+                }
+              }
+              const callback: productViewManager.ProductViewCallback = {
+                onError: (error: BusinessError) => {
+                  hilog.error(0x0001, 'TAG', `loadService onError.code is ${error.code}, message is ${error.message}`)
+                  promptAction.showToast({
+                    message: '跳转失败'
+                  })
+                }
+              }
+              // 调用接口，拉起应用详情页
+              promptAction.showToast({
+                message: '正在尝试跳转应用商店'
+              })
+              productViewManager.loadProduct(uiContext, wantParam, callback);
+            })
+          }
+          ListItem() {
+            Column(){
+              Row(){
+                Row() {
+                  Image(this.Apps[5].img).width('60%').fillColor(0xffffff)
+                }.height('70%').aspectRatio(1).borderRadius('50%').backgroundColor(this.Apps[5].color)
+                .justifyContent(FlexAlign.Center)
+                .alignItems(VerticalAlign.Center)         .clip(true)
+              }.width('100%').height('70%')
+              .justifyContent(FlexAlign.Center)
+              .alignItems(VerticalAlign.Center)
+              Row(){
+                Text(this.Apps[5].name)
+              }
+              .width('100%').height('30%')
+              .justifyContent(FlexAlign.Center)
+              .alignItems(VerticalAlign.Top)
+            }
+            .width('90%')
+            .aspectRatio(1)
+            .margin('5%')
+            .borderRadius(16)
+            .clip(true)
+            .backgroundColor(0xffffff)
+            .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+
+          }
+        }
+
+        ListItemGroup({ header: this.itemHead('更多'), space: 8 }) {
+          ////体验更多服务
+          ListItem() {
+            Column(){
+              Row(){
+                Row() {
+                  Image(this.Apps[6].img).width('60%').fillColor(0xffffff)
+                }.height('70%').aspectRatio(1).borderRadius('50%').backgroundColor(this.Apps[6].color)
+                .justifyContent(FlexAlign.Center)
+                .alignItems(VerticalAlign.Center)         .clip(true)
+              }.width('100%').height('70%')
+              .justifyContent(FlexAlign.Center)
+              .alignItems(VerticalAlign.Center)
+              Row(){
+                Text(this.Apps[6].name)
+              }
+              .width('100%').height('30%')
+              .justifyContent(FlexAlign.Center)
+              .alignItems(VerticalAlign.Top)
+            }
+            .width('90%')
+            .aspectRatio(1)
+            .margin('5%')
+            .borderRadius(16)
+            .clip(true)
+            .backgroundColor(0xffffff)
+            .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+            .onClick(()=>{
+              const uiContext = getContext(this) as common.UIAbilityContext
+              const wantParam: Want = {
+                parameters: {
+                  // 此处填入要加载的应用包名，例如： bundleName: 'com.huawei.hmsapp.books'
+                  bundleName: 'com.atomicservice.5765880207854873613'
+                }
+              }
+              const callback: productViewManager.ProductViewCallback = {
+                onError: (error: BusinessError) => {
+                  hilog.error(0x0001, 'TAG', `loadService onError.code is ${error.code}, message is ${error.message}`)
+                  promptAction.showToast({
+                    message: '跳转失败'
+                  })
+                }
+              }
+              // 调用接口，拉起应用详情页
+              promptAction.showToast({
+                message: '正在尝试跳转应用商店'
+              })
+              productViewManager.loadProduct(uiContext, wantParam, callback);
+            })
+          }
+          //////版权声明
+          ListItem() {
+            Column(){
+              Row(){
+                Row() {
+                  Image(this.Apps[7].img).width('60%').fillColor(0xffffff)
+                }.height('70%').aspectRatio(1).borderRadius('50%').backgroundColor(this.Apps[7].color)
+                .justifyContent(FlexAlign.Center)
+                .alignItems(VerticalAlign.Center)         .clip(true)
+              }.width('100%').height('70%')
+              .justifyContent(FlexAlign.Center)
+              .alignItems(VerticalAlign.Center)
+              Row(){
+                Text(this.Apps[7].name)
+              }
+              .width('100%').height('30%')
+              .justifyContent(FlexAlign.Center)
+              .alignItems(VerticalAlign.Top)
+            }
+            .width('90%')
+            .aspectRatio(1)
+            .margin('5%')
+            .borderRadius(16)
+            .clip(true)
+            .backgroundColor(0xffffff)
+            .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+            .onClick(()=>{
+              this.pageInfos.pushPath({ name: '版权声明' })
+            })
+          }
       }
+}
+      .width('100%')
       .height('100%')
-      .margin({ left: 12, right: 12 })
-    }.height('100%').backgroundColor($r("app.color.view_bgc_2"))
+      .lanes(this.currentBreakpoint.value === 'sm' ? 2 : (this.currentBreakpoint.value === 'md' ? 3 : 4))
+      .padding({ left:this.currentBreakpoint.value=='sm'?6:12,right:this.currentBreakpoint.value=='sm'?6:12})
+    } .backgroundColor(0xf1f3f5)
+}
+   .title('更多信息')
+    .onBackPressed(() => {
+      const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
+      //console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
+      return true
+    })      .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.BOTTOM])
   }
 }
 

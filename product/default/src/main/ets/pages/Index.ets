@@ -11,6 +11,10 @@ import { preferences } from '@kit.ArkData'
 import CommonConstants from '../constants/CommonConstants'
 import { GlobalContext } from '../constants/GlobalContext'
 import Logger from '../constants/Logger'
+import { productViewManager } from '@kit.StoreKit';
+import { hilog } from '@kit.PerformanceAnalysisKit';
+import type { common, Want } from '@kit.AbilityKit';
+
 @Entry({ routeName: 'Index' })
 @Component
 struct TabBar {
@@ -176,7 +180,20 @@ struct TabBar {
             //Text(this.isFirst)
           }
           .onClick(()=>{
-
+            const uiContext = getContext(this) as common.UIAbilityContext
+            const wantParam: Want = {
+              // 此处填入要加载的元服务的加桌链接
+              uri: 'xxx'
+            }
+            const callback: productViewManager.ServiceViewCallback = {
+              onReceive: (data: productViewManager.ServiceViewReceiveData) => {
+                hilog.info(0x0001, 'TAG', `loadService onReceive.result is ${data.result}, msg is ${data.msg}, formInfo is ${JSON.stringify(data.formInfo)}`);
+              },
+              onError: (error: BusinessError) => {
+                hilog.error(0x0001, 'TAG', `loadService onError.code is ${error.code}, message is ${error.message}`)
+              }
+            }
+            productViewManager.loadService(uiContext, wantParam, callback);
           })
           .width('100%')
           .height($r("app.string.header_height"))

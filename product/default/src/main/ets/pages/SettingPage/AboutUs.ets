@@ -63,7 +63,7 @@ struct AboutUs {
           })
       }.width(300)
       Row(){
-        Text('个人介绍：测试文本、Test Text、测试文本、test text 个人开发者')
+        Text('个人介绍：个人开发者、在校学生 \n社媒昵称：门二三三')
       }
       .width('100%')
       .height(80)

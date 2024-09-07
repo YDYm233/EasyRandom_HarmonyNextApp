@@ -5,7 +5,6 @@ import Options from './Options';
 import PrivacyPolicy from './PrivacyPolicy';
 import Illustrate from './Illustrate';
 import CopyRight from './CopyRight';
-import AddOil from './AddOil';
 import { promptAction } from '@kit.ArkUI';
 import { BreakpointState, BreakpointSystem } from '@ohos/common';
 
@@ -53,16 +52,12 @@ struct Setting {
       ContactUsView()
     } else if (name == "通用设置") {
       OptionsView()
-    } else if (name == "使用说明") {
-      IllustrateView()
     } else if (name == "隐私政策") {
       PrivacyPolicyView()
     } else if (name == "版权声明") {
       CopyRightView()
     } else if (name == "更多信息") {
-      IllustrateView()
-    } else if (name == "赞赏我们") {
-      AddOilView()
+      Illustrate()
     } else { //默认开发者团队页面
       AboutUsView()
     }
@@ -212,11 +207,7 @@ struct Setting {
             }
           }
 
-          ListItemGroup({ header: this.itemHead('更多'), space: 8 }) {
-            ListItem() {
-              this.SettingItem(addOil)
-            }
-          }
+
 
 
           //列表底部抬高
@@ -335,22 +326,6 @@ export struct PrivacyPolicyView {
   }
 }
 
-// AddOils.ets
-@Component
-export struct AddOilView {
-  @Consume('pageInfos') pageInfos: NavPathStack;
-
-  build() {
-    NavDestination() {
-      AddOil().width('100%').height('100%')
-    }.title(addOil.title)
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
-      //console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })      .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.BOTTOM])
-  }
-}
 
 // ContactUs.ets
 @Component

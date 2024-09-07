@@ -26,7 +26,7 @@ let Apps: Array<AppItem> = [
     'components/RollBlessings', '', [[0x00beff, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
 
   new AppItem('人生必去的100个地方', $r("app.media.icon_RandomPlace"),
-    'components/RandomPlaces', '', [[0x00beff, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
+    'components/RandomPlaces', '', null),
 
   new AppItem('二维码转换', $r("app.media.QRcode"),
     'components/TransQR', '', [[0x00beff, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
