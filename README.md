@@ -34,23 +34,20 @@
 #### 主页面
 
 - 幸运转盘
-
-![微信图片_20240815103158](D:\WorkSpace\Product\EasyRandom\Screen\微信图片_20240815103158.png)
+- ![幸运转盘](http://www.m233.top/easyrandom/intro1.png)
 
 - 热门功能
-
-![微信图片_20240815103233](D:\WorkSpace\Product\EasyRandom\Screen\微信图片_20240815103233.png)
+- ![热猛男](http://www.m233.top/easyrandom/intro2.png)
 
 - 答案之书
-
-![微信图片_20240815103237](D:\WorkSpace\Product\EasyRandom\Screen\微信图片_20240815103237.png)
+- ![答案之书](http://www.m233.top/easyrandom/intro3.png)
 
 - 更多功能
-
-![微信图片_20240815103244](D:\WorkSpace\Product\EasyRandom\Screen\微信图片_20240815103244.png)
+- ![更多功能](http://www.m233.top/easyrandom/intro4.png)
 
 - 卡片组件
-![36a999d7cca9033e1393d28b6513bee](D:\WorkSpace\Product\EasyRandom\Screen\36a999d7cca9033e1393d28b6513bee.png)
+- ![卡片组件](http://www.m233.top/easyrandom/intro5.png)
+
 
 ## 项目功能开发进度
 
