@@ -1,5 +1,7 @@
 # 随易 EasyRandom
 
+## 项目介绍
+
 > 随易是是一个面向生活的工具箱。
 >
 > 通过随机算法帮助我们做一些简单的决定，
@@ -27,23 +29,30 @@
 └──product/default/src/main/resources        // 资源文件目录
 ```
 
-
-
 ## 项目介绍
 
 #### 主页面
 
-- [x] 幸运转盘
-- [x] 功能
-- [x] 答案之书
-- [x] 更多
-- [x] 设置
+- 幸运转盘
 
+![微信图片_20240815103158](D:\WorkSpace\Product\EasyRandom\Screen\微信图片_20240815103158.png)
 
+- 热门功能
+
+![微信图片_20240815103233](D:\WorkSpace\Product\EasyRandom\Screen\微信图片_20240815103233.png)
+
+- 答案之书
+
+![微信图片_20240815103237](D:\WorkSpace\Product\EasyRandom\Screen\微信图片_20240815103237.png)
+
+- 更多功能
+
+![微信图片_20240815103244](D:\WorkSpace\Product\EasyRandom\Screen\微信图片_20240815103244.png)
+
+- 卡片组件
+![36a999d7cca9033e1393d28b6513bee](D:\WorkSpace\Product\EasyRandom\Screen\36a999d7cca9033e1393d28b6513bee.png)
 
 ## 项目功能开发进度
-
-
 
 #### 子模块
 
@@ -65,7 +74,7 @@
 - [ ] 抽签
 - [ ] 64卦
 
-## 卡片组件
+#### 卡片组件
 
  - [x] 颜色卡片
  - [x] 转盘卡片 
