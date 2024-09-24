@@ -14,14 +14,15 @@
 
 ``` 
 ├──common/src/main/ets                       //公共库                      
-│  ├──entryability
-│  ├──data
-│  ├──pages
-│  └──viewmodel
+│  ├──components                             //公共组件
+│  └──utils                                  //公共函数库
 ├──product/default/src/main/ets              // 代码区                       
 │  ├──entryability                           //页面Ability
-│  ├──data                                   //页面数据
+│  ├──components                             //子组件
+│  ├──constants                              //公共常量
+│  ├──datas                                  //页面数据
 │  ├──pages                                  //主要页面
+│  ├──defaultformability                     //卡片Ability
 │  └──widgets                                //卡片组件
 └──product/default/src/main/resources        // 资源文件目录
 ```
@@ -72,6 +73,7 @@
  - [x] 木鱼卡片 
  - [x] 骰子卡片 
  - [x] 硬币卡片 
+ - [x] 桌面宠物
 
 
 
