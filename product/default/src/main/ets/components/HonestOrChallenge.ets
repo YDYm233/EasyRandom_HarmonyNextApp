@@ -122,8 +122,7 @@ struct HonestOrChallenge {
           .animation({ duration: this.duration, curve: Curve.Ease })
         }
         .onClick(() => {
-
-          let target = Random(1, 360, true) + 360 * 1;
+          let target = Random(1, 360, true) + 360 * 3;
           this.pointAngle = this.pointAngle + target
           //console.log(this.pointAngle.toString())
           if (this.pointAngle > 3600000) {

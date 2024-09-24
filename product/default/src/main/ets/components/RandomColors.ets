@@ -55,13 +55,13 @@ struct ColorsBox {
   @State RGB: string = '#bfc'
   @State RGBA: string = '#bbffccff'
   @State bgc: string = ExColor(this.RGBA)
-  public blurColor: LinearGradient =
+  @State blurColor: LinearGradient =
     new LinearGradient([{ color: this.RGB, offset: 0 }, { color: this.RGBA, offset: 1 }])
-  public blurRedColor: LinearGradient =
+  @State blurRedColor: LinearGradient =
     new LinearGradient([{ color: this.RGBA, offset: 0 }, { color: 0xffffcc, offset: 1 }])
-  public blurGreenColor: LinearGradient =
+  @State  blurGreenColor: LinearGradient =
     new LinearGradient([{ color: this.RGBA, offset: 0 }, { color: 0xbbffcc, offset: 1 }])
-  public blurBlueColor: LinearGradient =
+  @State  blurBlueColor: LinearGradient =
     new LinearGradient([{ color: this.RGB, offset: 0 }, { color: 0xbbffff, offset: 1 }])
 
   build() {

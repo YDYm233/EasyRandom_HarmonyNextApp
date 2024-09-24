@@ -15,7 +15,7 @@ import { productViewManager } from '@kit.StoreKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import type { common, Want } from '@kit.AbilityKit';
 
-@Entry({ routeName: 'Index' })
+@Entry
 @Component
 struct TabBar {
   @State customDialogId: number = 0
@@ -176,24 +176,56 @@ struct TabBar {
       GridRow() {
         GridCol({ span: { sm: 3, md: 2, lg: 1 } }) {
           Row() {
-            // Image($r("app.media.func_back")).height('24vp').width('24vp')
-            //Text(this.isFirst)
+             Image($r("app.media.link_myApp")).height('24vp').width('24vp')
           }
           .onClick(()=>{
-            const uiContext = getContext(this) as common.UIAbilityContext
-            const wantParam: Want = {
-              // 此处填入要加载的元服务的加桌链接
-              uri: 'xxx'
-            }
-            const callback: productViewManager.ServiceViewCallback = {
-              onReceive: (data: productViewManager.ServiceViewReceiveData) => {
-                hilog.info(0x0001, 'TAG', `loadService onReceive.result is ${data.result}, msg is ${data.msg}, formInfo is ${JSON.stringify(data.formInfo)}`);
-              },
-              onError: (error: BusinessError) => {
-                hilog.error(0x0001, 'TAG', `loadService onError.code is ${error.code}, message is ${error.message}`)
+
+            let want: Want = {
+              deviceId: '',
+              bundleName:'com.atomicservice.5765880207854873613',
+              abilityName: 'EntryAbility',
+              moduleName:"entry"
+            };
+            promptAction.showToast({
+              message: `正在尝试打开随易元服务`
+            })
+            //const context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
+            let context = getContext(this) as common.UIAbilityContext;
+            context.startAbility(want, (err: BusinessError) => {
+              if (err.code) {
+                console.error(`Failed to startAbility. Code: ${err.code}, message: ${err.message}`);//拉取应用失败信息
+                //打开失败
+                // 尝试跳转应用商店
+                promptAction.showToast({
+                  message: `尝试打开应用商店`
+                })
+                const want: Want = {
+                  uri: `store://appgallery.huawei.com/app/detail?id=com.atomicservice.5765880207854873613`
+                };
+                context.startAbility(want).then(() => {
+                  //跳转应用商店成功
+                }).catch(() => {
+                  //跳转应用商店失败
+                  // 尝试打开应用详情
+                  const wantParam: Want = {
+                    parameters: {
+                      bundleName: 'com.atomicservice.5765880207854873613'
+                    }
+                  }
+                  const callback: productViewManager.ProductViewCallback = {
+                    onError: (error: BusinessError) => {
+                      hilog.error(0x0001, 'TAG', `loadService onError.code is ${error.code}, message is ${error.message}`)//显示应用详情失败
+                      //统统失败
+                      // 弹出错误信息
+                      promptAction.showToast({
+                        message: '跳转失败'
+                      })
+                    }
+                  }
+                  productViewManager.loadProduct(context, wantParam, callback);//打开应用详情
+                })
               }
-            }
-            productViewManager.loadService(uiContext, wantParam, callback);
+            });
           })
           .width('100%')
           .height($r("app.string.header_height"))

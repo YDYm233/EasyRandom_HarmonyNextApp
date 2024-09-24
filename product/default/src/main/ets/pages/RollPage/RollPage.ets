@@ -20,7 +20,7 @@ struct RollPage {
       GridRow({ columns: { sm: 4, md: 8, lg: 12 }, gutter: 12 }) {
         GridCol({ span: { sm: 4, md: 4, lg: 4 }, offset: { sm: 0, md: 2, lg: 4 } }) {
           Row() {
-            RollBoxs()
+            PieChartsShow()
           }
           .width('100%')
           .alignItems(VerticalAlign.Center)
@@ -35,7 +35,7 @@ struct RollPage {
 AppStorage.setOrCreate('allRolls', rolls);
 
 @Component
-struct RollBoxs {
+struct PieChartsShow{
   @StorageLink('allRolls') dataList: Roll[] = rolls
   @State title: string = this.dataList[0].rollName
   @State rotateAngle: number = 0
@@ -118,7 +118,7 @@ struct RollBoxs {
       Swiper(this.swiperController) {
         ForEach(this.dataList, (item: Roll) => {
           Row() {
-            RollBox({ data: item })
+            PieChart({ data: item })
               .width('100%')
           }
           .width('90%')
@@ -225,10 +225,10 @@ struct RollBoxs {
 
           .onClick(() => {
 
-           // this.isSheetShow = true;
-            promptAction.showToast({
-              message: '功能完善中 未来将支持更改转盘选项'
-            })
+            //this.isSheetShow = true;
+          promptAction.showToast({
+            message: '功能完善中 未来将支持更改转盘选项'
+          })
 
           })
         }
@@ -268,7 +268,7 @@ struct RollBoxs {
 }
 
 @Component
-struct RollBox {
+struct PieChart {
   @Prop data: Roll
   @Prop boxWidth: number
   private settings: RenderingContextSettings = new RenderingContextSettings(true)
@@ -281,65 +281,54 @@ struct RollBox {
   build() {
     Flex({ direction: FlexDirection.Column, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Center }) {
       Canvas(this.context)
-        .onSizeChange((oldValue: SizeOptions, newValue: SizeOptions) => {
-          //console.log('boxWidth=='+this.boxWidth)
-          //  console.log('SizeChange===old:'+oldValue.width+'  ----new:'+newValue.width)
-          //this.boxWidth=Number(newValue.width)
-        })
-        .onAreaChange((oldValue: Area, newValue: Area) => {
-          //this.boxWidth=Number(newValue.width)
-          //console.log('AreaChange===old:'+oldValue.width+'  ----new:'+newValue.width)
-        })
         .onReady(() => {
-          let ctx = this.context;
-          //console.log('ctx.width:' + ctx.width)
-          ctx.clearRect(0, 0, ctx.width, ctx.width)
-          //const contextWidth = Number(newValue.width);
-          const contextWidth = ctx.width;
-          //const contextWidth = this.boxWidth
-          const r = contextWidth / 2;
-          let list: Array<RollItem> = this.data.rollItems
-          let totalWeight = list.reduce<number>((acc: number, single: RollItem) => acc + single.weight, 0);
-          let startAngle = -list[0].weight / totalWeight * 180 + 90;
+          let ctx = this.context;                                        //获取指定Canvas组件
+          const radius =  ctx.width / 2;                           //获取半径（宽度）
+          let list: Array<RollItem> = this.data.rollItems    //获取传入数据
+          let totalWeight = list.reduce<number>((acc: number, single: RollItem) => acc + single.weight, 0);   //计算出总权重，子选项将根据与总权重的比例计算出角度。
+          let startAngle = -list[0].weight / totalWeight * 180 + 90;                                                                           //此处角度控制开始渲染的位置，出于个人习惯我将第一个选项调整为正上方(默认角度为正右）
 
-          list.forEach(single => {
-            const endAngle: number = startAngle + (single.weight / totalWeight) * 360;
-            const centerAngle = (startAngle + endAngle) / 2;
-            ctx.globalCompositeOperation = 'xor'
-            ctx.beginPath();
-            ctx.moveTo(r, r); // 中心点
-            ctx.arc(r, r, r, startAngle * Math.PI / 180, endAngle * Math.PI / 180, false);
-            ctx.closePath()
-            ctx.fillStyle = single.color;
-            ctx.fill();
-            ctx.fillStyle = '#FFFFFF';
-            ctx.textAlign = 'center';
-            ctx.save()
-            ctx.translate(r, r)
-            //ctx.rotate((centerAngle - 90) * Math.PI / 180)
+          list.forEach(single => {  //以下为循环绘制代码，其核心思想是通过绘制小扇形来拼接为圆形，通过权重/总权重*360便可以计算出合适的扇形角度。
+            const endAngle: number = startAngle + (single.weight / totalWeight) * 360;    //计算占比角度方便绘制
+            const centerAngle = (startAngle + endAngle) / 2;    //计算对称轴角度，以便确定绘制位置
+            ctx.beginPath();                        //开始
+            ctx.moveTo(radius, radius);   //中心点
+            ctx.arc(radius, radius, radius, startAngle * Math.PI / 180, endAngle * Math.PI / 180, false);  //绘制扇形
+            ctx.closePath()                    //闭合路径区域
+            ctx.fillStyle = single.color; //选定背景颜色
+            ctx.fill();                                //绘制背景颜色
+            ctx.fillStyle = '#FFFFFF';    //指定文字颜色
+            ctx.textAlign = 'center';     //指定对齐方式
+
+            ctx.save()          //以下语句用于绘制扇形上的文字，该方案不适合较长文本，请根据实际需求使用或更改
+            ctx.translate(radius, radius)
             ctx.rotate((centerAngle + 90) * Math.PI / 180)
-            let texts: Array<string> = single.text.split('');
+            const texts: Array<string> = single.text.split('');
             const x = 0;
-            const y = r * 0.1 + (r * 0.1 / texts.length);
-            const lineHight = (r - y) / (texts.length + 1)
+            const y = radius * 0.1 + (radius * 0.1 / texts.length);
+            const lineHight = (radius - y) / (texts.length + 1)
             const fontSize = lineHight
             const font = fontSize.toString() + 'vp';
             ctx.font = font;
             for (let n: number = 0; n < texts.length; n++) {
-              ctx.fillText(texts[n], x, (-r + lineHight + y / 2 + n * lineHight), fontSize);
+              ctx.fillText(texts[n], x, (-radius + lineHight + y / 2 + n * lineHight), fontSize);
             }
-            ctx.restore()
-            startAngle = endAngle;
+            ctx.restore()       //文字绘制完毕
+
+            startAngle = endAngle;  //每次循环完毕前刷新绘制角度
           })
-          ctx.beginPath();
-          ctx.moveTo(r, r); // 中心点
-          ctx.arc(r, r, r / 10, -45, 275, false);
+
+          ctx.beginPath();  //以下语句用于绘制饼状图中央小圆，可省略
+          ctx.moveTo(radius, radius);
+          ctx.arc(radius, radius, radius/ 10, -45, 275, false);
           ctx.closePath()
           ctx.fillStyle = 0xf1f3f5;
           ctx.fill();
         })
         .width('100%')
         .aspectRatio(1)
+      //将以上代码补全进上文PieChart()组件中
+
     }.width('100%').aspectRatio(1)
     .border({
       width: 10,
@@ -352,4 +341,4 @@ struct RollBox {
 
 export default RollPage
 
-export { rolls, Roll, RollItem, RollBox, RollBoxs }
+export { rolls, Roll, RollItem}

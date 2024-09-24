@@ -1,7 +1,8 @@
 @Component
 struct CopyRight {
-
+  @Consume('pageInfos') pageInfos: NavPathStack;
   build() {
+    NavDestination(){
     GridRow({columns:{sm:4,md:8,lg:12}}) {
       GridCol({span:{sm:4,md:6,lg:8},offset:{sm:0,md:1,lg:2}}){
         Column() {
@@ -37,9 +38,13 @@ struct CopyRight {
     }
     .width('100%')
     .height('100%')
-
-
     .padding(20)
+  }.title('版权声明')
+    .onBackPressed(() => {
+      const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
+      //console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
+      return true
+    })      .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.BOTTOM])
   }
 }
 

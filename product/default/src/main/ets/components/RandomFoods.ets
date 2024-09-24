@@ -54,7 +54,7 @@ struct Foods {
   build() {
     Column() {
       Row() {
-        Text(this.food).height('70%').animation({ duration: 100 }).fontSize(24).fontWeight(500)
+        Text(this.food).height('70%').fontSize(24).fontWeight(500)
       }.width('100%').height('80%').alignItems(VerticalAlign.Center).justifyContent(FlexAlign.Center)
 
       Row() {
@@ -69,12 +69,15 @@ struct Foods {
             let index = 0;
             let loop = setInterval(() => {
               this.food = this.foods[Random(0, this.foods.length - 1, true)];
-              if (index > 25) {
+              if (index = 8) {
                 this.food = selected
+
+              }
+              else if(index>8){
                 clearInterval(loop)
               }
               index++;
-            }, 60)
+            }, 120)
           })
       }.height('20%')
 

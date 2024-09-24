@@ -52,27 +52,40 @@ struct Level{
 
 @Component
 struct Container{
+  @Consume('pageInfos') pageInfos: NavPathStack;
   build(){
-    List({ space: 12 }) {
-      ListItem() {
-        Level()
-      }
-      .width('100%')
-      ListItem() {
+    NavDestination() {
+      List({ space: 12 }) {
+        ListItem() {
+          Level()
+        }
+        .width('100%')
 
-      }
-      ListItem() {
+        ListItem() {
 
+        }
+
+        ListItem() {
+
+        }
+
+        ListItem() {
+        }
+
+        ListItem() {
+        }
       }
-      ListItem() {
-      }
-      ListItem() {
-      }
-    }
-    .padding(12)
-    .width("100%")
-    .height('100%')
-    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+      .padding(12)
+      .width("100%")
+      .height('100%')
+      .backgroundColor(0xF1F3F5)
+      .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+    }.title('通用设置')
+    .onBackPressed(() => {
+      const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
+      //console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
+      return true
+    })      .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.BOTTOM])
   }
 }
 @Component

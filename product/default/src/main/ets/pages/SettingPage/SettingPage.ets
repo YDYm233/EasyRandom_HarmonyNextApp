@@ -3,7 +3,7 @@ import AboutUs from './AboutUs';
 import ContactUs from './ContactUs';
 import Options from './Options';
 import PrivacyPolicy from './PrivacyPolicy';
-import Illustrate from './Illustrate';
+import Illustrate from './MoreOpt';
 import CopyRight from './CopyRight';
 import { promptAction } from '@kit.ArkUI';
 import { BreakpointState, BreakpointSystem } from '@ohos/common';
@@ -28,9 +28,8 @@ let options = new Item('通用设置', $r("app.media.func_setting"), 0x01f3ff)
 let privacyPolicy = new Item('隐私政策', $r("app.media.privacypolicy"), 0x00beff)
 let copyRight = new Item('版权声明', $r("app.media.addoil_thumb"), 0xfebb00)
 let illustrate = new Item('更多信息', $r("app.media.illustrate"), 0xbeff00)
-
 let addOil = new Item('赞赏我们', $r("app.media.addoil_flower"), 0xffbe00)
-
+let moreOpt = new Item ('更多操作',$r("sys.symbol.barrage_setting"),0xFFBBEE)
 @Entry({ routeName: 'Setting' })
 @Component
 struct Setting {
@@ -40,6 +39,7 @@ struct Setting {
   aboutToAppear() {
     BreakpointSystem.getInstance().attach(this.currentBreakpoint)
     BreakpointSystem.getInstance().start()
+    if(this.currentBreakpoint.value!='sm')this.pageInfos.pushPath({ name:'开发者团队' } )
   }
 
   aboutToDisappear() {
@@ -48,18 +48,18 @@ struct Setting {
   }
   @Builder
   PageMap(name: string) {
-    if (name == "问题反馈") {
-      ContactUsView()
+    if (name == "版权声明") {
+      CopyRight()
     } else if (name == "通用设置") {
-      OptionsView()
+      Options()
+    } else if (name == "问题反馈") {
+      ContactUs()
     } else if (name == "隐私政策") {
-      PrivacyPolicyView()
-    } else if (name == "版权声明") {
-      CopyRightView()
-    } else if (name == "更多信息") {
+      PrivacyPolicy()
+    } else if (name == "更多操作") {
       Illustrate()
     } else { //默认开发者团队页面
-      AboutUsView()
+      AboutUs()
     }
   }
 
@@ -176,34 +176,23 @@ struct Setting {
             }
           }
 
-
           ListItemGroup({ header: this.itemHead('关于'), space: 8 }) {
             ListItem() {
               this.SettingItem(aboutUs)
             }
-
             ListItem() {
-              this.SettingItem(contactUs)
+              this.SettingItem(privacyPolicy)
             }
+            // ListItem() {
+            // this.SettingItem(illustrate)
+            //  }
           }
-
           ListItemGroup({ header: this.itemHead('通用'), space: 8 }) {
             ListItem() {
               this.SettingItem(options)
             }
-          }
-
-          ListItemGroup({ header: this.itemHead('声明'), space: 8 }) {
             ListItem() {
-              this.SettingItem(privacyPolicy)
-            }
-
-            ListItem() {
-              this.SettingItem(copyRight)
-            }
-
-            ListItem() {
-              this.SettingItem(illustrate)
+              this.SettingItem(moreOpt)
             }
           }
 
@@ -242,105 +231,6 @@ struct Setting {
       .backButtonIcon(this.currentBreakpoint.value=='sm'?$r("app.media.func_back"):null)
       .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.BOTTOM])
      // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
-  }
-}
-
-//AboutUs.ets
-@Component
-export struct AboutUsView {
-  @Consume('pageInfos') pageInfos: NavPathStack;
-  build() {
-    NavDestination() {
-      AboutUs().width('100%').height('100%')
-    }.title(aboutUs.title)
-     .onBackPressed(() => {
-      const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
-      //console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })
-  }
-}
-
-//Illustratet.ets
-@Component
-export struct IllustrateView {
-  @Consume('pageInfos') pageInfos: NavPathStack;
-  build() {
-    NavDestination() {
-      Illustrate().width('100%').height('100%')
-    }.title(illustrate.title)
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
-      //console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })      .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.BOTTOM])
-  }
-}
-
-// CopyRight.ets
-@Component
-export struct CopyRightView {
-  @Consume('pageInfos') pageInfos: NavPathStack;
-
-  build() {
-    NavDestination() {
-      CopyRight().width('100%').height('100%')
-    }.title("版权声明")
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
-      //console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })      .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.BOTTOM])
-  }
-}
-
-// Options.ets
-@Component
-export struct OptionsView {
-  @Consume('pageInfos') pageInfos: NavPathStack;
-  build() {
-    NavDestination() {
-      Options().width('100%').height('100%')
-    }.title(options.title)
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
-      //console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })      .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.BOTTOM])
-  }
-}
-
-// PrivacyPolicy.ets
-@Component
-export struct PrivacyPolicyView {
-  @Consume('pageInfos') pageInfos: NavPathStack;
-  build() {
-    NavDestination() {
-      PrivacyPolicy().width('100%').height('100%')
-    }.title(privacyPolicy.title).width("100%")
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
-      //console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })      .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.BOTTOM])
-  }
-}
-
-
-// ContactUs.ets
-@Component
-export struct ContactUsView {
-  @Consume('pageInfos') pageInfos: NavPathStack;
-
-  build() {
-    NavDestination() {
-      ContactUs().width('100%').height('100%')
-    }.title(contactUs.title)
-    .onBackPressed(() => {
-      const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
-      //console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
-      return true
-    })      .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.BOTTOM])
   }
 }
 

@@ -1,6 +1,6 @@
 import { Random } from '@ohos/common'
 import Header from './Header'
-import { placesArray,placeAttraction } from '../datas/places'
+import { placeAttraction, placesArray } from '../datas/places'
 import { promptAction } from '@kit.ArkUI'
 
 @Entry
@@ -38,11 +38,14 @@ struct RandomFoods {
             .alignItems(VerticalAlign.Center)
           }
         }
-        .margin(24)  .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+        .margin(24).expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
       }
       .width('100%')
-      .height('100%')  .padding({ top: $r("app.string.header_height") })
-    }.height('100%').backgroundColor($r("app.color.view_bgc_2"))    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+      .height('100%').padding({ top: $r("app.string.header_height") })
+    }
+    .height('100%')
+    .backgroundColor($r("app.color.view_bgc_2"))
+    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
@@ -50,62 +53,79 @@ struct RandomFoods {
 @Component
 struct Foods {
   @State places: placeAttraction[] = placesArray
-  @State index:number = Random(0, this.places.length - 1, true)
+  @State index: number = Random(0, this.places.length - 1, true)
   @State placeNames: string[] = this.places.map(obj => obj.name)
-  @State placeTitle:string=this.placeNames[this.index]
-  @State place:placeAttraction=this.places[this.index]
-  @State isRoll:boolean=false
-  @State customDialogId:number = 0;
+  @State placeTitle: string = this.placeNames[this.index]
+  @State place: placeAttraction = this.places[this.index]
+  @State isRoll: boolean = false
+  @State customDialogId: number = 0;
+
   @Builder
   CustomDialog() {
     Column() {
       Text(this.place.name).fontSize(30).lineHeight(36).fontWeight(FontWeight.Bold)
-        .margin({bottom:12})
-      Row(){
-      Text(this.place.category) .width('100%').textAlign(TextAlign.Start).fontSize(16).fontColor(0x88333333).fontStyle(FontStyle.Italic)
-      Text(''+this.place.country) .width('100%').textAlign(TextAlign.End).fontSize(16).fontColor(0x88333333)
+        .margin({ bottom: 12 })
+      Row() {
+        Text(this.place.category)
+          .width('100%')
+          .textAlign(TextAlign.Start)
+          .fontSize(16)
+          .fontColor(0x88333333)
+          .fontStyle(FontStyle.Italic)
+        Text('' + this.place.country).width('100%').textAlign(TextAlign.End).fontSize(16).fontColor(0x88333333)
       }
-      .alignItems(VerticalAlign.Center).justifyContent(FlexAlign.SpaceBetween)
-      .width('100%').height(20)
-      .margin({bottom:24})
-      Text('位置:'+this.place.location)
+      .alignItems(VerticalAlign.Center)
+      .justifyContent(FlexAlign.SpaceBetween)
+      .width('100%')
+      .height(20)
+      .margin({ bottom: 24 })
+
+      Text('位置:' + this.place.location)
         .width('100%').textAlign(TextAlign.Start)
         .fontSize(18)
-        .margin({bottom:12})
-      Text('详情:'+this.place.description)
+        .margin({ bottom: 12 })
+      Text('详情:' + this.place.description)
         .width('100%').textAlign(TextAlign.Start)
         .fontSize(18)
-        .margin({bottom:12})
+        .margin({ bottom: 12 })
 
 
     }.padding(24)
   }
- showPopup(){
-   promptAction.openCustomDialog({
-     builder: () => {
-       this.CustomDialog()
-     },
-     showInSubWindow: false,
-     offset: { dx: 0, dy: 5 },
-     backgroundColor: 0xd9ffffff,
-     cornerRadius: 24,
-     backgroundBlurStyle: BlurStyle.Regular,
-     //width: 320,
-    // height: 500,
 
-   }).then((dialogId: number) => {
-     this.customDialogId = dialogId
-   })
- }
+  showPopup() {
+    promptAction.openCustomDialog({
+      builder: () => {
+        this.CustomDialog()
+      },
+      showInSubWindow: false,
+      offset: { dx: 0, dy: 5 },
+      backgroundColor: 0xd9ffffff,
+      cornerRadius: 24,
+      backgroundBlurStyle: BlurStyle.Regular,
+      //width: 320,
+      // height: 500,
+
+    }).then((dialogId: number) => {
+      this.customDialogId = dialogId
+    })
+  }
+
   build() {
     Column() {
       Row() {
-        Text(this.placeTitle).height('70%').animation({ duration: 100 }).fontSize(24).fontWeight(500)
-        if(!this.isRoll){
-        Text('[点击查看详情]').height('30%')
+        Text(this.placeTitle).height('70%').fontSize(24).fontWeight(500)
+        if (!this.isRoll) {
+          Text('[点击查看详情]').height('30%')
         }
-      }.width('100%').height('80%').alignItems(VerticalAlign.Center).justifyContent(FlexAlign.Center)
-      .onClick(()=>{        this.showPopup()})
+      }
+      .width('100%')
+      .height('80%')
+      .alignItems(VerticalAlign.Center)
+      .justifyContent(FlexAlign.Center)
+      .onClick(() => {
+        this.showPopup()
+      })
 
       Row() {
         Button('开始')
@@ -114,20 +134,22 @@ struct Foods {
           .fontWeight(800)
           .aspectRatio(2)
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+          .enabled(!this.isRoll)
           .onClick(() => {
-            this.isRoll=true;
-            this.index=Random(0, this.places.length - 1, true)
+            this.isRoll = true;
+            this.index = Random(0, this.places.length - 1, true)
             let index = 0;
             let loop = setInterval(() => {
-              this.placeTitle = this.places[  Random(0, this.places.length - 1, true)].name;
-              if (index > 25) {
-                this.placeTitle =this.placeNames[this.index];
+              this.placeTitle = this.places[Random(0, this.places.length - 1, true)].name;
+              if (index == 8) {
+                this.placeTitle = this.placeNames[this.index];
                 this.place = this.places[this.index];
-                this.isRoll=false;
+                this.isRoll = false;
+              } else if (index > 9) {
                 clearInterval(loop)
               }
               index++;
-            }, 60)
+            }, 120)
           })
       }.height('20%')
 

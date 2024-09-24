@@ -50,7 +50,7 @@ struct RollFlip {
 struct Coin {
   @State angle: number = 0
   @State x: string = '0%'
-  @State duration: number = 2000
+  @State duration: number =1200
   @State ForB: boolean = true
   @State F: number = 1
   @State B: number = 0
@@ -79,7 +79,7 @@ struct Coin {
         .clip(true)
         .margin({ bottom: '10%' })
         .rotate({ x: 1, angle: this.angle })
-        .animation({ duration: this.duration / 2 })
+        .animation({ duration: this.duration / 2,curve:Curve.Linear })
         .translate({ y: this.x })
       }
       .height('80%').width('100%').alignItems(VerticalAlign.Bottom).justifyContent(FlexAlign.Center)
@@ -90,10 +90,10 @@ struct Coin {
           Text('开始').fontColor($r("app.color.control_fc_1")).fontWeight(FontWeight.Bold).fontSize('50%')
         }
         .onClick(() => {
-          this.duration = 2000;
-          this.angle = this.angle + 360 * 2 + 180 * Random(1, 2, true);
+          this.duration = 1800;
+          let profit= 360 * 3 + 180 * Random(1, 2, true);
+          this.angle = this.angle +profit;
           this.x = '-40%';
-          let index = 0
           this.isFliping = true
           let loop = setInterval(() => {
             if (this.ForB) {
@@ -105,18 +105,13 @@ struct Coin {
             }
             //console.log(this.duration / (this.angle / 180) + '正反？' + this.ForB);
             this.ForB = !this.ForB;
-
-            if (index == 3) {
-              this.x = '0%';
-              this.angle = this.angle - 360 * 2;
-            } else if (index == 5) {
-              clearInterval(loop);
-              this.duration = 0;
-              this.isFliping = false
-            }
-            index++;
-          }, this.duration / (this.angle / 180));
-
+          }, this.duration / (profit / 180));
+          setTimeout(()=>{this.x='0%'},this.duration/2)
+          setTimeout(()=>{
+            clearInterval(loop)
+            this.duration = 0;
+            this.isFliping = false
+          },this.duration)
         })
         .enabled(!this.isFliping)
         .backgroundColor($r("app.color.control_bgc_1"))

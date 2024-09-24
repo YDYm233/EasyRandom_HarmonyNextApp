@@ -35,12 +35,13 @@ struct AboutUs {
     .margin(24)
     .backgroundColor(0xffffff)
   }
-
+  @Consume('pageInfos') pageInfos: NavPathStack;
   build() {
+    NavDestination(){
     Row(){
     Column() {
       Row() {
-        Image($r("app.media.MuYu"))
+        Image($r("app.media.Avatar"))
           .width('40%')
           .aspectRatio(1)
           .padding(12)
@@ -122,6 +123,12 @@ struct AboutUs {
     .alignItems(VerticalAlign.Center)
     .backgroundColor(0xffffff)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+  }  .title('开发者团队')
+    .onBackPressed(() => {
+      const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
+      //console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
+      return true
+    })
   }
 }
 

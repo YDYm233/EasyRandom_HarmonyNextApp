@@ -6,11 +6,19 @@
     },
     {
       "name": "app_info",
-      "value": "随易V1.0.8"
+      "value": "随易V1.0.10"
+    },
+    {
+      "name": "app_bundlename",
+      "value": "ydy.App.EasyRandom"
     },
     {
       "name": "app_link",
       "value": "使用元服务"
+    },
+    {
+      "name": "app_link_bundle",
+      "value": "com.atomicservice.5765880207854873613"
     },
     {
       "name": "page_name1",

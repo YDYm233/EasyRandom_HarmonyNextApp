@@ -19,6 +19,11 @@ class AppItem {
     this.color = color
   }
 }
+const context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
+const AppName = '随易APP'
+const AppBundleName = 'ydy.App.EasyRandom'
+const LinkAppName:string = '随易元服务'
+const LinkAppBundleName:string = 'com.atomicservice.5765880207854873613'
 
 function startBrowsableAbility(context: common.UIAbilityContext,src:string): void {
   let want: Want = {
@@ -28,9 +33,14 @@ function startBrowsableAbility(context: common.UIAbilityContext,src:string): voi
   };
   context.startAbility(want)
     .then(() => {
-
+      promptAction.showToast({
+        message: '正在尝试跳转浏览器'
+      })
     })
     .catch((err: BusinessError) => {
+      promptAction.showToast({
+        message: '跳转失败'
+      })
       console.error(`Failed to startAbility. Code: ${err.code}, message: ${err.message}`);
     });
 }
@@ -42,17 +52,17 @@ struct Illustrate {
   new AppItem('微博留言', $r("app.media.link_weibo"),
     'https://weibo.com/5858421461/OuE5WnqyO', '', 0xffff00),
   new AppItem('B站留言', $r("app.media.link_bilibili"),
-    'https://www.bilibili.com/opus/971320804050468900?spm_id_from=333.1365.0.0', '', 0xFF7299),
+    'https://www.bilibili.com/video/BV135tie7E5P/?p=1&spm_id_from=pageDriver', '', 0xFF7299),
   new AppItem('官方网站', $r("app.media.link_myself"),
     'http://www.m233.top', '', 0x00BEFF),
     new AppItem('给个好评', $r("app.media.addoil_thumb"),
-      '', '', 0x00BEFF),
+      '', '', 0xfebb00),
     new AppItem('赞赏我们', $r("app.media.addoil_flower"),
-      '', '', 0x00BEFF),
-    new AppItem($r("app.string.app_link"), $r("sys.media.ohos_ic_public_express"),
+      '', '', 0xff3366),
+    new AppItem(LinkAppName, $r("app.media.link_myApp"),
       '', '', 0x00BEFF),
     new AppItem('版权声明', $r("app.media.illustrate"),
-      '', '', 0x00BEFF),
+      '', '', 0xBBFFCC),
 ];
   @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
   @State fontSize: number = 16;
@@ -65,7 +75,31 @@ struct Illustrate {
     BreakpointSystem.getInstance().attach(this.currentBreakpoint)
     BreakpointSystem.getInstance().stop()
   }
+  @State customDialogId:number = 0;
+  @Builder
+  CustomDialog() {
+    Column() {
+      Text('感谢您的支持与鼓励').fontSize(30).lineHeight(36).fontWeight(FontWeight.Bold)
+        .margin({bottom:12})
+      Row(){
+        Text('') .width('100%').textAlign(TextAlign.Start).fontSize(16).fontColor(0x88333333).fontStyle(FontStyle.Italic)
+        Text('') .width('100%').textAlign(TextAlign.End).fontSize(16).fontColor(0x88333333)
+      }
+      .alignItems(VerticalAlign.Center).justifyContent(FlexAlign.SpaceBetween)
+      .width('100%').height(20)
+      .margin({bottom:24})
+      Text('本App暂无支付功能')
+        .width('100%').textAlign(TextAlign.Start)
+        .fontSize(18)
+        .margin({bottom:12})
+      Text('您可以为我的B站账户充电、在应用市场给我评价、在我的帖子回消息、反馈Bug、或向我提出任何改进意见来鼓励我')
+        .width('100%').textAlign(TextAlign.Start)
+        .fontSize(18)
+        .margin({bottom:12})
 
+
+    }.padding(24)
+  }
   @Builder
   itemHead(text: string) {
     Text(text)
@@ -81,17 +115,23 @@ struct Illustrate {
         ListItemGroup({ header: this.itemHead('问题反馈'), space: 8 }) {
           ////微信群
           ListItem() {
-            Column(){
-              Row(){
+            Column() {
+              Row() {
                 Row() {
                   Image(this.Apps[0].img).width('60%').fillColor(0xffffff)
-                }.height('70%').aspectRatio(1).borderRadius('50%').backgroundColor(this.Apps[0].color)
+                }
+                .height('70%')
+                .aspectRatio(1)
+                .borderRadius('50%')
+                .backgroundColor(this.Apps[0].color)
                 .justifyContent(FlexAlign.Center)
-                .alignItems(VerticalAlign.Center)         .clip(true)
+                .alignItems(VerticalAlign.Center)
+                .clip(true)
               }.width('100%').height('70%')
               .justifyContent(FlexAlign.Center)
               .alignItems(VerticalAlign.Center)
-              Row(){
+
+              Row() {
                 Text(this.Apps[0].name)
               }
               .width('100%').height('30%')
@@ -105,25 +145,31 @@ struct Illustrate {
             .clip(true)
             .backgroundColor(0xffffff)
             .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
-            .onClick(()=>{
+            .onClick(() => {
               this.pageInfos.pushPath({ name: '问题反馈' })
             })
           }
+
           ////微博
           ListItem() {
-            Column(){
-              Row(){
+            Column() {
+              Row() {
                 Row() {
                   Image(this.Apps[1].img).width('70%')
-                    //.fillColor(0xffffff)
-                }.height('70%').aspectRatio(1).borderRadius('50%')
+                  //.fillColor(0xffffff)
+                }
+                .height('70%')
+                .aspectRatio(1)
+                .borderRadius('50%')
                 .backgroundColor(this.Apps[1].color)
                 .justifyContent(FlexAlign.Center)
-                .alignItems(VerticalAlign.Center)         .clip(true)
+                .alignItems(VerticalAlign.Center)
+                .clip(true)
               }.width('100%').height('70%')
               .justifyContent(FlexAlign.Center)
               .alignItems(VerticalAlign.Center)
-              Row(){
+
+              Row() {
                 Text(this.Apps[1].name)
               }
               .width('100%').height('30%')
@@ -138,24 +184,31 @@ struct Illustrate {
             .backgroundColor(0xffffff)
           }
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
-          .onClick(()=>{
-            const context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
-            const uri:string = this.Apps[1].url
-            startBrowsableAbility(context,uri)
+          .onClick(() => {
+
+            const uri: string = this.Apps[1].url
+            startBrowsableAbility(context, uri)
           })
+
           ////
           ListItem() {
-            Column(){
-              Row(){
+            Column() {
+              Row() {
                 Row() {
                   Image(this.Apps[2].img).width('70%').fillColor(0xffffff)
-                }.height('70%').aspectRatio(1).borderRadius('50%').backgroundColor(this.Apps[2].color)
+                }
+                .height('70%')
+                .aspectRatio(1)
+                .borderRadius('50%')
+                .backgroundColor(this.Apps[2].color)
                 .justifyContent(FlexAlign.Center)
-                .alignItems(VerticalAlign.Center)         .clip(true)
+                .alignItems(VerticalAlign.Center)
+                .clip(true)
               }.width('100%').height('70%')
               .justifyContent(FlexAlign.Center)
               .alignItems(VerticalAlign.Center)
-              Row(){
+
+              Row() {
                 Text(this.Apps[2].name)
               }
               .width('100%').height('30%')
@@ -170,24 +223,30 @@ struct Illustrate {
             .backgroundColor(0xffffff)
           }
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
-          .onClick(()=>{
-            const context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
-            const uri:string = 'http://www.m233.top'
-            startBrowsableAbility(context,uri)
+          .onClick(() => {
+            const uri: string = this.Apps[2].url
+            startBrowsableAbility(context, uri)
           })
+
           ////
           ListItem() {
-            Column(){
-              Row(){
+            Column() {
+              Row() {
                 Row() {
                   Image(this.Apps[3].img).width('70%').fillColor(0xffffff)
-                }.height('70%').aspectRatio(1).borderRadius('50%').backgroundColor(this.Apps[3].color)
+                }
+                .height('70%')
+                .aspectRatio(1)
+                .borderRadius('50%')
+                .backgroundColor(this.Apps[3].color)
                 .justifyContent(FlexAlign.Center)
-                .alignItems(VerticalAlign.Center)         .clip(true)
+                .alignItems(VerticalAlign.Center)
+                .clip(true)
               }.width('100%').height('70%')
               .justifyContent(FlexAlign.Center)
               .alignItems(VerticalAlign.Center)
-              Row(){
+
+              Row() {
                 Text(this.Apps[3].name)
               }
               .width('100%').height('30%')
@@ -202,29 +261,31 @@ struct Illustrate {
             .backgroundColor(0xffffff)
           }
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
-          .onClick(()=>{
-            const context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
-            const uri:string = 'http://www.m233.top'
-            startBrowsableAbility(context,uri)
+          .onClick(() => {
+            const uri: string = this.Apps[3].url
+            startBrowsableAbility(context, uri)
           })
         }
-
-
-
         ListItemGroup({ header: this.itemHead('赞赏我们'), space: 8 }) {
           ////
           ListItem() {
-            Column(){
-              Row(){
+            Column() {
+              Row() {
                 Row() {
                   Image(this.Apps[4].img).width('60%').fillColor(0xffffff)
-                }.height('70%').aspectRatio(1).borderRadius('50%').backgroundColor(this.Apps[4].color)
+                }
+                .height('70%')
+                .aspectRatio(1)
+                .borderRadius('50%')
+                .backgroundColor(this.Apps[4].color)
                 .justifyContent(FlexAlign.Center)
-                .alignItems(VerticalAlign.Center)         .clip(true)
+                .alignItems(VerticalAlign.Center)
+                .clip(true)
               }.width('100%').height('70%')
               .justifyContent(FlexAlign.Center)
               .alignItems(VerticalAlign.Center)
-              Row(){
+
+              Row() {
                 Text(this.Apps[4].name)
               }
               .width('100%').height('30%')
@@ -238,27 +299,33 @@ struct Illustrate {
             .clip(true)
             .backgroundColor(0xffffff)
             .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
-            .onClick(()=>{
-              const uiContext = getContext(this) as common.UIAbilityContext
-              const wantParam: Want = {
-                parameters: {
-                  // 此处填入要加载的应用包名，例如： bundleName: 'com.huawei.hmsapp.books'
-                  bundleName: 'com.atomicservice.5765880207854873613'
-                }
-              }
-              const callback: productViewManager.ProductViewCallback = {
-                onError: (error: BusinessError) => {
-                  hilog.error(0x0001, 'TAG', `loadService onError.code is ${error.code}, message is ${error.message}`)
-                  promptAction.showToast({
-                    message: '跳转失败'
-                  })
-                }
-              }
-              // 调用接口，拉起应用详情页
+            .onClick(() => {
+              const want: Want = {
+                uri: `store://appgallery.huawei.com/app/detail?id=${AppBundleName}`
+              };
               promptAction.showToast({
-                message: '正在尝试跳转应用商店'
+                message: '正在尝试转到应用商店查看'+AppName
               })
-              productViewManager.loadProduct(uiContext, wantParam, callback);
+              context.startAbility(want).then(() => {
+                //拉起成功
+              }).catch(() => {
+                //跳转应用商店失败
+                // 尝试打开应用详情
+                const wantParam: Want = {
+                  parameters: {
+                    bundleName: AppBundleName
+                  }
+                }
+                const callback: productViewManager.ProductViewCallback = {
+                  onError: (error: BusinessError) => {
+                    hilog.error(0x0001, 'TAG', `loadService onError.code is ${error.code}, message is ${error.message}`)
+                    promptAction.showToast({
+                      message: '跳转失败'
+                    })
+                  }
+                }
+                productViewManager.loadProduct(context, wantParam, callback);
+              })
             })
           }
           ListItem() {
@@ -286,7 +353,21 @@ struct Illustrate {
             .clip(true)
             .backgroundColor(0xffffff)
             .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+            .onClick(()=>{
+              promptAction.openCustomDialog({
+                builder: () => {
+                  this.CustomDialog()
+                },
+                showInSubWindow: false,
+                offset: { dx: 0, dy: 5 },
+                backgroundColor: 0xd9ffffff,
+                cornerRadius: 24,
+                backgroundBlurStyle: BlurStyle.Regular,
 
+              }).then((dialogId: number) => {
+                this.customDialogId = dialogId
+              })
+            })
           }
         }
 
@@ -318,26 +399,54 @@ struct Illustrate {
             .backgroundColor(0xffffff)
             .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
             .onClick(()=>{
-              const uiContext = getContext(this) as common.UIAbilityContext
-              const wantParam: Want = {
-                parameters: {
-                  // 此处填入要加载的应用包名，例如： bundleName: 'com.huawei.hmsapp.books'
-                  bundleName: 'com.atomicservice.5765880207854873613'
-                }
-              }
-              const callback: productViewManager.ProductViewCallback = {
-                onError: (error: BusinessError) => {
-                  hilog.error(0x0001, 'TAG', `loadService onError.code is ${error.code}, message is ${error.message}`)
+              console.log(LinkAppBundleName)
+              console.log(LinkAppName)
+              let want: Want = {
+                deviceId: '',
+                bundleName:LinkAppBundleName,
+                abilityName: 'EntryAbility',
+                moduleName:"entry"
+              };
+              promptAction.showToast({
+                message: `正在尝试打开${LinkAppName}`
+              })
+              //const context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
+              let context = getContext(this) as common.UIAbilityContext;
+              context.startAbility(want, (err: BusinessError) => {
+                if (err.code) {
+                  console.error(`Failed to startAbility. Code: ${err.code}, message: ${err.message}`);//拉取应用失败信息
+                  //打开失败
+                  // 尝试跳转应用商店
                   promptAction.showToast({
-                    message: '跳转失败'
+                    message: `尝试打开应用商店`
+                  })
+                  const want: Want = {
+                    uri: `store://appgallery.huawei.com/app/detail?id=${LinkAppBundleName}`
+                  };
+                  context.startAbility(want).then(() => {
+                    //跳转应用商店成功
+                  }).catch(() => {
+                    //跳转应用商店失败
+                    // 尝试打开应用详情
+                    const wantParam: Want = {
+                      parameters: {
+                        bundleName: LinkAppBundleName
+                      }
+                    }
+                    const callback: productViewManager.ProductViewCallback = {
+                      onError: (error: BusinessError) => {
+                        hilog.error(0x0001, 'TAG', `loadService onError.code is ${error.code}, message is ${error.message}`)//显示应用详情失败
+                       //统统失败
+                        // 弹出错误信息
+                        promptAction.showToast({
+                          message: '跳转失败'
+                        })
+                      }
+                    }
+                    productViewManager.loadProduct(context, wantParam, callback);//打开应用详情
                   })
                 }
-              }
-              // 调用接口，拉起应用详情页
-              promptAction.showToast({
-                message: '正在尝试跳转应用商店'
-              })
-              productViewManager.loadProduct(uiContext, wantParam, callback);
+              });
             })
           }
           //////版权声明
@@ -381,9 +490,10 @@ struct Illustrate {
    .title('更多信息')
     .onBackPressed(() => {
       const popDestinationInfo = this.pageInfos.pop() // 弹出路由栈栈顶元素
-      //console.log('pop' + '返回值' + JSON.stringify(popDestinationInfo))
+
       return true
-    })      .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.BOTTOM])
+    })
+    .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.BOTTOM])
   }
 }
 
