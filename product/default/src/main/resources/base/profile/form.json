@@ -19,7 +19,11 @@
       "defaultDimension": "2*2",
       "supportDimensions": [
         "2*2"
-      ]
+      ], "formConfigAbility": "ability://defaultformability",
+      "dataProxyEnabled": false,
+      "isDynamic": true,
+      "transparencyEnabled": false,
+      "metadata": []
     },{
       "name": "FlipCoinCard",
       "displayName": "$string:FlipCoinCard_display_name",
@@ -39,7 +43,10 @@
       "defaultDimension": "2*2",
       "supportDimensions": [
         "2*2"
-      ]
+      ], "formConfigAbility": "ability://defaultformability",
+      "dataProxyEnabled": false,
+      "transparencyEnabled": false,
+      "metadata": []
     },
     {
       "name": "RollWheelCard",
@@ -61,7 +68,10 @@
       "supportDimensions": [
         "2*2",
         "4*4"
-      ]
+      ], "formConfigAbility": "ability://defaultformability",
+      "dataProxyEnabled": false,
+      "transparencyEnabled": false,
+      "metadata": []
     }
   ,
     {
@@ -84,7 +94,10 @@
       "supportDimensions": [
         "2*2",
         "4*4"
-      ]
+      ],"formConfigAbility": "ability://defaultformability",
+      "dataProxyEnabled": false,
+      "transparencyEnabled": false,
+      "metadata": []
     }
   ,
     {
@@ -106,7 +119,10 @@
       "defaultDimension": "2*2",
       "supportDimensions": [
         "2*2"
-      ]
+      ],"formConfigAbility": "ability://defaultformability",
+      "dataProxyEnabled": false,
+      "transparencyEnabled": false,
+      "metadata": []
     }
   ]
 }

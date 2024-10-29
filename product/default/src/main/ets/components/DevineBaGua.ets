@@ -1,6 +1,7 @@
 import { Random } from '@ohos/common'
 import Header from './Header'
-
+import { promptAction } from '@kit.ArkUI';
+import { BreakpointState, BreakpointSystem } from '@ohos/common';
 @Entry
 @Component
 struct DevineBaGua {
@@ -227,16 +228,43 @@ struct BaGuaBox {
   readonly widthMargin: string = ((100 - this.widthRate) / 2).toString() + '%';
   public guas: Array<string> = ['太极','坎', '坤', '震', '巽',  '乾', '兑', '艮', '离']
   public angles: Array<number> = [180, 45, 270, 315, 135, 90, 225, 0];
-  public duration: number = 2000;
+  readonly  duration: number = 2000;
   @State angle: number = 0;
-  @State gua:string = '请开始'
+  @State gua:string = ''
   @State isRoll: boolean = false;
+
+  @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
+  aboutToAppear() {
+    BreakpointSystem.getInstance().attach(this.currentBreakpoint)
+    BreakpointSystem.getInstance().start()
+  }
+  aboutToDisappear() {
+    BreakpointSystem.getInstance().attach(this.currentBreakpoint)
+    BreakpointSystem.getInstance().stop()
+  }
+  @State customDialogId: number = 0
+  showPopup() {
+    promptAction.openCustomDialog({
+      builder: () => {
+        this.result()
+      },
+      showInSubWindow: false,
+      offset: { dx: 5, dy: 5 },
+      backgroundColor: 0xd9ffffff,
+      cornerRadius: 24,
+      //backgroundBlurStyle: BlurStyle.Regular,
+      width: this.currentBreakpoint.value == 'sm' ? '80%' :
+        (this.currentBreakpoint.value == 'md' ? '50%' : '30%'),
+      //height: this.currentBreakpoint.value == 'sm' ? '40%' :
+       // (this.currentBreakpoint.value == 'md' ? '50%' : '50%'),
+    }).then((dialogId: number) => {
+      this.customDialogId = dialogId
+    })
+  }
+
 @Builder result(){
   Column() {
-    Text(this.gua)
-      .fontSize(66)
-      .fontWeight(700)
-      .layoutWeight(2)
+Row().layoutWeight(1)
     Row(){
       //'太极','坎', '坤', '震', '巽', '乾', '兑', '艮', '离']
       if(this.gua=='坎'){
@@ -267,67 +295,77 @@ struct BaGuaBox {
         Text('')
       }
     }
-    .padding(16)
+    .padding(36)
     .layoutWeight(3)
+    Text(this.gua)
+      .fontSize(48)
+      .fontWeight(600)
+      .layoutWeight(2)
 
-    Row() {
-      Button() {
-        if (!this.isRoll) {
-          Text('开始').fontColor($r("app.color.control_fc_1")).fontWeight(FontWeight.Bold)
-        }
-        else{
-          LoadingProgress()
-        }
-      }
-      .enabled(!this.isRoll)
-      .onClick(() => {
-        this.isRoll = true;
-        let index =Random(0, 7, true);
-        this.angle = (this.angle%360)*360+(360-this.angles[index]) + 360 * 8;
-        console.log(index.toString())
-        console.log((this.angle%360).toString())
-        console.log(this.gua)
-        setTimeout(() => {
-
-          this.gua=this.guas[index+1];
-          this.isRoll = false;
-        }, this.duration)
-      })
-      .backgroundColor($r("app.color.control_bgc_1"))
-      .height('100%')
-      .aspectRatio(2)
-      .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
-    }.width('100%').layoutWeight(1).justifyContent(FlexAlign.Center).alignItems(VerticalAlign.Center)
-  }.height('100%')
+  }
+  .width('100%')
   .aspectRatio(1)
+  .backgroundColor (0xffffff)
 }
   build() {
           Column() {
-            Image($r('app.media.BaGua'))
-              .width('100%')
-              .aspectRatio(1)
-              .position({top:0,left:0})
-              .animation({ duration: 2000,curve:Curve.Ease })
-              .rotate({ angle: this.angle })
-          }
-          .position({top:0,left:0})
-          .backgroundColor(0xffffff)
-          .width('100%')
-          .aspectRatio(1)
-          .borderRadius(12)
-          .clip(true)
-          .onClick(() => {
-            this.isRoll = true;
-            let index =Random(0, 7, true);
-            this.angle = (this.angle%360)*360+(360-this.angles[index]) + 360 * 8;
-            console.log(index.toString())
-            console.log((this.angle%360).toString())
-            console.log(this.gua)
-            setTimeout(() => {
+            Row() {
+              Image($r('app.media.BaGua'))
+                .width('90%')
+                .aspectRatio(1)// .animation({ duration: 1000,curve:Curve.Linear,playMode: PlayMode.Normal})
+                .rotate({ z: 1, angle: this.angle })
+            }
+            .alignItems(VerticalAlign.Center)
+            .justifyContent(FlexAlign.Center)
+            .backgroundColor(0xffffff)
+            .width('100%')
+            .aspectRatio(1)
+            .borderRadius(12)
+            .clip(true)
+            Row() {
+              Button() {
+                if (!this.isRoll) {
+                  Text('开始').fontColor($r("app.color.control_fc_1")).fontWeight(FontWeight.Bold)
+                }
+                else{
+                  LoadingProgress()
+                }
+              }
+              .enabled(!this.isRoll)
+              .onClick(() => {
+                this.isRoll = true;
+                let index =Random(0, 7, true);
+                //this.angle = Math.floor(this.angle/360)*360+(360-this.angles[index]) + 360 * 6;
+                animateTo ( {
+                  duration: this.duration,
+                  iterations: 1,
+                  curve:Curve.Linear
+                }, () => {
+                  this.angle = Math.floor(this.angle/360)*360+(360-this.angles[index]) + 360 * 6;
+                })
 
-              this.gua=this.guas[index+1];
-              this.isRoll = false;
-            }, this.duration)
-          })
+                console.log(index.toString())
+                console.log(this.angle.toString()+' ~~~ '+(this.angle%360).toString())
+                setTimeout(() => {
+                  this.gua=this.guas[index+1];
+                  this.showPopup()
+                  console.log(this.gua)
+                  this.isRoll = false;
+                }, this.duration)
+              })
+              .backgroundColor($r("app.color.control_bgc_1"))
+              .height('80%')
+              .aspectRatio(2)
+              .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+            }.width('100%').justifyContent(FlexAlign.Center).alignItems(VerticalAlign.Center).aspectRatio(6)
+          }
+          .alignItems(HorizontalAlign.Center)
+          .justifyContent(FlexAlign.Center)
+          //.position({top:0,left:0})
+          //.backgroundColor(0xffffff)
+          .width('100%')
+          .aspectRatio(5/6)
+
+
   }
 }

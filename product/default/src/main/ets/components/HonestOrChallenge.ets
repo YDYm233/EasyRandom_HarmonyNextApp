@@ -6,8 +6,8 @@ import { challenges, honests } from '../datas/challenges';
 @Entry
 @Component
 struct HonestOrChallenge {
-  @State customDialogId: number = 0
-  @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
+
+
   @State honests: string[] = honests
   @State challenges: string[] = challenges
   @State selectedText: string = this.challenges[Random(0, this.challenges.length - 1, true)]
@@ -17,7 +17,7 @@ struct HonestOrChallenge {
   @State index: number = 0
   @State honestColor: Color = 0xFF7299
   @State challengeColor: Color = 0x23ADE5
-
+  @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
   aboutToAppear() {
     BreakpointSystem.getInstance().attach(this.currentBreakpoint)
     BreakpointSystem.getInstance().start()
@@ -46,7 +46,7 @@ struct HonestOrChallenge {
       this.customDialogId = dialogId
     })
   }
-
+  @State customDialogId: number = 0
   @Builder
   customDialogBuilder() {
     Column() {
@@ -105,12 +105,10 @@ struct HonestOrChallenge {
       Header({ title: '真心话大冒险' })
       Row() {
         Column() {
-
             Image($r("app.media.needle"))
               .width('100%')
               .aspectRatio(1)
               .fillColor(0xffffff)
-          .aspectRatio(1)
           .rotate({ z: 1, angle: this.currentBreakpoint.value == 'sm' ? this.pointAngle + 90 : this.pointAngle })
           .animation({ duration: this.duration, curve: Curve.Ease })
         }

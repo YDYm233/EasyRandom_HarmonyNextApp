@@ -135,7 +135,7 @@ struct PieChartsShow{
               .zIndex(8)
               .width('40%')
               .aspectRatio(1)
-              .fillColor($r('app.color.container_bgc_2'))
+              .fillColor($r('app.color.container_bgc_1'))
               .position({top:'30%',left:'30%'})
               //.backgroundImagePosition(Alignment.Center)
           }
@@ -204,7 +204,7 @@ struct PieChartsShow{
           }
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .onClick(() => {
-            this.duration = 3000
+            this.duration = 1600
             this.isRoll = true;
             this.rotateAngle = Random(0, 360, true) + 360 * 18;
             setTimeout(() => {

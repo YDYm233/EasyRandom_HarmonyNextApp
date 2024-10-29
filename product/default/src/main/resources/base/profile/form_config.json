@@ -45,7 +45,12 @@
       "defaultDimension": "2*2",
       "supportDimensions": [
         "2*2"
-      ]
+      ],
+      "formConfigAbility": "ability://defaultformability",
+      "dataProxyEnabled": false,
+      "isDynamic": true,
+      "transparencyEnabled": false,
+      "metadata": []
     },
     {
       "name": "RollBlessingsCard",
@@ -67,7 +72,12 @@
       "supportDimensions": [
         "2*2",
         "4*4"
-      ]
+      ],
+      "formConfigAbility": "ability://defaultformability",
+      "dataProxyEnabled": false,
+      "isDynamic": true,
+      "transparencyEnabled": false,
+      "metadata": []
     },
     {
       "name": "RandomColorsCard",
@@ -89,7 +99,12 @@
       "supportDimensions": [
         "2*2",
         "4*4"
-      ]
+      ],
+      "formConfigAbility": "ability://defaultformability",
+      "dataProxyEnabled": false,
+      "isDynamic": true,
+      "transparencyEnabled": false,
+      "metadata": []
     }
   ]
 }

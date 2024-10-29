@@ -6,7 +6,8 @@ struct RollDiceCard {
   @State diceImageArray: Resource[] =
     [$r("app.media.dice1"), $r("app.media.dice2"), $r("app.media.dice3"), $r("app.media.dice4"), $r("app.media.dice5"),
       $r("app.media.dice6")]
-  @State diceImageIndex: Resource = this.diceImageArray[Random(0, this.diceImageArray.length - 1, true)]
+  @State diceImageIndex: Resource = $r("app.media.dice5");
+  //this.diceImageArray[Random(0, this.diceImageArray.length - 1, true)]
   build() {
     Row() {
         Image(this.diceImageIndex)
