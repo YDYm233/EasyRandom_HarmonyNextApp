@@ -59,8 +59,8 @@ let Swipers: Array<AppItem> = [
   new AppItem('幸运转盘', $r("app.media.icon_Rolls"),
     'pages/Index', '', [[0x00BFFF, 0], [0x1E90FF, 0.5], [0x00008B, 1]]),
 
-  new AppItem('人生必去的100个地方', $r("app.media.icon_RandomPlaces"),
-    'components/RandomPlaces', '', [[0x00beff, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
+  new AppItem('ABCD', $r("app.media.icon_RandomPlaces"),
+    'components/RandomABCD', '', [[0x00beff, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
 ]
 
 @Component
@@ -87,7 +87,7 @@ struct Banner {
       .backgroundColor(0x00beff)
       .onClick(() => {
         router.pushUrl({ url: app.url, params: app.params })
-      })
+      })    .margin({ bottom: 38 })
   }
 
   build() {
@@ -96,17 +96,26 @@ struct Banner {
       this.swiperItem(Swipers[1])
       this.swiperItem(Swipers[2])
     }
-    .autoPlay(false)
-    .indicator(true)
-    .itemSpace(10)
+    .autoPlay(true)
+    .itemSpace(30)
+    .cachedCount(3)
+    .interval(12000)
     .displayCount(this.currentBreakpoint.value === 'sm' ? 1 : (this.currentBreakpoint.value === 'md' ? 2 : 3))
     .width('100%')
-    .padding({
-     // left: 12,
-      //right: 12,
-      bottom: 36,
-      //top: 16
-    })
+    .loop(true)
+   // .indicator(true)
+    .indicator( // 设置圆点导航点样式
+      new DotIndicator()
+        .itemWidth(10)
+        .itemHeight(10)
+        .selectedItemWidth(15)
+        .selectedItemHeight(10)
+        //.color(Color.Gray)
+        .selectedColor($r("app.color.brand"))
+        .bottom(-2)
+    )
+  //.padding({ bottom: 36 })
+    //.margin({ bottom: 36 })
   }
 }
 

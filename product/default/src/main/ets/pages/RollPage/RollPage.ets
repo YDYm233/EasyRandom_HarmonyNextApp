@@ -120,20 +120,29 @@ struct PieChartsShow{
           Row() {
             PieChart({ data: item })
               .width('100%')
+              .position({top:0,left:0})
+              .rotate({
+                angle: this.rotateAngle
+              })
+              .border({
+                width:0,
+                color: 0xf1f3f5,
+                radius: '50%',
+                style: BorderStyle.Solid
+              })
+              .animation({ duration: this.duration, curve: Curve.Ease })
+            Image($r("app.media.needle"))
+              .zIndex(8)
+              .width('40%')
+              .aspectRatio(1)
+              .fillColor($r('app.color.container_bgc_2'))
+              .position({top:'30%',left:'30%'})
+              //.backgroundImagePosition(Alignment.Center)
           }
           .width('90%')
           .margin('5%')
           .aspectRatio(1)
-          .rotate({
-            angle: this.rotateAngle
-          })
-          .border({
-            width:0,
-            color: 0xf1f3f5,
-            radius: '50%',
-            style: BorderStyle.Solid
-          })
-          .animation({ duration: this.duration, curve: Curve.Ease })
+
         }, (item: Roll) => item.index)
 
       }
@@ -336,6 +345,7 @@ struct PieChart {
       radius: '50%',
       style: BorderStyle.Solid
     })
+
   }
 }
 

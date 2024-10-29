@@ -12,16 +12,20 @@
       },
       "colorMode": "auto",
       "isDynamic": true,
-      "isDefault": false,
-      "updateEnabled": false,
+      "isDefault": true,
+      "updateEnabled": true,
       "scheduledUpdateTime": "10:30",
       "updateDuration": 1,
       "defaultDimension": "2*2",
       "supportDimensions": [
         "2*2"
-      ]
+      ],
+      "formConfigAbility": "ability://defaultformability",
+      "dataProxyEnabled": false,
+      "isDynamic": true,
+      "transparencyEnabled": false,
+      "metadata": []
     },
-
     {
       "name": "FlipCoinCard",
       "displayName": "$string:FlipCoinCard_display_name",
@@ -35,7 +39,7 @@
       "colorMode": "auto",
       "isDynamic": true,
       "isDefault": false,
-      "updateEnabled": false,
+      "updateEnabled": true,
       "scheduledUpdateTime": "10:30",
       "updateDuration": 1,
       "defaultDimension": "2*2",
@@ -56,7 +60,7 @@
       "colorMode": "auto",
       "isDynamic": true,
       "isDefault": false,
-      "updateEnabled": false,
+      "updateEnabled": true,
       "scheduledUpdateTime": "10:30",
       "updateDuration": 1,
       "defaultDimension": "2*2",
@@ -78,7 +82,7 @@
       "colorMode": "auto",
       "isDynamic": true,
       "isDefault": false,
-      "updateEnabled": false,
+      "updateEnabled": true,
       "scheduledUpdateTime": "10:30",
       "updateDuration": 1,
       "defaultDimension": "2*2",

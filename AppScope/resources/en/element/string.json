@@ -2,11 +2,11 @@
   "string": [
     {
       "name": "app_name",
-      "value": "随易"
+      "value": "EasyRandom"
     },
     {
       "name": "app_info",
-      "value": "随易V1.0.12"
+      "value": "EasyRandomV1.0.10"
     },
     {
       "name": "app_bundlename",
@@ -14,7 +14,7 @@
     },
     {
       "name": "app_link",
-      "value": "使用元服务"
+      "value": "Use EasyRandom Atomicservice"
     },
     {
       "name": "app_link_bundle",
@@ -22,23 +22,23 @@
     },
     {
       "name": "page_name1",
-      "value": "幸运转盘"
+      "value": "Roll"
     },
     {
       "name": "page_name2",
-      "value": "随机选择"
+      "value": "Pages"
     },
     {
       "name": "page_name3",
-      "value": "答案之书"
+      "value": "AnswerBook"
     },
     {
       "name": "page_name4",
-      "value": "更多功能"
+      "value": "More"
     },
     {
       "name": "AnswerBook",
-      "value": "请在心中默念您的问题"
+      "value": "Please think about your problem in  mind"
     },
     {
       "name": "header_height",

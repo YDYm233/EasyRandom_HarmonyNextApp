@@ -55,6 +55,7 @@ struct Coin {
   @State F: number = 1
   @State B: number = 0
   @State isFliping: boolean = false
+  @State profit:number =0
 
   build() {
     Column() {
@@ -79,8 +80,8 @@ struct Coin {
         .clip(true)
         .margin({ bottom: '10%' })
         .rotate({ x: 1, angle: this.angle })
-        .animation({ duration: this.duration / 2,curve:Curve.Linear })
-        .translate({ y: this.x })
+        .animation({ duration: this.duration / this.profit,curve:Curve.Linear })
+        //.translate({ y: this.x })
       }
       .height('80%').width('100%').alignItems(VerticalAlign.Bottom).justifyContent(FlexAlign.Center)
 
@@ -90,28 +91,36 @@ struct Coin {
           Text('开始').fontColor($r("app.color.control_fc_1")).fontWeight(FontWeight.Bold).fontSize('50%')
         }
         .onClick(() => {
-          this.duration = 1800;
-          let profit= 360 * 3 + 180 * Random(1, 2, true);
-          this.angle = this.angle +profit;
-          this.x = '-40%';
-          this.isFliping = true
+          this.duration = 2000;
+          this.profit=  Random(1, 4, true)+2;
+          this.isFliping = true;
+          let count =1;
+          this.x='-40%'
           let loop = setInterval(() => {
-            if (this.ForB) {
-              this.F = 0;
-              this.B = 1;
-            } else {
-              this.F = 1;
-              this.B = 0;
-            }
-            //console.log(this.duration / (this.angle / 180) + '正反？' + this.ForB);
-            this.ForB = !this.ForB;
-          }, this.duration / (profit / 180));
-          setTimeout(()=>{this.x='0%'},this.duration/2)
+            this.angle=this.angle+180;
+              setTimeout(()=>{
+                this.ForB = !this.ForB;
+                if (this.ForB) {
+                  this.F = 0;
+                  this.B = 1;
+                }
+                else if(!this.ForB){
+                  this.F = 1;
+                  this.B = 0;
+                }
+              },this.duration/this.profit/2)
+           if(count>=this.profit){
+             clearInterval(loop)
+           }
+           count++;
+          }, this.duration / (this.profit) );
+          //setTimeout(()=>{this.x='0%'},this.duration/2)
+
           setTimeout(()=>{
-            clearInterval(loop)
-            this.duration = 0;
+            this.x='0%'
             this.isFliping = false
-          },this.duration)
+            console.log('次数'+this.profit.toString()+'间隔:'+(this.duration / (this.profit)).toString() + '正反？' + this.ForB);
+          },this.duration-30)
         })
         .enabled(!this.isFliping)
         .backgroundColor($r("app.color.control_bgc_1"))

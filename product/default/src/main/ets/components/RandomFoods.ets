@@ -50,7 +50,7 @@ struct RandomFoods {
 struct Foods {
   @State foods: string[] = foodsArray
   @State food: string = this.foods[Random(0, this.foods.length - 1, true)]
-
+  @State isRoll: boolean = false
   build() {
     Column() {
       Row() {
@@ -64,20 +64,31 @@ struct Foods {
           .fontWeight(800)
           .aspectRatio(2)
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+          .enabled(!this.isRoll)
           .onClick(() => {
+            this.isRoll=true;
             let selected: string = this.foods[Random(0, this.foods.length - 1, true)];
             let index = 0;
             let loop = setInterval(() => {
+              if(index<8){
               this.food = this.foods[Random(0, this.foods.length - 1, true)];
-              if (index = 8) {
-                this.food = selected
-
+              console.log(this.food)
               }
-              else if(index>8){
-                clearInterval(loop)
+              else if (index = 8) {
+               // this.food = selected
+                //this.isRoll=false;
+                //console.log(index.toString())
+              }
+             else if (index > 9) {
+                //clearInterval(loop)
               }
               index++;
             }, 120)
+            setTimeout(()=>{
+              this.food = selected
+              this.isRoll=false;
+              clearInterval(loop)
+            },120*9)
           })
       }.height('20%')
 

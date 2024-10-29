@@ -51,7 +51,7 @@
         ]
       },
       {
-        "name": "DefaultFormAbility",
+        "name": "DefaultFormAbility1",
         "srcEntry": "./ets/defaultformability/DefaultFormAbility.ets",
         "label": "$string:DefaultFormAbility_label",
         "description": "$string:DefaultFormAbility_desc",
@@ -59,7 +59,7 @@
         "metadata": [
           {
             "name": "ohos.extension.form",
-            "resource": "$profile:form"
+            "resource": "$profile:form_config"
           }
         ]
       }

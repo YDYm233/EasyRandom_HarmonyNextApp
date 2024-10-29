@@ -37,7 +37,7 @@ struct AnswerBook {
   build() {
     Column() {
       Row() {
-        Text('请在心中默念您的问题').fontWeight(800)
+        Text($r("app.string.AnswerBook")).fontWeight(800)
           .width('100%').textAlign(TextAlign.Center)
           .aspectRatio(9 / 2)
       }

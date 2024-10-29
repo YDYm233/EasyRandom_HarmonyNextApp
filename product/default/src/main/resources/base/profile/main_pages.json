@@ -18,6 +18,7 @@
     "components/AllasOne",
     "components/TransQR",
     "components/RandomPlaces",
-    "components/TextMarquee"
+    "components/TextMarquee",
+    "components/RandomABCD"
   ]
 }

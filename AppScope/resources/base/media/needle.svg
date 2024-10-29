@@ -1,0 +1,9 @@
+<svg id="图层_1" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+    <defs>
+        <style>.cls-1{fill:#cdcdcd;}</style>
+    </defs>
+    <title>point</title>
+    <path class="cls-1"
+          d="M121.37,94.85a26.84,26.84,0,0,0-8.8-6.69l-9.11-59.58a3.06,3.06,0,0,0-6,0L88.31,88.16a27,27,0,0,0-9.68,7.76c9,1.07,18,1.07,27,1.66,4.24.28,8.49.54,12.74.81A11,11,0,0,1,121.37,94.85Z"/>
+    <circle class="cls-1" cx="100" cy="100" r="26.79"/>
+</svg>

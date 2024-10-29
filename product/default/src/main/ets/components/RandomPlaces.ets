@@ -137,18 +137,20 @@ struct Foods {
           .enabled(!this.isRoll)
           .onClick(() => {
             this.isRoll = true;
-            this.index = Random(0, this.places.length - 1, true)
-            let index = 0;
+            let index = Random(0, this.places.length - 1, true)
+            let count = 0;
             let loop = setInterval(() => {
-              this.placeTitle = this.places[Random(0, this.places.length - 1, true)].name;
-              if (index == 8) {
-                this.placeTitle = this.placeNames[this.index];
-                this.place = this.places[this.index];
+              if(count<8) {
+                this.placeTitle = this.places[Random(0, this.places.length - 1, true)].name;
+              }
+              else if (count == 8) {
+                this.placeTitle = this.placeNames[index];
+                this.place = this.places[index];
                 this.isRoll = false;
-              } else if (index > 9) {
+              } else if (count > 9) {
                 clearInterval(loop)
               }
-              index++;
+              count++;
             }, 120)
           })
       }.height('20%')

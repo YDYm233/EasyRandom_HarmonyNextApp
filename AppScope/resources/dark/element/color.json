@@ -34,11 +34,11 @@
     },
     {
       "name": "view_bgc_1",
-      "value": "#FFFFFF"
+      "value": "#ff000000"
     },
     {
       "name": "view_bgc_2",
-      "value": "#F1F3F5"
+      "value": "#ff191a1c"
     },
     {
       "name": "view_bgc_3",
@@ -86,7 +86,7 @@
     },
     {
       "name": "container_fc_2",
-      "value": "#99000000"
+      "value": "#99ffffff"
     }
   ]
 }

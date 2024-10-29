@@ -105,25 +105,18 @@ struct HonestOrChallenge {
       Header({ title: '真心话大冒险' })
       Row() {
         Column() {
-          Row() {
-            Image($r("app.media.point"))
+
+            Image($r("app.media.needle"))
               .width('100%')
-              .height(90)
-              .position({ left: 0, top: -40 })
+              .aspectRatio(1)
               .fillColor(0xffffff)
-          }
-          .clip(false)
-          .backgroundColor(0xffffff)
-          .width('80%')
-          .margin('10%')
-          .borderRadius(800)
           .aspectRatio(1)
           .rotate({ z: 1, angle: this.currentBreakpoint.value == 'sm' ? this.pointAngle + 90 : this.pointAngle })
           .animation({ duration: this.duration, curve: Curve.Ease })
         }
         .onClick(() => {
           let target = Random(1, 360, true) + 360 * 3;
-          this.pointAngle = this.pointAngle + target
+          this.pointAngle+= target;
           //console.log(this.pointAngle.toString())
           if (this.pointAngle > 3600000) {
             this.pointAngle = this.pointAngle - 3600000
@@ -145,24 +138,17 @@ struct HonestOrChallenge {
             setTimeout(() => {
                   this.showPopup()
             }, this.duration)
-
-
           }
         })
-
-        .height('80%')
-        .aspectRatio(1)
-        .backgroundColor(0xffffff)
-        .borderRadius(800)
       }
-      .width(this.currentBreakpoint.value == 'sm' ? '20%' : '16%')
-      .height(this.currentBreakpoint.value == 'sm' ? '10%' : '14%')
-      .position(this.currentBreakpoint.value == 'sm' ? { left: '40%', top: '45%' } : { left: '42%', top: '43%' })
+      .width(this.currentBreakpoint.value == 'sm' ? '50%' : '40%')
+      .height(this.currentBreakpoint.value == 'sm' ? '30%' : '40%')
+      .position(this.currentBreakpoint.value == 'sm' ? { left: '25%', top: '35%' } : { left: '30%', top: '30%' })
       .zIndex(10)
       .margin({ top: 25 })
       .alignItems(VerticalAlign.Center)
       .justifyContent(FlexAlign.Center)
-
+      //.backgroundColor(0x333333)
       //.padding({top:50})
       GridRow({
         columns: {
