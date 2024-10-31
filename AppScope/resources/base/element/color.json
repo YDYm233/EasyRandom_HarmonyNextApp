@@ -87,6 +87,81 @@
    {
       "name": "container_fc_2",
       "value": "#99000000"
+    },
+
+
+    {
+      "name": "Brand",
+      "value": "#FF00BEFF"
+    },
+    {
+      "name": "SubBrand",
+      "value": "#8800BEFF"
+    },
+    {
+      "name": "Harmony",
+      "value": "#FFF1F3F5"
+    },
+    {
+      "name": "FontIcon_Fore1",
+      "value": "#E5000000"
+    },
+    {
+      "name": "FontIcon_Fore2",
+      "value": "#99000000"
+    },
+    {
+      "name": "FontIcon_Fore3",
+      "value": "#66000000"
+    },
+    {
+      "name": "FontIcon_Fore4",
+      "value": "#33000000"
+    },
+    {
+    "name": "FontIcon_Back1",
+    "value": "#FFFFFFFF"
+    },
+    {
+      "name": "FontIcon_Back2",
+      "value": "#99FFFFFF"
+    },
+    {
+      "name": "FontIcon_Back3",
+      "value": "#66FFFFFF"
+    },
+    {
+      "name": "FontIcon_Back4",
+      "value": "#33FFFFFF"
+    },
+    {
+      "name": "Comp_Bg1",
+      "value": "#FFFFFFFF"
+    },
+    {
+      "name": "Comp_Bg2",
+      "value": "#FFF1F3F5"
+    },
+    {
+      "name": "Comp_Bg3",
+      "value": "#FFE5E5EA"
+    },
+    {
+      "name": "Comp_Bg4",
+      "value": "#FFD1D1D6"
+    },
+    {
+      "name": "Cont_Bg1",
+      "value": "#FFF1F3F5"
+    },
+    {
+      "name": "Cont_Bg2",
+      "value": "#19000000"
+    },
+    {
+      "name": "Cont_Bg3",
+      "value": "#0c000000"
     }
+
   ]
 }

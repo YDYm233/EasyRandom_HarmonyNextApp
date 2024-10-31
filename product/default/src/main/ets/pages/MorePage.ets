@@ -19,7 +19,7 @@ class AppItem {
 }
 
 let Apps: Array<AppItem> = [
-  new AppItem('八卦', $r("app.media.icon_DevineBaGua"),
+  new AppItem('八卦', $r("app.media.BaGua"),
     'components/DevineBaGua', '', [[0x00beff, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
 
   new AppItem('祝福木鱼', $r("app.media.MuYu"),
@@ -59,6 +59,8 @@ struct MorePage {
             .height('96%')
             .margin('2%')
             .aspectRatio(1)
+            //.backgroundColor($r("app.color.FontIcon_Fore1"))
+            .fillColor($r("app.color.FontIcon_Fore1"))
             .border({
               color: Color.Blue,
               width: 0,
@@ -67,7 +69,7 @@ struct MorePage {
             })
           Text(app.name.toString())
             .opacity(0.88)
-            .fontColor(0x000000)
+            .fontColor($r("app.color.FontIcon_Fore1"))
             .fontSize('80%')
             .fontWeight(800)
             .textAlign(TextAlign.Center)
@@ -77,7 +79,7 @@ struct MorePage {
       .width('98%')
       .margin({ left: '1%', right: '1%', top: '5%' })
       .aspectRatio(5 / 2)
-      .backgroundColor($r("app.color.view_bgc_1"))
+      .backgroundColor($r("app.color.Comp_Bg1"))
       .border({
         color: Color.Red,
         width: 0,
@@ -98,6 +100,7 @@ struct MorePage {
     .onClick(() => {
       router.pushUrl({ url: app.url, params: app.params })
     })
+
   }
 
   build() {
@@ -114,7 +117,7 @@ struct MorePage {
         .lanes(this.currentBreakpoint.value === 'sm' ? 1 : (this.currentBreakpoint.value === 'md' ? 2 : 3))
         .padding({ left:this.currentBreakpoint.value=='sm'?6:12,right:this.currentBreakpoint.value=='sm'?6:12})
     }
-
+    .backgroundColor($r("app.color.Comp_Bg3"))
   }
 }
 

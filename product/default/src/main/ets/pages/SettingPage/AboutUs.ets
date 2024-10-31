@@ -64,7 +64,7 @@ struct AboutUs {
           })
       }.width(300)
       Row(){
-        Text('个人介绍：闫东阳，个人开发者、大四在读 \n社媒昵称：门二三三')
+        Text('个人介绍：闫东阳，个人开发者、大四在读 \n社媒昵称：门二三三')      .fontColor(0x333333)
       }
       .width('100%')
       .height(80)

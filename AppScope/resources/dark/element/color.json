@@ -1,92 +1,77 @@
 {
   "color": [
     {
-      "name": "start_window_background",
-      "value": "#FFFFFF"
+      "name": "Brand",
+      "value": "#FF00BEFF"
     },
     {
-      "name": "information_title_font",
-      "value": "#E6000000"
+      "name": "SubBrand",
+      "value": "#8800BEFF"
     },
     {
-      "name": "title_font",
+      "name": "Harmony",
+      "value": "#FFF1F3F5"
+    },
+    {
+      "name": "FontIcon_Fore1",
       "value": "#E5FFFFFF"
     },
     {
-      "name": "item_text_font",
+      "name": "FontIcon_Fore2",
+      "value": "#99FFFFFF"
+    },
+    {
+      "name": "FontIcon_Fore3",
+      "value": "#66FFFFFF"
+    },
+    {
+      "name": "FontIcon_Fore4",
+      "value": "#33FFFFFF"
+    },
+    {
+      "name": "FontIcon_Back1",
+      "value": "#FF000000"
+    },
+    {
+      "name": "FontIcon_Back2",
       "value": "#99000000"
     },
     {
-      "name": "image_info_background",
-      "value": "#FFFFFF"
+      "name": "FontIcon_Back3",
+      "value": "#66000000"
     },
     {
-      "name": "brand",
-      "value": "#00BEFF"
+      "name": "FontIcon_Back4",
+      "value": "#33000000"
     },
     {
-      "name": "warning",
-      "value": "#FFBB00"
+      "name": "Comp_Bg1",
+      "value": "#FF000000"
     },
     {
-      "name": "alert",
-      "value": "#FFEB00"
+      "name": "Comp_Bg2",
+      "value": "#FF191A1C"
     },
     {
-      "name": "view_bgc_1",
-      "value": "#ff000000"
+      "name": "Comp_Bg3",
+      "value": "#FF202224"
     },
     {
-      "name": "view_bgc_2",
-      "value": "#ff191a1c"
+      "name": "Comp_Bg4",
+      "value": "#FF2E3033"
     },
     {
-      "name": "view_bgc_3",
-      "value": "#E5E5EA"
+      "name": "Cont_Bg1",
+      "value": "#FFE5E5EA"
     },
     {
-      "name": "view_bgc_4",
-      "value": "#D1D1D6"
+      "name": "Cont_Bg2",
+      "value": "#19FFFFFF"
     },
     {
-      "name": "control_bgc_1",
-      "value": "#00BEFF"
-    },
-    {
-      "name": "control_fc_1",
-      "value": "#FFFFFF"
-    },
-    {
-      "name": "control_bgc_2",
-      "value": "#19000000"
-    },
-    {
-      "name": "control_fc_2",
-      "value": "#00BEFF"
-    },
-    {
-      "name": "control_bgc_3",
-      "value": "#5800BEFF"
-    },
-    {
-      "name": "control_fc_3",
-      "value": "#e5ffffff"
-    },
-    {
-      "name": "container_bgc_1",
-      "value": "#FFFFFF"
-    },
-    {
-      "name": "container_fc_1",
-      "value": "#e5ffffff"
-    },
-    {
-      "name": "container_bgc_2",
-      "value": "#E5E7E9"
-    },
-    {
-      "name": "container_fc_2",
-      "value": "#99ffffff"
+      "name": "Cont_Bg3",
+      "value": "#0cFFFFFF"
     }
+
   ]
 }

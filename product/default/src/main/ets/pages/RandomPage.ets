@@ -26,6 +26,7 @@ struct RandomPage {
         AppList()
       }
     }
+    .backgroundColor($r("app.color.Comp_Bg3"))
     .width("100%")
     .padding({ left:this.currentBreakpoint.value=='sm'?12:24,right:this.currentBreakpoint.value=='sm'?12:24})
   }
@@ -84,7 +85,7 @@ struct Banner {
       .aspectRatio(1)
       .objectFit(ImageFit.Fill)
       .borderRadius(16)
-      .backgroundColor(0x00beff)
+     // .backgroundColor(0x00beff)
       .onClick(() => {
         router.pushUrl({ url: app.url, params: app.params })
       })    .margin({ bottom: 38 })
@@ -111,9 +112,10 @@ struct Banner {
         .selectedItemWidth(15)
         .selectedItemHeight(10)
         //.color(Color.Gray)
-        .selectedColor($r("app.color.brand"))
+        .selectedColor($r("app.color.Brand"))
         .bottom(-2)
     )
+
   //.padding({ bottom: 36 })
     //.margin({ bottom: 36 })
   }
@@ -174,7 +176,7 @@ struct AppList {
         .fontSize(16)
         .fontWeight(FontWeight.Bold)
         .textAlign(TextAlign.Center)
-        .fontColor('#18181A')
+        .fontColor($r("app.color.FontIcon_Fore1"))
         .margin({ bottom: 8 })
     }
     .onClick(() => {
@@ -185,7 +187,7 @@ struct AppList {
   build() {
     Column() {
       Row() {
-        Text('热门功能').fontSize(20).fontWeight(FontWeight.Bold)
+        Text('热门功能').fontSize(20).fontWeight(FontWeight.Bold)       .fontColor($r("app.color.FontIcon_Fore1"))
       }.justifyContent(FlexAlign.Start).width('100%').height(40).alignItems(VerticalAlign.Center)
 
       List({ space: this.currentBreakpoint.value === 'lg' ? 22 : 20 }) {

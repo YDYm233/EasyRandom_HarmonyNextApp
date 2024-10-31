@@ -41,7 +41,7 @@ struct RandomFoods {
       }
       .width('100%')
       .height('100%')  .padding({ top: $r("app.string.header_height") })
-    }.height('100%').backgroundColor($r("app.color.view_bgc_2"))    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+    }.height('100%')    .backgroundColor($r("app.color.Comp_Bg3"))     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
@@ -54,7 +54,7 @@ struct Foods {
   build() {
     Column() {
       Row() {
-        Text(this.food).height('70%').fontSize(24).fontWeight(500)
+        Text(this.food).height('70%').fontSize(24).fontWeight(500).fontColor( $r("app.color.FontIcon_Fore1"))
       }.width('100%').height('80%').alignItems(VerticalAlign.Center).justifyContent(FlexAlign.Center)
 
       Row() {
@@ -92,7 +92,7 @@ struct Foods {
           })
       }.height('20%')
 
-    }.aspectRatio(1).backgroundColor($r("app.color.view_bgc_1")).borderRadius(24)
+    }.aspectRatio(1).backgroundColor($r("app.color.Comp_Bg1")).borderRadius(24)
 
   }
 }

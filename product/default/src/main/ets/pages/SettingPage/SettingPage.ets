@@ -69,6 +69,7 @@ struct Setting {
       .fontSize(20)
       .width("100%")
       .padding(10)
+      .fontColor(0x333333)
   }
 
   @Builder
@@ -89,7 +90,7 @@ struct Setting {
         .fontWeight(500)
         .textAlign(TextAlign.Start)
         .margin({ left: 8 })
-
+        .fontColor(0x333333)
       Row() {
         Image($r("app.media.func_next")).width('60%').margin('20%').fillColor(0x885e5e5e)
       }
@@ -164,7 +165,7 @@ struct Setting {
                 Text($r("app.string.app_info"))
                   .textAlign(TextAlign.End)
                   .fontWeight(600)
-                  .fontSize(16)
+                  .fontSize(16)      .fontColor(0x333333)
               }
               .justifyContent(FlexAlign.SpaceAround)
               .alignItems(VerticalAlign.Center)

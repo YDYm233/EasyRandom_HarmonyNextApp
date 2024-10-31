@@ -11,7 +11,7 @@ struct AnswerPage {
 
     .width('100%')
     .height('100%')
-    .backgroundColor($r("app.color.view_bgc_2"))
+    .backgroundColor($r("app.color.Comp_Bg3"))
     .alignItems(VerticalAlign.Center)
     .justifyContent(FlexAlign.Center)
   }
@@ -38,6 +38,7 @@ struct AnswerBook {
     Column() {
       Row() {
         Text($r("app.string.AnswerBook")).fontWeight(800)
+          .fontColor($r("app.color.FontIcon_Fore1"))
           .width('100%').textAlign(TextAlign.Center)
           .aspectRatio(9 / 2)
       }
@@ -55,7 +56,7 @@ struct AnswerBook {
         .visibility(this.backVisible)
 
         Row() {
-          Text(this.answer).width('80%').margin('10%').textAlign(TextAlign.Center)
+          Text(this.answer).width('80%').margin('10%').textAlign(TextAlign.Center)  .fontColor(Color.Black)
         }
         .position({ left: 0, top: 0 })
         .backgroundColor(0xffffff)

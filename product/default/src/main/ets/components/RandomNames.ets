@@ -40,7 +40,7 @@ struct RandomNames {
       }
       .width('100%')
       .height('100%')  .padding({ top: $r("app.string.header_height") })
-    }.height('100%').backgroundColor($r("app.color.view_bgc_2"))    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+    }.height('100%')          .backgroundColor($r("app.color.Comp_Bg3"))  .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
@@ -60,14 +60,14 @@ struct NamesBox {
         .width('10%')
         .aspectRatio(1)
         .fontSize(16)
-        .backgroundColor(0xf1f3f5)
+        .backgroundColor($r("app.color.Comp_Bg3"))
         .borderRadius('50%')
         .margin('2.5%')
         .textAlign(TextAlign.Center)
       Text(name)
         .width('90%')
         .opacity(0.88)
-        .fontColor(0x000000)
+        .fontColor($r("app.color.FontIcon_Fore1"))
         .fontSize(20)
         .textAlign(TextAlign.Center)
     }
@@ -77,13 +77,8 @@ struct NamesBox {
     //.margin('5%')
     .justifyContent(FlexAlign.Center)
     .alignItems(VerticalAlign.Center)
-    .border({
-      color: Color.Blue,
-      width: 0,
-      style: BorderStyle.Solid,
-      radius: 12
-    })
-    .backgroundColor(0xffffff)
+.borderRadius(6)
+    .backgroundColor($r("app.color.Comp_Bg1"))
 
   }
 
@@ -116,9 +111,9 @@ struct NamesBox {
           .margin('5%')
           .padding({ top: '5%' })
           .aspectRatio(1)
-          .backgroundColor(0xf1f3f5)
-          .border({ width: 4, color: 0x20808080, radius: 12 })
-        }.borderRadius(24).backgroundColor($r("app.color.view_bgc_1"))
+          .backgroundColor($r("app.color.Comp_Bg2"))
+          .border({ width: 4, color:$r("app.color.Comp_Bg2"), radius: 12 })
+        }.borderRadius(24).backgroundColor($r("app.color.Comp_Bg1"))
 
 
         GridCol({
@@ -134,12 +129,14 @@ struct NamesBox {
                 .textAlign(TextAlign.Center)
                 .alignSelf(ItemAlign.Center)
                 .fontWeight(FontWeight.Bold)
+                .fontColor($r("app.color.FontIcon_Fore1"))
             }
             .width('100%')
             .layoutWeight(1)
 
             TextArea({ text: this.textValue, placeholder: '\n本app不会收集或保存您的列表数据' })
               .padding(8)
+              .fontColor($r("app.color.FontIcon_Fore2"))
               .layoutWeight(4)
               .onChange((value: string) => {
                 this.textValue = value;
@@ -213,8 +210,8 @@ struct NamesBox {
         })
         .width('100%')
         .aspectRatio(1)
-        .backgroundColor(0xffffff)
-        .border({ width: 0, color: 0xf33333, radius: 24 })
+        .backgroundColor($r("app.color.Comp_Bg1"))
+        .border({ width: 0, color: $r("app.color.Comp_Bg2") ,radius: 24 })
       }
     }
   }

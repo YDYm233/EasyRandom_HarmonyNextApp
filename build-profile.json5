@@ -49,6 +49,9 @@
       "name": "common",
       "srcPath": "./common",
     },
-
+    {
+      "name": "PieChart",
+      "srcPath": "./PieChart",
+    }
   ]
 }

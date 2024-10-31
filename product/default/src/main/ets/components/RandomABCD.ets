@@ -41,7 +41,8 @@ struct RollFlip {
       }
       .width('100%')
       .height('100%')  .padding({ top: $r("app.string.header_height") })
-    }.height('100%').backgroundColor($r("app.color.view_bgc_2"))    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+    }.height('100%')
+    .backgroundColor($r("app.color.Comp_Bg3"))    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
@@ -59,7 +60,7 @@ struct ABCD {
         .backgroundColor(this.colors[0])
         .fontColor(this.fontColors[0])
         .position({left:0,top:0})
-        .border({style:BorderStyle.Solid,width:5,color:$r("app.color.view_bgc_2"),radius:12})
+        .border({style:BorderStyle.Solid,width:5,color:$r("app.color.Comp_Bg2"),radius:12})
         .clip(true)
         .fontWeight(FontWeight.Bold)
         .fontSize(48).textAlign(TextAlign.Center)
@@ -67,7 +68,7 @@ struct ABCD {
          .backgroundColor(this.colors[1])
          .fontColor(this.fontColors[1])
          .position({right:0,top:0})
-         .border({style:BorderStyle.Solid,width:5,color:$r("app.color.view_bgc_2"),radius:12})
+         .border({style:BorderStyle.Solid,width:5,color:$r("app.color.Comp_Bg2"),radius:12})
          .clip(true)
          .fontWeight(FontWeight.Bold)
          .fontSize(48).textAlign(TextAlign.Center)
@@ -75,7 +76,7 @@ struct ABCD {
          .backgroundColor(this.colors[2])
          .fontColor(this.fontColors[2])
          .position({left:0,bottom:0})
-         .border({style:BorderStyle.Solid,width:5,color:$r("app.color.view_bgc_2"),radius:12})
+         .border({style:BorderStyle.Solid,width:5,color:$r("app.color.Comp_Bg2"),radius:12})
          .clip(true)
          .fontWeight(FontWeight.Bold)
          .fontSize(48).textAlign(TextAlign.Center)
@@ -83,7 +84,7 @@ struct ABCD {
          .backgroundColor(this.colors[3])
          .fontColor(this.fontColors[3])
          .position({right:0,bottom:0})
-         .border({style:BorderStyle.Solid,width:5,color:$r("app.color.view_bgc_2"),radius:12})
+         .border({style:BorderStyle.Solid,width:5,color:$r("app.color.Comp_Bg2"),radius:12})
          .clip(true)
          .fontWeight(FontWeight.Bold)
          .fontSize(48).textAlign(TextAlign.Center)
@@ -94,9 +95,10 @@ struct ABCD {
          .animation({ duration: this.duration, curve: Curve.Ease })
      }
      .width('100%')
+     .padding(6)
      .aspectRatio(1)
      .borderRadius(12)
-      .backgroundColor($r("app.color.view_bgc_2"))
+      .backgroundColor($r("app.color.Comp_Bg1"))
      .clip(true)
       Row(){
         Button('开始').aspectRatio(2).height('80%').backgroundColor($r('app.color.brand'))
@@ -116,19 +118,19 @@ struct ABCD {
             }
             setTimeout(()=>{
               if(this.angle%360<90){
-                this.colors[1]=$r("app.color.brand")
+                this.colors[1]=$r("app.color.Brand")
                 this.fontColors[1]=0xffffff;
               }
               else if(this.angle%360>90&&this.angle%360<180){
-                this.colors[3]=$r("app.color.brand")
+                this.colors[3]=$r("app.color.Brand")
                 this.fontColors[3]=0xffffff;
               }
               else if(this.angle%360>180&&this.angle%360<270){
-                this.colors[2]=$r("app.color.brand")
+                this.colors[2]=$r("app.color.Brand")
                 this.fontColors[2]=0xffffff;
               }
               else {
-                this.colors[0]=$r("app.color.brand")
+                this.colors[0]=$r("app.color.Brand")
                 this.fontColors[0]=0xffffff;
               }
             },this.duration)
@@ -140,7 +142,7 @@ struct ABCD {
     .width('100%')
     .aspectRatio(5/6)
     .borderRadius(12)
-    .backgroundColor($r("app.color.view_bgc_1"))
+    .backgroundColor($r("app.color.Comp_Bg1"))
     .clip(true)
 
 

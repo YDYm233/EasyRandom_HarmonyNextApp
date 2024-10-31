@@ -105,7 +105,7 @@ struct Illustrate {
     Text(text)
       .fontSize(20)
       .width("100%")
-      .padding(10)
+      .padding(10)      .fontColor(0x333333)
   }
   @Consume('pageInfos') pageInfos: NavPathStack;
   build() {

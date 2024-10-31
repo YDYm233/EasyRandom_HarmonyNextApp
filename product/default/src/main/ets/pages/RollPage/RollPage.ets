@@ -27,7 +27,7 @@ struct RollPage {
         }          .width('100%')
       }
       .margin(this.currentBreakpoint.value=='sm'?12: 24)
-    }.width('100%').height('100%').backgroundColor($r("app.color.view_bgc_2"))
+    }.width('100%').height('100%').backgroundColor($r("app.color.Comp_Bg3"))
   }
 }
 
@@ -46,6 +46,7 @@ struct PieChartsShow{
   @State isSheetShow: boolean = false
   @State isDialogShow: boolean = false
   @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
+  @State showPoint:boolean=true;
   private swiperController: SwiperController = new SwiperController()
 
   aboutToAppear() {
@@ -70,10 +71,10 @@ struct PieChartsShow{
       Row() {
         Row() {
           Button({ type: ButtonType.Capsule, stateEffect: true }) {
-            Image($r("app.media.func_pre")).fillColor($r("app.color.control_fc_2")).width('75%').aspectRatio(1.4)
+            Image($r("app.media.func_pre")).fillColor($r("app.color.Brand")).width('75%').aspectRatio(1.4)
           }
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
-          .backgroundColor($r("app.color.control_bgc_2"))
+          .backgroundColor($r("app.color.Comp_Bg3"))
           .height('100%')
           .aspectRatio(1)
           .onClick(() => {
@@ -85,7 +86,7 @@ struct PieChartsShow{
 
         Row() {
           Text(this.title)
-            .fontColor(0x333333)
+            .fontColor($r("app.color.FontIcon_Fore1"))
             .fontWeight(800)
             .height('100%')
             .aspectRatio(3)
@@ -97,11 +98,11 @@ struct PieChartsShow{
 
         Row() {
           Button({ type: ButtonType.Capsule, stateEffect: true }) {
-            Image($r("app.media.func_next")).fillColor($r("app.color.control_fc_2")).width('75%').aspectRatio(1.4)
+            Image($r("app.media.func_next")).fillColor($r("app.color.Brand")).width('75%').aspectRatio(1.4)
           }
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .position({ right: 0 })
-          .backgroundColor($r("app.color.control_bgc_2"))
+          .backgroundColor($r("app.color.Comp_Bg3"))
           .height('100%')
           .aspectRatio(1)
           .onClick(() => {
@@ -126,18 +127,20 @@ struct PieChartsShow{
               })
               .border({
                 width:0,
-                color: 0xf1f3f5,
+                color: $r("app.color.Cont_Bg1"),
                 radius: '50%',
                 style: BorderStyle.Solid
               })
               .animation({ duration: this.duration, curve: Curve.Ease })
-            Image($r("app.media.needle"))
-              .zIndex(8)
-              .width('40%')
-              .aspectRatio(1)
-              .fillColor($r('app.color.container_bgc_1'))
-              .position({top:'30%',left:'30%'})
+            if(this.showPoint) {
+              Image($r("app.media.needle"))
+                .zIndex(8)
+                .width('40%')
+                .aspectRatio(1)
+                .fillColor($r("app.color.FontIcon_Back2"))
+                .position({ top: '30%', left: '30%' })
               //.backgroundImagePosition(Alignment.Center)
+            }
           }
           .width('90%')
           .margin('5%')
@@ -150,7 +153,7 @@ struct PieChartsShow{
       .aspectRatio(1)
       .border({
         width: 0,
-        color: 0xfff,
+        color: $r("app.color.Comp_Bg2"),
         radius: 10,
         style: BorderStyle.Dotted
       })
@@ -159,6 +162,9 @@ struct PieChartsShow{
       .indicatorInteractive(true)
       .duration(1000)
       .itemSpace(0)
+      .onClick(()=>{
+        this.showPoint=!this.showPoint;
+      })
       .onChange((index: number) => {
         this.swiperIndex = index
         this.title = this.dataList[index].rollName
@@ -174,11 +180,11 @@ struct PieChartsShow{
 
           Button({ type: ButtonType.Capsule, stateEffect: true }) {
             Image($r("app.media.func_pin"))
-              .fillColor(this.swiperIndex != this.loveIndex ? $r("app.color.control_fc_2") : "#ffffff")
+              .fillColor(this.swiperIndex != this.loveIndex ? $r("app.color.Brand") : "#ffffff")
               .width('75%')
           }
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
-          .backgroundColor(this.swiperIndex != this.loveIndex ? $r("app.color.control_bgc_2") :
+          .backgroundColor(this.swiperIndex != this.loveIndex ? $r("app.color.Comp_Bg3") :
           $r("app.color.control_bgc_1"))
           .height('100%')
           .aspectRatio(1)
@@ -196,9 +202,9 @@ struct PieChartsShow{
         Row() {
           Button({ type: ButtonType.Capsule, stateEffect: this.isRoll }) {
             if (this.isRoll == false) {
-              Text('开始').fontColor($r("app.color.control_fc_1")).fontWeight(800)
+              Text('开始').fontColor(Color.White).fontWeight(800)
             } else {
-              LoadingProgress().color($r("app.color.control_fc_1")).height('75%')
+              LoadingProgress().color(Color.White).height('75%')
             }
             //Image($r("app.media.page_icon1_selected")).fillColor($r("app.color.control_fc_1")).height('75%')
           }
@@ -213,7 +219,7 @@ struct PieChartsShow{
               this.rotateAngle = this.rotateAngle - 360 * 18
             }, this.duration);
           })
-          .backgroundColor($r("app.color.control_bgc_1"))
+          .backgroundColor($r("app.color.Brand"))
           .height('100%')
           .aspectRatio(3)
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
@@ -224,11 +230,11 @@ struct PieChartsShow{
 
         Row() {
           Button({ type: ButtonType.Capsule, stateEffect: true }) {
-            Image($r("app.media.func_plus")).fillColor($r("app.color.control_fc_2")).width('75%')
+            Image($r("app.media.func_plus")).fillColor($r("app.color.Brand")).width('75%')
           }
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .position({ right: 0 })
-          .backgroundColor($r("app.color.control_bgc_2"))
+          .backgroundColor($r("app.color.Comp_Bg3"))
           .height('100%')
           .aspectRatio(1)
 
@@ -257,7 +263,7 @@ struct PieChartsShow{
       radius: '5.56%',
       style: BorderStyle.Dotted
     })
-    .backgroundColor(0xffffff)
+    .backgroundColor($r("app.color.Comp_Bg1"))
     .bindSheet($$this.isSheetShow, this.neirong(), {
       dragBar: true,
       blurStyle: BlurStyle.Thin,
@@ -341,7 +347,7 @@ struct PieChart {
     }.width('100%').aspectRatio(1)
     .border({
       width: 10,
-      color: 0xf1f3f5,
+      color: $r("app.color.Comp_Bg3"),
       radius: '50%',
       style: BorderStyle.Solid
     })

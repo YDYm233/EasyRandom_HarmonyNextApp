@@ -57,7 +57,7 @@ struct TabBar {
           .height('80%')
           .aspectRatio(2)
           .backgroundColor($r("app.color.warning"))
-          .fontColor($r("app.color.control_fc_1"))
+          .fontColor($r("app.color.FontIcon_Fore1"))
           .onClick(() => {
             promptAction.closeCustomDialog(this.customDialogId)
             promptAction.showToast({
@@ -67,8 +67,8 @@ struct TabBar {
         Button('同意')
           .height('80%')
           .aspectRatio(2)
-          .backgroundColor($r("app.color.control_bgc_1"))
-          .fontColor($r("app.color.control_fc_1"))
+          .backgroundColor($r("app.color.Brand"))
+          .fontColor($r("app.color.FontIcon_Fore1"))
           .onClick(() => {
             this.saveIsPrivacy()
             promptAction.showToast({
@@ -150,10 +150,10 @@ struct TabBar {
       Image(this.currentIndex === targetIndex ? selectedIcon : unselectIcon)
         .width(24)
         .height(24)
-        .fillColor(this.currentIndex === targetIndex ? 0x00beff : $r("app.color.container_fc_2"))
+        .fillColor(this.currentIndex === targetIndex ? 0x00beff : $r("app.color.FontIcon_Fore2"))
       Text(title)
         .fontSize(10)
-        .fontColor(this.currentIndex === targetIndex ? 0x00beff :  $r("app.color.container_fc_2"))
+        .fontColor(this.currentIndex === targetIndex ? 0x00beff :  $r("app.color.FontIcon_Fore2"))
         .textAlign(TextAlign.Center)
         .lineHeight(14)
         .fontWeight(500)
@@ -176,7 +176,7 @@ struct TabBar {
       GridRow() {
         GridCol({ span: { sm: 3, md: 2, lg: 1 } }) {
           Row() {
-             Image($r("app.media.link_myApp")).height('24vp').width('24vp')
+             Image($r("app.media.link_myApp")).height('24vp').width('24vp').fillColor($r("app.color.FontIcon_Fore1"))
           }
           .onClick(()=>{
 
@@ -236,7 +236,7 @@ struct TabBar {
 
         GridCol({ span: { sm: 6, md: 8, lg: 10 } }) {
           Row() {
-            Text(this.title)
+            Text(this.title).fontColor($r("app.color.FontIcon_Fore1"))
           }
           .width('100%')
           .height($r("app.string.header_height"))
@@ -246,7 +246,7 @@ struct TabBar {
 
         GridCol({ span: { sm: 3, md: 2, lg: 1 } }) {
           Row() {
-            Image($r("app.media.func_setting")).height(24).width(24)
+            Image($r("app.media.func_setting")).height(24).width(24).fillColor($r("app.color.FontIcon_Fore1"))
           }
           .width('100%')
           .height($r("app.string.header_height"))
@@ -267,7 +267,7 @@ struct TabBar {
       }
       .width('100%')
       .height($r("app.string.header_height"))
-      .backgroundColor($r("app.color.view_bgc_1"))
+      .backgroundColor($r("app.color.Comp_Bg1"))
       .zIndex(10)
       .margin({ top: $r("app.string.header_margin") })
       .position({ top: $r("app.string.header_margin") })
@@ -283,28 +283,28 @@ struct TabBar {
         TabContent() {
           RollPage()
         }
-        .padding({ top: $r("app.string.header_height") }).backgroundColor($r("app.color.view_bgc_2"))
+        .padding({ top: $r("app.string.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
         .tabBar(this.tabBarBuilder($r('app.string.page_name1'), 0, $r('app.media.page_icon1_selected'),
           $r('app.media.page_icon1')));
 
         TabContent() {
           RandomPage()
         }
-        .padding({ top: $r("app.string.header_height") }).backgroundColor($r("app.color.view_bgc_2"))
+        .padding({ top: $r("app.string.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
         .tabBar(this.tabBarBuilder($r('app.string.page_name2'), 1, $r('app.media.page_icon2_selected'),
           $r('app.media.page_icon2')));
 
         TabContent() {
           AnswerPage()
         }
-        .padding({ top: $r("app.string.header_height") }).backgroundColor($r("app.color.view_bgc_2"))
+        .padding({ top: $r("app.string.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
         .tabBar(this.tabBarBuilder($r('app.string.page_name3'), 2, $r('app.media.page_icon3_selected'),
           $r('app.media.page_icon3')));
 
         TabContent() {
           MorePage()
         }
-        .padding({ top: $r("app.string.header_height") }).backgroundColor($r("app.color.view_bgc_2"))
+        .padding({ top: $r("app.string.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
         .tabBar(this.tabBarBuilder($r('app.string.page_name4'), 3, $r('app.media.page_icon4_selected'),
           $r('app.media.page_icon4')));
       }
@@ -317,7 +317,7 @@ struct TabBar {
         strokeWidth: 0.8,
         color: '#0D182431'
       })
-      .backgroundColor($r("app.color.view_bgc_1"))
+      .backgroundColor($r("app.color.Comp_Bg1"))
       .padding({ top: $r("app.string.header_margin"), bottom: $r("app.string.footer_margin") })
       .barHeight(56)
     }
