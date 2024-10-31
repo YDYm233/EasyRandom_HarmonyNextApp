@@ -1,6 +1,6 @@
 # 随易 EasyRandom
-
 ## 项目介绍
+![随易应用图标](./preview/应用图标.png)    ![随易应用图标](./preview/应用元服务图标.png)
 
 > 随易是是一个面向生活的工具箱。
 >
@@ -29,24 +29,19 @@
 └──product/default/src/main/resources        // 资源文件目录
 ```
 
-## 项目介绍
 
-#### 主页面
+## 页面展示:
 
-- 幸运转盘
-- ![幸运转盘](http://www.m233.top/easyrandom/intro1.png)
-
-- 热门功能
-- ![热猛男](http://www.m233.top/easyrandom/intro2.png)
-
-- 答案之书
-- ![答案之书](http://www.m233.top/easyrandom/intro3.png)
-
-- 更多功能
-- ![更多功能](http://www.m233.top/easyrandom/intro4.png)
-
-- 卡片组件
-- ![卡片组件](http://www.m233.top/easyrandom/intro5.png)
+#### 幸运转盘
+![幸运转盘](./preview/介绍图%20(1).png)
+#### 热门功能
+![热门功能](./preview/介绍图%20(2).png)
+#### 答案之书
+![答案之书](./preview/介绍图%20(3).png)
+#### 更多功能
+![更多功能](./preview/介绍图%20(4).png)
+#### 卡片组件
+![卡片组件](./preview/介绍图%20(5).png)
 
 
 ## 项目功能开发进度
@@ -55,7 +50,6 @@
 
 - [x] 幸运转盘 RollPage
 - [x] 答案之书 AnswerPage
-
 - [x] 随机数 RandomNumbers 
 - [x] 吃什么 RandomFoods
 - [x] 丢硬币 FlipCoin
@@ -79,7 +73,7 @@
  - [x] 木鱼卡片 
  - [x] 骰子卡片 
  - [x] 硬币卡片 
- - [x] 桌面宠物
+ - [ ] 桌面宠物
 
 
 
