@@ -31,7 +31,7 @@ struct RandomFoods {
             }
           }) {
             Row() {
-              Foods().width('100%')
+              Places().width('100%')
             }
             .width('100%')
             .justifyContent(FlexAlign.Center)
@@ -44,14 +44,14 @@ struct RandomFoods {
       .height('100%').padding({ top: $r("app.string.header_height") })
     }
     .height('100%')
-    .backgroundColor($r("app.color.view_bgc_2"))
+    .backgroundColor($r("app.color.Comp_Bg3"))
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
-    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+   // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
 
 @Component
-struct Foods {
+struct Places {
   @State places: placeAttraction[] = placesArray
   @State index: number = Random(0, this.places.length - 1, true)
   @State placeNames: string[] = this.places.map(obj => obj.name)
@@ -70,9 +70,9 @@ struct Foods {
           .width('100%')
           .textAlign(TextAlign.Start)
           .fontSize(16)
-          .fontColor(0x88333333)
+          .fontColor($r("app.color.FontIcon_Fore2"))
           .fontStyle(FontStyle.Italic)
-        Text('' + this.place.country).width('100%').textAlign(TextAlign.End).fontSize(16).fontColor(0x88333333)
+        Text('' + this.place.country).width('100%').textAlign(TextAlign.End).fontSize(16).fontColor($r("app.color.FontIcon_Fore2"))
       }
       .alignItems(VerticalAlign.Center)
       .justifyContent(FlexAlign.SpaceBetween)
@@ -155,7 +155,7 @@ struct Foods {
           })
       }.height('20%')
 
-    }.aspectRatio(1).backgroundColor($r("app.color.view_bgc_1")).borderRadius(24)
+    }.aspectRatio(1).backgroundColor($r("app.color.Comp_Bg1")).borderRadius(24)
 
   }
 }

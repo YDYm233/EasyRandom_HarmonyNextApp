@@ -1,6 +1,10 @@
 {
   "color": [
     {
+      "name": "start_window_background",
+      "value": "#000000"
+    },
+    {
       "name": "Brand",
       "value": "#FF00BEFF"
     },
@@ -71,7 +75,14 @@
     {
       "name": "Cont_Bg3",
       "value": "#0cFFFFFF"
+    },
+    {
+      "name": "Yin",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "Yang",
+      "value": "#000000"
     }
-
   ]
 }

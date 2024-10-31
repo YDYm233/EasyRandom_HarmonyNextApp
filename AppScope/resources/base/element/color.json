@@ -161,7 +161,13 @@
     {
       "name": "Cont_Bg3",
       "value": "#0c000000"
+    },    {
+      "name": "Yin",
+      "value": "#000000"
+    },
+    {
+      "name": "Yang",
+      "value": "#FFFFFF"
     }
-
   ]
 }

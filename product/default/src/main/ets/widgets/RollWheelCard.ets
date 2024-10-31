@@ -89,7 +89,7 @@ struct RollBox {
     }.width('100%').aspectRatio(1)
     .border({
       width: 8,
-      color: 0xf1f3f5,
+      color: $r("app.color.Comp_Bg4"),
       radius: '50%',
       style: BorderStyle.Solid
     })

@@ -41,7 +41,7 @@ struct RollBlessings {
       }
       .width('100%')
       .height('100%')  .padding({ top: $r("app.string.header_height") })
-    }.height('100%').backgroundColor($r("app.color.view_bgc_2"))    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+    }.height('100%').backgroundColor($r("app.color.Comp_Bg3"))   .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
@@ -157,7 +157,7 @@ struct RollBlessingsBox {
     .width('100%')
     .aspectRatio(1)
     .borderRadius(12)
-    .backgroundColor($r("app.color.view_bgc_1"))
+    .backgroundColor($r("app.color.Comp_Bg1"))
     .clip(true)
 
   }

@@ -137,7 +137,7 @@ struct PieChartsShow{
                 .zIndex(8)
                 .width('40%')
                 .aspectRatio(1)
-                .fillColor($r("app.color.FontIcon_Back2"))
+                .fillColor($r("app.color.FontIcon_Back1"))
                 .position({ top: '30%', left: '30%' })
               //.backgroundImagePosition(Alignment.Center)
             }

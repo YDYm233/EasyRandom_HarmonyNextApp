@@ -41,7 +41,7 @@ struct DevineBaGua {
       }
       .width('100%')
       .height('100%')  .padding({ top: $r("app.string.header_height") })
-    }.height('100%').backgroundColor($r("app.color.view_bgc_2"))    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+    }.height('100%') .backgroundColor($r("app.color.Comp_Bg3"))    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
@@ -102,7 +102,7 @@ struct TaiJi {
     }
     .width('100%')
     .aspectRatio(1)
-    .border({ width: 0, color: 0x808080, radius: '50%' })
+    .border({ width: 0, color: $r("app.color.Comp_Bg2"), radius: '50%' })
     .clip(true)
   }
 }
@@ -301,23 +301,120 @@ Row().layoutWeight(1)
       .fontSize(48)
       .fontWeight(600)
       .layoutWeight(2)
-
+      .fontColor($r("app.color.FontIcon_Fore1"))
   }
   .width('100%')
   .aspectRatio(1)
-  .backgroundColor (0xffffff)
+  .backgroundColor($r("app.color.FontIcon_Back2"))
 }
   build() {
           Column() {
             Row() {
-              Image($r('app.media.BaGua'))
+              Row() {
+                Row() {
+                  TaiJi()
+                    .width('40%').margin('30%').border({ width: 2, color: 0xf1f3f5, radius: '50%' })
+                }
+                .width('100%')
+                .height('100%')
+                .position({ top: 0, left: 0 })
+                .rotate({ angle: 0 })
+
+
+                Row() {
+                  Kan()
+                    .width(this.widthPer)
+                    .position({ y: this.heightMargin, x: this.widthMargin })
+                }
+                .width('100%')
+                .height('100%')
+                .position({ top: 0, left: 0 })
+                .rotate({ angle: this.angles[0] })
+
+
+                Row() {
+                  Kun()
+                    .width(this.widthPer)
+                    .position({ y: this.heightMargin, x: this.widthMargin })
+                }
+                .width('100%')
+                .height('100%')
+                .position({ top: 0, left: 0 })
+                .rotate({ angle: this.angles[1] })
+
+
+                Row() {
+                  Zhen()
+                    .width(this.widthPer)
+                    .position({ y: this.heightMargin, x: this.widthMargin })
+                }
+                .width('100%')
+                .height('100%')
+                .position({ top: 0, left: 0 })
+                .rotate({ angle: this.angles[2] })
+
+
+                Row() {
+                  Xun()
+                    .width(this.widthPer)
+                    .position({ y: this.heightMargin, x: this.widthMargin })
+                }
+                .width('100%')
+                .height('100%')
+                .position({ top: 0, left: 0 })
+                .rotate({ angle: this.angles[3] })
+
+
+                Row() {
+                  Qian()
+                    .width(this.widthPer)
+                    .position({ y: this.heightMargin, x: this.widthMargin })
+                }
+                .width('100%')
+                .height('100%')
+                .position({ top: 0, left: 0 })
+                .rotate({ angle: this.angles[4] })
+
+
+                Row() {
+                  Dui()
+                    .width(this.widthPer)
+                    .position({ y: this.heightMargin, x: this.widthMargin })
+                }
+                .width('100%')
+                .height('100%')
+                .position({ top: 0, left: 0 })
+                .rotate({ angle: this.angles[5] })
+
+
+                Row() {
+                  Gen()
+                    .width(this.widthPer)
+                    .position({ y: this.heightMargin, x: this.widthMargin })
+                }
+                .width('100%')
+                .height('100%')
+                .position({ top: 0, left: 0 })
+                .rotate({ angle: this.angles[6] })
+
+
+                Row() {
+                  Li()
+                    .width(this.widthPer)
+                    .position({ y: this.heightMargin, x: this.widthMargin })
+                }
+                .width('100%')
+                .height('100%')
+                .position({ top: 0, left: 0 })
+                .rotate({ angle: this.angles[7] })
+              }
                 .width('90%')
                 .aspectRatio(1)// .animation({ duration: 1000,curve:Curve.Linear,playMode: PlayMode.Normal})
                 .rotate({ z: 1, angle: this.angle })
             }
             .alignItems(VerticalAlign.Center)
             .justifyContent(FlexAlign.Center)
-            .backgroundColor(0xffffff)
+            .backgroundColor($r("app.color.Comp_Bg1"))
             .width('100%')
             .aspectRatio(1)
             .borderRadius(12)
@@ -362,7 +459,7 @@ Row().layoutWeight(1)
           .alignItems(HorizontalAlign.Center)
           .justifyContent(FlexAlign.Center)
           //.position({top:0,left:0})
-          //.backgroundColor(0xffffff)
+
           .width('100%')
           .aspectRatio(5/6)
 

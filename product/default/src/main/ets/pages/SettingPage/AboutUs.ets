@@ -24,16 +24,17 @@ struct AboutUs {
       Row() {
         Row(){
           Hyperlink(this.qrSrc[this.index],this.linkTitle).color(0xffffff)
-        }.backgroundColor(this.themeColor[this.index]).padding(5).borderRadius(12)
+        }.backgroundColor(this.themeColor[this.index]).padding(5).borderRadius(12).height('80%')
       }
       .width('100%')
-      .aspectRatio(10)    .justifyContent(FlexAlign.Center)
+      .aspectRatio(5)
+      .justifyContent(FlexAlign.Center)
       .alignItems(VerticalAlign.Center)
     }
     .width(280)
-    .aspectRatio(5/6)
-    .margin(24)
-    .backgroundColor(0xffffff)
+    .aspectRatio(5/7)
+    .padding(24)
+    .backgroundColor($r("app.color.Comp_Bg1"))
   }
   @Consume('pageInfos') pageInfos: NavPathStack;
   build() {
@@ -44,18 +45,17 @@ struct AboutUs {
         Image($r("app.media.Avatar"))
           .width('40%')
           .aspectRatio(1)
-          .padding(12)
-          .backgroundColor(0xffffff)
+          //.padding(2)
+          //.backgroundColor(0xffffff)
           .margin({ left:'30%',right:'30%',top:'20%',bottom:'10%' })
           .border({width:5,color:Color.Gray,radius:800})
           .bindPopup($$this.isShowQR, {
             builder: this.QRCodeBox(),
             placement: Placement.Bottom,
-            mask: {color:'#33000000'},
-            popupColor: Color.Yellow,
+            //mask: {color:'#33000000'},
+            popupColor: $r("app.color.Comp_Bg1"),
             enableArrow: true,
             showInSubWindow: false,
-
             onStateChange: (e) => {
               if (!e.isVisible) {
                 this.isShowQR = false
@@ -64,7 +64,7 @@ struct AboutUs {
           })
       }.width(300)
       Row(){
-        Text('个人介绍：闫东阳，个人开发者、大四在读 \n社媒昵称：门二三三')      .fontColor(0x333333)
+        Text('个人介绍：闫东阳，个人开发者、大四在读 \n社媒昵称：门二三三')          .fontColor($r("app.color.FontIcon_Fore1"))
       }
       .width('100%')
       .height(80)
@@ -121,7 +121,7 @@ struct AboutUs {
     .width('100%').height('100%')
     .justifyContent(FlexAlign.Center)
     .alignItems(VerticalAlign.Center)
-    .backgroundColor(0xffffff)
+    .backgroundColor($r("app.color.Comp_Bg2"))
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }  .title('开发者团队')
     .onBackPressed(() => {

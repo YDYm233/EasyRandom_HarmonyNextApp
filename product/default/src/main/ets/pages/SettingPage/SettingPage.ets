@@ -29,7 +29,7 @@ let privacyPolicy = new Item('隐私政策', $r("app.media.privacypolicy"), 0x00
 let copyRight = new Item('版权声明', $r("app.media.addoil_thumb"), 0xfebb00)
 let illustrate = new Item('更多信息', $r("app.media.illustrate"), 0xbeff00)
 let addOil = new Item('赞赏我们', $r("app.media.addoil_flower"), 0xffbe00)
-let moreOpt = new Item ('更多操作',$r("sys.symbol.barrage_setting"),0xFFBBEE)
+let moreOpt = new Item ('更多操作',$r("app.media.func_more"),0xFFBBEE)
 @Entry({ routeName: 'Setting' })
 @Component
 struct Setting {
@@ -69,14 +69,14 @@ struct Setting {
       .fontSize(20)
       .width("100%")
       .padding(10)
-      .fontColor(0x333333)
+      .fontColor($r("app.color.FontIcon_Fore1"))
   }
 
   @Builder
   SettingItem(item: Item) {
     Row() {
       Row() {
-        Image(item.icon).fillColor(0xffffff).width('70%').margin('15%')
+        Image(item.icon).fillColor(Color.White).width('70%').margin('15%')
       }
       .aspectRatio(1)
       .height('60%')
@@ -90,9 +90,9 @@ struct Setting {
         .fontWeight(500)
         .textAlign(TextAlign.Start)
         .margin({ left: 8 })
-        .fontColor(0x333333)
+        .fontColor($r("app.color.FontIcon_Fore1"))
       Row() {
-        Image($r("app.media.func_next")).width('60%').margin('20%').fillColor(0x885e5e5e)
+        Image($r("app.media.func_next")).width('60%').margin('20%').fillColor($r("app.color.FontIcon_Fore1"))
       }
       .aspectRatio(1)
       .height('60%')
@@ -107,7 +107,7 @@ struct Setting {
     .height(50)
     .borderRadius(12)
     .padding({ left: 24, right: 24 })
-    .backgroundColor(0xffffff)
+    .backgroundColor($r("app.color.Comp_Bg1"))
     .justifyContent(FlexAlign.SpaceBetween)
     .alignItems(VerticalAlign.Center)
   }
@@ -117,7 +117,7 @@ struct Setting {
         Column(){
         Row() {
           Row() {
-            Image($r("app.media.func_back")).height(24).width(24)
+            Image($r("app.media.func_back")).height(24).width(24).fillColor($r("app.color.FontIcon_Fore1"))
           }
           .height('100%')
           .aspectRatio(1)
@@ -129,11 +129,11 @@ struct Setting {
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
 
           Row() {
-            Text('设置').height(24).fontWeight(800).textAlign(TextAlign.Center)
+            Text('设置').height(24).fontWeight(800).textAlign(TextAlign.Center).fontColor($r("app.color.FontIcon_Fore1"))
           }.height('100%').aspectRatio(1).alignItems(VerticalAlign.Center).justifyContent(FlexAlign.Center)
 
           Row() {
-            Image($r("app.media.func_share")).height(24).width(24)
+            Image($r("app.media.func_share")).height(24).width(24).fillColor($r("app.color.FontIcon_Fore1"))
 
           } .onClick(() => {
             promptAction.showToast({
@@ -146,7 +146,7 @@ struct Setting {
         .height(56)
         .alignItems(VerticalAlign.Center)
         .justifyContent(FlexAlign.SpaceBetween)
-        .backgroundColor(0xffffff)
+        .backgroundColor($r("app.color.Comp_Bg1"))
         // .backgroundColor('rgba(0,0,0,0)')
 
         List({ space: 12 }) {
@@ -165,7 +165,7 @@ struct Setting {
                 Text($r("app.string.app_info"))
                   .textAlign(TextAlign.End)
                   .fontWeight(600)
-                  .fontSize(16)      .fontColor(0x333333)
+                  .fontSize(16)          .fontColor($r("app.color.FontIcon_Fore1"))
               }
               .justifyContent(FlexAlign.SpaceAround)
               .alignItems(VerticalAlign.Center)
@@ -216,14 +216,14 @@ struct Setting {
       }
       .width('100%')
         .height('100%')
-        .backgroundColor(0xf1f3f5)
+        .backgroundColor($r("app.color.Comp_Bg3"))
        // .backgroundColor(0xfff000)
        // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
       }
       .padding(0)
       .width('100%')
       .height('100%')
-      .backgroundColor(0xffffff)
+      .backgroundColor($r("app.color.Comp_Bg1"))
       .mode(NavigationMode.Auto)
       .navDestination(this.PageMap)
       .hideTitleBar(true)

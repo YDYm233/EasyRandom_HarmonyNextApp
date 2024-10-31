@@ -40,7 +40,7 @@ struct RandomNames {
       }
       .width('100%')
       .height('100%')  .padding({ top: $r("app.string.header_height") })
-    }.height('100%').backgroundColor($r("app.color.view_bgc_2"))    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+    }.height('100%') .backgroundColor($r("app.color.Comp_Bg3"))   .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
@@ -64,7 +64,7 @@ struct NumbersBox {
     }) {
       Text(title.toString())
         .opacity(0.88)
-        .fontColor(0x000000)
+        .fontColor($r("app.color.FontIcon_Fore1"))
         .fontSize(20)
         .textAlign(TextAlign.Center)
         .width('100%')
@@ -72,9 +72,9 @@ struct NumbersBox {
         .fontWeight(800)
     }
     .width('100%')
-
+    .backgroundColor($r("app.color.Comp_Bg1"))
     .border({
-      color: 0x20000000,
+      color: $r("app.color.Comp_Bg3"),
       width: 1,
       style: BorderStyle.Solid,
       radius: 12
@@ -93,21 +93,22 @@ struct NumbersBox {
         }.width('100%')
       }
       .width('100%')
-      .border({ width: 2, color: 0x20808080, radius: 12 })
+      .border({ width: 2, color:$r("app.color.Comp_Bg3"), radius: 12 })
+      .backgroundColor($r("app.color.Comp_Bg2"))
       .layoutWeight(5)
       .clip(true)
 
       Row() {
         Row() {
-          Text('最小值:').height('100%').fontWeight(FontWeight.Bold)
+          Text('最小值:').height('100%').fontWeight(FontWeight.Bold)   .fontColor($r("app.color.FontIcon_Fore1"))
           TextInput({ text: this.min.toString(), placeholder: '最小值' })
             .padding(0)
             .height('60%')
             .width('20%')
-            .fontColor(0x333333)
+            .fontColor($r("app.color.FontIcon_Fore1"))
             .textAlign(TextAlign.Center)
             .fontWeight(FontWeight.Bold)
-            .underlineColor(0x333333)
+            .underlineColor($r("app.color.FontIcon_Fore1"))
             .type(InputType.Number)
             .enterKeyType(EnterKeyType.Done)
             .onChange((value: string) => {
@@ -122,15 +123,15 @@ struct NumbersBox {
         }
 
         Row() {
-          Text('最大值:').height('100%').fontWeight(FontWeight.Bold)
-          TextInput({ text: this.max.toString(), placeholder: '最小值' })
+          Text('最大值:').height('100%').fontWeight(FontWeight.Bold)   .fontColor($r("app.color.FontIcon_Fore1"))
+          TextInput({ text: this.max.toString(), placeholder: '最大值' })
             .padding(0)
             .height('70%')
             .width('20%')
-            .fontColor(0x333333)
+            .fontColor($r("app.color.FontIcon_Fore1"))
             .textAlign(TextAlign.Center)
             .fontWeight(FontWeight.Bold)
-            .underlineColor(0x333333)
+           //.underlineColor($r("app.color.FontIcon_Fore1"))
             .type(InputType.Number)
             .enterKeyType(EnterKeyType.Done)
             .onChange((value: string) => {
@@ -149,7 +150,7 @@ struct NumbersBox {
 
       Row() {
         Row() {
-          Text('数量:').height('100%').fontWeight(FontWeight.Bold)
+          Text('数量:').height('100%').fontWeight(FontWeight.Bold)   .fontColor($r("app.color.FontIcon_Fore1"))
           CounterComponent({
             options: {
               type: CounterType.COMPACT,
@@ -177,7 +178,7 @@ struct NumbersBox {
           this.numbers = Randoms(this.min, this.max, true, this.howmany, false)
         })
 
-        .backgroundColor($r("app.color.control_bgc_1"))
+        .backgroundColor($r("app.color.Brand"))
         .height('80%')
         .aspectRatio(2)
         .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
@@ -188,7 +189,7 @@ struct NumbersBox {
     .borderRadius(24)
     .padding('5%')
     .aspectRatio(1)
-    .backgroundColor($r("app.color.view_bgc_1"))
+    .backgroundColor($r("app.color.Comp_Bg1"))
   }
 }
 

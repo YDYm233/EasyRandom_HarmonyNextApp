@@ -105,7 +105,7 @@ struct Illustrate {
     Text(text)
       .fontSize(20)
       .width("100%")
-      .padding(10)      .fontColor(0x333333)
+      .padding(10)      .fontColor($r("app.color.FontIcon_Fore1"))
   }
   @Consume('pageInfos') pageInfos: NavPathStack;
   build() {
@@ -143,7 +143,7 @@ struct Illustrate {
             .margin('5%')
             .borderRadius(16)
             .clip(true)
-            .backgroundColor(0xffffff)
+            .backgroundColor($r("app.color.Comp_Bg1"))
             .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
             .onClick(() => {
               this.pageInfos.pushPath({ name: '问题反馈' })
@@ -181,7 +181,7 @@ struct Illustrate {
             .margin('5%')
             .borderRadius(16)
             .clip(true)
-            .backgroundColor(0xffffff)
+            .backgroundColor($r("app.color.Comp_Bg1"))
           }
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .onClick(() => {
@@ -220,7 +220,7 @@ struct Illustrate {
             .margin('5%')
             .borderRadius(16)
             .clip(true)
-            .backgroundColor(0xffffff)
+            .backgroundColor($r("app.color.Comp_Bg1"))
           }
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .onClick(() => {
@@ -258,7 +258,7 @@ struct Illustrate {
             .margin('5%')
             .borderRadius(16)
             .clip(true)
-            .backgroundColor(0xffffff)
+            .backgroundColor($r("app.color.Comp_Bg1"))
           }
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .onClick(() => {
@@ -297,7 +297,7 @@ struct Illustrate {
             .margin('5%')
             .borderRadius(16)
             .clip(true)
-            .backgroundColor(0xffffff)
+            .backgroundColor($r("app.color.Comp_Bg1"))
             .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
             .onClick(() => {
               const want: Want = {
@@ -351,7 +351,7 @@ struct Illustrate {
             .margin('5%')
             .borderRadius(16)
             .clip(true)
-            .backgroundColor(0xffffff)
+            .backgroundColor($r("app.color.Comp_Bg1"))
             .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
             .onClick(()=>{
               promptAction.openCustomDialog({
@@ -396,7 +396,7 @@ struct Illustrate {
             .margin('5%')
             .borderRadius(16)
             .clip(true)
-            .backgroundColor(0xffffff)
+            .backgroundColor($r("app.color.Comp_Bg1"))
             .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
             .onClick(()=>{
               console.log(LinkAppBundleName)
@@ -473,7 +473,7 @@ struct Illustrate {
             .margin('5%')
             .borderRadius(16)
             .clip(true)
-            .backgroundColor(0xffffff)
+            .backgroundColor($r("app.color.Comp_Bg1"))
             .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
             .onClick(()=>{
               this.pageInfos.pushPath({ name: '版权声明' })
@@ -485,7 +485,7 @@ struct Illustrate {
       .height('100%')
       .lanes(this.currentBreakpoint.value === 'sm' ? 2 : (this.currentBreakpoint.value === 'md' ? 3 : 4))
       .padding({ left:this.currentBreakpoint.value=='sm'?6:12,right:this.currentBreakpoint.value=='sm'?6:12})
-    } .backgroundColor(0xf1f3f5)
+    }     .backgroundColor($r("app.color.Comp_Bg2"))
 }
    .title('更多信息')
     .onBackPressed(() => {
