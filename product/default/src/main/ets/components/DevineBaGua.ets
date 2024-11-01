@@ -450,7 +450,7 @@ Row().layoutWeight(1)
                   this.isRoll = false;
                 }, this.duration)
               })
-              .backgroundColor($r("app.color.control_bgc_1"))
+              .backgroundColor($r("app.color.Comp_Bg1"))
               .height('80%')
               .aspectRatio(2)
               .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
@@ -459,7 +459,6 @@ Row().layoutWeight(1)
           .alignItems(HorizontalAlign.Center)
           .justifyContent(FlexAlign.Center)
           //.position({top:0,left:0})
-
           .width('100%')
           .aspectRatio(5/6)
 

@@ -4,7 +4,7 @@ import MorePage from './MorePage'
 import AnswerPage from './AnswerPage'
 import router from '@ohos.router'
 import { BusinessError } from '@kit.BasicServicesKit'
-import { promptAction } from '@kit.ArkUI'
+import { promptAction, Router } from '@kit.ArkUI'
 import { BreakpointState, BreakpointSystem } from '@ohos/common'
 import { webview } from '@kit.ArkWeb'
 import { preferences } from '@kit.ArkData'
@@ -14,7 +14,12 @@ import Logger from '../constants/Logger'
 import { productViewManager } from '@kit.StoreKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import type { common, Want } from '@kit.AbilityKit';
-
+class Params {
+  type:string
+  constructor(tuple:string) {
+    this.type = tuple
+  }
+}
 @Entry
 @Component
 struct TabBar {
@@ -38,7 +43,18 @@ struct TabBar {
     BreakpointSystem.getInstance().attach(this.currentBreakpoint)
     BreakpointSystem.getInstance().stop()
   }
-
+  async routePage() {
+    let options:router.RouterOptions = {
+      url: 'pages/SettingPage/SettingPage',
+      params: new Params('privatepolicy')
+    }
+    try {
+      // 建议使用this.getUIContext().getRouter().pushUrl()
+      await router.pushUrl(options)
+    } catch (err) {
+      console.info(` fail callback, code: ${(err as BusinessError).code}, msg: ${(err as BusinessError).message}`)
+    }
+  }
   @Builder
   PrivacyPolicyDialog() {
     Column() {
@@ -47,8 +63,18 @@ struct TabBar {
       }.width('100%').height('80%')
 
       Row() {
-        Hyperlink('http://www.m233.top/easyrandom/privacypolicy.html', '点击查看详细信息') {
-        }.width('100%')
+        Hyperlink('http://www.m233.top/easyrandom/privacypolicy.html', '点击查看详细信息') {}.width('100%')
+        Text('点击查看详细信息').onClick(()=>{
+
+          router.pushUrl({
+            url: 'pages/SettingPage/SettingPage',
+            params:new Params('privatepolicy')
+          }).then(() => {
+            console.info("success.");
+          }).catch((err: BusinessError) => {
+            console.error(`err, code is ${err.code}, message is ${err.message}.`);
+          })
+        })
       }.width('100%').height('8%')
       .justifyContent(FlexAlign.Center)
 
@@ -226,6 +252,10 @@ struct TabBar {
                 })
               }
             });
+            //router.pushUrl({
+              //url: 'pages/SettingPage/SettingPage',
+              //params:'privatepolicy'
+            //})
           })
           .width('100%')
           .height($r("app.string.header_height"))
@@ -255,7 +285,8 @@ struct TabBar {
           .padding({ right: 12 })
           .onClick(() => {
             router.pushUrl({
-              url: 'pages/SettingPage/SettingPage'
+              url: 'pages/SettingPage/SettingPage',
+              params:new Params('aboutus')
             }).then(() => {
               console.info("success.");
             }).catch((err: BusinessError) => {

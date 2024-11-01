@@ -30,16 +30,28 @@ let copyRight = new Item('版权声明', $r("app.media.addoil_thumb"), 0xfebb00)
 let illustrate = new Item('更多信息', $r("app.media.illustrate"), 0xbeff00)
 let addOil = new Item('赞赏我们', $r("app.media.addoil_flower"), 0xffbe00)
 let moreOpt = new Item ('更多操作',$r("app.media.func_more"),0xFFBBEE)
+class Params {
+  type:string
+  constructor(tuple:string) {
+    this.type = tuple
+  }
+}
 @Entry({ routeName: 'Setting' })
 @Component
 struct Setting {
   @Provide('pageInfos') pageInfos: NavPathStack = new NavPathStack()
   @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
+onPageShow(): void {
 
+}
   aboutToAppear() {
+    let params = router.getParams() as Params;
+    console.info(`参数：${params.type}`)
+    if(this.currentBreakpoint.value!='sm'&&params.type!='privatepolicy')this.pageInfos.pushPath({ name:'开发者团队' } )
+    else if(params.type=='privatepolicy')this.pageInfos.pushPath({ name:'隐私政策' } )
     BreakpointSystem.getInstance().attach(this.currentBreakpoint)
     BreakpointSystem.getInstance().start()
-    if(this.currentBreakpoint.value!='sm')this.pageInfos.pushPath({ name:'开发者团队' } )
+
   }
 
   aboutToDisappear() {

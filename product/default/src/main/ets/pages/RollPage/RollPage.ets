@@ -149,6 +149,7 @@ struct PieChartsShow{
         }, (item: Roll) => item.index)
 
       }
+      //.indicator({})
       .width('100%')
       .aspectRatio(1)
       .border({
