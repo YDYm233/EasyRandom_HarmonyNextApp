@@ -107,6 +107,14 @@
     {
       "name": "appDesc",
       "value": "随时随地 轻松容易"
+    },
+    {
+      "name": "ABCDCard_display_name",
+      "value": "做选择"
+    },
+    {
+      "name": "ABCDCard_desc",
+      "value": "遇事不决，量子力学"
     }
   ]
 }

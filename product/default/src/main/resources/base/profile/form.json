@@ -123,6 +123,30 @@
       "dataProxyEnabled": false,
       "transparencyEnabled": false,
       "metadata": []
+    },
+    {
+      "name": "ABCDCard",
+      "displayName": "$string:ABCDCard_display_name",
+      "description": "$string:ABCDCard_desc",
+      "src": "./ets/widgets/ABCDCard.ets",
+      "uiSyntax": "arkts",
+      "window": {
+        "designWidth": 720,
+        "autoDesignWidth": true
+      },
+      "colorMode": "auto",
+      "isDynamic": true,
+      "isDefault": false,
+      "updateEnabled": false,
+      "scheduledUpdateTime": "10:30",
+      "updateDuration": 1,
+      "defaultDimension": "2*2",
+      "supportDimensions": [
+        "2*2"
+      ],"formConfigAbility": "ability://defaultformability",
+      "dataProxyEnabled": false,
+      "transparencyEnabled": false,
+      "metadata": []
     }
   ]
 }
