@@ -60,11 +60,11 @@ struct TabBar {
     Column() {
       Row() {
         Web({ src: $rawfile("privacypolicy.html"), controller: this.controller }).width("100%")
-      }.width('100%').height('80%')
+      }.width('100%').height('80%').borderRadius(12).clip(true)
 
       Row() {
-        Hyperlink('http://www.m233.top/easyrandom/privacypolicy.html', '点击查看详细信息') {}.width('100%')
-        Text('点击查看详细信息').onClick(()=>{
+        //Hyperlink('http://www.m233.top/easyrandom/privacypolicy.html', '点击查看详细信息') {}.width('100%')
+        Text('点此查看详细信息').onClick(()=>{
 
           router.pushUrl({
             url: 'pages/SettingPage/SettingPage',
@@ -73,8 +73,9 @@ struct TabBar {
             console.info("success.");
           }).catch((err: BusinessError) => {
             console.error(`err, code is ${err.code}, message is ${err.message}.`);
-          })
-        })
+          });
+          promptAction.closeCustomDialog(this.customDialogId)
+        }).textAlign(TextAlign.Start).width('100%').margin({left:20})
       }.width('100%').height('8%')
       .justifyContent(FlexAlign.Center)
 
@@ -83,7 +84,7 @@ struct TabBar {
           .height('80%')
           .aspectRatio(2)
           .backgroundColor($r("app.color.warning"))
-          .fontColor($r("app.color.FontIcon_Fore1"))
+          .fontColor(Color.White)
           .onClick(() => {
             promptAction.closeCustomDialog(this.customDialogId)
             promptAction.showToast({
@@ -94,7 +95,7 @@ struct TabBar {
           .height('80%')
           .aspectRatio(2)
           .backgroundColor($r("app.color.Brand"))
-          .fontColor($r("app.color.FontIcon_Fore1"))
+          .fontColor(Color.White)
           .onClick(() => {
             this.saveIsPrivacy()
             promptAction.showToast({
