@@ -21,7 +21,6 @@
         "2*2"
       ], "formConfigAbility": "ability://defaultformability",
       "dataProxyEnabled": false,
-      "isDynamic": true,
       "transparencyEnabled": false,
       "metadata": []
     },{

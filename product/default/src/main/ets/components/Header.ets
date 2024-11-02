@@ -1,5 +1,10 @@
 import router from '@ohos.router';
-
+class Params {
+  type:string
+  constructor(tuple:string) {
+    this.type = tuple
+  }
+}
 //import  '@ohos/setting/src/main/ets/pages/Index'
 @Component
 export default struct Header {
@@ -38,7 +43,8 @@ export default struct Header {
           }
           .onClick(() => {
             router.pushUrl({
-              url: 'pages/SettingPage/SettingPage'
+              url: 'pages/SettingPage/SettingPage',
+              params:new Params('privatepolicy')
             }).then(() => {
               console.info("success.");
             })
