@@ -44,7 +44,7 @@ export default struct Header {
           .onClick(() => {
             router.pushUrl({
               url: 'pages/SettingPage/SettingPage',
-              params:new Params('privatepolicy')
+              params:new Params('no')
             }).then(() => {
               console.info("success.");
             })
