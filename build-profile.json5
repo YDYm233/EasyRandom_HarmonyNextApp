@@ -50,8 +50,8 @@
       "srcPath": "./common",
     },
     {
-      "name": "PieChart",
-      "srcPath": "./PieChart",
+      "name": "UI",
+      "srcPath": "./UI"
     }
   ]
 }

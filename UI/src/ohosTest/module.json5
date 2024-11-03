@@ -1,6 +1,6 @@
 {
   "module": {
-    "name": "PieChart_test",
+    "name": "UI_test",
     "type": "feature",
     "deviceTypes": [
       "default",
