@@ -1,29 +1,27 @@
-export class PieChartOption { //饼状图子类
+export class PieChartData  { //饼状图子类
   id: string
   text: string
   weight: number
-  color: string;
-  constructor(id: string, text: string, weight: number, color: string) {
+  color: string | number | CanvasGradient | CanvasPattern;
+  constructor(id: string, text: string, weight: number, color:string | number | CanvasGradient | CanvasPattern) {
     this.id = id
     this.text = text;
     this.weight = weight;
     this.color = color;
   }
 }
-export class ChartData{ //饼状图类
-  id: string
+export class Chart{ //饼状图类
   chartName: string
-  chartOptions: Array<PieChartOption> //所有饼状图子类
-  constructor(id: string, rollName: string, rollItems: Array<PieChartOption>) {
-    this.id = id;
-    this.chartName = rollName;
-    this.chartOptions = rollItems;
+  chartDatas: Array<PieChartData> //所有饼状图子类
+  constructor(chartName: string, chartDatas: Array<PieChartData>) {
+    this.chartName = chartName;
+    this.chartDatas = chartDatas;
   }
 }
 @Component
 struct PieChart {
-  @Prop data: ChartData
-  @Prop showDot:boolean
+  @Prop data: Chart
+  //@Prop showDot:boolean
   private settings: RenderingContextSettings = new RenderingContextSettings(true)
   private context: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings)
   build() {
@@ -31,8 +29,8 @@ struct PieChart {
       .onReady(() => {
         let ctx = this.context;                                        //获取指定Canvas组件
         const radius =  ctx.width / 2;                           //获取半径（宽度）
-        let list: Array<PieChartOption> = this.data.chartOptions    //获取传入数据
-        let totalWeight = list.reduce<number>((acc: number, single: PieChartOption) => acc + single.weight, 0);   //计算出总权重，子选项将根据与总权重的比例计算出角度。
+        let list: Array<PieChartData> = this.data.chartDatas    //获取传入数据
+        let totalWeight = list.reduce<number>((acc: number, single: PieChartData) => acc + single.weight, 0);   //计算出总权重，子选项将根据与总权重的比例计算出角度。
         let startAngle = -list[0].weight / totalWeight * 180 + 90;                                                                           //此处角度控制开始渲染的位置，出于个人习惯我将第一个选项调整为正上方(默认角度为正右）
 
         list.forEach(single => {  //以下为循环绘制代码，其核心思想是通过绘制小扇形来拼接为圆形，通过权重/总权重*360便可以计算出合适的扇形角度。
@@ -64,16 +62,9 @@ struct PieChart {
 
           startAngle = endAngle;  //每次循环完毕前刷新绘制角度
         })
-        if(this.showDot) {//是否显示中央小圆点
-          ctx.beginPath(); //以下语句用于绘制饼状图中央小圆，可省略
-          ctx.moveTo(radius, radius);
-          ctx.arc(radius, radius, radius / 10, -45, 275, false);
-          ctx.closePath()
-          ctx.fillStyle = 0xf1f3f5;
-          ctx.fill();
-        }
       })
       .width('100%')
       .aspectRatio(1)
   }
 }
+export { PieChart}
