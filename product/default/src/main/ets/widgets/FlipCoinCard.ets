@@ -1,7 +1,7 @@
 import {Random} from '@ohos/common'
 @Entry
 @Component
-struct FlipCoinCardCard {
+struct FlipCoinCard {
   readonly FULL_WIDTH_PERCENT: string = '70%';
   @State coinImageArray: Resource[] = [$r("app.media.coin1"), $r("app.media.coin2")]
   @State coinImageIndex: Resource = this.coinImageArray[Random(0, this.coinImageArray.length - 1, true)]
@@ -45,4 +45,4 @@ struct FlipCoinCardCard {
   }
 }
 
-export default FlipCoinCardCard
+export default FlipCoinCard

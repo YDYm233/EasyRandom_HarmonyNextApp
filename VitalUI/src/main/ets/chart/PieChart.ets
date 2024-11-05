@@ -2,7 +2,7 @@ export class PieChartOption { //饼状图子类
   id: string
   text: string
   weight: number
-  color: string
+  color: string;
   constructor(id: string, text: string, weight: number, color: string) {
     this.id = id
     this.text = text;

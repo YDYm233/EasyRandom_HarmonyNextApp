@@ -1,6 +1,6 @@
 {
   "module": {
-    "name": "UI",
+    "name": "VitalUI",
     "type": "har",
     "deviceTypes": [
       "default",

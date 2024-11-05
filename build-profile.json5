@@ -50,8 +50,8 @@
       "srcPath": "./common",
     },
     {
-      "name": "UI",
-      "srcPath": "./UI"
+      "name": "VitalUI",
+      "srcPath": "./VitalUI"
     }
   ]
 }

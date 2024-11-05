@@ -1,5 +1,5 @@
 import BaGuaCard from '../widgets/BaGuaCard'
-import FlipCoinCard from '../widgets/FlipCoinCardCard'
+import FlipCoinCard from '../widgets/FlipCoinCard'
 import RandomColorsCard from '../widgets/RandomColorsCard'
 import RollBlessingsCard from '../widgets/RollBlessingsCard'
 import RollDiceCard from '../widgets/RollDiceCard'

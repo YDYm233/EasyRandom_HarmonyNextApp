@@ -20,13 +20,13 @@ struct DevineBaGua {
           GridCol({
             span: {
               sm: 4,
-              md: 6,
-              lg: 8
+              md: 4,
+              lg: 6
             },
             offset: {
               sm: 0,
-              md: 1,
-              lg: 2
+              md: 2,
+              lg: 3
             }
           }) {
             Row() {
@@ -450,7 +450,7 @@ Row().layoutWeight(1)
                   this.isRoll = false;
                 }, this.duration)
               })
-              .backgroundColor($r("app.color.Comp_Bg1"))
+              .backgroundColor($r("app.color.Brand"))
               .height('80%')
               .aspectRatio(2)
               .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })

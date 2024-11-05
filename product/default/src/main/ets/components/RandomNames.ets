@@ -184,6 +184,7 @@ struct NamesBox {
                 //console.log('valueArray:'+filterArray)
                 // console.log('indexs:'+this.indexs.toString())
                 let i: number = 0;
+                this.texts=[''];
                 while (i < this.number) {
                   let x: number = this.indexs[i]
                   this.texts[i] = filterArray[x]

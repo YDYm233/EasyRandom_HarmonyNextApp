@@ -35,6 +35,7 @@ struct TabBar {
   private tabsController: TabsController = new TabsController();
 
   aboutToAppear() {
+    this.tabsController.changeIndex(this.currentIndex)
     BreakpointSystem.getInstance().attach(this.currentBreakpoint)
     BreakpointSystem.getInstance().start()
   }

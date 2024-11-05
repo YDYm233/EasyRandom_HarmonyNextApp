@@ -30,7 +30,7 @@
       "name": "FlipCoinCard",
       "displayName": "$string:FlipCoinCard_display_name",
       "description": "$string:FlipCoinCard_desc",
-      "src": "./ets/widgets/FlipCoinCardCard.ets",
+      "src": "./ets/widgets/FlipCoinCard.ets",
       "uiSyntax": "arkts",
       "window": {
         "designWidth": 720,

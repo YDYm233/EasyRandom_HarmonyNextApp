@@ -1,6 +1,6 @@
 {
   "module": {
-    "name": "UI_test",
+    "name": "VitalUI_test",
     "type": "feature",
     "deviceTypes": [
       "default",
