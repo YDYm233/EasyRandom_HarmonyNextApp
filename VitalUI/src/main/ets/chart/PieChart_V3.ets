@@ -51,16 +51,17 @@ const demoData: Array<Chart> = [//所有转盘
   ]),
 ]
 @Component
-struct PieChart {
+struct PieChart_V3 {
   @Prop data: Chart
-  @Prop showDot:boolean
+  @Prop showDot:boolean=false
   private settings: RenderingContextSettings = new RenderingContextSettings(true)
   private context: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings)
   build() {
     Canvas(this.context)
       .onReady(() => {
         let ctx = this.context;                                        //获取指定Canvas组件
-        const radius =  ctx.width / 2;                           //获取半径（宽度）
+        const center = ctx.width/2
+        const radius =  center*1;                           //获取半径（宽度）
         let data: Array<PieChartData> = this.data.chartDatas    //获取传入数据
       //  let totalWeight = data.reduce<number>((acc: number, single: PieChartOption) => acc + single.weight, 0);   //计算出总权重，子选项将根据与总权重的比例计算出角度。
       //  let startAngle = -data[0].weight / totalWeight * 180 + 90;                                                                           //此处角度控制开始渲染的位置，出于个人习惯我将第一个选项调整为正上方(默认角度为正右）
@@ -75,7 +76,7 @@ struct PieChart {
           // 绘制扇形
           ctx.beginPath();
           ctx.moveTo(radius, radius); // 中心点
-          ctx.arc(200, 200, 180, startAngle * Math.PI / 180, endAngle * Math.PI / 180, false);
+          ctx.arc(center, center, radius, startAngle * Math.PI / 180, endAngle * Math.PI / 180, false);
           ctx.fillStyle = sector.color;
           ctx.fill();
 
@@ -83,8 +84,8 @@ struct PieChart {
           ctx.font = '20px Arial';
           ctx.fillStyle = 'white';
           ctx.textAlign = 'center';
-          const textX = 200 + 160 * Math.cos(centerAngle * Math.PI / 180);
-          const textY = 200 + 160 * Math.sin(centerAngle * Math.PI / 180);
+          const textX = center + 160 * Math.cos(centerAngle * Math.PI / 180);
+          const textY = center + 160 * Math.sin(centerAngle * Math.PI / 180);
           ctx.fillText(sector.text, textX, textY);
 
           // 更新起始角度
@@ -95,3 +96,4 @@ struct PieChart {
       .aspectRatio(1)
   }
 }
+export {PieChart_V3}

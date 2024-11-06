@@ -10,7 +10,7 @@ export class PieChartData  { //饼状图子类
     this.color = color;
   }
 }
-export class Chart{ //饼状图类
+export class Chart{
   chartName: string
   chartDatas: Array<PieChartData> //所有饼状图子类
   constructor(chartName: string, chartDatas: Array<PieChartData>) {
