@@ -1,7 +1,7 @@
 //utils.ColorCode
 // 颜色编码转换工具，提供RGBA/HSLA/16进制颜色编码之间的相互转换功能
 
-export  function rgbaToHex8(rgba: string): string | null {
+export function rgbaToHex8(rgba: string): string | null {
   const match = rgba.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+),\s*(\d+(?:\.\d+)?)\)$/);
   if (match) {
     const a = parseFloat(match[4] || '1');
@@ -20,7 +20,7 @@ export  function rgbaToHex8(rgba: string): string | null {
 function rgbaToHsla(r: number, g: number, b: number, a: number): string {
   let max = Math.max(r, g, b);
   let min = Math.min(r, g, b);
-  let h: number=0, s: number, l: number;
+  let h: number = 0, s: number, l: number;
 
   l = (max + min) / 2;
 
@@ -31,13 +31,21 @@ function rgbaToHsla(r: number, g: number, b: number, a: number): string {
     s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
 
     switch (max) {
-      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-      case g: h = (b - r) / d + 2; break;
-      case b: h = (r - g) / d + 4; break;
+      case r:
+        h = (g - b) / d + (g < b ? 6 : 0);
+        break;
+      case g:
+        h = (b - r) / d + 2;
+        break;
+      case b:
+        h = (r - g) / d + 4;
+        break;
     }
 
-    h *=  60;
-    if (h < 0){h += 360;}
+    h *= 60;
+    if (h < 0) {
+      h += 360;
+    }
   }
 
 
@@ -62,15 +70,26 @@ function hexToHsla(hex: string): string {
     parseInt(hex.slice(5, 7), 16) / 255, // B
     parseInt(hex.slice(7, 9), 16) / 255// A
   ];
-  let hsla = rgbaToHsla(rgba[0],rgba[1],rgba[2],rgba[3])
-  return  hsla;
+  let hsla = rgbaToHsla(rgba[0], rgba[1], rgba[2], rgba[3])
+  return hsla;
 }
+
 function hue2rgb(p: number, q: number, t: number): number {
-  if (t < 0) t += 1;
-  if (t > 1) t -= 1;
-  if (t < 1 / 6) return p + (q - p) * 6 * t;
-  if (t < 1 / 2) return q;
-  if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+  if (t < 0) {
+    t += 1;
+  }
+  if (t > 1) {
+    t -= 1;
+  }
+  if (t < 1 / 6) {
+    return p + (q - p) * 6 * t;
+  }
+  if (t < 1 / 2) {
+    return q;
+  }
+  if (t < 2 / 3) {
+    return p + (q - p) * (2 / 3 - t) * 6;
+  }
   return p;
 }
 
@@ -81,7 +100,7 @@ function hslaToRgba(hsla: string): string | null {
   }
   // 提取 HSLA 值
   const h = match[1]; // 色调
-  const s = match[2] ; // 饱和度转换为 0-1
+  const s = match[2]; // 饱和度转换为 0-1
   const l = match[3]; // 亮度转换为 0-1
   const a = match[4]; // 透明度已经是 0-1
   const hue = parseInt(h, 10) / 360; // 将色调转换为 0-1 之间的浮点数
@@ -98,6 +117,7 @@ function hslaToRgba(hsla: string): string | null {
   // 转换后的 RGBA 字符串
   return `rgba(${r},${g},${b},${alpha.toFixed(2)})`;
 }
+
 export function ExColor(input: string): string {
   if (input.startsWith('rgba')) {
     return rgbaToHex8(input) || input;

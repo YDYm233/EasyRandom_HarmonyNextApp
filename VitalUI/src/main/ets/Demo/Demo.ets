@@ -1,7 +1,7 @@
 @Entry
 @Component
-struct Demo{
-  build(){
+struct Demo {
+  build() {
 
   }
 }

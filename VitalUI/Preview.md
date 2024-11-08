@@ -9,7 +9,7 @@
 # 雷达图 
 > 雷达图
 #### 组件传参
-- [**必填**]data:RadarChart
+- [**必填**]data:RadarChart 数据
 - rate数字类型 默认值0.8 即绘制图表主体占组件的80%
 - showAixs布尔类型 默认true 是否绘制坐标轴
 - showText布尔类型 默认true 是否绘制文字
