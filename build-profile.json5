@@ -5,13 +5,13 @@
         "name": "default",
         "type": "HarmonyOS",
         "material": {
-          "storePassword": "000000195B60A356A3B473F3A5740784C912CA04C9A516FCFEA49331BE69B83016AEED97B2EE7F26B5",
-          "certpath": "D:/WorkSpace/Product/签名/EasyRandom.cer",
-          "keyAlias": "EasyRandom_P12",
-          "keyPassword": "00000019193203DEEB22D70AB27AF4F289B78CE485E2889DF8B7B5FBCFD5E6ADCC84CB52A5A73064F3",
-          "profile": "D:/WorkSpace/Product/签名/随易APPRelease.p7b",
+          "certpath": "C:\\Users\\30145\\.ohos\\config\\default_EasyRandom_MdC7dJtqzqyGdcPVMxqhpiJNQGzTyPc7wCbFzLx7ZD4=.cer",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001A1F2B43B86AD321E87AFFB543596FF663C2735A656F4F9D9D3AE977C7A5F20600CEF7ED4A8B52",
+          "profile": "C:\\Users\\30145\\.ohos\\config\\default_EasyRandom_MdC7dJtqzqyGdcPVMxqhpiJNQGzTyPc7wCbFzLx7ZD4=.p7b",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "D:/WorkSpace/Product/签名/EasyRandom.p12"
+          "storeFile": "C:\\Users\\30145\\.ohos\\config\\default_EasyRandom_MdC7dJtqzqyGdcPVMxqhpiJNQGzTyPc7wCbFzLx7ZD4=.p12",
+          "storePassword": "0000001A226A58631CD2755D95940513FB72A2CDDE2C90220C135C3D71354CE1D4CF353EF2C73AB696A6"
         }
       }
     ],
@@ -52,6 +52,18 @@
     {
       "name": "VitalUI",
       "srcPath": "./VitalUI"
+    },
+    {
+      "name": "wearable",
+      "srcPath": "./product/wearable",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
     }
   ]
 }
