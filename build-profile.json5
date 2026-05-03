@@ -46,8 +46,8 @@
       ]
     },
     {
-      "name": "common",
-      "srcPath": "./common",
+      "name": "basic",
+      "srcPath": "./basic"
     },
     {
       "name": "VitalUI",

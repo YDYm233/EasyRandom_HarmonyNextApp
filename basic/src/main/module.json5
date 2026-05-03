@@ -1,6 +1,6 @@
 {
   "module": {
-    "name": "common",
+    "name": "basic",
     "type": "har",
     "deviceTypes": [
       "default",
