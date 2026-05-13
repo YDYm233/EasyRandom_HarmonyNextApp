@@ -55,7 +55,7 @@ struct TextMarquee {
     .height('100%')
     .backgroundColor(0xffffff)
     .mode(NavigationMode.Stack)
-    .navDestination(this.MarqueeView)
+    // .navDestination(this.MarqueeView)
     .hideTitleBar(true)
     .hideToolBar(true)
     .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.BOTTOM])

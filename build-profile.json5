@@ -5,13 +5,13 @@
         "name": "default",
         "type": "HarmonyOS",
         "material": {
-          "certpath": "C:\\Users\\30145\\.ohos\\config\\default_EasyRandom_MdC7dJtqzqyGdcPVMxqhpiJNQGzTyPc7wCbFzLx7ZD4=.cer",
+          "certpath": "C:\\Users\\GOODS-Laptop\\.ohos\\config\\default_app_EasyRandom_4p9o-I-n2HH41fIerRAVqKXjydIt5_U5rYFJqV1EPxs=.cer",
           "keyAlias": "debugKey",
-          "keyPassword": "0000001A1F2B43B86AD321E87AFFB543596FF663C2735A656F4F9D9D3AE977C7A5F20600CEF7ED4A8B52",
-          "profile": "C:\\Users\\30145\\.ohos\\config\\default_EasyRandom_MdC7dJtqzqyGdcPVMxqhpiJNQGzTyPc7wCbFzLx7ZD4=.p7b",
+          "keyPassword": "0000001B95C65DDBC33FE070AC9AF63945E57CB4A4B09B870B2EECE16ACD609077D1F16696501A1B5E308D",
+          "profile": "C:\\Users\\GOODS-Laptop\\.ohos\\config\\default_app_EasyRandom_4p9o-I-n2HH41fIerRAVqKXjydIt5_U5rYFJqV1EPxs=.p7b",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "C:\\Users\\30145\\.ohos\\config\\default_EasyRandom_MdC7dJtqzqyGdcPVMxqhpiJNQGzTyPc7wCbFzLx7ZD4=.p12",
-          "storePassword": "0000001A226A58631CD2755D95940513FB72A2CDDE2C90220C135C3D71354CE1D4CF353EF2C73AB696A6"
+          "storeFile": "C:\\Users\\GOODS-Laptop\\.ohos\\config\\default_app_EasyRandom_4p9o-I-n2HH41fIerRAVqKXjydIt5_U5rYFJqV1EPxs=.p12",
+          "storePassword": "0000001B14B4A95DFFC52818DBDDADF6E15A61001B856588B9FB535CEECA20A91BC1F69E5FA2A25994C4E4"
         }
       }
     ],
@@ -21,6 +21,7 @@
         "signingConfig": "default",
         "compatibleSdkVersion": "5.0.0(12)",
         "runtimeOS": "HarmonyOS",
+        "targetSdkVersion": "5.0.0(12)"
       }
     ],
     "buildModeSet": [
@@ -47,7 +48,7 @@
     },
     {
       "name": "basic",
-      "srcPath": "./basic"
+      "srcPath": "./common/basic"
     },
     {
       "name": "VitalUI",

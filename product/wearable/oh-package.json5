@@ -1,12 +1,12 @@
 {
   "name": "wearable",
   "version": "1.0.0",
-  "description": "Please describe the basic information.",
+  "description": "手表主入口",
   "main": "",
   "author": "",
   "license": "",
   "dependencies": {
-    "@ohos/common": "file:../../basic"
+    "@ohos/common": "file:../../common/basic"
   }
 }
 
