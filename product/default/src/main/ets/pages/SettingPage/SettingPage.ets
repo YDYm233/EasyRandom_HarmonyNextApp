@@ -237,7 +237,7 @@ onPageShow(): void {
       .height('100%')
       .backgroundColor($r("app.color.Comp_Bg1"))
       .mode(NavigationMode.Auto)
-      .navDestination(this.PageMap)
+      // .navDestination(this.PageMap)
       .hideTitleBar(true)
       .hideToolBar(true)
       .minContentWidth('420vp')
