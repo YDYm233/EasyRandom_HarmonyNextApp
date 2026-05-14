@@ -57,14 +57,12 @@
     {
       "name": "wearable",
       "srcPath": "./product/wearable",
-      "targets": [
-        {
-          "name": "default",
-          "applyToProducts": [
-            "default"
-          ]
-        }
-      ]
+//      "targets": [
+//        {
+//          "name": "default",
+////          "applyToProducts": "${ENABLE_WEARABLE ? ['default'] : []}"
+//        }
+//      ]
     }
   ]
 }
