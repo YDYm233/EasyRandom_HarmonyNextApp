@@ -5,13 +5,13 @@
         "name": "default",
         "type": "HarmonyOS",
         "material": {
-          "certpath": "C:\\Users\\GOODS-Laptop\\.ohos\\config\\default_app_EasyRandom_4p9o-I-n2HH41fIerRAVqKXjydIt5_U5rYFJqV1EPxs=.cer",
-          "keyAlias": "debugKey",
-          "keyPassword": "0000001B95C65DDBC33FE070AC9AF63945E57CB4A4B09B870B2EECE16ACD609077D1F16696501A1B5E308D",
-          "profile": "C:\\Users\\GOODS-Laptop\\.ohos\\config\\default_app_EasyRandom_4p9o-I-n2HH41fIerRAVqKXjydIt5_U5rYFJqV1EPxs=.p7b",
+          "storeFile": "C:/Users/GOODS-Laptop/Documents/EasyRandom.p12",
+          "storePassword": "0000001961057B9EC0A315556BDB2E12C281024688794785CCAB243A2656E7730C1B9CE060CA6D6919",
+          "keyAlias": "EasyRandom_P12",
+          "keyPassword": "00000019EFDFD49714B73DA2E4D173B59BD702F37656CC78BE98AC98C4E39D3D73CCC20E597B42D77F",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "C:\\Users\\GOODS-Laptop\\.ohos\\config\\default_app_EasyRandom_4p9o-I-n2HH41fIerRAVqKXjydIt5_U5rYFJqV1EPxs=.p12",
-          "storePassword": "0000001B14B4A95DFFC52818DBDDADF6E15A61001B856588B9FB535CEECA20A91BC1F69E5FA2A25994C4E4"
+          "profile": "C:/Users/GOODS-Laptop/Documents/随易APPRelease.p7b",
+          "certpath": "C:/Users/GOODS-Laptop/Documents/EasyRandom.cer"
         }
       }
     ],
