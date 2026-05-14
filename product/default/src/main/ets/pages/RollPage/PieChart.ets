@@ -54,12 +54,12 @@ struct PieChart {
             const texts: Array<string> = single.text.split('');
             const x = 0;
             const y = radius * 0.1 + (radius * 0.1 / texts.length);
-            const lineHight = (radius - y) / (texts.length + 1)
-            const fontSize = lineHight
+            const lineHeight = (radius - y) / (texts.length + 1)
+            const fontSize = lineHeight
             const font = fontSize.toString() + 'vp';
             ctx.font = font;
             for (let n: number = 0; n < texts.length; n++) {
-              ctx.fillText(texts[n], x, (-radius + lineHight + y / 2 + n * lineHight), fontSize);
+              ctx.fillText(texts[n], x, (-radius + lineHeight + y / 2 + n * lineHeight), fontSize);
             }
             ctx.restore()       //文字绘制完毕
 
