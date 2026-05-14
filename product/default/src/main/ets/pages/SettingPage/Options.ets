@@ -90,8 +90,13 @@ struct Container{
     })      .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.BOTTOM])
   }
 }
+@Builder
+export function Options() {
+  OptionsComponent();
+}
+
 @Component
-struct Options {
+struct OptionsComponent {
   build() {
     Column() {
       GridRow({
@@ -129,4 +134,4 @@ struct Options {
 }
 
 
-export default Options
+// export default OptionsComponent

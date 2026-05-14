@@ -44,8 +44,13 @@ function startBrowsableAbility(context: common.UIAbilityContext,src:string): voi
       console.error(`Failed to startAbility. Code: ${err.code}, message: ${err.message}`);
     });
 }
+@Builder
+export function Illustrate() {
+  IllustrateComponent();
+}
+
 @Component
-struct Illustrate {
+struct IllustrateComponent {
   private readonly  Apps: Array<AppItem> = [
   new AppItem('联系我们', $r("app.media.contactus_fill"),
     '', '',0xf10ff5),
@@ -498,4 +503,4 @@ struct Illustrate {
 }
 
 
-export default Illustrate
+// export default IllustrateComponent

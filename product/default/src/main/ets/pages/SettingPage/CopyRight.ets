@@ -1,5 +1,10 @@
+@Builder
+export function CopyRight() {
+  CopyRightComponent();
+}
+
 @Component
-struct CopyRight {
+struct CopyRightComponent {
   @Consume('pageInfos') pageInfos: NavPathStack;
   build() {
     NavDestination(){
@@ -48,4 +53,4 @@ struct CopyRight {
   }
 }
 
-export default CopyRight
+// export default CopyRightComponent

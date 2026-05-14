@@ -1,10 +1,10 @@
 import router from '@ohos.router';
-import AboutUs from './AboutUs';
-import ContactUs from './ContactUs';
-import Options from './Options';
-import PrivacyPolicy from './PrivacyPolicy';
-import Illustrate from './MoreOpt';
-import CopyRight from './CopyRight';
+import { AboutUs } from './AboutUs';
+import { ContactUs } from './ContactUs';
+import { Options } from './Options';
+import { PrivacyPolicy } from './PrivacyPolicy';
+import { Illustrate } from './MoreOpt';
+import { CopyRight } from './CopyRight';
 import { promptAction } from '@kit.ArkUI';
 import { BreakpointState, BreakpointSystem } from '@ohos/common';
 
@@ -58,22 +58,22 @@ onPageShow(): void {
     BreakpointSystem.getInstance().attach(this.currentBreakpoint)
     BreakpointSystem.getInstance().stop()
   }
-  @Builder
-  PageMap(name: string) {
-    if (name == "版权声明") {
-      CopyRight()
-    } else if (name == "通用设置") {
-      Options()
-    } else if (name == "问题反馈") {
-      ContactUs()
-    } else if (name == "隐私政策") {
-      PrivacyPolicy()
-    } else if (name == "更多操作") {
-      Illustrate()
-    } else { //默认开发者团队页面
-      AboutUs()
-    }
-  }
+  // @Builder
+  // PageMap(name: string) {
+  //   if (name == "版权声明") {
+  //     CopyRight()
+  //   } else if (name == "通用设置") {
+  //     Options()
+  //   } else if (name == "问题反馈") {
+  //     ContactUs()
+  //   } else if (name == "隐私政策") {
+  //     PrivacyPolicy()
+  //   } else if (name == "更多操作") {
+  //     Illustrate()
+  //   } else { //默认开发者团队页面
+  //     AboutUs()
+  //   }
+  // }
 
   @Builder
   itemHead(text: string) {
@@ -113,6 +113,7 @@ onPageShow(): void {
     }
     .onClick(() => {
       this.pageInfos.pushPath({ name: item.title })
+      console.log("click"+item.title)
      // console.log('name' + item.title)
     })          .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
     .width('100%')
@@ -237,7 +238,7 @@ onPageShow(): void {
       .height('100%')
       .backgroundColor($r("app.color.Comp_Bg1"))
       .mode(NavigationMode.Auto)
-      // .navDestination(this.PageMap)
+      // .navDestination(this.PageMap) // 使用系统路由表配置
       .hideTitleBar(true)
       .hideToolBar(true)
       .minContentWidth('420vp')

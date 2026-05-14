@@ -1,7 +1,12 @@
 import { webview } from '@kit.ArkWeb';
 
+@Builder
+export function PrivacyPolicy() {
+  PrivacyPolicyComponent();
+}
+
 @Component
-struct PrivacyPolicy {
+struct PrivacyPolicyComponent {
   @State src: string | Resource = $rawfile("privacypolicy.html")
   controller: webview.WebviewController = new webview.WebviewController();
   @Consume('pageInfos') pageInfos: NavPathStack;
@@ -17,4 +22,4 @@ struct PrivacyPolicy {
   }
 }
 
-export default PrivacyPolicy
+// export default PrivacyPolicyComponent

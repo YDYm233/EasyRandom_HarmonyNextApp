@@ -1,0 +1,39 @@
+{
+  "routerMap": [
+    {
+      "name": "版权声明",
+      "pageSourceFile": "src/main/ets/pages/SettingPage/CopyRight.ets",
+      "buildFunction": "CopyRight"
+    },
+    {
+      "name": "通用设置",
+      "pageSourceFile": "src/main/ets/pages/SettingPage/Options.ets",
+      "buildFunction": "Options"
+    },
+    {
+      "name": "问题反馈",
+      "pageSourceFile": "src/main/ets/pages/SettingPage/ContactUs.ets",
+      "buildFunction": "ContactUs"
+    },
+    {
+      "name": "隐私政策",
+      "pageSourceFile": "src/main/ets/pages/SettingPage/PrivacyPolicy.ets",
+      "buildFunction": "PrivacyPolicy"
+    },
+    {
+      "name": "更多操作",
+      "pageSourceFile": "src/main/ets/pages/SettingPage/MoreOpt.ets",
+      "buildFunction": "Illustrate"
+    },
+    {
+      "name": "开发者团队",
+      "pageSourceFile": "src/main/ets/pages/SettingPage/AboutUs.ets",
+      "buildFunction": "AboutUs"
+    },
+    {
+      "name": "MarqueeView",
+      "pageSourceFile": "src/main/ets/components/TextMarquee.ets",
+      "buildFunction": "MarqueeViewBuilder"
+    }
+  ]
+}

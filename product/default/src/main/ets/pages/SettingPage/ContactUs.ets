@@ -11,8 +11,13 @@ struct Container {
   }
 }
 
+@Builder
+export function ContactUs() {
+  ContactUsComponent();
+}
+
 @Component
-struct ContactUs {
+struct ContactUsComponent {
   @Consume('pageInfos') pageInfos: NavPathStack;
   build() {
     NavDestination() {
@@ -59,4 +64,4 @@ struct ContactUs {
 }
 
 
-export default ContactUs
+// export default ContactUsComponent
