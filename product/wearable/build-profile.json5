@@ -19,7 +19,7 @@
   ],
   "targets": [
     {
-      "name": "wearable"
+      "name": "default"
     },
     {
       "name": "ohosTest",
