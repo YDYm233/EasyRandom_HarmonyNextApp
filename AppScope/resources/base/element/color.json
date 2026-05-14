@@ -162,6 +162,42 @@
       "name": "Cont_Bg3",
       "value": "#0c000000"
     },    {
+      "name": "success",
+      "value": "#FF4CAF50"
+    },
+    {
+      "name": "error",
+      "value": "#FFF44336"
+    },
+    {
+      "name": "info",
+      "value": "#FF2196F3"
+    },
+    {
+      "name": "border_primary",
+      "value": "#33000000"
+    },
+    {
+      "name": "border_secondary",
+      "value": "#1A000000"
+    },
+    {
+      "name": "shadow",
+      "value": "#1A000000"
+    },
+    {
+      "name": "disabled_bg",
+      "value": "#1A000000"
+    },
+    {
+      "name": "disabled_fg",
+      "value": "#66000000"
+    },
+    {
+      "name": "link",
+      "value": "#FF00BEFF"
+    },
+    {
       "name": "Yin",
       "value": "#000000"
     },

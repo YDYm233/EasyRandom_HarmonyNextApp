@@ -69,7 +69,7 @@ struct OptBoxs {
           .onClick(() => {
             let afterData = AppStorage.get('allRolls') as Array<Roll>;
             let tailData: Roll = new Roll((Number(afterData[afterData.length-1].index) + 1).toString(), '新转盘',
-              [new RollItem('0', '请输入', 1, '#00beff')])
+              [new RollItem('0', '请输入', 1, '#FF00BEFF')])
             this.boxsList.push(tailData)
             AppStorage.setAndLink('allroos', this.boxsList)
           })
@@ -215,7 +215,7 @@ struct Opts {
               .backgroundColor('rgba(0,0,0,0)')
               .height('100%')
               .onClick(() => {
-                let tailData = new RollItem(this.optsList.rollItems.length.toString(), '请输入', 1, '#00beff')
+                let tailData = new RollItem(this.optsList.rollItems.length.toString(), '请输入', 1, '#FF00BEFF')
                 this.optsList.rollItems.push(tailData)
                 let afterData = AppStorage.get('allRolls') as Array<Roll>
                 afterData[Number(this.optsList.index)] = this.optsList
@@ -261,7 +261,7 @@ struct Opt {
   @State isEdit: boolean = false
   @State newText: string = ''
   @State newWeight: number = 1
-  @State newColor: string = '#00beff'
+  @State newColor: string = '#FF00BEFF'
 
   build() {
     if (this.isShow) {
@@ -324,7 +324,7 @@ struct Opt {
                 .backgroundColor(this.optData.color)
             }
             .onClick(() => {
-              let rgb: string = '#00beff'
+              let rgb: string = '#FF00BEFF'
               rgb = 'rgb(' + Random(50, 220, true) + ',' + Random(50, 220, true) + ',' + Random(50, 220, true) + ')'
               this.optData.color = rgb
               this.newColor = rgb

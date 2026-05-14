@@ -178,10 +178,10 @@ struct TabBar {
       Image(this.currentIndex === targetIndex ? selectedIcon : unselectIcon)
         .width(24)
         .height(24)
-        .fillColor(this.currentIndex === targetIndex ? 0x00beff : $r("app.color.FontIcon_Fore2"))
+        .fillColor(this.currentIndex === targetIndex ? $r("app.color.Brand") : $r("app.color.FontIcon_Fore2"))
       Text(title)
         .fontSize(10)
-        .fontColor(this.currentIndex === targetIndex ? 0x00beff :  $r("app.color.FontIcon_Fore2"))
+        .fontColor(this.currentIndex === targetIndex ? $r("app.color.Brand") :  $r("app.color.FontIcon_Fore2"))
         .textAlign(TextAlign.Center)
         .lineHeight(14)
         .fontWeight(500)
@@ -348,7 +348,7 @@ struct TabBar {
       .vertical(false)
       .divider({
         strokeWidth: 0.8,
-        color: '#0D182431'
+        color: $r("app.color.FontIcon_Fore4")
       })
       .backgroundColor($r("app.color.Comp_Bg1"))
       .padding({ top: $r("app.string.header_margin"), bottom: $r("app.string.footer_margin") })

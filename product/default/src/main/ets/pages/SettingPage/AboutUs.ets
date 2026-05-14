@@ -9,7 +9,7 @@ struct AboutUsComponent {
   @State isShowQR:boolean =false
   @State qrSrc:string[] = ['http://www.m233.top',"https://www.bilibili.com/opus/971320804050468900?spm_id_from=333.1365.0.0","https://weibo.com/5858421461/OuE5WnqyO"]
   @State popupTitle:string[]=['个人主页','哔哩哔哩','微博']
-  @State themeColor:Color[] =[0x00BEFF,0xFF7299,0xFFEB00]
+  @State themeColor:Color[] =[0xFF00BEFF,0xFF7299,0xFFEB00]
   @State themeIcon:Resource[]=[$r("app.media.link_myself"),$r("app.media.link_bilibili"),$r("app.media.link_weibo")]
   @State index:number = 0
   @State linkTitle:string='点击前往'+this.popupTitle[this.index]
@@ -23,6 +23,8 @@ struct AboutUsComponent {
       .alignItems(VerticalAlign.Center)
       Row() {
         QRCode(this.qrSrc[this.index])      .width('100%')
+          .color($r("app.color.FontIcon_Fore1"))
+          .backgroundColor($r("app.color.Comp_Bg1"))
       }
       .width('100%')
       .aspectRatio(1)

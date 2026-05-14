@@ -41,7 +41,7 @@ struct TransQR {
       }
       .width('100%')
       .height('100%')  .padding({ top: $r("app.string.header_height") })
-    }.height('100%').backgroundColor($r("app.color.view_bgc_2"))    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+    }.height('100%').backgroundColor($r("app.color.Comp_Bg2"))    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
@@ -69,13 +69,15 @@ struct NamesBox {
         }) {
           Row(){
             QRCode(this.QrCode).width('90%').margin('5%')
+              .color($r("app.color.FontIcon_Fore1"))
+              .backgroundColor($r("app.color.Comp_Bg1"))
           }
           .justifyContent(FlexAlign.Center)
           .alignItems(VerticalAlign.Center)
           .width('100%')
           .aspectRatio(1)
         }
-        .borderRadius(24).backgroundColor($r("app.color.view_bgc_1"))
+        .borderRadius(24).backgroundColor($r("app.color.Comp_Bg1"))
 
 
         GridCol({
@@ -91,12 +93,15 @@ struct NamesBox {
                 .textAlign(TextAlign.Center)
                 .alignSelf(ItemAlign.Center)
                 .fontWeight(FontWeight.Bold)
+                .fontColor($r("app.color.FontIcon_Fore1"))
             }
             .width('100%')
             .layoutWeight(1)
             TextArea({ text: this.WebSrc, placeholder: '\n本app不会收集或保存您在此输入的数据' })
               .padding(12)
               .layoutWeight(4)
+              .fontColor($r("app.color.FontIcon_Fore1"))
+              .backgroundColor($r("app.color.Comp_Bg1"))
               .onChange((value: string) => {
                 this.WebSrc = value;
               })
@@ -124,8 +129,8 @@ struct NamesBox {
         })
         .width('100%')
         .aspectRatio(1)
-        .backgroundColor(0xffffff)
-        .border({ width: 0, color: 0xf33333, radius: 24 })
+        .backgroundColor($r("app.color.Comp_Bg1"))
+        .border({ width: 0, color: $r("app.color.FontIcon_Fore4"), radius: 24 })
       }
     }
   }

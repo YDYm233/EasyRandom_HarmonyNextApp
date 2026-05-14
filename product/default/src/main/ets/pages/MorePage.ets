@@ -20,16 +20,16 @@ class AppItem {
 
 let Apps: Array<AppItem> = [
   new AppItem('八卦', $r("app.media.BaGua"),
-    'components/DevineBaGua', '', [[0x00beff, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
+    'components/DevineBaGua', '', [[0xFF00BEFF, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
 
   new AppItem('祝福木鱼', $r("app.media.MuYu"),
-    'components/RollBlessings', '', [[0x00beff, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
+    'components/RollBlessings', '', [[0xFF00BEFF, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
 
   new AppItem('人生必去的100个地方', $r("app.media.icon_RandomPlace"),
     'components/RandomPlaces', '', null),
 
   new AppItem('二维码转换', $r("app.media.QRcode"),
-    'components/TransQR', '', [[0x00beff, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
+    'components/TransQR', '', [[0xFF00BEFF, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
 
 ];
 
@@ -62,7 +62,7 @@ struct MorePage {
             //.backgroundColor($r("app.color.FontIcon_Fore1"))
             .fillColor($r("app.color.FontIcon_Fore1"))
             .border({
-              color: Color.Blue,
+              color: $r("app.color.Brand"),
               width: 0,
               style: BorderStyle.Solid,
               radius: 12
@@ -81,7 +81,7 @@ struct MorePage {
       .aspectRatio(5 / 2)
       .backgroundColor($r("app.color.Comp_Bg1"))
       .border({
-        color: Color.Red,
+        color: $r("app.color.FontIcon_Fore4"),
         width: 0,
         style: BorderStyle.Solid,
         radius: 12
@@ -89,7 +89,7 @@ struct MorePage {
     }
     .width('100%')
     .border({
-      color: Color.Blue,
+      color: $r("app.color.Brand"),
       width: 0,
       style: BorderStyle.Solid,
       radius: 12

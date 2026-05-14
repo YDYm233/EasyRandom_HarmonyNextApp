@@ -6,15 +6,15 @@
     },
     {
       "name": "Brand",
-      "value": "#FF00BEFF"
+      "value": "#FF5CC8FF"
     },
     {
       "name": "SubBrand",
-      "value": "#8800BEFF"
+      "value": "#AA5CC8FF"
     },
     {
       "name": "Harmony",
-      "value": "#FFF1F3F5"
+      "value": "#FF1E2022"
     },
     {
       "name": "FontIcon_Fore1",
@@ -66,7 +66,7 @@
     },
     {
       "name": "Cont_Bg1",
-      "value": "#FFE5E5EA"
+      "value": "#FF191A1C"
     },
     {
       "name": "Cont_Bg2",
@@ -74,7 +74,51 @@
     },
     {
       "name": "Cont_Bg3",
-      "value": "#0cFFFFFF"
+      "value": "#0CFFFFFF"
+    },
+    {
+      "name": "success",
+      "value": "#FF4CAF50"
+    },
+    {
+      "name": "warning",
+      "value": "#FFFF9800"
+    },
+    {
+      "name": "alert",
+      "value": "#FFFFEB00"
+    },
+    {
+      "name": "error",
+      "value": "#FFF44336"
+    },
+    {
+      "name": "info",
+      "value": "#FF2196F3"
+    },
+    {
+      "name": "border_primary",
+      "value": "#33FFFFFF"
+    },
+    {
+      "name": "border_secondary",
+      "value": "#1AFFFFFF"
+    },
+    {
+      "name": "shadow",
+      "value": "#40000000"
+    },
+    {
+      "name": "disabled_bg",
+      "value": "#1AFFFFFF"
+    },
+    {
+      "name": "disabled_fg",
+      "value": "#66FFFFFF"
+    },
+    {
+      "name": "link",
+      "value": "#FF00D8FF"
     },
     {
       "name": "Yin",

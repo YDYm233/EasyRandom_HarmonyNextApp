@@ -56,10 +56,11 @@ struct AnswerBook {
         .visibility(this.backVisible)
 
         Row() {
-          Text(this.answer).width('80%').margin('10%').textAlign(TextAlign.Center)  .fontColor(Color.Black)
+          Text(this.answer).width('80%').margin('10%').textAlign(TextAlign.Center)
+            .fontColor($r("app.color.FontIcon_Fore1"))
         }
         .position({ left: 0, top: 0 })
-        .backgroundColor(0xffffff)
+        .backgroundColor($r("app.color.Comp_Bg1"))
         .width('100%')
         .height('100%')
         .visibility(this.foreVisible)

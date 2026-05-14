@@ -61,7 +61,7 @@ let Swipers: Array<AppItem> = [
     'pages/Index', '', [[0x00BFFF, 0], [0x1E90FF, 0.5], [0x00008B, 1]]),
 
   new AppItem('ABCD', $r("app.media.icon_RandomPlaces"),
-    'components/RandomABCD', '', [[0x00beff, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
+    'components/RandomABCD', '', [[0xFF00BEFF, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
 ]
 
 @Component
@@ -111,7 +111,7 @@ struct Banner {
         .itemHeight(10)
         .selectedItemWidth(15)
         .selectedItemHeight(10)
-        //.color(Color.Gray)
+        //.color($r("app.color.FontIcon_Fore3"))
         .selectedColor($r("app.color.Brand"))
         .bottom(-2)
     )

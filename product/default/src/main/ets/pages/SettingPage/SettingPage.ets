@@ -25,7 +25,7 @@ let contactUs = new Item('问题反馈', $r("app.media.contactus_fill"), 0xf10ff
 
 let options = new Item('通用设置', $r("app.media.func_setting"), 0x01f3ff)
 
-let privacyPolicy = new Item('隐私政策', $r("app.media.privacypolicy"), 0x00beff)
+let privacyPolicy = new Item('隐私政策', $r("app.media.privacypolicy"), 0xFF00BEFF)
 let copyRight = new Item('版权声明', $r("app.media.addoil_thumb"), 0xfebb00)
 let illustrate = new Item('更多信息', $r("app.media.illustrate"), 0xbeff00)
 let addOil = new Item('赞赏我们', $r("app.media.addoil_flower"), 0xffbe00)
