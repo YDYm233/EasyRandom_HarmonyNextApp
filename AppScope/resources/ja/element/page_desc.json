@@ -2,23 +2,23 @@
   "string": [
     {
       "name": "page_bagua",
-      "value": "BaGua"
+      "value": "八卦"
     },
     {
       "name": "page_muyu",
-      "value": "Blessing Mokugyo"
+      "value": "祝福の木魚"
     },
     {
       "name": "page_random_places",
-      "value": "100 Must-Visit Places"
+      "value": "人生で必ず訪れたい100の場所"
     },
     {
       "name": "page_qrcode",
-      "value": "QR Code Converter"
+      "value": "QRコードコンバーター"
     },
     {
       "name": "page_honest_or_challenge",
-      "value": "Truth or Dare"
+      "value": "真実か挑戦か"
     },
     {
       "name": "page_abcd",
@@ -26,27 +26,27 @@
     },
     {
       "name": "page_random_colors",
-      "value": "\tColor Matching"
+      "value": "カラーマッチング"
     },
     {
       "name": "page_flip_coin",
-      "value": "Coin Flip"
+      "value": "コインフリップ"
     },
     {
       "name": "page_random_names",
-      "value": "Draw Lots"
+      "value": "くじ引き"
     },
     {
       "name": "page_roll_dices",
-      "value": "Dice Roll"
+      "value": "ダイスロール"
     },
     {
       "name": "page_random_foods",
-      "value": "What to Eat"
+      "value": "何を食べるか"
     },
     {
       "name": "page_random_numbers",
-      "value": "Random Numbers"
+      "value": "ランダムナンバー"
     }
   ]
 }

@@ -2,12 +2,11 @@
   "string": [
     {
       "name": "app_name",
-      "value": "EasyRandom"
+      "value": "イージーランダム"
     },
-
     {
       "name": "app_author",
-      "value": "Yan Dongyang(闫东阳)"
+      "value": "ヤン・ドンヤン"
     }
   ]
 }

@@ -1,5 +1,6 @@
 import { Random } from '@ohos/common';
 import { answers } from '../datas/answers';
+import { resourceManager } from '@kit.LocalizationKit';
 
 @Entry
 @Component
@@ -27,6 +28,17 @@ struct AnswerBook {
   @State answers: string[] = answers
   @State answer: string = this.answers[Random(0, this.answers.length - 1, true)]
   @State isRolling:boolean=false
+
+  aboutToAppear() {
+    const resMgr = getContext(this).resourceManager;
+    resMgr.getStringArray($r('app.strarray.answers').id, (error, value) => {
+      if (error === undefined && value && value.length > 0) {
+        this.answers = value as string[];
+        this.answer = this.answers[Random(0, this.answers.length - 1, true)];
+      }
+    });
+  }
+
   aboutToDisappear() {
     this.angle = -180;
     this.ForB = false

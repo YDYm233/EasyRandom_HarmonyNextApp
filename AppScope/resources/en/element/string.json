@@ -2,20 +2,12 @@
   "string": [
 
     {
-      "name": "app_bundlename",
-      "value": "ydy.App.EasyRandom"
-    },
-    {
       "name": "app_link",
-      "value": "Use EasyRandom Atomicservice"
-    },
-    {
-      "name": "app_link_bundle",
-      "value": "com.atomicservice.5765880207854873613"
+      "value": "Use EasyRandom Atomic Service"
     },
     {
       "name": "page_name1",
-      "value": "RollWheel"
+      "value": "Lucky Wheel"
     },
     {
       "name": "page_name2",
@@ -31,23 +23,8 @@
     },
     {
       "name": "AnswerBook",
-      "value": "Please think about your problem in  mind"
-    },
-    {
-      "name": "header_height",
-      "value": "50"
-    },
-    {
-      "name": "footer_height",
-      "value": "56"
-    },
-    {
-      "name": "header_margin",
-      "value": "0"
-    },
-    {
-      "name": "footer_margin",
-      "value": "0"
+      "value": "Please think about your problem"
     }
+
   ]
 }

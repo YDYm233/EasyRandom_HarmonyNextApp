@@ -1,0 +1,32 @@
+{
+  "string": [
+    {
+      "name": "app_bundlename",
+      "value": "ydy.App.EasyRandom"
+    },
+    {
+      "name": "app_version",
+      "value": "1.0.15"
+    },
+
+    {
+      "name": "app_link_bundle",
+      "value": "com.atomicservice.5765880207854873613"
+    },    {
+      "name": "header_height",
+      "value": "50"
+    },
+    {
+      "name": "footer_height",
+      "value": "56"
+    },
+    {
+      "name": "header_margin",
+      "value": "0"
+    },
+    {
+      "name": "footer_margin",
+      "value": "0"
+    }
+  ]
+}

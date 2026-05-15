@@ -2,41 +2,39 @@
   "string": [
     {
       "name": "RollDiceCard_display_name",
-      "value": "Dice Roll"
+      "value": "ダイスロール"
     },
     {
       "name": "RollDiceCard_desc",
-      "value": "Roll a dice"
+      "value": "ダイスを振る"
     },
     {
       "name": "FlipCoinCard_display_name",
-      "value": "Coin Flip"
+      "value": "コインフリップ"
     },
     {
       "name": "FlipCoinCard_desc",
-      "value": "Heads or tails?"
+      "value": "表か裏か？"
     },
-
     {
       "name": "RandomColorsCard_display_name",
-      "value": "Color Matching"
+      "value": "カラーマッチング"
     },
     {
       "name": "RandomColorsCard_desc",
-      "value": "Get random color combos"
+      "value": "ランダムな色合わせ"
     },
     {
       "name": "RollWheelCard_display_name",
-      "value": "Lucky Wheel"
+      "value": "ラッキーホイール"
     },
     {
       "name": "RollWheelCard_desc",
-      "value": "Help you make a choice"
+      "value": "決めてくれる"
     },
-
     {
       "name": "BaGuaCard_display_name",
-      "value": "BaGua"
+      "value": "八卦"
     },
     {
       "name": "BaGuaCard_desc",
@@ -44,11 +42,11 @@
     },
     {
       "name": "RollBlessingsCard_display_name",
-      "value": "Blessing Mokugyo"
+      "value": "祝福の木魚"
     },
     {
       "name": "RollBlessingsCard_desc",
-      "value": "Get a blessed from mokugyo"
+      "value": "祝福の木魚を獲得"
     }
   ]
 }

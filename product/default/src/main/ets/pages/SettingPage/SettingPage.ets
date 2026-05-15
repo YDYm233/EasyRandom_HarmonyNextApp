@@ -175,7 +175,7 @@ onPageShow(): void {
                   bottom: '10%'
                 })
               Row() {
-                Text($r("app.string.app_info"))
+                Text(($r("app.string.app_name")+$r("app.string.app_version").toString()))
                   .textAlign(TextAlign.End)
                   .fontWeight(600)
                   .fontSize(16)          .fontColor($r("app.color.FontIcon_Fore1"))

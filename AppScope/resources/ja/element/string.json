@@ -1,30 +1,28 @@
 {
   "string": [
-
     {
       "name": "app_link",
-      "value": "使用元服务"
+      "value": "EasyRandomアトミックサービスを使用"
     },
     {
       "name": "page_name1",
-      "value": "幸运转盘"
+      "value": "ラッキーホイール"
     },
     {
       "name": "page_name2",
-      "value": "功能卡片"
+      "value": "カード"
     },
     {
       "name": "page_name3",
-      "value": "答案之书"
+      "value": "アンサーブック"
     },
     {
       "name": "page_name4",
-      "value": "工具箱"
+      "value": "ツール"
     },
     {
       "name": "AnswerBook",
-      "value": "请在心中默念您的问题"
+      "value": "心の中で問題を唱えてください"
     }
-
   ]
 }
