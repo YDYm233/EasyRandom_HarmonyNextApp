@@ -2,36 +2,36 @@
   "string": [
     {
       "name": "RollDiceCard_display_name",
-      "value": "flip dice"
+      "value": "Dice Roll"
     },
     {
       "name": "RollDiceCard_desc",
-      "value": "flip a dice"
+      "value": "Roll a dice"
     },
     {
       "name": "FlipCoinCard_display_name",
-      "value": "flip coin"
+      "value": "Coin Flip"
     },
     {
       "name": "FlipCoinCard_desc",
-      "value": "up or down？"
+      "value": "Heads or tails?"
     },
 
     {
       "name": "RandomColorsCard_display_name",
-      "value": "random a color"
+      "value": "Color Matching"
     },
     {
       "name": "RandomColorsCard_desc",
-      "value": "get a good plan"
+      "value": "Match colors perfectly"
     },
     {
       "name": "RollWheelCard_display_name",
-      "value": "roll wheel"
+      "value": "Lucky Wheel"
     },
     {
       "name": "RollWheelCard_desc",
-      "value": "easy to decide"
+      "value": "Make decisions easy"
     },
 
     {
@@ -40,15 +40,15 @@
     },
     {
       "name": "BaGuaCard_desc",
-      "value": "there is 八卦"
+      "value": "坎,坤,震,巽,乾,兑,艮,离"
     },
     {
       "name": "RollBlessingsCard_display_name",
-      "value": "祝福木鱼"
+      "value": "Blessing Wooden Fish"
     },
     {
       "name": "RollBlessingsCard_desc",
-      "value": "click for blessings"
+      "value": "Click for blessings"
     }
   ]
 }

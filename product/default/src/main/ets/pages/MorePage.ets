@@ -2,13 +2,13 @@ import { BreakpointState, BreakpointSystem } from '@ohos/common';
 import router from '@ohos.router';
 
 class AppItem {
-  name: string
+  name: Resource
   img: Resource
   url: string | null
   params: string | null
   colors: Array<[ResourceColor, number]> | null
 
-  constructor(name: string, img: Resource, url: string, params: string | null,
+  constructor(name: Resource, img: Resource, url: string, params: string | null,
     colors: Array<[ResourceColor, number]> | null) {
     this.name = name;
     this.img = img;
@@ -19,40 +19,40 @@ class AppItem {
 }
 
 let Apps: Array<AppItem> = [
-  new AppItem('八卦', $r("app.media.BaGua"),
+  new AppItem($r("app.string.page_bagua"), $r("app.media.BaGua"),
     'sub_pages/devine_bagua/DevineBaGua', '', [[0xFF00BEFF, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
 
-  new AppItem('祝福木鱼', $r("app.media.MuYu"),
+  new AppItem($r("app.string.page_muyu"), $r("app.media.MuYu"),
     'sub_pages/roll_blessings/RollBlessings', '', [[0xFF00BEFF, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
 
-  new AppItem('人生必去的100个地方', $r("app.media.icon_RandomPlace"),
+  new AppItem($r("app.string.page_random_places"), $r("app.media.icon_RandomPlace"),
     'sub_pages/random_places/RandomPlaces', '', null),
 
-  new AppItem('二维码转换', $r("app.media.QRcode"),
+  new AppItem($r("app.string.page_qrcode"), $r("app.media.QRcode"),
     'sub_pages/trans_qr/TransQR', '', [[0xFF00BEFF, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
 
-  new AppItem('真心话大冒险', $r("app.media.icon_HonestOrChallenge"),
+  new AppItem($r("app.string.page_honest_or_challenge"), $r("app.media.icon_HonestOrChallenge"),
     'sub_pages/honest_or_challenge/HonestOrChallenge', '', [[0xFF6347, 0], [0xFFD700, 0.5], [0xFFA500, 1]]),
 
-  new AppItem('ABCD', $r("app.media.icon_RandomPlaces"),
+  new AppItem($r("app.string.page_abcd"), $r("app.media.icon_RandomPlaces"),
     'sub_pages/random_abcd/RandomABCD', '', [[0xFF00BEFF, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
 
-  new AppItem('颜色搭配', $r("app.media.icon_RandomColors"),
+  new AppItem($r("app.string.page_random_colors"), $r("app.media.icon_RandomColors"),
     'sub_pages/random_colors/RandomColors', '', [[0xDDA0DD, 0], [0xEE82EE, 0.5], [0x9400D3, 1]]),
 
-  new AppItem('扔硬币', $r("app.media.icon_FlipCoin"),
+  new AppItem($r("app.string.page_flip_coin"), $r("app.media.icon_FlipCoin"),
     'sub_pages/flip_coin/FlipCoin', '', [[0xFF6347, 0], [0xFFD700, 0.5], [0xFFA500, 1]]),
 
-  new AppItem('抽签', $r("app.media.icon_RandomNames"),
+  new AppItem($r("app.string.page_random_names"), $r("app.media.icon_RandomNames"),
     'sub_pages/random_names/RandomNames', '', [[0x98FB98, 0], [0x32CD32, 0.5], [0x006400, 1]]),
 
-  new AppItem('掷骰子', $r("app.media.icon_RollDices"),
+  new AppItem($r("app.string.page_roll_dices"), $r("app.media.icon_RollDices"),
     'sub_pages/flip_dices/RollDices', '', [[0x6A5ACD, 0], [0x483D8B, 0.5], [0x0000FF, 1]]),
 
-  new AppItem('吃什么', $r("app.media.icon_RandomFoods"),
+  new AppItem($r("app.string.page_random_foods"), $r("app.media.icon_RandomFoods"),
     'sub_pages/random_foods/RandomFoods', '', [[0xADFF2F, 0], [0x7FFF00, 0.5], [0x008000, 1]]),
 
-  new AppItem('随机数', $r("app.media.icon_RollNumbers"),
+  new AppItem($r("app.string.page_random_numbers"), $r("app.media.icon_RollNumbers"),
     'sub_pages/random_numbers/RandomNumbers', '', [[0xFFDAB9, 0], [0xFFE4B5, 0.5], [0xB8860B, 1]]),
 
 ];
@@ -91,7 +91,7 @@ struct MorePage {
               style: BorderStyle.Solid,
               radius: 12
             })
-          Text(app.name.toString())
+          Text(app.name)
             .opacity(0.88)
             .fontColor($r("app.color.FontIcon_Fore1"))
             .fontSize('80%')

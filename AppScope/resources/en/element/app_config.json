@@ -1,0 +1,20 @@
+{
+  "string": [
+    {
+      "name": "app_name",
+      "value": "EasyRandom"
+    },
+    {
+      "name": "app_info",
+      "value": "EasyRandom V1.0.15"
+    },
+    {
+      "name": "app_version",
+      "value": "1.0.15"
+    },
+    {
+      "name": "app_author",
+      "value": "Yan Dongyang"
+    }
+  ]
+}

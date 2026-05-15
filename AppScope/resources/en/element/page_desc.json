@@ -2,23 +2,23 @@
   "string": [
     {
       "name": "page_bagua",
-      "value": "八卦"
+      "value": "BaGua"
     },
     {
       "name": "page_muyu",
-      "value": "祝福木鱼"
+      "value": "Blessing Wooden Fish"
     },
     {
       "name": "page_random_places",
-      "value": "人生必去的100个地方"
+      "value": "100 Must-Visit Places"
     },
     {
       "name": "page_qrcode",
-      "value": "二维码转换"
+      "value": "QR Code Converter"
     },
     {
       "name": "page_honest_or_challenge",
-      "value": "真心话大冒险"
+      "value": "Truth or Dare"
     },
     {
       "name": "page_abcd",
@@ -26,27 +26,27 @@
     },
     {
       "name": "page_random_colors",
-      "value": "颜色搭配"
+      "value": "Color Matching"
     },
     {
       "name": "page_flip_coin",
-      "value": "扔硬币"
+      "value": "Coin Flip"
     },
     {
       "name": "page_random_names",
-      "value": "抽签"
+      "value": "Name Draw"
     },
     {
       "name": "page_roll_dices",
-      "value": "掷骰子"
+      "value": "Dice Roll"
     },
     {
       "name": "page_random_foods",
-      "value": "吃什么"
+      "value": "What to Eat"
     },
     {
       "name": "page_random_numbers",
-      "value": "随机数"
+      "value": "Random Numbers"
     }
   ]
 }
