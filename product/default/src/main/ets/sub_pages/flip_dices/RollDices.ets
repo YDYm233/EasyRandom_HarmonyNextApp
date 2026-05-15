@@ -1,5 +1,5 @@
 import { Random } from '@ohos/common';
-import Header from './Header';
+import Header from '../../components/Header';
 
 @Entry
 @Component

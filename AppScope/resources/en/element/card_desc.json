@@ -1,0 +1,54 @@
+{
+  "string": [
+    {
+      "name": "RollDiceCard_display_name",
+      "value": "flip dice"
+    },
+    {
+      "name": "RollDiceCard_desc",
+      "value": "flip a dice"
+    },
+    {
+      "name": "FlipCoinCard_display_name",
+      "value": "flip coin"
+    },
+    {
+      "name": "FlipCoinCard_desc",
+      "value": "up or down？"
+    },
+
+    {
+      "name": "RandomColorsCard_display_name",
+      "value": "random a color"
+    },
+    {
+      "name": "RandomColorsCard_desc",
+      "value": "get a good plan"
+    },
+    {
+      "name": "RollWheelCard_display_name",
+      "value": "roll wheel"
+    },
+    {
+      "name": "RollWheelCard_desc",
+      "value": "easy to decide"
+    },
+
+    {
+      "name": "BaGuaCard_display_name",
+      "value": "BaGua"
+    },
+    {
+      "name": "BaGuaCard_desc",
+      "value": "there is 八卦"
+    },
+    {
+      "name": "RollBlessingsCard_display_name",
+      "value": "祝福木鱼"
+    },
+    {
+      "name": "RollBlessingsCard_desc",
+      "value": "click for blessings"
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 import { Randoms } from '@ohos/common';
-import Header from './Header';
+import Header from '../../components/Header';
 import { CounterComponent, CounterType } from '@kit.ArkUI';
 @Entry
 @Component

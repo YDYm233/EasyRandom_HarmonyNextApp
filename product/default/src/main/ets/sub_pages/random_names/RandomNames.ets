@@ -1,6 +1,6 @@
 import { Randoms } from '@ohos/common';
-import Header from './Header';
-import {names}from'../datas/names'
+import Header from '../../components/Header';
+import {names}from '../../datas/names'
 @Entry
 @Component
 struct RandomNames {

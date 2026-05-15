@@ -1,5 +1,5 @@
 import { Random } from '@ohos/common'
-import Header from './Header'
+import Header from '../../components/Header'
 import { promptAction } from '@kit.ArkUI';
 import { BreakpointState, BreakpointSystem } from '@ohos/common';
 @Entry

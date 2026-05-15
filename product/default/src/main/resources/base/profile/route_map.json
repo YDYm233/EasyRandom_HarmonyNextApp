@@ -32,7 +32,7 @@
     },
     {
       "name": "MarqueeView",
-      "pageSourceFile": "src/main/ets/components/TextMarquee.ets",
+      "pageSourceFile": "src/main/ets/sub_pages/text_marquee/TextMarquee.ets",
       "buildFunction": "MarqueeViewBuilder"
     }
   ]

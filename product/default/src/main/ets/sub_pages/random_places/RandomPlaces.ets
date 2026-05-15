@@ -1,6 +1,6 @@
 import { Random } from '@ohos/common'
-import Header from './Header'
-import { placeAttraction, placesArray } from '../datas/places'
+import Header from '../../components/Header'
+import { placeAttraction, placesArray } from '../../datas/places'
 import { promptAction } from '@kit.ArkUI'
 
 @Entry
