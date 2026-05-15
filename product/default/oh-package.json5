@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "手机、平板主入口",
   "main": "Index.ets",
-  "author": "闫东阳",
+  "author": "$string.app_author",
   "license": "",
   "dependencies": {
     "@ohos/common": "file:../../common/basic"

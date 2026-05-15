@@ -1,13 +1,6 @@
 {
   "string": [
-    {
-      "name": "app_name",
-      "value": "随易"
-    },
-    {
-      "name": "app_info",
-      "value": "随易V1.0.15"
-    },
+
     {
       "name": "app_bundlename",
       "value": "ydy.App.EasyRandom"
