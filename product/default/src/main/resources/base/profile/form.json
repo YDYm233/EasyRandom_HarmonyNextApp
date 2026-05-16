@@ -4,7 +4,7 @@
       "name": "RollDiceCard",
       "displayName": "$string:RollDiceCard_display_name",
       "description": "$string:RollDiceCard_desc",
-      "src": "./ets/widgets/RollDiceCard.ets",
+      "src": "./ets/form_cards/RollDiceCard.ets",
       "uiSyntax": "arkts",
       "window": {
         "designWidth": 720,
@@ -27,7 +27,7 @@
       "name": "FlipCoinCard",
       "displayName": "$string:FlipCoinCard_display_name",
       "description": "$string:FlipCoinCard_desc",
-      "src": "./ets/widgets/FlipCoinCard.ets",
+      "src": "./ets/form_cards/FlipCoinCard.ets",
       "uiSyntax": "arkts",
       "window": {
         "designWidth": 720,
@@ -51,7 +51,7 @@
       "name": "RollWheelCard",
       "displayName": "$string:RollWheelCard_display_name",
       "description": "$string:RollWheelCard_desc",
-      "src": "./ets/widgets/RollWheelCard.ets",
+      "src": "./ets/form_cards/RollWheelCard.ets",
       "uiSyntax": "arkts",
       "window": {
         "designWidth": 720,
@@ -77,7 +77,7 @@
       "name": "BaGuaCard",
       "displayName": "$string:BaGuaCard_display_name",
       "description": "$string:BaGuaCard_desc",
-      "src": "./ets/widgets/BaGuaCard.ets",
+      "src": "./ets/form_cards/BaGuaCard.ets",
       "uiSyntax": "arkts",
       "window": {
         "designWidth": 720,
@@ -103,7 +103,7 @@
       "name": "RandomColorsCard",
       "displayName": "$string:RandomColorsCard_display_name",
       "description": "$string:RandomColorsCard_desc",
-      "src": "./ets/widgets/RandomColorsCard.ets",
+      "src": "./ets/form_cards/RandomColorsCard.ets",
       "uiSyntax": "arkts",
       "window": {
         "designWidth": 720,
@@ -127,7 +127,7 @@
       "name": "ABCDCard",
       "displayName": "$string:ABCDCard_display_name",
       "description": "$string:ABCDCard_desc",
-      "src": "./ets/widgets/ABCDCard.ets",
+      "src": "./ets/form_cards/ABCDCard.ets",
       "uiSyntax": "arkts",
       "window": {
         "designWidth": 720,

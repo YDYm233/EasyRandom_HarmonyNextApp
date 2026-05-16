@@ -4,7 +4,7 @@
       "name": "RollDiceCard",
       "displayName": "$string:RollDiceCard_display_name",
       "description": "$string:RollDiceCard_desc",
-      "src": "./ets/widgets/RollDiceCard.ets",
+      "src": "./ets/form_cards/RollDiceCard.ets",
       "uiSyntax": "arkts",
       "window": {
         "designWidth": 720,
@@ -29,7 +29,7 @@
       "name": "FlipCoinCard",
       "displayName": "$string:FlipCoinCard_display_name",
       "description": "$string:FlipCoinCard_desc",
-      "src": "./ets/widgets/FlipCoinCard.ets",
+      "src": "./ets/form_cards/FlipCoinCard.ets",
       "uiSyntax": "arkts",
       "window": {
         "designWidth": 720,
@@ -54,7 +54,7 @@
       "name": "RollBlessingsCard",
       "displayName": "$string:RollBlessingsCard_display_name",
       "description": "$string:RollBlessingsCard_desc",
-      "src": "./ets/widgets/RollBlessingsCard.ets",
+      "src": "./ets/form_cards/RollBlessingsCard.ets",
       "uiSyntax": "arkts",
       "window": {
         "designWidth": 720,
@@ -80,7 +80,7 @@
       "name": "RandomColorsCard",
       "displayName": "$string:RandomColorsCard_display_name",
       "description": "$string:RandomColorsCard_desc",
-      "src": "./ets/widgets/RandomColorsCard.ets",
+      "src": "./ets/form_cards/RandomColorsCard.ets",
       "uiSyntax": "arkts",
       "window": {
         "designWidth": 720,

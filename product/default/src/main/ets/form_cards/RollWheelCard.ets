@@ -1,5 +1,5 @@
 import {Random} from '@ohos/common'
-import { Roll, RollItem, rolls } from '../datas/rolls';
+import { Roll, RollItem, rolls } from '../static_datas/rolls';
 @Entry
 @Component
 struct RollWheelCard {

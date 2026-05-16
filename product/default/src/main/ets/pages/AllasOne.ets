@@ -1,9 +1,9 @@
-import BaGuaCard from '../widgets/BaGuaCard'
-import FlipCoinCard from '../widgets/FlipCoinCard'
-import RandomColorsCard from '../widgets/RandomColorsCard'
-import RollBlessingsCard from '../widgets/RollBlessingsCard'
-import RollDiceCard from '../widgets/RollDiceCard'
-import RollWheelCard from '../widgets/RollWheelCard'
+import BaGuaCard from '../form_cards/BaGuaCard'
+import FlipCoinCard from '../form_cards/FlipCoinCard'
+import RandomColorsCard from '../form_cards/RandomColorsCard'
+import RollBlessingsCard from '../form_cards/RollBlessingsCard'
+import RollDiceCard from '../form_cards/RollDiceCard'
+import RollWheelCard from '../form_cards/RollWheelCard'
 @Entry
 @Component
 struct AllasOne {

@@ -1,6 +1,6 @@
 import { BreakpointState, BreakpointSystem, Random } from '@ohos/common';
 import OptBoxs from './RollOpts';
-import { Roll, RollItem, rolls } from '../../datas/rolls';
+import { Roll, RollItem, rolls } from '../../static_datas/rolls';
 import { promptAction } from '@kit.ArkUI';
 
 @Entry

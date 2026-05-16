@@ -1,3 +1,4 @@
+@Preview
 @Component
 struct  spare{
   readonly widthRate: number = 20

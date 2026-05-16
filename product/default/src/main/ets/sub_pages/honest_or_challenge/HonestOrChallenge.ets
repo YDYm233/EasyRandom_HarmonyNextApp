@@ -1,7 +1,7 @@
 import { BreakpointState, BreakpointSystem, Random } from '@ohos/common';
 import Header from '../../components/Header';
 import { promptAction } from '@kit.ArkUI';
-import { challenges, honests } from '../../datas/challenges';
+import { challenges, honests } from '../../static_datas/challenges';
 
 @Entry
 @Component

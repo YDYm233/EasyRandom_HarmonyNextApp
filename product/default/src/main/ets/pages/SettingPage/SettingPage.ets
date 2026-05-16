@@ -216,7 +216,6 @@ onPageShow(): void {
 
 
 
-
           //列表底部抬高
           .margin({bottom:120})
         }

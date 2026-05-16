@@ -1,5 +1,5 @@
 import { Random } from '@ohos/common';
-import { answers } from '../datas/answers';
+import { answers } from '../static_datas/answers';
 import { resourceManager } from '@kit.LocalizationKit';
 
 @Entry

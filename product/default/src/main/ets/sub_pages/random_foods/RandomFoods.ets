@@ -1,6 +1,6 @@
 import { Random } from '@ohos/common'
 import Header from '../../components/Header'
-import { foodsArray } from '../../datas/foods'
+import { foodsArray } from '../../static_datas/foods'
 
 @Entry
 @Component
