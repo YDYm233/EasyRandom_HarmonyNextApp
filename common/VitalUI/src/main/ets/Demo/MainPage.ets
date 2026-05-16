@@ -1,6 +1,6 @@
 @Entry
 @Component
-export struct MainPage {
+ struct MainPage {
   @State message: string = 'Hello World';
 
   build() {
@@ -15,3 +15,4 @@ export struct MainPage {
     .height('100%')
   }
 }
+export default  MainPage;
