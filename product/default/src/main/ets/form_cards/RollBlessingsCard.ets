@@ -1,30 +1,12 @@
 @Entry
 @Component
 struct RollBlessingsCard {
-  /*
-   * The title.
-   */
-  readonly TITLE: string = 'Hello World';
-  /*
-   * The action type.
-   */
-  readonly ACTION_TYPE: string = 'router';
-  /*
-   * The ability name.
-   */
-  readonly ABILITY_NAME: string = 'EntryAbility';
-  /*
-   * The message.
-   */
-  readonly MESSAGE: string = 'add detail';
-  /*
-   * The width percentage setting.
-   */
-  readonly FULL_WIDTH_PERCENT: string = '100%';
-  /*
-   * The height percentage setting.
-   */
-  readonly FULL_HEIGHT_PERCENT: string = '100%';
+  readonly TITLE: string = 'Hello World'
+  readonly ACTION_TYPE: string = 'router'
+  readonly ABILITY_NAME: string = 'EntryAbility'
+  readonly MESSAGE: string = 'add detail'
+  readonly FULL_WIDTH_PERCENT: string = '100%'
+  readonly FULL_HEIGHT_PERCENT: string = '100%'
 
   build() {
     Row() {
@@ -42,9 +24,10 @@ struct RollBlessingsCard {
         action: this.ACTION_TYPE,
         abilityName: this.ABILITY_NAME,
         params: {
-          message: this.MESSAGE
+          message: this.MESSAGE,
+          cardClick: 'blessing_muyu'  // 标记：卡片点击，由 EntryAbility 处理计数
         }
-      });
+      })
     })
   }
 }

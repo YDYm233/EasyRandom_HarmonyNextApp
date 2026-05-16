@@ -7,7 +7,6 @@ struct BlessingMuyuCard {
   readonly LUCK: number[] =
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 5, 0]
 
-  // 弹出动效：scale 缩放 + translateY 上浮
   @State blessingText: string = '点击木鱼'
   @State bubbleScale: number = 1
   @State bubbleTranslateY: number = 0
@@ -16,7 +15,6 @@ struct BlessingMuyuCard {
   build() {
     Stack() {
       Column() {
-        // 祝福文字 —— 位于木鱼上方
         Text(this.blessingText)
           .fontSize(16)
           .fontWeight(FontWeight.Bold)
@@ -27,12 +25,12 @@ struct BlessingMuyuCard {
 
         Blank()
 
-        // 木鱼触发区
         Image($r('app.media.MuYu'))
           .width('80%')
           .aspectRatio(1)
           .objectFit(ImageFit.Contain)
           .onClick(() => {
+            // ── 本地动画（卡片渲染服务独立执行）──
             this.tapVersion++
             let version = this.tapVersion
 
@@ -40,17 +38,13 @@ struct BlessingMuyuCard {
             let count = this.LUCK[Random(0, this.LUCK.length - 1, true)]
             this.blessingText = this.BLESSINGS[idx] + ' +' + count
 
-            // 起始态：缩到 0.6x、下沉 15vp（无动画，瞬间就位）
             this.bubbleScale = 0.6
             this.bubbleTranslateY = 15
 
-            // 阶段 1：弹出 → 过冲到 1.08x、轻微上浮
-            // 卡片不允许 delay/iterations/tempo，只能 onFinish 链式衔接
             animateTo({ duration: 300, curve: Curve.EaseOut, onFinish: () => {
               if (this.tapVersion !== version) {
                 return
               }
-              // 阶段 2：回弹到正常 1.0x
               animateTo({ duration: 150, curve: Curve.EaseIn }, () => {
                 this.bubbleScale = 1.0
                 this.bubbleTranslateY = 0
@@ -58,6 +52,15 @@ struct BlessingMuyuCard {
             }}, () => {
               this.bubbleScale = 1.08
               this.bubbleTranslateY = -2
+            })
+
+            // ── 计数持久化（router → EntryAbility.handleCardClick → Preferences）──
+            postCardAction(this, {
+              action: 'router',
+              abilityName: 'EntryAbility',
+              params: {
+                cardClick: 'blessing_muyu'
+              }
             })
           })
       }
