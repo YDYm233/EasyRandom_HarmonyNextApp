@@ -2,6 +2,7 @@ import RandomPage from './RandomPage'
 import RollPage from './RollPage/RollPage'
 import MorePage from './MorePage'
 import AnswerPage from './AnswerPage'
+import AllasOne from './AllasOne'
 import router from '@ohos.router'
 import { BusinessError } from '@kit.BasicServicesKit'
 import { promptAction, Router } from '@kit.ArkUI'
@@ -321,7 +322,7 @@ struct TabBar {
           $r('app.media.page_icon1')));
 
         TabContent() {
-          RandomPage()
+          AllasOne()
         }
         .padding({ top: $r("app.string.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
         .tabBar(this.tabBarBuilder($r('app.string.page_name2'), 1, $r('app.media.page_icon2_selected'),

@@ -15,7 +15,7 @@
     "sub_pages/honest_or_challenge/HonestOrChallenge",
     "sub_pages/flip_dices/RollDices",
     "sub_pages/random_foods/RandomFoods",
-    "components/AllasOne",
+    "pages/AllasOne",
     "sub_pages/trans_qr/TransQR",
     "sub_pages/random_places/RandomPlaces",
     "sub_pages/text_marquee/TextMarquee",

@@ -7,6 +7,7 @@ import { Illustrate } from './MoreOpt';
 import { CopyRight } from './CopyRight';
 import { promptAction } from '@kit.ArkUI';
 import { BreakpointState, BreakpointSystem } from '@ohos/common';
+import { resourceManager } from '@kit.LocalizationKit';
 
 class Item {
   title: string
@@ -41,6 +42,7 @@ class Params {
 struct Setting {
   @Provide('pageInfos') pageInfos: NavPathStack = new NavPathStack()
   @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
+  @State appInfoText: string = 'App'
 onPageShow(): void {
 
 }
@@ -51,7 +53,9 @@ onPageShow(): void {
     else if(params.type=='privatepolicy')this.pageInfos.pushPath({ name:'隐私政策' } )
     BreakpointSystem.getInstance().attach(this.currentBreakpoint)
     BreakpointSystem.getInstance().start()
-
+    const resMgr = getContext(this).resourceManager;
+    this.appInfoText = resMgr.getStringSync($r('app.string.app_name').id)
+      + resMgr.getStringSync($r('app.string.app_version').id);
   }
 
   aboutToDisappear() {
@@ -175,7 +179,7 @@ onPageShow(): void {
                   bottom: '10%'
                 })
               Row() {
-                Text(($r("app.string.app_name")+$r("app.string.app_version").toString()))
+                Text(this.appInfoText)
                   .textAlign(TextAlign.End)
                   .fontWeight(600)
                   .fontSize(16)          .fontColor($r("app.color.FontIcon_Fore1"))
