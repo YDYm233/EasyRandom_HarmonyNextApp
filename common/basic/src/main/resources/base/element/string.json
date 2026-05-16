@@ -1,8 +1,12 @@
 {
   "string": [
     {
-      "name": "page_show",
-      "value": "page from package"
+      "name": "module_desc",
+      "value": "随易公共基础模块",
+      "comment": "common/basic 模块描述",
+      "attr": {
+        "translatable": false
+      }
     }
   ]
 }

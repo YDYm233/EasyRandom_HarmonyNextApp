@@ -2,13 +2,21 @@
   "string": [
     {
       "name": "app_name",
-      "value": "随易"
+      "value": "随易",
+      "comment": "应用名称，桌面图标下方展示",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     },
-
-
     {
       "name": "app_author",
-      "value": "闫东阳"
+      "value": "闫东阳",
+      "comment": "应用作者/开发者署名",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     }
   ]
 }

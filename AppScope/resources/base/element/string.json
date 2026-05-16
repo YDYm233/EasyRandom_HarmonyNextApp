@@ -1,30 +1,58 @@
 {
   "string": [
-
     {
       "name": "app_link",
-      "value": "使用元服务"
+      "value": "使用元服务",
+      "comment": "元服务快捷入口文案，显示在服务卡片/桌面快捷方式",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     },
     {
       "name": "page_name1",
-      "value": "幸运转盘"
+      "value": "幸运转盘",
+      "comment": "首页Tab名 - 幸运转盘",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     },
     {
       "name": "page_name2",
-      "value": "功能卡片"
+      "value": "功能卡片",
+      "comment": "首页Tab名 - 功能卡片",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     },
     {
       "name": "page_name3",
-      "value": "答案之书"
+      "value": "答案之书",
+      "comment": "首页Tab名 - 答案之书",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     },
     {
       "name": "page_name4",
-      "value": "工具箱"
+      "value": "工具箱",
+      "comment": "首页Tab名 - 工具箱",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     },
     {
       "name": "AnswerBook",
-      "value": "请在心中默念您的问题"
+      "value": "请在心中默念您的问题",
+      "comment": "答案之书页面引导提示语",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     }
-
   ]
 }

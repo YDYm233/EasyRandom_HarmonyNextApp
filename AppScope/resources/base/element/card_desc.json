@@ -2,53 +2,110 @@
   "string": [
     {
       "name": "RollDiceCard_display_name",
-      "value": "掷骰子"
+      "value": "掷骰子",
+      "comment": "功能卡片名 - 掷骰子",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     },
     {
       "name": "RollDiceCard_desc",
-      "value": "掷个骰子"
+      "value": "掷个骰子",
+      "comment": "功能卡片描述 - 掷骰子",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     },
     {
       "name": "FlipCoinCard_display_name",
-      "value": "丢硬币"
+      "value": "丢硬币",
+      "comment": "功能卡片名 - 丢硬币",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     },
     {
       "name": "FlipCoinCard_desc",
-      "value": "正还是反？"
+      "value": "正还是反？",
+      "comment": "功能卡片描述 - 丢硬币",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     },
-
     {
       "name": "RandomColorsCard_display_name",
-      "value": "随机颜色"
+      "value": "随机颜色",
+      "comment": "功能卡片名 - 随机颜色",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     },
     {
       "name": "RandomColorsCard_desc",
-      "value": "搭配好颜色"
+      "value": "搭配好颜色",
+      "comment": "功能卡片描述 - 随机颜色",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     },
     {
       "name": "RollWheelCard_display_name",
-      "value": "幸运转盘"
+      "value": "幸运转盘",
+      "comment": "功能卡片名 - 幸运转盘",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     },
     {
       "name": "RollWheelCard_desc",
-      "value": "帮你做决定"
+      "value": "帮你做决定",
+      "comment": "功能卡片描述 - 幸运转盘",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     },
-
     {
       "name": "BaGuaCard_display_name",
-      "value": "八卦"
+      "value": "八卦",
+      "comment": "功能卡片名 - 八卦",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     },
     {
       "name": "BaGuaCard_desc",
-      "value": "坎,坤,震,巽,乾,兑,艮,离"
+      "value": "坎,坤,震,巽,乾,兑,艮,离",
+      "comment": "功能卡片描述 - 八卦（八卦专有名词，无需翻译）",
+      "attr": {
+        "translatable": false
+      }
     },
     {
       "name": "RollBlessingsCard_display_name",
-      "value": "祝福木鱼"
+      "value": "祝福木鱼",
+      "comment": "功能卡片名 - 祝福木鱼",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     },
     {
       "name": "RollBlessingsCard_desc",
-      "value": "获得祝福的木鱼"
+      "value": "获得祝福的木鱼",
+      "comment": "功能卡片描述 - 祝福木鱼",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     }
   ]
 }

@@ -2,51 +2,110 @@
   "string": [
     {
       "name": "page_bagua",
-      "value": "八卦"
+      "value": "八卦",
+      "comment": "工具箱入口 - 八卦占卜",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     },
     {
       "name": "page_muyu",
-      "value": "祝福木鱼"
+      "value": "祝福木鱼",
+      "comment": "工具箱入口 - 祝福木鱼",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     },
     {
       "name": "page_random_places",
-      "value": "人生必去的100个地方"
+      "value": "人生必去的100个地方",
+      "comment": "工具箱入口 - 随机地点",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     },
     {
       "name": "page_qrcode",
-      "value": "二维码转换"
+      "value": "二维码转换",
+      "comment": "工具箱入口 - 二维码转换",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     },
     {
       "name": "page_honest_or_challenge",
-      "value": "真心话大冒险"
+      "value": "真心话大冒险",
+      "comment": "工具箱入口 - 真心话大冒险",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     },
     {
       "name": "page_abcd",
-      "value": "ABCD"
+      "value": "ABCD",
+      "comment": "工具箱入口 - ABCD选择器（通用缩写，无需翻译）",
+      "attr": {
+        "translatable": false
+      }
     },
     {
       "name": "page_random_colors",
-      "value": "颜色搭配"
+      "value": "颜色搭配",
+      "comment": "工具箱入口 - 颜色搭配",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     },
     {
       "name": "page_flip_coin",
-      "value": "扔硬币"
+      "value": "扔硬币",
+      "comment": "工具箱入口 - 扔硬币",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     },
     {
       "name": "page_random_names",
-      "value": "抽签"
+      "value": "抽签",
+      "comment": "工具箱入口 - 抽签",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     },
     {
       "name": "page_roll_dices",
-      "value": "掷骰子"
+      "value": "掷骰子",
+      "comment": "工具箱入口 - 掷骰子",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     },
     {
       "name": "page_random_foods",
-      "value": "吃什么"
+      "value": "吃什么",
+      "comment": "工具箱入口 - 随机食物",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     },
     {
       "name": "page_random_numbers",
-      "value": "随机数"
+      "value": "随机数",
+      "comment": "工具箱入口 - 随机数字",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     }
   ]
 }
