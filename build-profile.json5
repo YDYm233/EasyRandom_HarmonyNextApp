@@ -52,7 +52,7 @@
     },
     {
       "name": "VitalUI",
-      "srcPath": "./VitalUI"
+      "srcPath": "./common/VitalUI"
     },
     {
       "name": "wearable",
