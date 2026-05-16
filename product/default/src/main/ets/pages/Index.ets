@@ -6,12 +6,9 @@ import AllasOne from './AllasOne'
 import router from '@ohos.router'
 import { BusinessError } from '@kit.BasicServicesKit'
 import { promptAction, Router } from '@kit.ArkUI'
-import { BreakpointState, BreakpointSystem } from '@ohos/common'
+import { BreakpointState, BreakpointSystem, CommonConstants, GlobalContext, Logger } from '@ohos/common'
 import { webview } from '@kit.ArkWeb'
 import { preferences } from '@kit.ArkData'
-import CommonConstants from '../constants/CommonConstants'
-import { GlobalContext } from '../constants/GlobalContext'
-import Logger from '../constants/Logger'
 import { productViewManager } from '@kit.StoreKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import type { common, Want } from '@kit.AbilityKit';
