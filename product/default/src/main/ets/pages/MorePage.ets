@@ -23,7 +23,10 @@ let Apps: Array<AppItem> = [
     'sub_pages/devine_bagua/DevineBaGua', '', [[0xFF00BEFF, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
 
   new AppItem($r("app.string.page_muyu"), $r("app.media.MuYu"),
-    'sub_pages/roll_blessings/RollBlessings', '', [[0xFF00BEFF, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
+    'sub_pages/blessing_muyu/BlessingMuyu', '', [[0xFF00BEFF, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
+  new AppItem($r("app.string.page_muyu"), $r("app.media.MuYu"),
+    'sub_pages/blessing_muyu/BlessingMuyu_V2', '', [[0xFF00BEFF, 0], [0xffeb00, 0.5], [0xffff00, 1]]),
+
 
   new AppItem($r("app.string.page_random_places"), $r("app.media.icon_RandomPlace"),
     'sub_pages/random_places/RandomPlaces', '', null),

@@ -1,4 +1,5 @@
 import BaGuaCard from '../form_cards/BaGuaCard'
+import BlessingMuyuCard from '../form_cards/BlessingMuyuCard'
 import FlipCoinCard from '../form_cards/FlipCoinCard'
 import RandomColorsCard from '../form_cards/RandomColorsCard'
 import RollBlessingsCard from '../form_cards/RollBlessingsCard'
@@ -181,7 +182,7 @@ struct AllasOne {
         offset: 0
       }) {
         Column() {
-          RollBlessingsCard()
+          BlessingMuyuCard()
             .width('100%')
             .aspectRatio(1)
             .backgroundColor(0xffffff)

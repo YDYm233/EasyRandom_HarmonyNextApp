@@ -3,67 +3,73 @@ import { Random } from '@ohos/common'
 @Entry
 @Component
 struct BlessingMuyuCard {
-  @State blessings: string[] = ['幸福', '财力', '智力', '运气', '力量', '勇气', '实力', '美貌', '健康', '快乐']
-  @State positions: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-  @State opacityArray: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-  @State random: number = 1
-  @State luck: number[] =
+  readonly BLESSINGS: string[] = ['幸福', '财力', '智力', '运气', '力量', '勇气', '实力', '美貌', '健康', '快乐']
+  readonly LUCK: number[] =
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 5, 0]
 
-  build() {
-    Column() {
-      // Blessing text area
-      Row() {
-        ForEach(this.blessings, (blessing: string, index: number) => {
-          Text(blessing + ' +' + this.random)
-            .position({ bottom: this.positions[index] })
-            .width('100%')
-            .textAlign(TextAlign.Center)
-            .fontWeight(FontWeight.Bold)
-            .fontSize('30%')
-            .animation({ duration: this.positions[index] > 0 ? 200 : 0 })
-            .opacity(this.opacityArray[index])
-        }, (blessing: string, index: number) => index.toString())
-      }
-      .height('30%')
-      .width('100%')
+  // 弹出动效：scale 缩放 + translateY 上浮
+  @State blessingText: string = '点击木鱼'
+  @State bubbleScale: number = 1
+  @State bubbleTranslateY: number = 0
+  @State tapVersion: number = 0
 
-      // MuYu image area
-      Row() {
-        Image($r("app.media.MuYu"))
+  build() {
+    Stack() {
+      Column() {
+        // 祝福文字 —— 位于木鱼上方
+        Text(this.blessingText)
+          .fontSize(16)
+          .fontWeight(FontWeight.Bold)
+          .fontColor('#D4A017')
+          .scale({ x: this.bubbleScale, y: this.bubbleScale })
+          .translate({ y: this.bubbleTranslateY })
+          .shadow({ radius: 4, color: '#40000000', offsetX: 0, offsetY: 2 })
+
+        Blank()
+
+        // 木鱼触发区
+        Image($r('app.media.MuYu'))
           .width('80%')
           .aspectRatio(1)
+          .objectFit(ImageFit.Contain)
           .onClick(() => {
-            let index = Random(0, this.blessings.length - 1, true)
-            this.random = this.luck[Random(0, this.luck.length - 1, true)]
-            // Show blessing text
-            animateTo({
-              duration: 200,
-              curve: Curve.EaseIn
-            }, () => {
-              this.opacityArray[index] = 1
-              this.positions[index] = 25
-            })
-            // Hide after delay
-            animateTo({
-              duration: 200,
-              curve: Curve.EaseOut,
-              delay: 800
-            }, () => {
-              this.opacityArray[index] = 0
-              this.positions[index] = 0
+            this.tapVersion++
+            let version = this.tapVersion
+
+            let idx = Random(0, this.BLESSINGS.length - 1, true)
+            let count = this.LUCK[Random(0, this.LUCK.length - 1, true)]
+            this.blessingText = this.BLESSINGS[idx] + ' +' + count
+
+            // 起始态：缩到 0.6x、下沉 15vp（无动画，瞬间就位）
+            this.bubbleScale = 0.6
+            this.bubbleTranslateY = 15
+
+            // 阶段 1：弹出 → 过冲到 1.08x、轻微上浮
+            // 卡片不允许 delay/iterations/tempo，只能 onFinish 链式衔接
+            animateTo({ duration: 300, curve: Curve.EaseOut, onFinish: () => {
+              if (this.tapVersion !== version) {
+                return
+              }
+              // 阶段 2：回弹到正常 1.0x
+              animateTo({ duration: 150, curve: Curve.EaseIn }, () => {
+                this.bubbleScale = 1.0
+                this.bubbleTranslateY = 0
+              })
+            }}, () => {
+              this.bubbleScale = 1.08
+              this.bubbleTranslateY = -2
             })
           })
       }
-      .height('70%')
       .width('100%')
-      .alignItems(VerticalAlign.Center)
-      .justifyContent(FlexAlign.Center)
+      .height('100%')
+      .padding({ top: 12, bottom: 12 })
+      .alignItems(HorizontalAlign.Center)
     }
     .width('100%')
     .height('100%')
     .borderRadius(8)
-    .backgroundColor($r("app.color.Comp_Bg1"))
+    .backgroundColor($r('app.color.Comp_Bg1'))
     .clip(true)
   }
 }
