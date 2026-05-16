@@ -54,7 +54,7 @@
       "name": "RollBlessingsCard",
       "displayName": "$string:RollBlessingsCard_display_name",
       "description": "$string:RollBlessingsCard_desc",
-      "src": "./ets/form_cards/RollBlessingsCard.ets",
+      "src": "./ets/form_cards/BlessingMuyuCard.ets",
       "uiSyntax": "arkts",
       "window": {
         "designWidth": 720,

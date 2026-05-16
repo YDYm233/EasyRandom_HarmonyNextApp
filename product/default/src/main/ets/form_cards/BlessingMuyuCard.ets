@@ -3,9 +3,13 @@ import { Random } from '@ohos/common'
 @Entry
 @Component
 struct BlessingMuyuCard {
-  readonly BLESSINGS: string[] = ['幸福', '财力', '智力', '运气', '力量', '勇气', '实力', '美貌', '健康', '快乐']
-  readonly LUCK: number[] =
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 5, 0]
+  private readonly BLESSINGS: string[] = ['幸福', '财力', '智力', '运气', '力量', '勇气', '实力', '美貌', '健康', '快乐']
+  private readonly LUCK: number[] =
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      2, 2, 2, 2, 2, 2, 2, 2, 2,
+      3, 3, 3, 3, 3,
+      5, 5,
+      0]
 
   @State blessingText: string = '点击木鱼'
   @State bubbleScale: number = 1
@@ -30,21 +34,16 @@ struct BlessingMuyuCard {
           .aspectRatio(1)
           .objectFit(ImageFit.Contain)
           .onClick(() => {
-            // ── 本地动画（卡片渲染服务独立执行）──
+            // ── 本地动画 ──
             this.tapVersion++
             let version = this.tapVersion
-
             let idx = Random(0, this.BLESSINGS.length - 1, true)
             let count = this.LUCK[Random(0, this.LUCK.length - 1, true)]
             this.blessingText = this.BLESSINGS[idx] + ' +' + count
-
             this.bubbleScale = 0.6
             this.bubbleTranslateY = 15
-
             animateTo({ duration: 300, curve: Curve.EaseOut, onFinish: () => {
-              if (this.tapVersion !== version) {
-                return
-              }
+              if (this.tapVersion !== version) return
               animateTo({ duration: 150, curve: Curve.EaseIn }, () => {
                 this.bubbleScale = 1.0
                 this.bubbleTranslateY = 0
@@ -54,13 +53,10 @@ struct BlessingMuyuCard {
               this.bubbleTranslateY = -2
             })
 
-            // ── 计数持久化（router → EntryAbility.handleCardClick → Preferences）──
+            // ── 计数：message → DefaultFormAbility.onFormEvent → Preferences ──
             postCardAction(this, {
-              action: 'router',
-              abilityName: 'EntryAbility',
-              params: {
-                cardClick: 'blessing_muyu'
-              }
+              action: 'message',
+              params: { event: 'blessing_muyu_click' }
             })
           })
       }
