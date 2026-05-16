@@ -54,15 +54,15 @@
       "name": "VitalUI",
       "srcPath": "./common/VitalUI"
     },
-    {
-      "name": "wearable",
-      "srcPath": "./product/wearable",
-//      "targets": [
-//        {
-//          "name": "default",
-////          "applyToProducts": "${ENABLE_WEARABLE ? ['default'] : []}"
-//        }
-//      ]
-    }
+    // {
+    //   "name": "wearable",
+    //   "srcPath": "./product/wearable",
+    //   "targets": [
+    //     {
+    //       "name": "default",
+    //       "applyToProducts": []
+    //     }
+    //   ]
+    // }
   ]
 }

@@ -6,6 +6,7 @@
   "author": "$string.app_author",
   "license": "",
   "dependencies": {
-    "@ohos/common": "file:../../common/basic"
+    "@ohos/common": "file:../../common/basic",
+    "@ohos/vitalui": "file:../../common/VitalUI"
   }
 }
