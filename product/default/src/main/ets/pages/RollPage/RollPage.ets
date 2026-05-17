@@ -24,7 +24,7 @@ struct RollPage {
 
   build() {
     Column() {
-      PieChartsShow()
+      PieChartsShow({ breakpoint: this.currentBreakpoint })
     }
     .width('100%')
     .height('100%')
@@ -39,6 +39,7 @@ struct RollPage {
 @Component
 struct PieChartsShow {
   @StorageLink('allRolls') @Watch('onDataListChange') dataList: Roll[] = rolls
+  @Prop breakpoint: BreakpointState<string>
   @State title: string = this.dataList.length > 0 ? this.dataList[0].rollName : ''
   @State rotateAngle: number = 0
   @State isRoll: boolean = false
@@ -261,7 +262,7 @@ struct PieChartsShow {
       style: BorderStyle.Dotted
     })
     .backgroundColor($r("app.color.Comp_Bg1"))
-    .constraintSize({ maxWidth: 520, maxHeight: 668 })
+    .constraintSize(this.breakpoint.value === 'sm' ? { maxWidth: 520, maxHeight: 668 } : { maxWidth: 400, maxHeight: 520 })
     .bindSheet($$this.isSheetShow, this.sheetContent(), {
       height: SheetSize.FIT_CONTENT,
       dragBar: true,

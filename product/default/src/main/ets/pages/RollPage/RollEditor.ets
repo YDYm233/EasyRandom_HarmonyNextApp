@@ -1,4 +1,5 @@
 import { Roll, RollItem } from '../../static_datas/rolls'
+import { Random } from '@ohos/common'
 import { promptAction } from '@kit.ArkUI'
 import { saveRollsToPrefs } from './RollDataManager'
 import { RollDetailEditor } from './RollDetailEditor'
@@ -89,48 +90,36 @@ struct RollManageContent {
 
   build() {
     Column() {
-      // 列表区域
-      if (this.allRolls.length === 0) {
-        Column() {
-          Text('暂无转盘')
-            .fontSize(15)
-            .fontColor($r('app.color.FontIcon_Fore3'))
-            .margin({ top: 60 })
+      // 列表区域（始终显示列表，即使为空）
+      List({ space: 8 }) {
+        ForEach(this.allRolls, (roll: Roll) => {
+          ListItem() {
+            this.RollCard(roll)
+          }
+        }, (roll: Roll) => roll.index)
+        // 新建转盘按钮作为最后一个列表项
+        ListItem() {
+          Row() {
+            Image($r('sys.symbol.plus'))
+              .width(24).height(24)
+              .fillColor($r('app.color.Brand'))
+          }
+          .width('100%')
+          .height(60)
+          .justifyContent(FlexAlign.Center)
+          .alignItems(VerticalAlign.Center)
+          .backgroundColor($r('app.color.Comp_Bg1'))
+          .borderRadius(12)
+          .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.97 })
         }
-        .width('100%')
-        .layoutWeight(1)
-      } else {
-        List({ space: 8 }) {
-          ForEach(this.allRolls, (roll: Roll) => {
-            ListItem() {
-              this.RollCard(roll)
-            }
-          }, (roll: Roll) => roll.index)
-        }
-        .layoutWeight(1)
-        .scrollBar(BarState.Off)
-        .padding({ left: 16, right: 16, top: 8 })
-        .alignListItem(ListItemAlign.Center)
+        .onClick(() => {
+          this.newRollDialog.open()
+        })
       }
-
-      // 底部"新建转盘"按钮
-      Button({ type: ButtonType.Capsule, stateEffect: true }) {
-        Row() {
-          Image($r('sys.symbol.plus'))
-            .width(18).height(18)
-            .fillColor(Color.White)
-          Text(' 新建转盘').fontSize(15).fontColor(Color.White).fontWeight(600)
-        }
-      }
-      .backgroundColor($r('app.color.Brand'))
-      .width('90%')
-      .height(44)
-      .margin({ bottom: 16, top: 8 })
-      .borderRadius(22)
-      .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.95 })
-      .onClick(() => {
-        this.newRollDialog.open()
-      })
+      .layoutWeight(1)
+      .scrollBar(BarState.Off)
+      .padding({ left: 16, right: 16, top: 8, bottom: 8 })
+      .alignListItem(ListItemAlign.Center)
     }
     .width('100%')
     .height('100%')
@@ -180,10 +169,20 @@ struct RollManageContent {
 
   private createRoll(name: string): void {
     const newIndex = `custom_${Date.now()}`
-    const roll = new Roll(newIndex, name, [
-      new RollItem(`${newIndex}_0`, '选项A', 1, COLOR_PRESETS[0]),
-      new RollItem(`${newIndex}_1`, '选项B', 1, COLOR_PRESETS[1])
-    ])
+    // 生成三个选项，权重1~10随机，颜色从预设中随机选取（不重复）
+    const colorIndices: number[] = []
+    while (colorIndices.length < 3) {
+      const idx = Random(0, COLOR_PRESETS.length - 1, true)
+      if (!colorIndices.includes(idx)) {
+        colorIndices.push(idx)
+      }
+    }
+    const rollItems = [
+      new RollItem(`${newIndex}_0`, '选项A', Random(1, 10, true), COLOR_PRESETS[colorIndices[0]]),
+      new RollItem(`${newIndex}_1`, '选项B', Random(1, 10, true), COLOR_PRESETS[colorIndices[1]]),
+      new RollItem(`${newIndex}_2`, '选项C', Random(1, 10, true), COLOR_PRESETS[colorIndices[2]])
+    ]
+    const roll = new Roll(newIndex, name, rollItems)
     this.allRolls.push(roll)
     this.persist()
     promptAction.showToast({ message: `已创建"${name}"` })
