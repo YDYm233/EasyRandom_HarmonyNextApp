@@ -3,70 +3,72 @@ import { BreakpointState, BreakpointSystem, Random } from '@ohos/common';
 import { Roll, RollItem, rolls } from '../../static_datas/rolls';
 import { promptAction } from '@kit.ArkUI';
 import { initRollsData } from './RollDataManager';
-import { RollEditor } from './RollEditor';
+import { RollEditSheet } from './RollEditor';
 
 @Entry
 @Component
 struct RollPage {
   @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
+
   aboutToAppear() {
     BreakpointSystem.getInstance().attach(this.currentBreakpoint)
     BreakpointSystem.getInstance().start()
     // 初始化持久化转盘数据到 AppStorage
     initRollsData(getContext(this).getApplicationContext())
   }
+
   aboutToDisappear() {
-    BreakpointSystem.getInstance().attach(this.currentBreakpoint)
+    BreakpointSystem.getInstance().detach(this.currentBreakpoint)
     BreakpointSystem.getInstance().stop()
   }
+
   build() {
-    Scroll() {
-      GridRow({ columns: { sm: 4, md: 8, lg: 12 }, gutter: 12 }) {
-        GridCol({ span: { sm: 4, md: 4, lg: 4 }, offset: { sm: 0, md: 2, lg: 4 } }) {
-          Row() {
-            PieChartsShow()
-          }
-          .width('100%')
-          .alignItems(VerticalAlign.Center)
-        }          .width('100%')
-      }
-      .margin(this.currentBreakpoint.value=='sm'?12: 24)
-    }.width('100%').height('100%').backgroundColor($r("app.color.Comp_Bg3"))
+    Column() {
+      PieChartsShow()
+    }
+    .width('100%')
+    .height('100%')
+    .justifyContent(FlexAlign.Center)
+    .alignItems(HorizontalAlign.Center)
+    .backgroundColor($r("app.color.Comp_Bg3"))
+    .padding({ left: 12, right: 12 })
   }
 }
 
 
 @Component
-struct PieChartsShow{
-  @StorageLink('allRolls') dataList: Roll[] = rolls
+struct PieChartsShow {
+  @StorageLink('allRolls') @Watch('onDataListChange') dataList: Roll[] = rolls
   @State title: string = this.dataList.length > 0 ? this.dataList[0].rollName : ''
   @State rotateAngle: number = 0
   @State isRoll: boolean = false
   @State duration: number = 0
   @State swiperIndex: number = 0
-  @State loveIndex: number = 0
+  @State loveIndex: number = -1
+  @State showPoint: boolean = true
   @State isSheetShow: boolean = false
-  @State isDialogShow: boolean = false
-  @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
-  @State showPoint:boolean=true;
   private swiperController: SwiperController = new SwiperController()
 
   aboutToAppear() {
-    BreakpointSystem.getInstance().attach(this.currentBreakpoint)
-    BreakpointSystem.getInstance().start()
     if (this.dataList.length > 0) {
       this.title = this.dataList[0].rollName
     }
   }
 
-  aboutToDisappear() {
-    BreakpointSystem.getInstance().attach(this.currentBreakpoint)
-    BreakpointSystem.getInstance().stop()
+  onDataListChange() {
+    if (this.swiperIndex < this.dataList.length) {
+      this.title = this.dataList[this.swiperIndex].rollName
+    } else if (this.dataList.length > 0) {
+      this.swiperIndex = 0
+      this.title = this.dataList[0].rollName
+    } else {
+      this.title = ''
+    }
   }
 
   @Builder
-  editorContent() {
-    RollEditor()
+  sheetContent() {
+    RollEditSheet()
   }
 
   build() {
@@ -118,24 +120,24 @@ struct PieChartsShow{
       .width('100%')
       .height('11.11%')
 
-      //组件轮播区
+      // 转盘轮播区
       Swiper(this.swiperController) {
         ForEach(this.dataList, (item: Roll) => {
           Row() {
             PieChart({ data: item })
               .width('100%')
-              .position({top:0,left:0})
+              .position({ top: 0, left: 0 })
               .rotate({
                 angle: this.rotateAngle
               })
               .border({
-                width:0,
+                width: 0,
                 color: $r("app.color.Cont_Bg1"),
                 radius: '50%',
                 style: BorderStyle.Solid
               })
               .animation({ duration: this.duration, curve: Curve.Ease })
-            if(this.showPoint) {
+            if (this.showPoint) {
               Image($r("app.media.needle"))
                 .zIndex(8)
                 .width('40%')
@@ -163,8 +165,8 @@ struct PieChartsShow{
       .indicatorInteractive(true)
       .duration(1000)
       .itemSpace(0)
-      .onClick(()=>{
-        this.showPoint=!this.showPoint;
+      .onClick(() => {
+        this.showPoint = !this.showPoint;
       })
       .onChange((index: number) => {
         this.swiperIndex = index
@@ -177,10 +179,9 @@ struct PieChartsShow{
         this.rotateAngle = 0;
       })
 
-      //底部控制区
+      // 底部控制区
       Row() {
         Row() {
-
           Button({ type: ButtonType.Capsule, stateEffect: true }) {
             Image($r("app.media.func_pin"))
               .fillColor(this.swiperIndex != this.loveIndex ? $r("app.color.Brand") : "#ffffff")
@@ -240,7 +241,6 @@ struct PieChartsShow{
           .height('100%')
           .aspectRatio(1)
           .onClick(() => {
-            // 打开转盘编辑面板
             this.isSheetShow = true
           })
         }
@@ -261,22 +261,11 @@ struct PieChartsShow{
       style: BorderStyle.Dotted
     })
     .backgroundColor($r("app.color.Comp_Bg1"))
-    .bindSheet($$this.isSheetShow, this.editorContent(), {
+    .constraintSize({ maxWidth: 520, maxHeight: 668 })
+    .bindSheet($$this.isSheetShow, this.sheetContent(), {
+      height: SheetSize.FIT_CONTENT,
       dragBar: true,
-      blurStyle: BlurStyle.Thin,
-      title: { title: '转盘管理' },
-      enableOutsideInteractive: true,
-      mode: SheetMode.EMBEDDED,
-      borderWidth: 2,
-      borderColor: 0x20000000,
-      borderStyle: BorderStyle.Solid,
-      height: this.currentBreakpoint.value == 'sm' ? SheetSize.LARGE : SheetSize.FIT_CONTENT,
-      detents: this.currentBreakpoint.value == 'sm' ? [SheetSize.LARGE, SheetSize.MEDIUM] : null,
-      preferType: this.currentBreakpoint.value == 'sm' ? SheetType.BOTTOM :
-        (this.currentBreakpoint.value == 'md' ? SheetType.CENTER : SheetType.CENTER),
-      width: this.currentBreakpoint.value == 'sm' ? '100%' : (this.currentBreakpoint.value == 'md' ? '50%' : '40%'),
       onDisappear: () => {
-        // 关闭 sheet 后刷新当前显示标题
         if (this.swiperIndex < this.dataList.length) {
           this.title = this.dataList[this.swiperIndex].rollName
         }
@@ -301,7 +290,7 @@ struct PieChart {
       Canvas(this.context)
         .onReady(() => {
           let ctx = this.context;
-          const radius =  ctx.width / 2;
+          const radius = ctx.width / 2;
           let list: Array<RollItem> = this.data.rollItems
           let totalWeight = list.reduce<number>((acc: number, single: RollItem) => acc + single.weight, 0);
           let startAngle = -list[0].weight / totalWeight * 180 + 90;
@@ -338,7 +327,7 @@ struct PieChart {
 
           ctx.beginPath();
           ctx.moveTo(radius, radius);
-          ctx.arc(radius, radius, radius/ 10, -45, 275, false);
+          ctx.arc(radius, radius, radius / 10, -45, 275, false);
           ctx.closePath()
           ctx.fillStyle = 0xf1f3f5;
           ctx.fill();
@@ -359,4 +348,4 @@ struct PieChart {
 
 export default RollPage
 
-export { rolls, Roll, RollItem}
+export { rolls, Roll, RollItem }

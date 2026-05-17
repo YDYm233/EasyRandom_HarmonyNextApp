@@ -1,10 +1,10 @@
 import {Random} from '@ohos/common'
 import { Roll, RollItem, rolls } from '../static_datas/rolls';
-
+@Entry
 @Component
 struct RollWheelCard {
   readonly FULL_WIDTH_PERCENT: string = '90%';
-  @StorageLink('allRolls') dataList: Roll[] = rolls
+  @State dataList:Roll[] = rolls
   @State rotateAngle:number = 0;
   build() {
     Swiper(){
@@ -54,7 +54,7 @@ struct RollBox {
             const centerAngle = (startAngle + endAngle) / 2;
             ctx.globalCompositeOperation = 'xor'
             ctx.beginPath();
-            ctx.moveTo(r, r);
+            ctx.moveTo(r, r); // 中心点
             ctx.arc(r, r, r, startAngle * Math.PI / 180, endAngle * Math.PI / 180, false);
             ctx.closePath()
             ctx.fillStyle = single.color;
@@ -78,7 +78,7 @@ struct RollBox {
             startAngle = endAngle;
           })
           ctx.beginPath();
-          ctx.moveTo(r, r);
+          ctx.moveTo(r, r); // 中心点
           ctx.arc(r, r, r / 10, -45, 275, false);
           ctx.closePath()
           ctx.fillStyle = 0xf1f3f5;
