@@ -67,7 +67,7 @@ struct PieChart {
           })
           if(this.showDot) {//是否显示中央小圆点
             ctx.beginPath(); //以下语句用于绘制饼状图中央小圆，可省略
-            ctx.moveTo(radius, radius);
+            ctx.moveTo(radius, radius)
             ctx.arc(radius, radius, radius / 10, -45, 275, false);
             ctx.closePath()
             ctx.fillStyle = 0xf1f3f5;
@@ -76,7 +76,7 @@ struct PieChart {
         })
         .width('100%')
         .aspectRatio(1)
-      //将以上代码补全进上文PieChart()组件中
+
 
   }
 }
