@@ -49,6 +49,14 @@
     {
       "name": "BlessingMuyuCard_desc",
       "value": "Get a blessed from mokugyo"
+    },
+    {
+      "name": "ABCDCard_display_name",
+      "value": "ABCD"
+    },
+    {
+      "name": "ABCDCard_desc",
+      "value": "ABCD"
     }
   ]
 }
