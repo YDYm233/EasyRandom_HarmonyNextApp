@@ -1,13 +1,70 @@
 import { Random } from '@ohos/common'
-import Header from '../../components/Header'
+import router from '@ohos.router';
 
+class Params {
+  type: string
+  constructor(tuple: string) {
+    this.type = tuple
+  }
+}
 
 @Entry
 @Component
 struct RollBlessings {
   build() {
     Column() {
-      Header({ title: '祝福木鱼' })
+      GridRow({ columns: { sm: 12, md: 12, lg: 12 } }) {
+        GridCol({ span: { sm: 3, md: 2, lg: 1 } }) {
+          Row() {
+            Image($r("app.media.func_back")).height('24vp').width('24vp').fillColor($r("app.color.FontIcon_Fore1"))
+          }
+          .onClick(() => {
+            router.back({ url: 'pages/Index' })
+          })
+          .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+          .width('100%')
+          .height($r("app.string.header_height"))
+          .justifyContent(FlexAlign.Start)
+          .alignItems(VerticalAlign.Center)
+          .padding({ left: 12 })
+        }
+
+        GridCol({ span: { sm: 6, md: 8, lg: 10 } }) {
+          Row() {
+            Text($r("app.string.page_muyu")).fontColor($r("app.color.FontIcon_Fore1"))
+          }
+          .width('100%')
+          .height($r("app.string.header_height"))
+          .justifyContent(FlexAlign.Center)
+          .alignItems(VerticalAlign.Center)
+        }
+
+        GridCol({ span: { sm: 3, md: 2, lg: 1 } }) {
+          Row() {
+            Image($r("app.media.func_setting")).height(24).width(24).fillColor($r("app.color.FontIcon_Fore1"))
+          }
+          .onClick(() => {
+            router.pushUrl({
+              url: 'pages/SettingPage/SettingPage',
+              params: new Params('no')
+            }).then(() => {
+              console.info("success.");
+            })
+          })
+          .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+          .width('100%')
+          .height($r("app.string.header_height"))
+          .justifyContent(FlexAlign.End)
+          .alignItems(VerticalAlign.Center)
+          .padding({ right: 12 })
+        }
+      }
+      .width('100%')
+      .height($r("app.string.header_height"))
+      .backgroundColor($r("app.color.Comp_Bg1"))
+      .zIndex(10)
+      .margin({ top: $r("app.string.header_margin") })
+      .position({ top: $r("app.string.header_margin") })
       Scroll() {
         GridRow({
           columns: {
