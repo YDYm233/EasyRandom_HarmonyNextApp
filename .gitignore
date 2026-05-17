@@ -1,12 +1,81 @@
+# =============================================================================
+# HarmonyOS DevEco Studio - 工程根目录 .gitignore
+# =============================================================================
+
+# -------------------- 依赖管理 --------------------
 /node_modules
 /oh_modules
+
+# -------------------- 本地环境配置 --------------------
 /local.properties
+*.local
+
+# -------------------- Hvigor 构建系统 --------------------
+/.hvigor/cache
+/.hvigor/outputs
+/.hvigor/report
+/.hvigor/dependencyMap
+
+# -------------------- DevEco Studio IDE --------------------
 /.idea
+/.appanalyzer
+/.preview
+/preview
+
+# -------------------- 构建产物 --------------------
 **/build
-/.hvigor
+**/.test
+
+# -------------------- C/C++ Native 编译 --------------------
 .cxx
 /.clangd
 /.clang-format
 /.clang-tidy
-**/.test
-/.appanalyzer
+
+# -------------------- 签名与证书文件（禁止提交敏感凭证） --------------------
+*.p12
+*.p7b
+*.cer
+*.jks
+*.csr
+*.keystore
+!AppScope/resources/**/*.p12
+!AppScope/resources/**/*.p7b
+!AppScope/resources/**/*.cer
+
+# -------------------- 操作系统生成文件 --------------------
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+# Windows
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+$RECYCLE.BIN/
+# Linux
+*~
+
+# -------------------- 编辑器临时文件 --------------------
+*.swp
+*.swo
+*.tmp
+*.bak
+*.orig
+
+# -------------------- 日志文件 --------------------
+*.log
+npm-debug.log*
+ohpm-debug.log*
+hvigor-report-*.json
+
+# -------------------- 代码覆盖率 --------------------
+coverage/
+*.lcov
+*.profraw
+*.profdata
+
+# -------------------- 环境变量文件 --------------------
+.env
+.env.local
+.env.*.local
