@@ -1,7 +1,9 @@
 import { BreakpointState, BreakpointSystem, Random } from '@ohos/common';
-import OptBoxs from './RollOpts';
+
 import { Roll, RollItem, rolls } from '../../static_datas/rolls';
 import { promptAction } from '@kit.ArkUI';
+import { initRollsData } from './RollDataManager';
+import { RollEditor } from './RollEditor';
 
 @Entry
 @Component
@@ -10,6 +12,8 @@ struct RollPage {
   aboutToAppear() {
     BreakpointSystem.getInstance().attach(this.currentBreakpoint)
     BreakpointSystem.getInstance().start()
+    // 初始化持久化转盘数据到 AppStorage
+    initRollsData(getContext(this).getApplicationContext())
   }
   aboutToDisappear() {
     BreakpointSystem.getInstance().attach(this.currentBreakpoint)
@@ -32,12 +36,10 @@ struct RollPage {
 }
 
 
-AppStorage.setOrCreate('allRolls', rolls);
-
 @Component
 struct PieChartsShow{
   @StorageLink('allRolls') dataList: Roll[] = rolls
-  @State title: string = this.dataList[0].rollName
+  @State title: string = this.dataList.length > 0 ? this.dataList[0].rollName : ''
   @State rotateAngle: number = 0
   @State isRoll: boolean = false
   @State duration: number = 0
@@ -52,6 +54,9 @@ struct PieChartsShow{
   aboutToAppear() {
     BreakpointSystem.getInstance().attach(this.currentBreakpoint)
     BreakpointSystem.getInstance().start()
+    if (this.dataList.length > 0) {
+      this.title = this.dataList[0].rollName
+    }
   }
 
   aboutToDisappear() {
@@ -60,10 +65,8 @@ struct PieChartsShow{
   }
 
   @Builder
-  neirong() {
-    Column() {
-      OptBoxs().width('100%').height('100%')
-    }
+  editorContent() {
+    RollEditor()
   }
 
   build() {
@@ -139,7 +142,6 @@ struct PieChartsShow{
                 .aspectRatio(1)
                 .fillColor($r("app.color.FontIcon_Back1"))
                 .position({ top: '30%', left: '30%' })
-              //.backgroundImagePosition(Alignment.Center)
             }
           }
           .width('90%')
@@ -149,7 +151,6 @@ struct PieChartsShow{
         }, (item: Roll) => item.index)
 
       }
-      //.indicator({})
       .width('100%')
       .aspectRatio(1)
       .border({
@@ -158,7 +159,6 @@ struct PieChartsShow{
         radius: 10,
         style: BorderStyle.Dotted
       })
-     // .cachedCount(2)
       .loop(true)
       .indicatorInteractive(true)
       .duration(1000)
@@ -168,7 +168,9 @@ struct PieChartsShow{
       })
       .onChange((index: number) => {
         this.swiperIndex = index
-        this.title = this.dataList[index].rollName
+        if (index < this.dataList.length) {
+          this.title = this.dataList[index].rollName
+        }
       })
       .onAnimationStart(() => {
         this.duration = 0;
@@ -207,7 +209,6 @@ struct PieChartsShow{
             } else {
               LoadingProgress().color(Color.White).height('75%')
             }
-            //Image($r("app.media.page_icon1_selected")).fillColor($r("app.color.control_fc_1")).height('75%')
           }
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .onClick(() => {
@@ -238,14 +239,9 @@ struct PieChartsShow{
           .backgroundColor($r("app.color.Comp_Bg3"))
           .height('100%')
           .aspectRatio(1)
-
           .onClick(() => {
-
-            //this.isSheetShow = true;
-          promptAction.showToast({
-            message: '功能完善中 未来将支持更改转盘选项'
-          })
-
+            // 打开转盘编辑面板
+            this.isSheetShow = true
           })
         }
         .height('100%')
@@ -265,10 +261,10 @@ struct PieChartsShow{
       style: BorderStyle.Dotted
     })
     .backgroundColor($r("app.color.Comp_Bg1"))
-    .bindSheet($$this.isSheetShow, this.neirong(), {
+    .bindSheet($$this.isSheetShow, this.editorContent(), {
       dragBar: true,
       blurStyle: BlurStyle.Thin,
-      title: { title: '编辑' },
+      title: { title: '转盘管理' },
       enableOutsideInteractive: true,
       mode: SheetMode.EMBEDDED,
       borderWidth: 2,
@@ -279,6 +275,12 @@ struct PieChartsShow{
       preferType: this.currentBreakpoint.value == 'sm' ? SheetType.BOTTOM :
         (this.currentBreakpoint.value == 'md' ? SheetType.CENTER : SheetType.CENTER),
       width: this.currentBreakpoint.value == 'sm' ? '100%' : (this.currentBreakpoint.value == 'md' ? '50%' : '40%'),
+      onDisappear: () => {
+        // 关闭 sheet 后刷新当前显示标题
+        if (this.swiperIndex < this.dataList.length) {
+          this.title = this.dataList[this.swiperIndex].rollName
+        }
+      }
     })
   }
 }
@@ -298,25 +300,25 @@ struct PieChart {
     Flex({ direction: FlexDirection.Column, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Center }) {
       Canvas(this.context)
         .onReady(() => {
-          let ctx = this.context;                                        //获取指定Canvas组件
-          const radius =  ctx.width / 2;                           //获取半径（宽度）
-          let list: Array<RollItem> = this.data.rollItems    //获取传入数据
-          let totalWeight = list.reduce<number>((acc: number, single: RollItem) => acc + single.weight, 0);   //计算出总权重，子选项将根据与总权重的比例计算出角度。
-          let startAngle = -list[0].weight / totalWeight * 180 + 90;                                                                           //此处角度控制开始渲染的位置，出于个人习惯我将第一个选项调整为正上方(默认角度为正右）
+          let ctx = this.context;
+          const radius =  ctx.width / 2;
+          let list: Array<RollItem> = this.data.rollItems
+          let totalWeight = list.reduce<number>((acc: number, single: RollItem) => acc + single.weight, 0);
+          let startAngle = -list[0].weight / totalWeight * 180 + 90;
 
-          list.forEach(single => {  //以下为循环绘制代码，其核心思想是通过绘制小扇形来拼接为圆形，通过权重/总权重*360便可以计算出合适的扇形角度。
-            const endAngle: number = startAngle + (single.weight / totalWeight) * 360;    //计算占比角度方便绘制
-            const centerAngle = (startAngle + endAngle) / 2;    //计算对称轴角度，以便确定绘制位置
-            ctx.beginPath();                        //开始
-            ctx.moveTo(radius, radius);   //中心点
-            ctx.arc(radius, radius, radius, startAngle * Math.PI / 180, endAngle * Math.PI / 180, false);  //绘制扇形
-            ctx.closePath()                    //闭合路径区域
-            ctx.fillStyle = single.color; //选定背景颜色
-            ctx.fill();                                //绘制背景颜色
-            ctx.fillStyle = '#FFFFFF';    //指定文字颜色
-            ctx.textAlign = 'center';     //指定对齐方式
+          list.forEach(single => {
+            const endAngle: number = startAngle + (single.weight / totalWeight) * 360;
+            const centerAngle = (startAngle + endAngle) / 2;
+            ctx.beginPath();
+            ctx.moveTo(radius, radius);
+            ctx.arc(radius, radius, radius, startAngle * Math.PI / 180, endAngle * Math.PI / 180, false);
+            ctx.closePath()
+            ctx.fillStyle = single.color;
+            ctx.fill();
+            ctx.fillStyle = '#FFFFFF';
+            ctx.textAlign = 'center';
 
-            ctx.save()          //以下语句用于绘制扇形上的文字，该方案不适合较长文本，请根据实际需求使用或更改
+            ctx.save()
             ctx.translate(radius, radius)
             ctx.rotate((centerAngle + 90) * Math.PI / 180)
             const texts: Array<string> = single.text.split('');
@@ -329,12 +331,12 @@ struct PieChart {
             for (let n: number = 0; n < texts.length; n++) {
               ctx.fillText(texts[n], x, (-radius + lineHight + y / 2 + n * lineHight), fontSize);
             }
-            ctx.restore()       //文字绘制完毕
+            ctx.restore()
 
-            startAngle = endAngle;  //每次循环完毕前刷新绘制角度
+            startAngle = endAngle;
           })
 
-          ctx.beginPath();  //以下语句用于绘制饼状图中央小圆，可省略
+          ctx.beginPath();
           ctx.moveTo(radius, radius);
           ctx.arc(radius, radius, radius/ 10, -45, 275, false);
           ctx.closePath()
@@ -343,7 +345,6 @@ struct PieChart {
         })
         .width('100%')
         .aspectRatio(1)
-      //将以上代码补全进上文PieChart()组件中
 
     }.width('100%').aspectRatio(1)
     .border({
