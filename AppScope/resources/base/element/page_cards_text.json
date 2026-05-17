@@ -1,0 +1,31 @@
+{
+  "string": [
+    {
+      "name": "toast_add_form_success",
+      "value": "已添加到桌面",
+      "comment": "AllasOne页面 - 卡片添加至桌面成功提示",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
+    },
+    {
+      "name": "toast_add_form_fail",
+      "value": "添加失败，请重试",
+      "comment": "AllasOne页面 - 卡片添加至桌面失败提示",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
+    },
+    {
+      "name": "allasone_hint",
+      "value": "功能卡片展示，长按卡片标题可添加到桌面",
+      "comment": "AllasOne页面 - 首次进入提示文字",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "string": [
+    {
+      "name": "toast_add_form_success",
+      "value": "Added to home screen"
+    },
+    {
+      "name": "toast_add_form_fail",
+      "value": "Failed to add, please try again"
+    },
+    {
+      "name": "allasone_hint",
+      "value": "Feature cards — long press title to add to home screen"
+    }
+  ]
+}

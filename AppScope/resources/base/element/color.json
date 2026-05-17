@@ -202,6 +202,18 @@
       "value": "#000000"
     },
     {
+      "name": "hint_bg",
+      "value": "#CCE8F0FE"
+    },
+    {
+      "name": "hint_shadow",
+      "value": "#1A000000"
+    },
+    {
+      "name": "hint_border",
+      "value": "#0D000000"
+    },
+    {
       "name": "Yang",
       "value": "#FFFFFF"
     }
