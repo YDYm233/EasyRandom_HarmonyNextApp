@@ -189,7 +189,7 @@ struct AllasOne {
             .clip(true)
             .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           Row() {
-            Text($r("app.string.RollBlessingsCard_display_name"))
+            Text($r("app.string.BlessingMuyuCard_display_name"))
               .textAlign(TextAlign.Center)
               .fontSize(this.titleFontSize)
               .fontColor(this.titleFontColor)

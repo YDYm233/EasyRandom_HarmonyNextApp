@@ -23,6 +23,18 @@
     {
       "name": "AnswerBook",
       "value": "心の中で問題を唱えてください"
+    },
+    {
+      "name": "BlessingMuyuCard_display_name",
+      "value": "祝福の木魚"
+    },
+    {
+      "name": "ABCDCard_display_name",
+      "value": "ABCD"
+    },
+    {
+      "name": "BlessingMuyuCard_desc",
+      "value": "Get a blessed from mokugyo"
     }
   ]
 }

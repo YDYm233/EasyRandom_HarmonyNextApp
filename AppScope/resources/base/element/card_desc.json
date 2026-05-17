@@ -90,7 +90,7 @@
       }
     },
     {
-      "name": "RollBlessingsCard_display_name",
+      "name": "BlessingMuyuCard_display_name",
       "value": "祝福木鱼",
       "comment": "功能卡片名 - 祝福木鱼",
       "attr": {
@@ -99,13 +99,21 @@
       }
     },
     {
-      "name": "RollBlessingsCard_desc",
+      "name": "BlessingMuyuCard_desc",
       "value": "获得祝福的木鱼",
       "comment": "功能卡片描述 - 祝福木鱼",
       "attr": {
         "translatable": true,
         "priority": "LT"
       }
+    },
+    {
+      "name": "ABCDCard_display_name",
+      "value": "ABCD"
+    },
+    {
+      "name": "ABCDCard_desc",
+      "value": "遇事不决，量子力学"
     }
   ]
 }

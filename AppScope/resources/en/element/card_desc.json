@@ -43,11 +43,11 @@
       "value": "坎,坤,震,巽,乾,兑,艮,离"
     },
     {
-      "name": "RollBlessingsCard_display_name",
+      "name": "BlessingMuyuCard_display_name",
       "value": "Blessing Mokugyo"
     },
     {
-      "name": "RollBlessingsCard_desc",
+      "name": "BlessingMuyuCard_desc",
       "value": "Get a blessed from mokugyo"
     }
   ]
