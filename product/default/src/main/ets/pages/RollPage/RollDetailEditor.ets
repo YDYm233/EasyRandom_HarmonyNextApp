@@ -1,6 +1,7 @@
 import { Roll, RollItem } from '../../static_datas/rolls'
 import { promptAction } from '@kit.ArkUI'
 import { saveRollsToPrefs } from './RollDataManager'
+import { ColorPickerComponent } from '@ohos/common'
 
 /** 预设颜色板 */
 const COLOR_PRESETS: string[] = [
@@ -233,46 +234,13 @@ export struct RollDetailEditor {
       .margin({ bottom: 8 })
 
       // 第二行：颜色选择器
-      Row({ space: 6 }) {
-        // 当前颜色大圆指示
-        Row()
-          .width(32).height(32)
-          .borderRadius(16)
-          .backgroundColor(item.color)
-          .border({ width: 2, color: $r('app.color.Comp_Bg3') })
-          .shadow({ radius: 4, color: item.color, offsetY: 1 })
-          .margin({ right: 6 })
-
-        // 颜色色板（网格排列，横滑）
-        Scroll() {
-          Row({ space: 5 }) {
-            ForEach(COLOR_PRESETS, (color: string) => {
-              Row() {
-                if (item.color.toLowerCase() === color.toLowerCase()) {
-                  Text('✓').fontSize(10).fontColor(Color.White).fontWeight(700)
-                }
-              }
-              .width(28).height(28)
-              .borderRadius(14)
-              .backgroundColor(color)
-              .justifyContent(FlexAlign.Center)
-              .shadow({ radius: 2, color: color, offsetY: 1 })
-              .scale(item.color.toLowerCase() === color.toLowerCase() ? { x: 1.15, y: 1.15 } : { x: 1, y: 1 })
-              .animation({ duration: 150, curve: Curve.EaseOut })
-              .onClick(() => {
-                item.color = color
-                this.persist()
-              })
-            }, (c: string) => c)
-          }
-          .padding({ left: 2 })
+      ColorPickerComponent({
+        selectedColor: item.color,
+        onColorChange: (color: string) => {
+          item.color = color
+          this.persist()
         }
-        .scrollable(ScrollDirection.Horizontal)
-        .scrollBar(BarState.Off)
-        .layoutWeight(1)
-      }
-      .width('100%')
-      .alignItems(VerticalAlign.Center)
+      })
     }
     .width('100%')
     .padding({ left: 12, right: 10, top: 12, bottom: 12 })
