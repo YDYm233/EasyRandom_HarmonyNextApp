@@ -1,5 +1,4 @@
 import { Roll, RollItem } from '../../static_datas/rolls'
-import { promptAction } from '@kit.ArkUI'
 import { saveRollsToPrefs } from './RollDataManager'
 import { RollDetailEditor } from './RollDetailEditor'
 
@@ -18,74 +17,11 @@ const COLOR_PRESETS: string[] = [
   '#ffde6e12', '#ff3498db', '#ff9b59b6', '#ff1abc9c', '#ffe74c3c', '#fff39c12'
 ]
 
-@CustomDialog
-struct NewRollDialog {
-  controller: CustomDialogController
-  @State inputName: string = ''
-  onConfirm?: (name: string) => void
-
-  build() {
-    Column() {
-      Text('新建转盘')
-        .fontSize(18)
-        .fontWeight(700)
-        .fontColor($r('app.color.FontIcon_Fore1'))
-        .margin({ bottom: 16 })
-      TextInput({ placeholder: '输入转盘名称', text: this.inputName })
-        .fontSize(15)
-        .backgroundColor($r('app.color.Comp_Bg2'))
-        .borderRadius(8)
-        .height(44)
-        .width('100%')
-        .onChange((v: string) => {
-          this.inputName = v
-        })
-        .margin({ bottom: 20 })
-      Row({ space: 12 }) {
-        Button('取消')
-          .fontSize(14)
-          .backgroundColor($r('app.color.Comp_Bg3'))
-          .fontColor($r('app.color.FontIcon_Fore2'))
-          .layoutWeight(1)
-          .onClick(() => {
-            this.controller.close()
-          })
-        Button('创建')
-          .fontSize(14)
-          .backgroundColor($r('app.color.Brand'))
-          .fontColor(Color.White)
-          .layoutWeight(1)
-          .onClick(() => {
-            if (this.inputName.trim().length === 0) {
-              promptAction.showToast({ message: '名称不能为空' })
-              return
-            }
-            this.onConfirm?.(this.inputName.trim())
-            this.controller.close()
-          })
-      }
-      .width('100%')
-    }
-    .padding(20)
-  }
-}
-
 // 转盘管理列表内容（作为半模态内 Navigation 的主内容区）
 @Component
 struct RollManageContent {
   @StorageLink('allRolls') allRolls: Roll[] = []
   @Consume('navPathStack') navPathStack: NavPathStack
-  private newRollDialog: CustomDialogController = new CustomDialogController({
-    builder: NewRollDialog({
-      onConfirm: (name: string) => {
-        this.createRoll(name)
-      }
-    }),
-    autoCancel: true,
-    alignment: DialogAlignment.Center,
-    customStyle: true,
-    cornerRadius: 16
-  })
 
   build() {
     Column() {
@@ -129,7 +65,7 @@ struct RollManageContent {
       .borderRadius(22)
       .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.95 })
       .onClick(() => {
-        this.newRollDialog.open()
+        this.quickCreateAndEnter()
       })
     }
     .width('100%')
@@ -178,15 +114,20 @@ struct RollManageContent {
     saveRollsToPrefs(ctx, this.allRolls)
   }
 
-  private createRoll(name: string): void {
+  private quickCreateAndEnter(): void {
     const newIndex = `custom_${Date.now()}`
-    const roll = new Roll(newIndex, name, [
-      new RollItem(`${newIndex}_0`, '选项A', 1, COLOR_PRESETS[0]),
-      new RollItem(`${newIndex}_1`, '选项B', 1, COLOR_PRESETS[1])
-    ])
+    // 随机子选项数量 2~5
+    const subCount = Math.floor(Math.random() * 4) + 2
+    const items: RollItem[] = []
+    for (let i = 0; i < subCount; i++) {
+      const color = COLOR_PRESETS[Math.floor(Math.random() * COLOR_PRESETS.length)]
+      const weight = Math.floor(Math.random() * 5) + 1 // 1~5
+      items.push(new RollItem(`${newIndex}_${i}`, `选项${i + 1}`, weight, color))
+    }
+    const roll = new Roll(newIndex, '新建转盘', items)
     this.allRolls.push(roll)
     this.persist()
-    promptAction.showToast({ message: `已创建"${name}"` })
+    this.navPathStack.pushPathByName('RollDetailEditor', new RollDetailParams(newIndex))
   }
 }
 
