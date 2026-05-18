@@ -1,5 +1,5 @@
 export { MainPage } from './src/main/ets/components/MainPage'
-export { ColorPickerComponent } from './src/main/ets/components/ColorPickerComponent/ColorPickerComponent'
+export { ColorPickerView, ColorPickerButton } from './src/main/ets/components/ColorPickerComponent/ColorPickerDialog'
 
 export { Random, Randoms, ExColor } from './src/main/ets/utils/Math'
 export { BreakpointSystem, Breakpoint, BreakpointOptions, BreakpointType, BreakpointState } from './src/main/ets/utils/BreakPointSystem'

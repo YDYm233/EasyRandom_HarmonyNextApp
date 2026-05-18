@@ -1,7 +1,7 @@
 import { Roll, RollItem } from '../../static_datas/rolls'
 import { promptAction } from '@kit.ArkUI'
 import { saveRollsToPrefs } from './RollDataManager'
-import { ColorPickerComponent } from '@ohos/common'
+import { ColorPickerButton } from '@ohos/common'
 
 /** 预设颜色板 */
 const COLOR_PRESETS: string[] = [
@@ -15,7 +15,6 @@ export struct RollDetailEditor {
   @Prop rollIndex: string = ''
   @StorageLink('allRolls') allRolls: Roll[] = []
   @Consume('navPathStack') navPathStack: NavPathStack
-  @State expandColorIdx: number = -1 // 展开颜色选择器的 item 索引
 
   /** 获取当前编辑的转盘 */
   private getRoll(): Roll | undefined {
@@ -233,14 +232,22 @@ export struct RollDetailEditor {
       .alignItems(VerticalAlign.Center)
       .margin({ bottom: 8 })
 
-      // 第二行：颜色选择器
-      ColorPickerComponent({
-        selectedColor: item.color,
-        onColorChange: (color: string) => {
-          item.color = color
-          this.persist()
-        }
-      })
+      // 第二行：颜色选择器按钮 → 点击弹出专业取色弹窗
+      Row({ space: 8 }) {
+        Text('颜色')
+          .fontSize(12)
+          .fontColor($r('app.color.FontIcon_Fore3'))
+        ColorPickerButton({
+          initialColor: item.color,
+          onColorChange: (color: string) => {
+            item.color = color
+            this.persist()
+          }
+        })
+        Blank()
+      }
+      .width('100%')
+      .alignItems(VerticalAlign.Center)
     }
     .width('100%')
     .padding({ left: 12, right: 10, top: 12, bottom: 12 })

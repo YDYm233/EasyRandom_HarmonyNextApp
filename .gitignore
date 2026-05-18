@@ -21,6 +21,7 @@
 /.appanalyzer
 /.preview
 /preview
+.vscode
 
 # -------------------- 构建产物 --------------------
 **/build
@@ -79,3 +80,4 @@ coverage/
 .env
 .env.local
 .env.*.local
+/.vscode/settings.json
