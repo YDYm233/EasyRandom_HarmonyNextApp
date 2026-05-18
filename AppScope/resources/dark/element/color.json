@@ -139,6 +139,10 @@
     {
       "name": "Yang",
       "value": "#000000"
+    },
+    {
+      "name": "popup_mask",
+      "value": "#66000000"
     }
   ]
 }

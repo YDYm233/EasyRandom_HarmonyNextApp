@@ -2,27 +2,24 @@
  * 专业颜色选择器 — Popup 气泡 + 按钮一体化组件
  *
  * 包含:
- *   ColorPickerView       — @Component 取色面板（色相滑块 + 色盘）
+ *   ColorPickerView       — @Component 取色面板（色相滑块 + 透明度滑块 + 2D 色块）
  *   ColorPickerButton     — 小巧方形按钮，点击弹出 Popup 气泡取色
  *
  * 多设备适配:
- *   view 自身 constraintSize 限制 400×480，Scroll layoutWeight 撑满，
- *   色盘格 aspectRatio 自适应——窄屏格子小全显，宽屏格子大可滚。
+ *   view 自身 constraintSize 限制 440×380（宽扁比例），2D 色块 layoutWeight 弹性撑满，
+ *   各子组件响应式自适应，无需滚动。mask 与 shadow 均使用 $r 资源适配暗色模式。
  */
 
 // ===================================================================
 //  常量 & 工具函数
 // ===================================================================
 
-const SAT_LEVELS: number[] = [20, 40, 60, 80, 100]
-const LIGHT_LEVELS: number[] = [85, 65, 45, 25]
+interface HslColor { h: number; s: number; l: number; a: number }
 
-interface HslColor { h: number; s: number; l: number }
-
-// ---- HSL ↔ Hex 转换 ----
+// ---- HSL ↔ Hex 转换（含 Alpha）----
 
 function hexToHsl(hex: string): HslColor {
-  let r = 0, g = 0, b = 0
+  let r = 0, g = 0, b = 0, a = 1
   const clean = hex.replace('#', '')
   if (clean.length === 3) {
     r = parseInt(clean[0] + clean[0], 16) / 255
@@ -33,6 +30,9 @@ function hexToHsl(hex: string): HslColor {
     r = parseInt(clean.substring(offset, offset + 2), 16) / 255
     g = parseInt(clean.substring(offset + 2, offset + 4), 16) / 255
     b = parseInt(clean.substring(offset + 4, offset + 6), 16) / 255
+    if (clean.length === 8) {
+      a = parseInt(clean.substring(0, 2), 16) / 255
+    }
   }
   const max = Math.max(r, g, b), min = Math.min(r, g, b), delta = max - min
   let h = 0, s = 0
@@ -43,18 +43,19 @@ function hexToHsl(hex: string): HslColor {
     else if (max === g) h = ((b - r) / delta + 2) * 60
     else h = ((r - g) / delta + 4) * 60
   }
-  return { h: Math.round(h), s: Math.round(s), l: Math.round(l) }
+  return { h: Math.round(h), s: Math.round(s), l: Math.round(l), a: Math.round(a * 100) / 100 }
 }
 
-function hslToHex(h: number, s: number, l: number): string {
+function hslToHex(h: number, s: number, l: number, a: number = 1): string {
   s /= 100; l /= 100
-  const a = s * Math.min(l, 1 - l)
+  const k1 = s * Math.min(l, 1 - l)
   const f = (n: number): number => {
     const k = (n + h / 30) % 12
-    return Math.round((l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1)) * 255)
+    return Math.round((l - k1 * Math.max(Math.min(k - 3, 9 - k, 1), -1)) * 255)
   }
   const toHex = (v: number): string => v.toString(16).padStart(2, '0')
-  return `#ff${toHex(f(0))}${toHex(f(8))}${toHex(f(4))}`
+  const alphaHex = Math.round(a * 255).toString(16).padStart(2, '0')
+  return `#${alphaHex}${toHex(f(0))}${toHex(f(8))}${toHex(f(4))}`
 }
 
 // ===================================================================
@@ -62,7 +63,7 @@ function hslToHex(h: number, s: number, l: number): string {
 // ===================================================================
 
 /**
- * 取色面板（色相滑块 + 饱和度×明度色盘 + 当前预览）。
+ * 取色面板（色相滑块 + 透明度滑块 + 饱和度×明度 2D 色块 + 当前预览）。
  * 不含弹窗逻辑，可嵌入任意容器。
  *
  * 回调: onConfirm(color) — 用户确定; onClose() — 取消/外部关闭
@@ -76,8 +77,12 @@ export struct ColorPickerView {
   @State private hue: number = 0
   @State private sat: number = 100
   @State private light: number = 50
-  @State private previewColor: string = '#ffcba50b'
-  @State private barWidth: number = 0
+  @State private alpha: number = 1
+  @State private previewColor: string = '#ff0ba5cb'
+  @State private hueBarWidth: number = 0
+  @State private alphaBarW: number = 0
+  @State private blockWidth: number = 0
+  @State private blockHeight: number = 0
 
   aboutToAppear(): void {
     this.resetToColor(this.initialColor)
@@ -90,19 +95,12 @@ export struct ColorPickerView {
     this.hue = hsl.h
     this.sat = hsl.s
     this.light = hsl.l
+    this.alpha = hsl.a
     this.previewColor = hex
   }
 
   private syncPreview(): void {
-    this.previewColor = hslToHex(this.hue, this.sat, this.light)
-  }
-
-  private cellColor(sat: number, light: number): string {
-    return hslToHex(this.hue, sat, light)
-  }
-
-  private isCellSelected(sat: number, light: number): boolean {
-    return this.sat === sat && this.light === light
+    this.previewColor = hslToHex(this.hue, this.sat, this.light, this.alpha)
   }
 
   // ---- UI ----
@@ -114,64 +112,65 @@ export struct ColorPickerView {
         Text('选取颜色')
           .fontSize(16).fontWeight(600)
           .fontColor($r('app.color.FontIcon_Fore1'))
-      }
-      .width('100%').padding({ left: 16, right: 16, top: 14, bottom: 10 })
-
-      Divider()
-        .color($r('app.color.Comp_Bg3'))
-        .width('100%')
-
-      // 取色区（可滚动）
-      Scroll() {
-        Column({ space: 14 }) {
-          this.HueBar()
-          this.SatLightGrid()
-          this.PreviewRow()
+        Blank()
+        Row() {
+          SymbolGlyph($r('sys.symbol.xmark'))
+            .fontSize(14)
+            .fontColor([$r('app.color.FontIcon_Fore2')])
         }
-        .padding({ left: 16, right: 16, top: 12, bottom: 8 })
+        .width(28).height(28).borderRadius(14)
+        .justifyContent(FlexAlign.Center)
+        .backgroundColor($r('app.color.Comp_Bg2'))
+        .onClick(() => this.onClose?.())
       }
-      .scrollBar(BarState.Off)
+      .width('100%').padding({ left: 16, right: 16, top: 10, bottom: 6 })
+
+      // 取色面板主体
+      Column({ space: 6 }) {
+        this.HueBar()
+        this.AlphaBar()
+        this.ColorBlock()
+        this.PreviewRow()
+        // 底部按钮
+        Row({ space: 12 }) {
+          Button('取消')
+            .fontSize(14)
+            .type(ButtonType.Normal)
+            .backgroundColor($r('app.color.Comp_Bg2'))
+            .fontColor($r('app.color.FontIcon_Fore1'))
+            .layoutWeight(1).height(38).borderRadius(10)
+            .onClick(() => this.onClose?.())
+
+          Button('确定')
+            .fontSize(14)
+            .type(ButtonType.Normal)
+            .backgroundColor($r('app.color.Brand'))
+            .fontColor(Color.White)
+            .layoutWeight(1).height(38).borderRadius(10)
+            .onClick(() => this.onConfirm?.(this.previewColor))
+        }
+        .width('100%')
+      }
       .layoutWeight(1)
-
-      // 底部按钮
-      Divider().color($r('app.color.Comp_Bg3'))
-      Row({ space: 12 }) {
-        Button('取消')
-          .fontSize(14)
-          .type(ButtonType.Normal)
-          .backgroundColor($r('app.color.Comp_Bg2'))
-          .fontColor($r('app.color.FontIcon_Fore1'))
-          .layoutWeight(1).height(42).borderRadius(10)
-          .onClick(() => this.onClose?.())
-
-        Button('确定')
-          .fontSize(14)
-          .type(ButtonType.Normal)
-          .backgroundColor($r('app.color.Brand'))
-          .fontColor(Color.White)
-          .layoutWeight(1).height(42).borderRadius(10)
-          .onClick(() => this.onConfirm?.(this.previewColor))
-      }
-      .width('100%')
-      .padding({ left: 16, right: 16, top: 10, bottom: 14 })
+      .padding({ left: 16, right: 16, top: 8, bottom: 10 })
     }
     .width('100%')
-    // ★ 极限尺寸：宽度≤400，高度≤480 → 宽高比≈1:1.2，适配多设备
-    .constraintSize({ maxWidth: 400, maxHeight: 480 })
+    .constraintSize({ maxWidth: 440, maxHeight: 380 })
     .borderRadius(16)
     .backgroundColor($r('app.color.Comp_Bg1'))
+    .shadow({ radius: 24, color: $r('app.color.shadow'), offsetY: 8 })
   }
 
   // ==================== 色相条 ====================
 
   @Builder
   HueBar() {
-    Column({ space: 8 }) {
+    Column({ space: 6 }) {
       Row({ space: 8 }) {
-        Text('色相').fontSize(12).fontColor($r('app.color.FontIcon_Fore3')).width(26)
+        Text('色相').fontSize(12).fontColor($r('app.color.FontIcon_Fore3')).width(36)
         Stack({ alignContent: Alignment.Start }) {
           Row()
-            .width('100%').height(24).borderRadius(12)
+            .width('100%').height(22).borderRadius(11)
             .linearGradient({
               direction: GradientDirection.Right,
               colors: [
@@ -182,12 +181,12 @@ export struct ColorPickerView {
               ]
             })
             .onAreaChange((_: Area, newArea: Area) => {
-              this.barWidth = newArea.width as number
+              this.hueBarWidth = newArea.width as number
             })
             .onTouch((event: TouchEvent) => {
               if (event.type === TouchType.Down || event.type === TouchType.Move) {
                 const ratio = Math.max(0, Math.min(1,
-                  event.touches[0].x / this.barWidth))
+                  event.touches[0].x / this.hueBarWidth))
                 this.hue = Math.round(ratio * 360)
                 this.syncPreview()
               }
@@ -197,56 +196,133 @@ export struct ColorPickerView {
             .fill(Color.White)
             .strokeWidth(2.5)
             .stroke(this.previewColor)
-            .shadow({ radius: 4, color: '#33000000' })
+            .shadow({ radius: 4, color: $r('app.color.shadow') })
             .offset({
-              x: this.barWidth > 0 ? (this.hue / 360) * this.barWidth - 9 : 0,
+              x: this.hueBarWidth > 0 ? (this.hue / 360) * this.hueBarWidth - 9 : 0,
               y: 0
             })
             .hitTestBehavior(HitTestMode.None)
         }
-        .layoutWeight(1).height(28)
+        .layoutWeight(1).height(24)
       }
       .width('100%').alignItems(VerticalAlign.Center)
     }
   }
 
-  // ==================== 饱和度 × 明度色盘 ====================
+  // ==================== 透明度条 ====================
 
   @Builder
-  SatLightGrid() {
+  AlphaBar() {
     Column({ space: 6 }) {
-      Row({ space: 4 }) {
-        Text('饱和度 →').fontSize(10).fontColor($r('app.color.FontIcon_Fore3')).width(26)
-        Blank()
-        Text('← 明度').fontSize(10).fontColor($r('app.color.FontIcon_Fore3'))
+      Row({ space: 8 }) {
+        Text('透明度').fontSize(12).fontColor($r('app.color.FontIcon_Fore3')).width(36)
+        Stack({ alignContent: Alignment.Start }) {
+          // 透明度提示底纹（浅灰→深灰→浅灰，模拟棋盘格暗示透明区域）
+          Row()
+            .width('100%').height(22).borderRadius(11)
+            .linearGradient({
+              direction: GradientDirection.Right,
+              colors: [['#D5D5D5', 0], ['#AAAAAA', 0.5], ['#D5D5D5', 1]]
+            })
+          // Alpha 颜色渐变（透明 → 完全不透明）
+          Row()
+            .width('100%').height(22).borderRadius(11)
+            .linearGradient({
+              direction: GradientDirection.Right,
+              colors: [
+                [`#00${this.previewColor.substring(3)}`, 0],
+                [`#ff${this.previewColor.substring(3)}`, 1]
+              ]
+            })
+            .onAreaChange((_: Area, newArea: Area) => {
+              this.alphaBarW = newArea.width as number
+            })
+            .onTouch((event: TouchEvent) => {
+              if (event.type === TouchType.Down || event.type === TouchType.Move) {
+                const ratio = Math.max(0, Math.min(1,
+                  event.touches[0].x / this.alphaBarW))
+                this.alpha = Math.round(ratio * 100) / 100
+                this.syncPreview()
+              }
+            })
+          // 指示器
+          Circle()
+            .width(18).height(18)
+            .fill(Color.White)
+            .strokeWidth(2.5)
+            .stroke($r('app.color.Comp_Bg3'))
+            .shadow({ radius: 4, color: $r('app.color.shadow') })
+            .offset({
+              x: this.alphaBarW > 0 ? this.alpha * this.alphaBarW - 9 : 0,
+              y: 0
+            })
+            .hitTestBehavior(HitTestMode.None)
+        }
+        .layoutWeight(1).height(24)
       }
-      Column({ space: 4 }) {
-        ForEach(LIGHT_LEVELS, (light: number) => {
-          Row({ space: 4 }) {
-            ForEach(SAT_LEVELS, (sat: number) => {
-              this.Cell(sat, light)
-            }, (s: number) => `${s}_${light}`)
-          }
-        }, (l: number) => `${l}`)
-      }
+      .width('100%').alignItems(VerticalAlign.Center)
     }
   }
 
+  // ==================== 饱和度 × 明度 2D 色块 ====================
+
   @Builder
-  Cell(sat: number, light: number) {
-    Row() {
-      if (this.isCellSelected(sat, light)) {
-        Text('✓')
-          .fontSize(11).fontWeight(700)
-          .fontColor(light > 50 ? '#333' : Color.White)
+  ColorBlock() {
+    Column({ space: 2 }) {
+
+      Stack({ alignContent: Alignment.TopStart }) {
+        // 底层：水平饱和度渐变（白 → 纯色）
+        Row()
+          .width('100%').height('100%')
+          .linearGradient({
+            direction: GradientDirection.Right,
+            colors: [['#FFFFFF', 0], [hslToHex(this.hue, 100, 50), 1]]
+          })
+
+        // 顶层：垂直明度渐变（透明 → 黑）
+        Row()
+          .width('100%').height('100%')
+          .linearGradient({
+            direction: GradientDirection.Bottom,
+            colors: [['#00FFFFFF', 0], ['#FF000000', 1]]
+          })
+
+        // 选中指示器（外白内空圆环）
+        Circle()
+          .width(18).height(18)
+          .fill(Color.Transparent)
+          .strokeWidth(2)
+          .stroke(Color.White)
+          .shadow({ radius: 8, color: '#44000000' })
+          .offset({
+            x: this.blockWidth > 0 ? (this.sat / 100) * this.blockWidth - 9 : 0,
+            y: this.blockHeight > 0 ? ((100 - this.light) / 100) * this.blockHeight - 9 : 0
+          })
+          .hitTestBehavior(HitTestMode.None)
       }
+      .width('100%')
+      .layoutWeight(1)
+      .constraintSize({ minHeight: 80, maxHeight: 130 })
+      .borderRadius(10)
+      .clip(true)
+      .onAreaChange((_: Area, newArea: Area) => {
+        this.blockWidth = newArea.width as number
+        this.blockHeight = newArea.height as number
+      })
+      .onTouch((event: TouchEvent) => {
+        if (event.type === TouchType.Down || event.type === TouchType.Move) {
+          if (this.blockWidth > 0 && this.blockHeight > 0) {
+            const rx = Math.max(0, Math.min(1,
+              event.touches[0].x / this.blockWidth))
+            const ry = Math.max(0, Math.min(1,
+              event.touches[0].y / this.blockHeight))
+            this.sat = Math.round(rx * 100)
+            this.light = Math.round((1 - ry) * 100)
+            this.syncPreview()
+          }
+        }
+      })
     }
-    .layoutWeight(1).aspectRatio(1).borderRadius(6)
-    .backgroundColor(this.cellColor(sat, light))
-    .justifyContent(FlexAlign.Center)
-    .scale(this.isCellSelected(sat, light) ? { x: 1.12, y: 1.12 } : { x: 1, y: 1 })
-    .animation({ duration: 120, curve: Curve.EaseOut })
-    .onClick(() => { this.sat = sat; this.light = light; this.syncPreview() })
   }
 
   // ==================== 预览 + 十六进制 ====================
@@ -255,15 +331,15 @@ export struct ColorPickerView {
   PreviewRow() {
     Row({ space: 12 }) {
       Circle()
-        .width(40).height(40)
+        .width(36).height(36)
         .fill(this.previewColor)
         .strokeWidth(2)
         .stroke($r('app.color.Comp_Bg3'))
         .shadow({ radius: 6, color: this.previewColor, offsetY: 2 })
-      Column({ space: 2 }) {
+      Column({ space: 3 }) {
         Text('当前颜色').fontSize(10).fontColor($r('app.color.FontIcon_Fore3'))
         Text(this.previewColor.toUpperCase())
-          .fontSize(13).fontWeight(500)
+          .fontSize(14).fontWeight(500)
           .fontColor($r('app.color.FontIcon_Fore1'))
           .fontFamily('monospace')
       }.alignItems(HorizontalAlign.Start)
@@ -354,7 +430,7 @@ export struct ColorPickerButton {
       enableArrow: true,
       autoCancel: true,
       radius: 16,
-      mask: { color: '#33000000' },
+      mask: { color: $r('app.color.popup_mask') },
       onStateChange: (e) => {
         if (!e.isVisible) {
           this.showPopup = false
