@@ -181,15 +181,20 @@ export function loadRollsFromPrefs(context: Context): Roll[] {
 
 /**
  * 将转盘数据保存到 Preferences，并同步更新 AppStorage
- * 使用浅拷贝新数组引用以触发 @StorageLink 更新
+ * 深拷贝所有 Roll / RollItem 对象，确保 @Prop 等引用型装饰器能检测到变化
  */
 export function saveRollsToPrefs(context: Context, data: Roll[]): void {
   try {
     const pref = preferences.getPreferencesSync(context, { name: PREF_NAME })
     pref.putSync(KEY_ROLLS, JSON.stringify(data))
     pref.flushSync()
-    // [...data] 创建新数组引用 → @StorageLink 检测到变化 → 所有监听组件刷新
-    AppStorage.setOrCreate(APP_STORAGE_KEY, [...data])
+    // 深拷贝：新 Roll → 新 RollItem → 新引用，触发所有监听组件的 @Prop / @StorageLink 刷新
+    const cloned: Roll[] = data.map((r: Roll) => {
+      const items = r.rollItems.map((item: RollItem) =>
+        new RollItem(item.id, item.text, item.weight, item.color))
+      return new Roll(r.index, r.rollName, items)
+    })
+    AppStorage.setOrCreate(APP_STORAGE_KEY, cloned)
   } catch (_e) {
     // ignore
   }

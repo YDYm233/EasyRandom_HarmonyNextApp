@@ -46,11 +46,12 @@ export struct RollDetailEditor {
           // ═══════ 缩略预览 ═══════
           if (this.resolveRoll()) {
             Row() {
-              if (this.editorVersion % 2 === 0) {
-                RollWheel({ data: this.resolveRoll()! })
-              } else {
-                RollWheel({ data: this.resolveRoll()! })
-              }
+              ForEach([this.editorVersion],
+                (v: number) => {
+                  RollWheel({ data: this.resolveRoll()! })
+                },
+                (v: number) => `${v}`
+              )
             }
             .width('100%')
             .justifyContent(FlexAlign.Center)

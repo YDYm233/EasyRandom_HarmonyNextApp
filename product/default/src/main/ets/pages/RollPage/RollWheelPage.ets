@@ -46,6 +46,7 @@ struct RollWheelsShow {
   @State loveIndex: number = -1
   @State showPoint: boolean = true
   @State isSheetShow: boolean = false
+  @State dataVersion: number = 0
   private swiperController: SwiperController = new SwiperController()
 
   aboutToAppear() {
@@ -55,6 +56,7 @@ struct RollWheelsShow {
   }
 
   onDataListChange() {
+    this.dataVersion++
     if (this.swiperIndex < this.dataList.length) {
       this.title = this.dataList[this.swiperIndex].rollName
     } else if (this.dataList.length > 0) {
@@ -149,7 +151,7 @@ struct RollWheelsShow {
           .margin('5%')
           .aspectRatio(1)
 
-        }, (item: Roll) => item.index)
+        }, (item: Roll) => `${item.index}_v${this.dataVersion}`)
 
       }
       .width('100%')
