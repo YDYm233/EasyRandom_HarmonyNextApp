@@ -264,6 +264,7 @@ struct RollWheelsShow {
     .bindSheet($$this.isSheetShow, this.sheetContent(), {
       height: SheetSize.FIT_CONTENT,
       dragBar: true,
+      showClose:false,
       onDisappear: () => {
         if (this.swiperIndex < this.dataList.length) {
           this.title = this.dataList[this.swiperIndex].rollName

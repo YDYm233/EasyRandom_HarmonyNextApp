@@ -77,19 +77,25 @@ export function findRoll(allRolls: Roll[], index: string): Roll | undefined {
   return allRolls.find((r: Roll) => r.index === index)
 }
 
-/** 在转盘中添加子选项 */
+/**
+ * 在转盘中添加子选项 — 生成新数组引用以触发 ForEach 增量刷新
+ */
 export function addRollItem(roll: Roll): RollItem {
   const item = new RollItem(generateItemId(), '新选项', 1, randomPresetColor())
-  roll.rollItems.push(item)
+  roll.rollItems = [...roll.rollItems, item]
   return item
 }
 
-/** 在转盘中删除子选项（保留至少 2 个），返回是否成功 */
+/**
+ * 在转盘中删除子选项（保留至少 2 个）— 生成新数组引用以触发 ForEach 增量刷新
+ */
 export function removeRollItem(roll: Roll, itemIdx: number): boolean {
   if (roll.rollItems.length <= 2) {
     return false
   }
-  roll.rollItems.splice(itemIdx, 1)
+  const updated = [...roll.rollItems]
+  updated.splice(itemIdx, 1)
+  roll.rollItems = updated
   return true
 }
 
