@@ -1,4 +1,4 @@
-import { Roll, RollItem } from '../../static_datas/rolls'
+import { Roll, RollItem, COLOR_PRESETS } from '../../static_datas/rolls'
 import { saveRollsToPrefs } from './RollDataManager'
 import { RollDetailEditor } from './RollDetailEditor'
 
@@ -9,13 +9,6 @@ export class RollDetailParams {
     this.rollIndex = rollIndex
   }
 }
-
-/** 预设颜色板 */
-const COLOR_PRESETS: string[] = [
-  '#ffcba50b', '#ffa87cf4', '#ffe81b58', '#ff38ed44', '#fff7942c', '#ff68ead0',
-  '#ffff007a', '#ff0cdec5', '#ff05f80b', '#ffecb609', '#ff5f16e1', '#499821',
-  '#ffde6e12', '#ff3498db', '#ff9b59b6', '#ff1abc9c', '#ffe74c3c', '#fff39c12'
-]
 
 // 转盘管理列表内容（作为半模态内 Navigation 的主内容区）
 @Component

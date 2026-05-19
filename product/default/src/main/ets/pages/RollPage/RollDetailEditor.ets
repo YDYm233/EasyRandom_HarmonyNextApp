@@ -1,23 +1,24 @@
-import { Roll, RollItem } from '../../static_datas/rolls'
+import { Roll, RollItem, COLOR_PRESETS } from '../../static_datas/rolls'
 import { promptAction } from '@kit.ArkUI'
 import { saveRollsToPrefs } from './RollDataManager'
 import { ColorPickerButton } from '@ohos/common'
-
-/** 预设颜色板 */
-const COLOR_PRESETS: string[] = [
-  '#ffcba50b', '#ffa87cf4', '#ffe81b58', '#ff38ed44', '#fff7942c', '#ff68ead0',
-  '#ffff007a', '#ff0cdec5', '#ff05f80b', '#ffecb609', '#ff5f16e1', '#499821',
-  '#ffde6e12', '#ff3498db', '#ff9b59b6', '#ff1abc9c', '#ffe74c3c', '#fff39c12'
-]
 
 @Component
 export struct RollDetailEditor {
   @Prop rollIndex: string = ''
   @StorageLink('allRolls') allRolls: Roll[] = []
   @Consume('navPathStack') navPathStack: NavPathStack
+  @State rollNameInput: string = ''
+
+  aboutToAppear(): void {
+    const roll = this.resolveRoll()
+    if (roll) {
+      this.rollNameInput = roll.rollName
+    }
+  }
 
   /** 获取当前编辑的转盘 */
-  private getRoll(): Roll | undefined {
+  private resolveRoll(): Roll | undefined {
     return this.allRolls.find((r: Roll) => r.index === this.rollIndex)
   }
 
@@ -25,10 +26,26 @@ export struct RollDetailEditor {
     NavDestination() {
       Scroll() {
         Column({ space: 0 }) {
-          // ====== 缩略预览（居中、约束尺寸） ======
-          if (this.getRoll()) {
+          // ====== 转盘未找到 ======
+          if (!this.resolveRoll()) {
+            Column() {
+              Image($r('sys.symbol.questionmark_circle'))
+                .width(40).height(40)
+                .fillColor($r('app.color.FontIcon_Fore3'))
+                .margin({ bottom: 12 })
+              Text('转盘不存在')
+                .fontSize(15)
+                .fontColor($r('app.color.FontIcon_Fore3'))
+            }
+            .width('100%')
+            .justifyContent(FlexAlign.Center)
+            .height(200)
+          }
+
+          // ====== 缩略预览 ======
+          if (this.resolveRoll()) {
             Row() {
-              PieChartMini({ data: this.getRoll()! })
+              PieChartMini({ data: this.resolveRoll()! })
             }
             .width('100%')
             .justifyContent(FlexAlign.Center)
@@ -36,14 +53,14 @@ export struct RollDetailEditor {
           }
 
           // ====== 名称编辑卡片 ======
-          if (this.getRoll()) {
+          if (this.resolveRoll()) {
             Column() {
               Row() {
                 Text('转盘名称')
                   .fontSize(13)
                   .fontColor($r('app.color.FontIcon_Fore3'))
                   .width(56)
-                TextInput({ text: this.getRoll()!.rollName })
+                TextInput({ text: this.rollNameInput })
                   .fontSize(15)
                   .fontWeight(600)
                   .layoutWeight(1)
@@ -52,9 +69,10 @@ export struct RollDetailEditor {
                   .height(40)
                   .padding({ left: 12, right: 12 })
                   .onChange((v: string) => {
-                    const roll = this.getRoll()
-                    if (roll) {
-                      roll.rollName = v
+                    this.rollNameInput = v
+                    const r = this.resolveRoll()
+                    if (r) {
+                      r.rollName = v
                       this.persist()
                     }
                   })
@@ -70,10 +88,10 @@ export struct RollDetailEditor {
           }
 
           // ====== 选项列表区域 ======
-          if (this.getRoll()) {
-            // 区域标题
+          if (this.resolveRoll()) {
+            // 区域标题行
             Row() {
-              Text('选项列表')
+              Text(`选项列表（${this.resolveRoll()!.rollItems.length}）`)
                 .fontSize(15)
                 .fontWeight(600)
                 .fontColor($r('app.color.FontIcon_Fore1'))
@@ -96,9 +114,9 @@ export struct RollDetailEditor {
             .width('100%')
             .padding({ left: 16, right: 10, bottom: 8 })
 
-            // 选项卡片列表
+            // 选项卡片列表（自适应高度）
             List({ space: 10 }) {
-              ForEach(this.getRoll()!.rollItems, (item: RollItem, itemIdx: number) => {
+              ForEach(this.resolveRoll()!.rollItems, (item: RollItem, itemIdx: number) => {
                 ListItem() {
                   this.ItemEditor(item, itemIdx)
                 }
@@ -113,14 +131,15 @@ export struct RollDetailEditor {
                     actionAreaDistance: 72
                   }
                 })
-              }, (item: RollItem) => `${this.getRoll()!.index}_${item.id}`)
+              }, (item: RollItem) => `${this.resolveRoll()!.index}_${item.id}`)
             }
             .scrollBar(BarState.Off)
             .padding({ left: 16, right: 16 })
             .alignListItem(ListItemAlign.Center)
-            .height(this.getRoll() ? Math.max(180, this.getRoll()!.rollItems.length * 130) : 180)
+            .constraintSize({ minHeight: 120 })
+            .height(this.resolveRoll()!.rollItems.length * 130)
 
-            // ====== 删除转盘（底部弱化入口） ======
+            // ====== 底部：删除转盘入口 ======
             Row() {
               Button() {
                 Row() {
@@ -134,45 +153,32 @@ export struct RollDetailEditor {
               .backgroundColor(0)
               .height(36)
               .onClick(() => {
-                AlertDialog.show({
-                  title: '确认删除',
-                  message: `确定要删除转盘「${this.getRoll()!.rollName}」吗？此操作不可撤销。`,
-                  autoCancel: true,
-                  alignment: DialogAlignment.Center,
-                  primaryButton: {
-                    value: '取消',
-                    action: () => {
+                const r = this.resolveRoll()
+                if (r) {
+                  AlertDialog.show({
+                    title: '确认删除',
+                    message: `确定要删除转盘「${r.rollName}」吗？此操作不可撤销。`,
+                    autoCancel: true,
+                    alignment: DialogAlignment.Center,
+                    primaryButton: {
+                      value: '取消',
+                      action: () => {
+                      }
+                    },
+                    secondaryButton: {
+                      value: '删除',
+                      fontColor: '#FFE74C3C',
+                      action: () => {
+                        this.deleteRoll()
+                      }
                     }
-                  },
-                  secondaryButton: {
-                    value: '删除',
-                    fontColor: '#FFE74C3C',
-                    action: () => {
-                      this.deleteRoll()
-                    }
-                  }
-                })
+                  })
+                }
               })
             }
             .width('100%')
             .justifyContent(FlexAlign.Center)
             .padding({ top: 20, bottom: 20 })
-          }
-
-          // 转盘未找到
-          if (!this.getRoll()) {
-            Column() {
-              Image($r('sys.symbol.questionmark_circle'))
-                .width(40).height(40)
-                .fillColor($r('app.color.FontIcon_Fore3'))
-                .margin({ bottom: 12 })
-              Text('转盘不存在')
-                .fontSize(15)
-                .fontColor($r('app.color.FontIcon_Fore3'))
-            }
-            .width('100%')
-            .justifyContent(FlexAlign.Center)
-            .height(200)
           }
         }
         .width('100%')
@@ -184,7 +190,7 @@ export struct RollDetailEditor {
       .edgeEffect(EdgeEffect.Spring)
       .align(Alignment.TopStart)
     }
-    .title(this.getRoll() ? `「${this.getRoll()!.rollName}」` : '编辑转盘')
+    .title(this.resolveRoll() ? `「${this.resolveRoll()!.rollName}」` : '编辑转盘')
     .onBackPressed(() => {
       this.navPathStack.pop()
       return true
@@ -232,7 +238,7 @@ export struct RollDetailEditor {
       .alignItems(VerticalAlign.Center)
       .margin({ bottom: 8 })
 
-      // 第二行：颜色选择器按钮 → 点击弹出专业取色弹窗
+      // 第二行：颜色选择器
       Row({ space: 8 }) {
         Text('颜色')
           .fontSize(12)
@@ -278,7 +284,7 @@ export struct RollDetailEditor {
   }
 
   private addItem(): void {
-    const roll = this.getRoll()
+    const roll = this.resolveRoll()
     if (!roll) {
       return
     }
@@ -289,7 +295,7 @@ export struct RollDetailEditor {
   }
 
   private deleteItem(itemIdx: number): void {
-    const roll = this.getRoll()
+    const roll = this.resolveRoll()
     if (!roll) {
       return
     }
@@ -297,12 +303,15 @@ export struct RollDetailEditor {
       promptAction.showToast({ message: '至少保留2个选项' })
       return
     }
-    roll.rollItems.splice(itemIdx, 1)
+    // 滑动删除动画：animateTo 包裹 splice 以触发列表过渡效果
+    animateTo({ duration: 280, curve: Curve.EaseInOut }, () => {
+      roll.rollItems.splice(itemIdx, 1)
+    })
     this.persist()
   }
 
   private deleteRoll(): void {
-    const roll = this.getRoll()
+    const roll = this.resolveRoll()
     if (!roll) {
       return
     }
@@ -327,31 +336,38 @@ struct PieChartMini {
     Flex({ direction: FlexDirection.Column, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Center }) {
       Canvas(this.context)
         .onReady(() => {
-          let ctx = this.context;
+          let ctx = this.context
           ctx.clearRect(0, 0, ctx.width, ctx.width)
-          const radius = ctx.width / 2;
+          const radius = ctx.width / 2
           let list: Array<RollItem> = this.data.rollItems
-          let totalWeight = list.reduce<number>((acc: number, single: RollItem) => acc + single.weight, 0);
-          let startAngle = -list[0].weight / totalWeight * 180 + 90;
+          // 防止除零：无选项或权重全为 0 时不绘制
+          if (list.length === 0) {
+            return
+          }
+          let totalWeight = list.reduce<number>((acc: number, single: RollItem) => acc + single.weight, 0)
+          if (totalWeight <= 0) {
+            totalWeight = list.length // 兜底：按等分处理
+          }
+          let startAngle = -list[0].weight / totalWeight * 180 + 90
 
           list.forEach(single => {
-            const endAngle: number = startAngle + (single.weight / totalWeight) * 360;
-            ctx.beginPath();
-            ctx.moveTo(radius, radius);
-            ctx.arc(radius, radius, radius, startAngle * Math.PI / 180, endAngle * Math.PI / 180, false);
+            const endAngle: number = startAngle + (single.weight / totalWeight) * 360
+            ctx.beginPath()
+            ctx.moveTo(radius, radius)
+            ctx.arc(radius, radius, radius, startAngle * Math.PI / 180, endAngle * Math.PI / 180, false)
             ctx.closePath()
-            ctx.fillStyle = single.color;
-            ctx.fill();
-            startAngle = endAngle;
+            ctx.fillStyle = single.color
+            ctx.fill()
+            startAngle = endAngle
           })
 
           // 中心圆
-          ctx.beginPath();
-          ctx.moveTo(radius, radius);
-          ctx.arc(radius, radius, radius / 10, -45, 275, false);
+          ctx.beginPath()
+          ctx.moveTo(radius, radius)
+          ctx.arc(radius, radius, radius / 10, -45, 275, false)
           ctx.closePath()
-          ctx.fillStyle = 0xf1f3f5;
-          ctx.fill();
+          ctx.fillStyle = '#f1f3f5'
+          ctx.fill()
         })
         .width('100%')
         .aspectRatio(1)
@@ -361,7 +377,7 @@ struct PieChartMini {
     .constraintSize({ maxWidth: 200 })
     .border({
       width: 5,
-      color: $r("app.color.Comp_Bg3"),
+      color: $r('app.color.Comp_Bg3'),
       radius: '50%',
       style: BorderStyle.Solid
     })

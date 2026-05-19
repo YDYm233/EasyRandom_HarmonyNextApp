@@ -1,3 +1,10 @@
+/** 预设颜色板（18色） */
+export const COLOR_PRESETS: string[] = [
+  '#ffcba50b', '#ffa87cf4', '#ffe81b58', '#ff38ed44', '#fff7942c', '#ff68ead0',
+  '#ffff007a', '#ff0cdec5', '#ff05f80b', '#ffecb609', '#ff5f16e1', '#499821',
+  '#ffde6e12', '#ff3498db', '#ff9b59b6', '#ff1abc9c', '#ffe74c3c', '#fff39c12'
+]
+
 export class RollItem { //转盘子选项
   id: string
   text: string
