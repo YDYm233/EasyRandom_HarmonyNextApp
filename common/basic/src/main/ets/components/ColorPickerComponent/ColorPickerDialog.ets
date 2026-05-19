@@ -692,12 +692,12 @@ export struct ColorPickerButton {
       }
       .width(28).height(28).borderRadius(6)
       .backgroundColor(this.displayColor)
-      .border({ width: 1.5, color: $r('app.color.Comp_Bg3') })
+      // .border({ width: 1.5, color: $r('app.color.Comp_Bg3') })
 
-      SymbolGlyph($r('sys.symbol.chevron_right'))
-        .fontSize(10)
-        .fontColor([$r('app.color.FontIcon_Fore3')])
-        .margin({ left: 2 })
+      // SymbolGlyph($r('sys.symbol.chevron_right'))
+      //   .fontSize(10)
+      //   .fontColor([$r('app.color.FontIcon_Fore3')])
+      //   .margin({ left: 2 })
     }
     .height(32)
     .padding({ left: 6, right: 8 })

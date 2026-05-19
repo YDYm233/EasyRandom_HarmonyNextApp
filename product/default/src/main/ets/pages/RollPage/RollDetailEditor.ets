@@ -12,7 +12,6 @@ export struct RollDetailEditor {
   @StorageLink('allRolls') allRolls: Roll[] = []
   @Consume('navPathStack') navPathStack: NavPathStack
   @State rollNameInput: string = ''
-  /** 每次 persist 后递增，驱动 Canvas 交替重建 */
   @State editorVersion: number = 0
 
   aboutToAppear(): void {
@@ -22,7 +21,6 @@ export struct RollDetailEditor {
     }
   }
 
-  /** 获取当前编辑的转盘 */
   private resolveRoll(): Roll | undefined {
     return this.allRolls.find((r: Roll) => r.index === this.rollIndex)
   }
@@ -31,118 +29,78 @@ export struct RollDetailEditor {
     NavDestination() {
       Scroll() {
         Column({ space: 0 }) {
-          // ====== 转盘未找到 ======
+
+          // ═══════ 转盘未找到 ═══════
           if (!this.resolveRoll()) {
             Column() {
-              Image($r('sys.symbol.questionmark_circle'))
-                .width(40).height(40)
-                .fillColor($r('app.color.FontIcon_Fore3'))
+              SymbolGlyph($r('sys.symbol.questionmark_circle'))
+                .fontSize(40)
+                .fontColor(['#FF999999'])
                 .margin({ bottom: 12 })
               Text('转盘不存在')
-                .fontSize(15)
-                .fontColor($r('app.color.FontIcon_Fore3'))
+                .fontSize(15).fontColor('#FF999999')
+            }
+            .width('100%').justifyContent(FlexAlign.Center).height(200)
+          }
+
+          // ═══════ 缩略预览 ═══════
+          if (this.resolveRoll()) {
+            Row() {
+              if (this.editorVersion % 2 === 0) {
+                RollWheel({ data: this.resolveRoll()! })
+              } else {
+                RollWheel({ data: this.resolveRoll()! })
+              }
             }
             .width('100%')
             .justifyContent(FlexAlign.Center)
-            .height(200)
+            .constraintSize({ maxWidth: 200 })
+            .padding({ top: 12, bottom: 4 })
           }
 
-          // ====== 缩略预览 ======
+          // ═══════ 名称编辑卡片 + 删除 ═══════
           if (this.resolveRoll()) {
-            if (this.editorVersion % 2 === 0) {
-              Row() {
-                RollWheel({ data: this.resolveRoll()! })
-              }
-              .width('100%')
-              .justifyContent(FlexAlign.Center)
-              .padding({ top: 16, bottom: 16 })
-            } else {
-              Row() {
-                RollWheel({ data: this.resolveRoll()! })
-              }
-              .width('100%')
-              .justifyContent(FlexAlign.Center)
-              .padding({ top: 16, bottom: 16 })
+            Row({ space: 10 }) {
+              Text('名称')
+                .fontSize(13).fontColor('#FF999999')
+              TextInput({ text: this.rollNameInput })
+                .fontSize(15).fontWeight(600)
+                .layoutWeight(1)
+                .backgroundColor($r('app.color.Comp_Bg2'))
+                .borderRadius(8).height(40)
+                .padding({ left: 12, right: 12 })
+                .onChange((v: string) => {
+                  this.rollNameInput = v
+                  const r = this.resolveRoll()
+                  if (r) {
+                    r.rollName = v
+                    this.persist()
+                  }
+                })
+              SymbolGlyph($r('sys.symbol.trash'))
+                .fontSize(20)
+                .fontColor(['#FF888888'])
+                .padding(8)
+                .onClick(() => this.confirmDeleteRoll())
             }
-          }
-
-          // ====== 名称编辑卡片（含删除转盘入口） ======
-          if (this.resolveRoll()) {
-            Column() {
-              Row({ space: 10 }) {
-                Text('名称')
-                  .fontSize(13)
-                  .fontColor($r('app.color.FontIcon_Fore3'))
-                TextInput({ text: this.rollNameInput })
-                  .fontSize(15)
-                  .fontWeight(600)
-                  .layoutWeight(1)
-                  .backgroundColor($r('app.color.Comp_Bg2'))
-                  .borderRadius(8)
-                  .height(40)
-                  .padding({ left: 12, right: 12 })
-                  .onChange((v: string) => {
-                    this.rollNameInput = v
-                    const r = this.resolveRoll()
-                    if (r) {
-                      r.rollName = v
-                      this.persist()
-                    }
-                  })
-                // 删除转盘入口 — 垃圾桶图标
-                Image($r('sys.symbol.trash'))
-                  .width(20).height(20)
-                  .fillColor($r('app.color.FontIcon_Fore3'))
-                  .padding(8)
-                  .onClick(() => {
-                    const r = this.resolveRoll()
-                    if (!r) {
-                      return
-                    }
-                    AlertDialog.show({
-                      title: '确认删除',
-                      message: `确定要删除转盘「${r.rollName}」吗？此操作不可撤销。`,
-                      autoCancel: true,
-                      alignment: DialogAlignment.Center,
-                      primaryButton: {
-                        value: '取消',
-                        action: () => {
-                        }
-                      },
-                      secondaryButton: {
-                        value: '删除',
-                        fontColor: '#FFE74C3C',
-                        action: () => {
-                          this.deleteRoll()
-                        }
-                      }
-                    })
-                  })
-              }
-              .width('100%')
-              .alignItems(VerticalAlign.Center)
-            }
-            .width('100%')
+            .width('100%').alignItems(VerticalAlign.Center)
             .padding({ left: 16, right: 12, top: 12, bottom: 12 })
             .backgroundColor($r('app.color.Comp_Bg1'))
             .borderRadius(12)
-            .margin({ left: 16, right: 16, bottom: 16 })
+            .margin({ left: 16, right: 16, bottom: 12 })
           }
 
-          // ====== 选项列表区域 ======
+          // ═══════ 选项列表 ═══════
           if (this.resolveRoll()) {
-            // 区域标题
             Row() {
               Text(`选项列表（${this.resolveRoll()!.rollItems.length}）`)
-                .fontSize(15)
-                .fontWeight(600)
-                .fontColor($r('app.color.FontIcon_Fore1'))
+                .fontSize(15).fontWeight(600)
+                .fontColor('#FF1A1A1A')
             }
             .width('100%')
             .padding({ left: 16, bottom: 8 })
 
-            // 列表：选项卡片 + 尾部添加按钮
-            List({ space: 10 }) {
+            List({ space: 8 }) {
               ForEach(this.resolveRoll()!.rollItems,
                 (item: RollItem, itemIdx: number) => {
                   ListItem() {
@@ -150,75 +108,74 @@ export struct RollDetailEditor {
                   }
                   .swipeAction({
                     end: {
-                      builder: () => {
-                        this.DeleteItemSwipeButton()
-                      },
-                      onAction: () => {
-                        this.deleteItem(itemIdx)
-                      },
+                      builder: () => { this.DeleteItemSwipeButton() },
+                      onAction: () => { this.deleteItem(itemIdx) },
                       actionAreaDistance: 72
                     }
                   })
                 },
-                (item: RollItem) =>
-                `${this.resolveRoll()!.index}_${item.id}`
+                (item: RollItem) => `${this.resolveRoll()!.index}_${item.id}`
               )
 
-              // 尾部：添加选项 ListItem
+              // 尾部：添加选项
               ListItem() {
                 Row() {
-                  Image($r('sys.symbol.plus_circle'))
-                    .width(28).height(28)
-                    .fillColor($r('app.color.Brand'))
+                  SymbolGlyph($r('sys.symbol.plus_circle'))
+                    .fontSize(24)
+                    .fontColor(['#FF007AFF'])
                 }
-                .width('100%')
-                .height(56)
+                .width('100%').height(44)
                 .justifyContent(FlexAlign.Center)
                 .borderRadius(12)
-                .border({ width: 1.5, color: $r('app.color.Brand'), style: BorderStyle.Dashed })
                 .backgroundColor($r('app.color.Comp_Bg1'))
-                .onClick(() => {
-                  this.addItem()
-                })
+                .onClick(() => { this.addItem() })
               }
             }
             .scrollBar(BarState.Off)
             .padding({ left: 16, right: 16 })
             .alignListItem(ListItemAlign.Center)
-            .constraintSize({ minHeight: 120 })
-            .height((this.resolveRoll()!.rollItems.length + 1) * 130)
+            .constraintSize({ minHeight: 80 })
+            .height((this.resolveRoll()!.rollItems.length + 1) * 110)
           }
+
         }
         .width('100%')
       }
-      .width('100%')
-      .height('100%')
+      .width('100%').height('100%')
       .backgroundColor($r('app.color.Comp_Bg2'))
       .scrollBar(BarState.Auto)
       .edgeEffect(EdgeEffect.Spring)
       .align(Alignment.TopStart)
     }
     .title(this.resolveRoll() ? `「${this.resolveRoll()!.rollName}」` : '编辑转盘')
-    .onBackPressed(() => {
-      this.navPathStack.pop()
-      return true
-    })
+    .onBackPressed(() => { this.navPathStack.pop(); return true })
     .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.BOTTOM])
   }
 
   // ════════════════ Builders ════════════════
 
+  /**
+   * 子选项编辑卡片 — 单行：颜色 | 名称 | 占比
+   */
   @Builder
   ItemEditor(item: RollItem, itemIdx: number) {
     Column({ space: 0 }) {
       Row({ space: 6 }) {
+        // 颜色 — 最左侧，无文字标签
+        ColorPickerButton({
+          initialColor: item.color,
+          onColorChange: (color: string) => {
+            item.color = color
+            this.persist()
+          }
+        })
+
         // 选项名称
         TextInput({ text: item.text })
           .fontSize(14)
           .layoutWeight(1)
           .backgroundColor($r('app.color.Comp_Bg2'))
-          .borderRadius(6)
-          .height(38)
+          .borderRadius(6).height(38)
           .padding({ left: 10, right: 10 })
           .onChange((v: string) => {
             item.text = v
@@ -227,15 +184,13 @@ export struct RollDetailEditor {
 
         // 占比
         Text('占比')
-          .fontSize(12)
-          .fontColor($r('app.color.FontIcon_Fore3'))
+          .fontSize(12).fontColor('#FF999999')
         TextInput({ text: item.weight.toString() })
           .fontSize(13)
           .type(InputType.Number)
-          .width(44)
+          .width(44).height(38)
           .backgroundColor($r('app.color.Comp_Bg2'))
           .borderRadius(6)
-          .height(38)
           .textAlign(TextAlign.Center)
           .onChange((v: string) => {
             const n = parseInt(v)
@@ -244,24 +199,11 @@ export struct RollDetailEditor {
               this.persist()
             }
           })
-
-        // 颜色
-        Text('颜色')
-          .fontSize(12)
-          .fontColor($r('app.color.FontIcon_Fore3'))
-        ColorPickerButton({
-          initialColor: item.color,
-          onColorChange: (color: string) => {
-            item.color = color
-            this.persist()
-          }
-        })
       }
-      .width('100%')
-      .alignItems(VerticalAlign.Center)
+      .width('100%').alignItems(VerticalAlign.Center)
     }
     .width('100%')
-    .padding({ left: 14, right: 10, top: 14, bottom: 14 })
+    .padding({ left: 14, right: 10, top: 10, bottom: 10 })
     .backgroundColor($r('app.color.Comp_Bg1'))
     .borderRadius(12)
   }
@@ -269,13 +211,12 @@ export struct RollDetailEditor {
   @Builder
   DeleteItemSwipeButton() {
     Row() {
-      Image($r('sys.symbol.trash'))
-        .width(20).height(20)
-        .fillColor(Color.White)
+      SymbolGlyph($r('sys.symbol.trash'))
+        .fontSize(20)
+        .fontColor([Color.White])
       Text('删除').fontSize(14).fontColor(Color.White).margin({ left: 4 })
     }
-    .width(72)
-    .height('100%')
+    .width(72).height('100%')
     .justifyContent(FlexAlign.Center)
     .backgroundColor('#FFE74C3C')
     .borderRadius({ topRight: 12, bottomRight: 12 })
@@ -308,6 +249,25 @@ export struct RollDetailEditor {
       return
     }
     this.persist()
+  }
+
+  private confirmDeleteRoll(): void {
+    const r = this.resolveRoll()
+    if (!r) {
+      return
+    }
+    AlertDialog.show({
+      title: '确认删除',
+      message: `确定要删除转盘「${r.rollName}」吗？此操作不可撤销。`,
+      autoCancel: true,
+      alignment: DialogAlignment.Center,
+      primaryButton: { value: '取消', action: () => {} },
+      secondaryButton: {
+        value: '删除',
+        fontColor: '#FFE74C3C',
+        action: () => { this.deleteRoll() }
+      }
+    })
   }
 
   private deleteRoll(): void {
