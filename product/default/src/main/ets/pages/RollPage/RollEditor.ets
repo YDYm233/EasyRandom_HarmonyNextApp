@@ -1,5 +1,4 @@
-import { Roll, RollItem, COLOR_PRESETS } from '../../static_datas/rolls'
-import { saveRollsToPrefs } from './RollDataManager'
+import { Roll, saveRollsToPrefs, createDefaultRoll } from './RollDataManager'
 import { RollDetailEditor } from './RollDetailEditor'
 
 /** Navigation 推页参数：转盘详情页 */
@@ -108,19 +107,10 @@ struct RollManageContent {
   }
 
   private quickCreateAndEnter(): void {
-    const newIndex = `custom_${Date.now()}`
-    // 随机子选项数量 2~5
-    const subCount = Math.floor(Math.random() * 4) + 2
-    const items: RollItem[] = []
-    for (let i = 0; i < subCount; i++) {
-      const color = COLOR_PRESETS[Math.floor(Math.random() * COLOR_PRESETS.length)]
-      const weight = Math.floor(Math.random() * 5) + 1 // 1~5
-      items.push(new RollItem(`${newIndex}_${i}`, `选项${i + 1}`, weight, color))
-    }
-    const roll = new Roll(newIndex, '新建转盘', items)
+    const roll = createDefaultRoll('新建转盘')
     this.allRolls.push(roll)
     this.persist()
-    this.navPathStack.pushPathByName('RollDetailEditor', new RollDetailParams(newIndex))
+    this.navPathStack.pushPathByName('RollDetailEditor', new RollDetailParams(roll.index))
   }
 }
 

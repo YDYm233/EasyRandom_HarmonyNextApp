@@ -2,7 +2,7 @@
   "src": [
     "pages/Index",
     "pages/RandomPage",
-    "pages/RollPage/RollPage",
+    "pages/RollPage/RollWheelPage",
     "pages/SettingPage/SettingPage",
     "pages/AnswerPage",
     "pages/MorePage",

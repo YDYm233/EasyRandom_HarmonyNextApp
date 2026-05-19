@@ -1,5 +1,5 @@
 import RandomPage from './RandomPage'
-import RollPage from './RollPage/RollPage'
+import RollPage from './RollPage/RollWheelPage'
 import MorePage from './MorePage'
 import AnswerPage from './AnswerPage'
 import AllasOne from './AllasOne'
