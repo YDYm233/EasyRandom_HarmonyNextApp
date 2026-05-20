@@ -35,18 +35,19 @@
 
 ## ✨ 核心特性
 
-| 特性 | 说明                       |
-|------|--------------------------|
-| 🧩 **多设备适配** | 支持手机、平板、2in1、车机，【手表端开发中】 |
-| 📱 **服务卡片** | 7 种桌面服务卡片，无需打开应用即可使用     |
-| 🔗 **元服务** | 提供轻量级元服务版本，即点即用          |
-| 🌐 **多语言** | 支持中文简体、English           |
-| 🌙 **暗夜模式** | 完整适配深色主题                 |
-| 📐 **响应式布局** | 基于断点系统的自适应栅格布局           |
-| 🔒 **隐私合规** | 内置隐私政策弹窗，符合应用市场审核要求      |
-| 📊 **VitalUI 图表库** | 自研图表组件库（饼图、玫瑰图、雷达图等）     |
+| 特性 | 说明 |
+|------|------|
+| 🧩 **多设备适配** | 支持手机、平板、2in1、车机，手表端开发中 |
+| 📱 **服务卡片** | 桌面服务卡片，无需打开应用即可使用 |
+| 🔗 **元服务** | 提供轻量级元服务版本，即点即用 |
+| 🌐 **多语言** | 支持中文简体、English |
+| 🌙 **暗夜模式** | 完整适配深色主题 |
+| 📐 **响应式布局** | 基于断点系统的自适应栅格布局 |
+| 🔒 **隐私合规** | 内置隐私政策弹窗，符合应用市场审核要求 |
+| 📊 **VitalUI 图表库** | 自研图表组件库（饼图、玫瑰图、雷达图等） |
 
 ---
+
 ## 📸 特性预览
 
 ### 多设备适配
@@ -71,6 +72,8 @@
   <img src="./preview/卡片%20(3).png" width="22%" alt="颜色卡片"/>
   <img src="./preview/卡片%20(4).png" width="22%" alt="转盘卡片"/>
 </p>
+
+---
 
 ## 🏗️ 技术架构
 
@@ -121,9 +124,6 @@ product/wearable  ──→  @ohos/common (basic)
 │   │       ├── components/            # 公共组件（MainPage、ColorPickerDialog）
 │   │       └── utils/                 # 工具函数（断点系统、日志、数学工具、全局上下文）
 │   └── VitalUI/                       # 图表组件库 (HAR)
-│       └── src/main/ets/
-│           ├── chart/                 # 图表组件（PieChart、RoseChart、RadarChart）
-│           └── utils/                 # 颜色工具、随机算法
 │
 ├── product/                           # 产品模块目录
 │   ├── default/                       # 主入口模块
@@ -132,28 +132,7 @@ product/wearable  ──→  @ohos/common (basic)
 │   │       │   ├── entryability/      # 主 Ability
 │   │       │   ├── defaultformability/# 服务卡片 Ability
 │   │       │   ├── pages/             # 主页面
-│   │       │   │   ├── Index.ets      # 首页（Tab 导航）
-│   │       │   │   ├── AnswerPage.ets # 答案之书
-│   │       │   │   ├── MorePage.ets   # 工具箱列表
-│   │       │   │   ├── AllasOne.ets   # 功能卡片（服务卡片预览）
-│   │       │   │   ├── RollPage/      # 幸运转盘模块
-│   │       │   │   ├── SettingPage/   # 设置模块
-│   │       │   │   ├── RandomPage.ets # 随机功能
-│   │       │   │   └── ToolsPage.ets  # 工具页
 │   │       │   ├── sub_pages/         # 子功能页面
-│   │       │   │   ├── random_colors/ # 随机颜色
-│   │       │   │   ├── random_names/  # 抽签
-│   │       │   │   ├── random_numbers/# 随机数
-│   │       │   │   ├── random_foods/  # 吃什么
-│   │       │   │   ├── random_places/ # 人生必去的100个地方
-│   │       │   │   ├── random_abcd/   # ABCD 选择器
-│   │       │   │   ├── flip_coin/     # 丢硬币
-│   │       │   │   ├── flip_dices/    # 掷骰子
-│   │       │   │   ├── blessing_muyu/ # 祝福木鱼
-│   │       │   │   ├── devine_bagua/  # 八卦占卜
-│   │       │   │   ├── honest_or_challenge/ # 真心话大冒险
-│   │       │   │   ├── trans_qr/      # 二维码转换
-│   │       │   │   └── text_marquee/  # 手持弹幕
 │   │       │   ├── form_cards/        # 服务卡片组件
 │   │       │   └── static_datas/      # 静态数据（答案库、食物库等）
 │   │       └── resources/             # 模块资源
@@ -183,56 +162,57 @@ product/wearable  ──→  @ohos/common (basic)
 
 ### 🧰 工具箱功能
 
-| 功能             | 状态 | 页面路径                                  | 说明            |
-|----------------|:--:|---------------------------------------|---------------|
-| 🎡 幸运转盘        | ✅  | RollPage/RollWheelPage                | 自定义轮盘抽奖，可视化编辑 |
-| 📖 答案之书        | ✅  | AnswerPage                            | 经典翻书式随机答案     |
-| 🎲 掷骰子         | ✅  | flip_dices/RollDices                  | 多骰子组合投掷       |
-| 🪙 丢硬币         | ✅  | flip_coin/FlipCoin                    | 硬币翻转动画        |
-| 🔢 随机数         | ✅  | random_numbers/RandomNumbers          | 自定义范围随机数生成    |
-| 🍜 吃什么         | ✅  | random_foods/RandomFoods              | 随机推荐美食        |
-| 🎨 颜色搭配        | ✅  | random_colors/RandomColors            | 随机色彩搭配灵感      |
-| ✍️ 抽签          | ✅  | random_names/RandomNames              | 自定义名单抽取       |
-| 🎯 真心话大冒险      | ✅  | honest_or_challenge/HonestOrChallenge | 双模式挑战         |
-| ☯️ 八卦占卜        | ✅  | devine_bagua/DevineBaGua              | 传统八卦占卜        |
-| 🐟 祝福木鱼        | ✅  | blessing_muyu/BlessingMuyu_V2         | 敲击木鱼积累功德      |
-| 🌍 人生必去的100个地方 | ✅  | random_places/RandomPlaces            | 旅行灵感随机推荐      |
-| 🔤 ABCD 选择器    | ✅  | random_abcd/RandomABCD                | 快速四选一决策       |
-| 📱 手持弹幕        | ✅  | text_marquee/TextMarquee              | LED 滚动字幕      |
-| 🔄 二维码转换       | ✅  | trans_qr/TransQR                      | 文字/链接转二维码     |
-
-计划页面
-- [ ] 抽卡 RandomCards — 模拟抽卡体验
-- [ ] 圣杯 — 传统掷筊占卜
-- [ ] 64卦 — 完整易经六十四卦
-- [ ] 单位转换 多类型单位换算
-- [ ] 计算器
-- [ ] 进制转换 — 二进制/八进制/十进制/十六进制
-- [ ] 电子宠物
+| 功能 | 状态 | 页面路径 | 说明 |
+|------|:----:|----------|------|
+| 🎡 幸运转盘 | ✅ | RollPage/RollWheelPage | 自定义轮盘抽奖，可视化编辑 |
+| 📖 答案之书 | ✅ | AnswerPage | 经典翻书式随机答案 |
+| 🎲 掷骰子 | ✅ | flip_dices/RollDices | 多骰子组合投掷 |
+| 🪙 丢硬币 | ✅ | flip_coin/FlipCoin | 硬币翻转动画 |
+| 🔢 随机数 | ✅ | random_numbers/RandomNumbers | 自定义范围随机数生成 |
+| 🍜 吃什么 | ✅ | random_foods/RandomFoods | 随机推荐美食 |
+| 🎨 颜色搭配 | ✅ | random_colors/RandomColors | 随机色彩搭配灵感 |
+| ✍️ 抽签 | ✅ | random_names/RandomNames | 自定义名单抽取 |
+| 🎯 真心话大冒险 | ✅ | honest_or_challenge/HonestOrChallenge | 双模式挑战 |
+| ☯️ 八卦占卜 | ✅ | devine_bagua/DevineBaGua | 传统八卦占卜 |
+| 🐟 祝福木鱼 | ✅ | blessing_muyu/BlessingMuyu_V2 | 敲击木鱼积累功德 |
+| 🌍 人生必去的100个地方 | ✅ | random_places/RandomPlaces | 旅行灵感随机推荐 |
+| 🔤 ABCD 选择器 | ✅ | random_abcd/RandomABCD | 快速四选一决策 |
+| 📱 手持弹幕 | ✅ | text_marquee/TextMarquee | LED 滚动字幕 |
+| 🔄 二维码转换 | ✅ | trans_qr/TransQR | 文字/链接转二维码 |
+| 🃏 抽卡 | 🚧 | — | 模拟抽卡体验 |
+| 🥢 圣杯 | 🚧 | — | 传统掷筊占卜 |
+| ☯️ 64卦 | 🚧 | — | 完整易经六十四卦 |
+| 📐 单位转换 | 🚧 | — | 多类型单位换算 |
+| 🧮 计算器 | 🚧 | — | 基础 / 科学计算器 |
+| 🔮 塔罗牌 | 🚧 | — | 塔罗牌占卜 |
+| 💱 进制转换 | 🚧 | — | 二/八/十/十六进制互转 |
+| 🐾 电子宠物 | 🚧 | — | 桌面电子宠物 |
 
 ### 🧩 服务卡片（桌面小组件）
 
-| 卡片         | 状态 |    尺寸     | 说明      |
-|------------|----|:---------:|---------|
-| 🎲 骰子卡片    | ✅  |    2×2    | 点击投掷骰子  |
-| 🪙 硬币卡片    | ✅  |    2×2    | 点击抛硬币   |
-| 🎡 转盘卡片    | ✅  | 2×2 / 4×4 | 迷你幸运转盘  |
-| ☯️ 八卦卡片    | ✅  | 2×2 / 4×4 | 八卦占卜结果  |
-| 🎨 颜色卡片    | ✅  |    2×2    | 随机颜色展示  |
-| 🔤 ABCD 卡片 | ✅  |    2×2    | 四选一抽选   |
-| 🐟 木鱼卡片    | ✅  |    2×2    | 敲木鱼快捷入口 |
----
-- [ ] 电子宠物卡片
+| 卡片 | 状态 | 尺寸 | 说明 |
+|------|:----:|:----:|------|
+| 🎲 骰子卡片 | ✅ | 2×2 | 点击投掷骰子 |
+| 🪙 硬币卡片 | ✅ | 2×2 | 点击抛硬币 |
+| 🎡 转盘卡片 | ✅ | 2×2 / 4×4 | 迷你幸运转盘 |
+| ☯️ 八卦卡片 | ✅ | 2×2 / 4×4 | 八卦占卜结果 |
+| 🎨 颜色卡片 | ✅ | 2×2 | 随机颜色展示 |
+| 🔤 ABCD 卡片 | ✅ | 2×2 | 四选一抽选 |
+| 🐟 木鱼卡片 | ✅ | 2×2 | 敲木鱼快捷入口 |
+| 🐾 电子宠物卡片 | 🚧 | 2×2 / 4×4 | 桌面养成互动 |
 
-### 🗺️ 未来计划
+---
+
+## 🗺️ 未来计划
 
 - [ ] 主页面 UI 重构
 - [ ] 液态玻璃效果适配
 - [ ] 震动反馈
-- [ ] 电子宠物模块（可能独立为单独应用）
-- [ ] 折叠屏深度适配
 - [ ] 手表端 (wearable) 完整适配
+- [ ] 折叠屏深度适配
+- [ ] PC 端 (2in1) 大屏适配
 
+---
 
 ## 🚀 快速开始
 
@@ -241,8 +221,12 @@ product/wearable  ──→  @ohos/common (basic)
 - **DevEco Studio**：5.0.0 及以上版本
 - **HarmonyOS SDK**：API 12 (5.0.0)
 - **设备系统**：HarmonyOS NEXT 5.0.0+
+
+### 项目配置
+
 - **应用包名**：`ydy.App.EasyRandom`
 - **元服务包名**：`com.atomicservice.5765880207854873613`
+
 ### 构建运行
 
 ```bash
@@ -259,17 +243,25 @@ git clone <仓库地址>
 hvigorw assembleHap
 ```
 
-### 项目配置
-
-
-
 ---
 
+## 📦 开源依赖备忘录
 
+本项目参考到以下开源内容，特此致谢。
 
----
+| 项目                                                                                            |   版本   | 协议         | 用途           |
+|-----------------------------------------------------------------------------------------------|:------:|------------|--------------|
+| [@ohos/hypium](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/hypium-overview) | 1.0.18 | Apache 2.0 | 鸿蒙官方单元测试框架   |
+| [@ohos/hamock](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/hamock-overview) | 1.0.0  | Apache 2.0 | 鸿蒙官方 Mock 框架 |
+| BrakePoint 断点系统                                                                               |  ---   | ---        | 华为开发者官网示例代码  |
+| Logger 日志系统                                                                                   |  ---   | ---        | 华为开发者官网示例代码  |
 
+### 自研模块
 
+| 模块 | 类型 | 协议 | 说明                  |
+|------|:----:|------|---------------------|
+| @ohos/common (basic) | HAR | Apache 2.0 | 颜色选择器               |
+| @ohos/vitalui (VitalUI) | HAR | Apache 2.0 | 自研图表组件库（饼图、玫瑰图、雷达图） |
 
 ---
 
