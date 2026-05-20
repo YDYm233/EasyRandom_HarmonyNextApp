@@ -20,6 +20,7 @@
     "sub_pages/trans_qr/TransQR",
     "sub_pages/random_places/RandomPlaces",
     "sub_pages/text_marquee/TextMarquee",
-    "sub_pages/random_abcd/RandomABCD"
+    "sub_pages/random_abcd/RandomABCD",
+    "pages/ToolsPage"
   ]
 }

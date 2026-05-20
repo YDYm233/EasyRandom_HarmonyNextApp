@@ -149,15 +149,16 @@ onPageShow(): void {
             Text('设置').height(24).fontWeight(800).textAlign(TextAlign.Center).fontColor($r("app.color.FontIcon_Fore1"))
           }.height('100%').aspectRatio(1).alignItems(VerticalAlign.Center).justifyContent(FlexAlign.Center)
 
-          Row() {
-            Image($r("app.media.func_share")).height(24).width(24).fillColor($r("app.color.FontIcon_Fore1"))
-
-          } .onClick(() => {
-            promptAction.showToast({
-              message: '功能开发中'
-            })
-          })          .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
-          .height('100%').aspectRatio(1).alignItems(VerticalAlign.Center).justifyContent(FlexAlign.Center)
+          // Row() {
+          //   Image($r("app.media.func_share")).height(24).width(24).fillColor($r("app.color.FontIcon_Fore1"))
+          //
+          // } .onClick(() => {
+          //   promptAction.showToast({
+          //     message: '功能开发中'
+          //   })
+          // })
+          // .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+          // .height('100%').aspectRatio(1).alignItems(VerticalAlign.Center).justifyContent(FlexAlign.Center)
         }
         .width('100%')
         .height(56)
