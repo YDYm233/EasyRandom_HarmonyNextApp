@@ -183,35 +183,35 @@ product/wearable  ──→  @ohos/common (basic)
 
 ### 🧰 工具箱功能
 
-| 功能 | 状态 | 页面路径 | 说明 |
-|------|:----:|----------|------|
-| 🎡 幸运转盘 | ✅ | RollPage/RollWheelPage | 自定义轮盘抽奖，可视化编辑 |
-| 📖 答案之书 | ✅ | AnswerPage | 经典翻书式随机答案 |
-| 🎲 掷骰子 | ✅ | flip_dices/RollDices | 多骰子组合投掷 |
-| 🪙 丢硬币 | ✅ | flip_coin/FlipCoin | 硬币翻转动画 |
-| 🔢 随机数 | ✅ | random_numbers/RandomNumbers | 自定义范围随机数生成 |
-| 🍜 吃什么 | ✅ | random_foods/RandomFoods | 随机推荐美食 |
-| 🎨 颜色搭配 | ✅ | random_colors/RandomColors | 随机色彩搭配灵感 |
-| ✍️ 抽签 | ✅ | random_names/RandomNames | 自定义名单抽取 |
-| 🎯 真心话大冒险 | ✅ | honest_or_challenge/HonestOrChallenge | 双模式挑战 |
-| ☯️ 八卦占卜 | ✅ | devine_bagua/DevineBaGua | 传统八卦占卜 |
-| 🐟 祝福木鱼 | ✅ | blessing_muyu/BlessingMuyu_V2 | 敲击木鱼积累功德 |
-| 🌍 人生必去的100个地方 | ✅ | random_places/RandomPlaces | 旅行灵感随机推荐 |
-| 🔤 ABCD 选择器 | ✅ | random_abcd/RandomABCD | 快速四选一决策 |
-| 📱 手持弹幕 | ✅ | text_marquee/TextMarquee | LED 滚动字幕 |
-| 🔄 二维码转换 | ✅ | trans_qr/TransQR | 文字/链接转二维码 |
+| 功能             | 状态 | 页面路径                                  | 说明            |
+|----------------|:--:|---------------------------------------|---------------|
+| 🎡 幸运转盘        | ✅  | RollPage/RollWheelPage                | 自定义轮盘抽奖，可视化编辑 |
+| 📖 答案之书        | ✅  | AnswerPage                            | 经典翻书式随机答案     |
+| 🎲 掷骰子         | ✅  | flip_dices/RollDices                  | 多骰子组合投掷       |
+| 🪙 丢硬币         | ✅  | flip_coin/FlipCoin                    | 硬币翻转动画        |
+| 🔢 随机数         | ✅  | random_numbers/RandomNumbers          | 自定义范围随机数生成    |
+| 🍜 吃什么         | ✅  | random_foods/RandomFoods              | 随机推荐美食        |
+| 🎨 颜色搭配        | ✅  | random_colors/RandomColors            | 随机色彩搭配灵感      |
+| ✍️ 抽签          | ✅  | random_names/RandomNames              | 自定义名单抽取       |
+| 🎯 真心话大冒险      | ✅  | honest_or_challenge/HonestOrChallenge | 双模式挑战         |
+| ☯️ 八卦占卜        | ✅  | devine_bagua/DevineBaGua              | 传统八卦占卜        |
+| 🐟 祝福木鱼        | ✅  | blessing_muyu/BlessingMuyu_V2         | 敲击木鱼积累功德      |
+| 🌍 人生必去的100个地方 | ✅  | random_places/RandomPlaces            | 旅行灵感随机推荐      |
+| 🔤 ABCD 选择器    | ✅  | random_abcd/RandomABCD                | 快速四选一决策       |
+| 📱 手持弹幕        | ✅  | text_marquee/TextMarquee              | LED 滚动字幕      |
+| 🔄 二维码转换       | ✅  | trans_qr/TransQR                      | 文字/链接转二维码     |
 
 ### 🧩 服务卡片（桌面小组件）
 
-| 11| 卡片 | 尺寸 | 说明 |
-|- | -----|:----:|------|
-| ✅ | 🎲 骰子卡片 | 2×2 | 点击投掷骰子 |
-|✅ |  🪙 硬币卡片 | 2×2 | 点击抛硬币 |
-| ✅ | 🎡 转盘卡片 | 2×2 / 4×4 | 迷你幸运转盘 |
-| ✅ | ☯️ 八卦卡片 | 2×2 / 4×4 | 八卦占卜结果 |
-| ✅ | 🎨 颜色卡片 | 2×2 | 随机颜色展示 |
-|✅ |  🔤 ABCD 卡片 | 2×2 | 四选一抽选 |
-| ✅ | 🐟 木鱼卡片 | 2×2 | 敲木鱼快捷入口 |
+| 卡片         | 状态 |    尺寸     | 说明      |
+|------------|----|:---------:|---------|
+| 🎲 骰子卡片    | ✅  |    2×2    | 点击投掷骰子  |
+| 🪙 硬币卡片    | ✅  |    2×2    | 点击抛硬币   |
+| 🎡 转盘卡片    | ✅  | 2×2 / 4×4 | 迷你幸运转盘  |
+| ☯️ 八卦卡片    | ✅  | 2×2 / 4×4 | 八卦占卜结果  |
+| 🎨 颜色卡片    | ✅  |    2×2    | 随机颜色展示  |
+| 🔤 ABCD 卡片 | ✅  |    2×2    | 四选一抽选   |
+| 🐟 木鱼卡片    | ✅  |    2×2    | 敲木鱼快捷入口 |
 
 ---
 
