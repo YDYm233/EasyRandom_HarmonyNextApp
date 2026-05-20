@@ -231,15 +231,13 @@ product/wearable  ──→  @ohos/common (basic)
 
 ```bash
 # 1. 克隆项目
-git clone <仓库地址>
+git clone https://gitee.com/Yan_m233/app_EasyRandom
 
 # 2. 使用 DevEco Studio 打开项目
 
-# 3. 配置签名（参考 build-profile.json5）
+# 3. 配置签名
 
-# 4. 选择产品 target 为 default
-
-# 5. 点击运行或使用命令行构建
+# 4. 点击运行或使用命令行构建
 hvigorw assembleHap
 ```
 
