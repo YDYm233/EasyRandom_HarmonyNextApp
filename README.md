@@ -47,6 +47,30 @@
 | 📊 **VitalUI 图表库** | 自研图表组件库（饼图、玫瑰图、雷达图等）     |
 
 ---
+## 📸 特性预览
+
+### 多设备适配
+
+<p align="center">
+  <img src="./preview/页面展示1.jpg" width="30%" alt="主界面展示"/>
+  <img src="./preview/页面展示2.jpg" width="30%" alt="主界面展示"/>
+</p>
+
+### 暗夜模式 & 多语言
+
+<p align="center">
+  <img src="./preview/暗夜模式适配.jpg" width="30%" alt="暗夜模式"/>
+  <img src="./preview/多语言适配[测试中].jpg" width="30%" alt="多语言"/>
+</p>
+
+### 服务卡片
+
+<p align="center">
+  <img src="./preview/卡片%20(1).png" width="22%" alt="硬币卡片"/>
+  <img src="./preview/卡片%20(2).png" width="22%" alt="木鱼卡片"/>
+  <img src="./preview/卡片%20(3).png" width="22%" alt="颜色卡片"/>
+  <img src="./preview/卡片%20(4).png" width="22%" alt="转盘卡片"/>
+</p>
 
 ## 🏗️ 技术架构
 
@@ -198,7 +222,8 @@ product/wearable  ──→  @ohos/common (basic)
 - **DevEco Studio**：5.0.0 及以上版本
 - **HarmonyOS SDK**：API 12 (5.0.0)
 - **设备系统**：HarmonyOS NEXT 5.0.0+
-
+- **应用包名**：`ydy.App.EasyRandom`
+- **元服务包名**：`com.atomicservice.5765880207854873613`
 ### 构建运行
 
 ```bash
@@ -217,43 +242,11 @@ hvigorw assembleHap
 
 ### 项目配置
 
-- **应用包名**：`ydy.App.EasyRandom`
-- **元服务包名**：`com.atomicservice.5765880207854873613`
-- **签名配置**：`build-profile.json5` → `app.signingConfigs`
+
 
 ---
 
-## 📸 应用预览
 
-### 主界面
-
-<p align="center">
-  <img src="./preview/页面展示1.jpg" width="30%" alt="主界面展示"/>
-  <img src="./preview/页面展示2.jpg" width="30%" alt="主界面展示"/>
-</p>
-
-### 功能介绍
-
-<p align="center">
-  <img src="./preview/介绍图%20(1).png" width="30%" alt="功能介绍"/>
-  <img src="./preview/介绍图%20(2).png" width="30%" alt="功能介绍"/>
-</p>
-
-### 暗夜模式 & 多语言
-
-<p align="center">
-  <img src="./preview/暗夜模式适配.jpg" width="30%" alt="暗夜模式"/>
-  <img src="./preview/多语言适配[测试中].jpg" width="30%" alt="多语言"/>
-</p>
-
-### 服务卡片
-
-<p align="center">
-  <img src="./preview/卡片%20(1).png" width="22%" alt="硬币卡片"/>
-  <img src="./preview/卡片%20(2).png" width="22%" alt="木鱼卡片"/>
-  <img src="./preview/卡片%20(3).png" width="22%" alt="颜色卡片"/>
-  <img src="./preview/卡片%20(4).png" width="22%" alt="转盘卡片"/>
-</p>
 
 ---
 
@@ -311,7 +304,6 @@ hvigorw assembleHap
 
 - **随易元服务**：应用内可跳转元服务版本（`com.atomicservice.5765880207854873613`）
 - **隐私政策**：应用内设置页可查看
-- **问题反馈**：应用内「设置 > 问题反馈」提交
 
 ---
 
