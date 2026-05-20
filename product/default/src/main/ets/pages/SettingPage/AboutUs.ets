@@ -8,7 +8,7 @@ export function AboutUs() {
 struct AboutUsComponent {
   @State isShowQR:boolean =false
   @State qrSrc:string[] = ['http://www.m233.top',"https://www.bilibili.com/opus/971320804050468900?spm_id_from=333.1365.0.0","https://weibo.com/5858421461/OuE5WnqyO"]
-  @State popupTitle:string[]=['个人主页','哔哩哔哩','微博']
+  @State popupTitle:string[]=['官方网站','哔哩哔哩','微博']
   @State themeColor:Color[] =[0xFF00BEFF,0xFF7299,0xFFEB00]
   @State themeIcon:Resource[]=[$r("app.media.link_myself"),$r("app.media.link_bilibili"),$r("app.media.link_weibo")]
   @State index:number = 0
