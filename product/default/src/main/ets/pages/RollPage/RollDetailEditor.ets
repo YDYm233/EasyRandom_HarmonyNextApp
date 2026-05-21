@@ -109,7 +109,7 @@ export struct RollDetailEditor {
                   }
                   .swipeAction({
                     end: {
-                      builder: () => { this.DeleteItemSwipeButton() },
+                      builder: () => { this.DeleteItemSwipeButton(itemIdx) },
                       onAction: () => { this.deleteItem(itemIdx) },
                       actionAreaDistance: 72
                     }
@@ -210,7 +210,7 @@ export struct RollDetailEditor {
   }
 
   @Builder
-  DeleteItemSwipeButton() {
+  DeleteItemSwipeButton(itemIndex:number) {
     Row() {
       SymbolGlyph($r('sys.symbol.trash'))
         .fontSize(20)
@@ -221,6 +221,7 @@ export struct RollDetailEditor {
     .justifyContent(FlexAlign.Center)
     .backgroundColor('#FFE74C3C')
     .borderRadius({ topRight: 12, bottomRight: 12 })
+    .onClick(()=>{this.deleteItem(itemIndex)})
   }
 
   // ════════════════ 操作方法 ════════════════
