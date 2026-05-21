@@ -122,59 +122,78 @@ export function createDefaultRoll(name: string): Roll {
 // ═══════════════════════════════════════════
 
 export const defaultRolls: Array<Roll> = [
+  // ── 0: 吃什么？— 日常外卖选择 ──
   new Roll('0', '吃什么？', [
-    new RollItem('0', '梅菜扣肉', 2, '#ffcba50b'),
-    new RollItem('1', '西湖醋鱼', 3, '#ffa87cf4'),
-    new RollItem('2', '西红柿炒鸡蛋', 2, '#ffe81b58'),
-    new RollItem('3', '海带炖肉', 3, '#ff38ed44'),
-    new RollItem('4', '穿过你的黑发我的手', 2, '#fff7942c'),
-    new RollItem('5', '蚂蚁上树', 3, '#ff68ead0'),
+    new RollItem('0', '麻辣烫',  2, '#ffcba50b'),
+    new RollItem('1', '汉堡薯条', 2, '#ffa87cf4'),
+    new RollItem('2', '黑胡椒汤',  3, '#ffe81b58'),
+    new RollItem('3', '盖浇饭',  2, '#ff38ed44'),
+    new RollItem('4', '羊肉烩面',  3, '#fff7942c'),
+    new RollItem('5', '火锅烤肉',    2, '#ff68ead0'),
   ]),
+  // ── 1: 随机颜色 — 8 常见色均权 ──
   new Roll('1', '随机颜色', [
-    new RollItem('0', '粉色', 2, '#ffff007a'),
-    new RollItem('1', '蓝色', 3, '#ff0cdec5'),
+    new RollItem('0', '红色', 1, '#ffe74c3c'),
+    new RollItem('1', '橙色', 1, '#fff39c12'),
+    new RollItem('2', '黄色', 1, '#ffecb609'),
+    new RollItem('3', '绿色', 1, '#ff38ed44'),
+    new RollItem('4', '蓝色', 1, '#ff3498db'),
+    new RollItem('5', '紫色', 1, '#ff9b59b6'),
+    new RollItem('6', '粉色', 1, '#ffff007a'),
+    new RollItem('7', '白色', 1, '#ffde6e12'),
   ]),
+  // ── 2: 抽奖 — 9格均分扇形、交错排列 ──
   new Roll('2', '抽奖', [
-    new RollItem('0', '三等奖', 4, '#ff05f80b'),
-    new RollItem('1', '特等奖', 1, '#ffecb609'),
-    new RollItem('2', '感谢参与', 5, '#499821'),
-    new RollItem('3', '二等奖', 3, '#ff5f16e1'),
-    new RollItem('4', '一等奖', 2, '#ffe81b58'),
+    new RollItem('0', '二等奖', 1, '#ff38ed44'),
+    new RollItem('1',  '三等奖', 1, '#ff5f16e1'),
+    new RollItem('2',  '二等奖', 1, '#ff38ed44'),
+    new RollItem('3',  '一等奖', 1, '#ffe81b58'),
+    new RollItem('4',  '三等奖', 1, '#ff5f16e1'),
+    new RollItem('5',  '二等奖', 1, '#ff38ed44'),
+    new RollItem('6',  '特等奖', 1, '#ffecb609'),
+    new RollItem('7', '三等奖', 1, '#ff5f16e1'),
+    new RollItem('8', '一等奖', 1, '#ffe81b58'),
+
   ]),
+  // ── 3: 幸运嘉宾 — 常见中文昵称 ──
   new Roll('3', '幸运嘉宾', [
-    new RollItem('0', '小绿', 1, '#ff05f80b'),
-    new RollItem('1', '小明', 1, '#ff5f16e1'),
-    new RollItem('2', '小红', 1, '#ffe81b58'),
-    new RollItem('3', '小橙', 1, '#ffecb609'),
-    new RollItem('4', '小岑', 1, '#499821'),
-    new RollItem('5', '小阳', 1, '#ffde6e12'),
-    new RollItem('6', '夏树', 1, '#ff3498db'),
+    new RollItem('0', '小明', 1, '#ffe74c3c'),
+    new RollItem('1', '小红', 1, '#ffe81b58'),
+    new RollItem('2', '小华', 1, '#ff3498db'),
+    new RollItem('3', '小丽', 1, '#ffecb609'),
+    new RollItem('4', '小强', 1, '#ff38ed44'),
+    new RollItem('5', '小美', 1, '#ffff007a'),
+    new RollItem('6', '小宇', 1, '#ff5f16e1'),
   ]),
+  // ── 4: 真心话大冒险 — 聚会破冰 ──
   new Roll('4', '真心话大冒险', [
     new RollItem('0', '真心话', 1, '#ffe74c3c'),
     new RollItem('1', '大冒险', 1, '#ff3498db'),
     new RollItem('2', '再来一次', 1, '#fff39c12'),
   ]),
+  // ── 5: 今天穿什么 — 穿搭灵感 ──
   new Roll('5', '今天穿什么', [
     new RollItem('0', '休闲风', 2, '#ff1abc9c'),
     new RollItem('1', '运动装', 2, '#ff3498db'),
-    new RollItem('2', '正装', 1, '#ff9b59b6'),
+    new RollItem('2', '正装',   1, '#ff9b59b6'),
     new RollItem('3', '牛仔风', 2, '#ffde6e12'),
     new RollItem('4', '随性混搭', 3, '#ff05f80b'),
   ]),
+  // ── 6: 周末去哪 — 出行选择 ──
   new Roll('6', '周末去哪', [
     new RollItem('0', '看电影', 2, '#fff7942c'),
     new RollItem('1', '逛公园', 3, '#ff38ed44'),
     new RollItem('2', '宅家追剧', 3, '#ff5f16e1'),
     new RollItem('3', '逛商场', 2, '#ffff007a'),
-    new RollItem('4', '爬山', 1, '#ff68ead0'),
+    new RollItem('4', '爬山',   1, '#ff68ead0'),
     new RollItem('5', '图书馆', 2, '#ffa87cf4'),
   ]),
+  // ── 7: 下午茶 — 甜点饮品 ──
   new Roll('7', '下午茶', [
-    new RollItem('0', '奶茶', 3, '#ffcba50b'),
-    new RollItem('1', '咖啡', 2, '#ff3498db'),
-    new RollItem('2', '果汁', 2, '#ff38ed44'),
-    new RollItem('3', '蛋糕', 3, '#ffff007a'),
+    new RollItem('0', '奶茶',   3, '#ffcba50b'),
+    new RollItem('1', '咖啡',   2, '#ff3498db'),
+    new RollItem('2', '果汁',   2, '#ff38ed44'),
+    new RollItem('3', '蛋糕',   3, '#ffff007a'),
     new RollItem('4', '冰淇淋', 2, '#ff1abc9c'),
     new RollItem('5', '水果捞', 2, '#fff39c12'),
     new RollItem('6', '小饼干', 2, '#ffde6e12'),

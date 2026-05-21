@@ -266,8 +266,10 @@ struct RollWheelsShow {
     .bindSheet($$this.isSheetShow, this.sheetContent(), {
       height: SheetSize.FIT_CONTENT,
       dragBar: true,
-      showClose:false,
+      showClose: false,
       onDisappear: () => {
+        // 重新从 Preferences 加载数据到 AppStorage，使主页面转盘同步编辑变更
+        initRollsData(getContext(this).getApplicationContext())
         if (this.swiperIndex < this.dataList.length) {
           this.title = this.dataList[this.swiperIndex].rollName
         }

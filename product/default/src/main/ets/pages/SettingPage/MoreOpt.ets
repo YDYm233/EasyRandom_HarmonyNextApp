@@ -59,7 +59,7 @@ struct IllustrateComponent {
   new AppItem('B站留言', $r("app.media.link_bilibili"),
     'https://www.bilibili.com/video/BV135tie7E5P/?p=1&spm_id_from=pageDriver', '', 0xFF7299),
   new AppItem('官方网站', $r("app.media.link_myself"),
-    'http://www.m233.top', '', 0xFF00BEFF),
+    'https://gitee.com/Yan_m233/app_EasyRandom', '', 0xFF00BEFF),
     new AppItem('给个好评', $r("app.media.addoil_thumb"),
       '', '', 0xfebb00),
     new AppItem('赞赏我们', $r("app.media.addoil_flower"),
