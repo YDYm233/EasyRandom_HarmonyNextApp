@@ -318,26 +318,28 @@ struct TabBar {
         .tabBar(this.tabBarBuilder($r('app.string.page_name1'), 0, $r('app.media.page_icon1_selected'),
           $r('app.media.page_icon1')));
 
-        TabContent() {
-          AllasOne()
-        }
-        .padding({ top: $r("app.string.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
-        .tabBar(this.tabBarBuilder($r('app.string.page_name2'), 1, $r('app.media.page_icon2_selected'),
-          $r('app.media.page_icon2')));
+
 
         TabContent() {
           AnswerPage()
         }
         .padding({ top: $r("app.string.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
-        .tabBar(this.tabBarBuilder($r('app.string.page_name3'), 2, $r('app.media.page_icon3_selected'),
+        .tabBar(this.tabBarBuilder($r('app.string.page_name3'), 1, $r('app.media.page_icon3_selected'),
           $r('app.media.page_icon3')));
 
         TabContent() {
           TollsPage()
         }
         .padding({ top: $r("app.string.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
-        .tabBar(this.tabBarBuilder($r('app.string.page_name4'), 3, $r('app.media.page_icon4_selected'),
+        .tabBar(this.tabBarBuilder($r('app.string.page_name4'), 2, $r('app.media.page_icon4_selected'),
           $r('app.media.page_icon4')));
+
+        TabContent() {
+          AllasOne()
+        }
+        .padding({ top: $r("app.string.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
+        .tabBar(this.tabBarBuilder($r('app.string.page_name2'), 3, $r('app.media.page_icon2_selected'),
+          $r('app.media.page_icon2')));
       }
       .onChange((index: number) => {
         this.title = this.titles[index]

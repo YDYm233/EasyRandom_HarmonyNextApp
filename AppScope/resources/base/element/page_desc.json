@@ -106,6 +106,15 @@
         "translatable": true,
         "priority": "LT"
       }
+    },
+    {
+      "name": "page_answer_book",
+      "value": "答案之书",
+      "comment": "工具箱入口 - 答案之书",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     }
   ]
 }
