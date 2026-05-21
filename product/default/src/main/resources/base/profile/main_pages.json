@@ -6,6 +6,8 @@
     "pages/SettingPage/SettingPage",
     "pages/AnswerPage",
     "pages/MorePage",
+    "pages/ToolsPage",
+    "pages/AllasOne",
     "sub_pages/random_colors/RandomColors",
     "sub_pages/random_names/RandomNames",
     "sub_pages/devine_bagua/DevineBaGua",
@@ -16,11 +18,9 @@
     "sub_pages/honest_or_challenge/HonestOrChallenge",
     "sub_pages/flip_dices/RollDices",
     "sub_pages/random_foods/RandomFoods",
-    "pages/AllasOne",
     "sub_pages/trans_qr/TransQR",
     "sub_pages/random_places/RandomPlaces",
     "sub_pages/text_marquee/TextMarquee",
-    "sub_pages/random_abcd/RandomABCD",
-    "pages/ToolsPage"
+    "sub_pages/random_abcd/RandomABCD"
   ]
 }

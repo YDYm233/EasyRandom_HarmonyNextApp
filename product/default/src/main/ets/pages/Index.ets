@@ -1,11 +1,11 @@
-import RandomPage from './RandomPage'
 import RollPage from './RollPage/RollWheelPage'
 import MorePage from './MorePage'
 import AnswerPage from './AnswerPage'
 import AllasOne from './AllasOne'
+import TollsPage from './ToolsPage'
 import router from '@ohos.router'
 import { BusinessError } from '@kit.BasicServicesKit'
-import { promptAction, Router } from '@kit.ArkUI'
+import { promptAction,} from '@kit.ArkUI'
 import { BreakpointState, BreakpointSystem, CommonConstants, GlobalContext, Logger } from '@ohos/common'
 import { webview } from '@kit.ArkWeb'
 import { preferences } from '@kit.ArkData'
@@ -333,7 +333,7 @@ struct TabBar {
           $r('app.media.page_icon3')));
 
         TabContent() {
-          MorePage()
+          TollsPage()
         }
         .padding({ top: $r("app.string.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
         .tabBar(this.tabBarBuilder($r('app.string.page_name4'), 3, $r('app.media.page_icon4_selected'),
