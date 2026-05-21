@@ -51,16 +51,16 @@ export class Roll {
 //  ID 生成器
 // ═══════════════════════════════════════════
 
-let _idCounter: number = Date.now()
+let sIdCounter: number = Date.now()
 
 /** 生成新的转盘 index */
 export function generateRollId(): string {
-  return `roll_${++_idCounter}`
+  return `roll_${++sIdCounter}`
 }
 
 /** 生成新的子选项 id */
 export function generateItemId(): string {
-  return `item_${++_idCounter}`
+  return `item_${++sIdCounter}`
 }
 
 /** 随机选取一个预设颜色 */
@@ -74,36 +74,36 @@ export function randomPresetColor(): string {
 
 /** 从 allRolls 中查找指定 index 的转盘 */
 export function findRoll(allRolls: Roll[], index: string): Roll | undefined {
-  return allRolls.find((r: Roll) => r.index === index)
+  return allRolls.find((roll: Roll) => roll.index === index)
 }
 
 /**
  * 在转盘中添加子选项 — 生成新数组引用以触发 ForEach 增量刷新
  */
 export function addRollItem(roll: Roll): RollItem {
-  const item = new RollItem(generateItemId(), '新选项', 1, randomPresetColor())
-  roll.rollItems = [...roll.rollItems, item]
-  return item
+  const newItem = new RollItem(generateItemId(), '新选项', 1, randomPresetColor())
+  roll.rollItems = [...roll.rollItems, newItem]
+  return newItem
 }
 
 /**
  * 在转盘中删除子选项（保留至少 2 个）— 生成新数组引用以触发 ForEach 增量刷新
  */
-export function removeRollItem(roll: Roll, itemIdx: number): boolean {
+export function removeRollItem(roll: Roll, itemIndex: number): boolean {
   if (roll.rollItems.length <= 2) {
     return false
   }
   const updated = [...roll.rollItems]
-  updated.splice(itemIdx, 1)
+  updated.splice(itemIndex, 1)
   roll.rollItems = updated
   return true
 }
 
 /** 从 allRolls 中删除转盘，返回被删除的 Roll 或 undefined */
 export function removeRoll(allRolls: Roll[], roll: Roll): Roll | undefined {
-  const idx = allRolls.indexOf(roll)
-  if (idx >= 0) {
-    return allRolls.splice(idx, 1)[0]
+  const targetIndex = allRolls.indexOf(roll)
+  if (targetIndex >= 0) {
+    return allRolls.splice(targetIndex, 1)[0]
   }
   return undefined
 }
@@ -118,10 +118,10 @@ export function createDefaultRoll(name: string): Roll {
 }
 
 // ═══════════════════════════════════════════
-//  默认示例数据
+//  预设转盘数据
 // ═══════════════════════════════════════════
 
-export const rolls: Array<Roll> = [
+export const defaultRolls: Array<Roll> = [
   new Roll('0', '吃什么？', [
     new RollItem('0', '梅菜扣肉', 2, '#ffcba50b'),
     new RollItem('1', '西湖醋鱼', 3, '#ffa87cf4'),
@@ -150,6 +150,35 @@ export const rolls: Array<Roll> = [
     new RollItem('5', '小阳', 1, '#ffde6e12'),
     new RollItem('6', '夏树', 1, '#ff3498db'),
   ]),
+  new Roll('4', '真心话大冒险', [
+    new RollItem('0', '真心话', 1, '#ffe74c3c'),
+    new RollItem('1', '大冒险', 1, '#ff3498db'),
+    new RollItem('2', '再来一次', 1, '#fff39c12'),
+  ]),
+  new Roll('5', '今天穿什么', [
+    new RollItem('0', '休闲风', 2, '#ff1abc9c'),
+    new RollItem('1', '运动装', 2, '#ff3498db'),
+    new RollItem('2', '正装', 1, '#ff9b59b6'),
+    new RollItem('3', '牛仔风', 2, '#ffde6e12'),
+    new RollItem('4', '随性混搭', 3, '#ff05f80b'),
+  ]),
+  new Roll('6', '周末去哪', [
+    new RollItem('0', '看电影', 2, '#fff7942c'),
+    new RollItem('1', '逛公园', 3, '#ff38ed44'),
+    new RollItem('2', '宅家追剧', 3, '#ff5f16e1'),
+    new RollItem('3', '逛商场', 2, '#ffff007a'),
+    new RollItem('4', '爬山', 1, '#ff68ead0'),
+    new RollItem('5', '图书馆', 2, '#ffa87cf4'),
+  ]),
+  new Roll('7', '下午茶', [
+    new RollItem('0', '奶茶', 3, '#ffcba50b'),
+    new RollItem('1', '咖啡', 2, '#ff3498db'),
+    new RollItem('2', '果汁', 2, '#ff38ed44'),
+    new RollItem('3', '蛋糕', 3, '#ffff007a'),
+    new RollItem('4', '冰淇淋', 2, '#ff1abc9c'),
+    new RollItem('5', '水果捞', 2, '#fff39c12'),
+    new RollItem('6', '小饼干', 2, '#ffde6e12'),
+  ]),
 ]
 
 // ═══════════════════════════════════════════
@@ -163,20 +192,20 @@ export function loadRollsFromPrefs(context: Context): Roll[] {
   try {
     const pref = preferences.getPreferencesSync(context, { name: PREF_NAME })
     if (pref.hasSync(KEY_ROLLS)) {
-      const raw: string = pref.getSync(KEY_ROLLS, '') as string
-      if (raw.length > 0) {
-        const parsed: Array<Roll> = JSON.parse(raw)
-        return parsed.map((r: Roll) => {
-          const items = r.rollItems.map((_item: RollItem) =>
-          new RollItem(_item.id, _item.text, _item.weight, _item.color))
-          return new Roll(r.index, r.rollName, items)
+      const rawData: string = pref.getSync(KEY_ROLLS, '') as string
+      if (rawData.length > 0) {
+        const parsed: Array<Roll> = JSON.parse(rawData)
+        return parsed.map((roll: Roll) => {
+          const items = roll.rollItems.map((item: RollItem) =>
+            new RollItem(item.id, item.text, item.weight, item.color))
+          return new Roll(roll.index, roll.rollName, items)
         })
       }
     }
   } catch (_e) {
     // fallback to defaults
   }
-  return rolls
+  return defaultRolls
 }
 
 /**
@@ -204,10 +233,10 @@ export function saveRollsToPrefs(context: Context, data: Roll[]): void {
     pref.putSync(KEY_ROLLS, JSON.stringify(data))
     pref.flushSync()
     // 深拷贝：新 Roll → 新 RollItem → 新引用，触发所有监听组件的 @Prop / @StorageLink 刷新
-    const cloned: Roll[] = data.map((r: Roll) => {
-      const items = r.rollItems.map((item: RollItem) =>
+    const cloned: Roll[] = data.map((roll: Roll) => {
+      const items = roll.rollItems.map((item: RollItem) =>
         new RollItem(item.id, item.text, item.weight, item.color))
-      return new Roll(r.index, r.rollName, items)
+      return new Roll(roll.index, roll.rollName, items)
     })
     AppStorage.setOrCreate(APP_STORAGE_KEY, cloned)
   } catch (_e) {

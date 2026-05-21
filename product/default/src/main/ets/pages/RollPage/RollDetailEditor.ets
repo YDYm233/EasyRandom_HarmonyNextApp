@@ -23,7 +23,7 @@ export struct RollDetailEditor {
   }
 
   private resolveRoll(): Roll | undefined {
-    return this.allRolls.find((r: Roll) => r.index === this.rollIndex)
+    return this.allRolls.find((roll: Roll) => roll.index === this.rollIndex)
   }
 
   build() {
@@ -48,10 +48,10 @@ export struct RollDetailEditor {
           if (this.resolveRoll()) {
             Row() {
               ForEach([this.editorVersion],
-                (v: number) => {
+                (_version: number) => {
                   RollWheel({ data: this.resolveRoll()! })
                 },
-                (v: number) => `${v}`
+                (_version: number) => `${_version}`
               )
             }
             .width('100%')
@@ -71,11 +71,11 @@ export struct RollDetailEditor {
                 .backgroundColor($r('app.color.Comp_Bg2'))
                 .borderRadius(8).height(40)
                 .padding({ left: 12, right: 12 })
-                .onChange((v: string) => {
-                  this.rollNameInput = v
-                  const r = this.resolveRoll()
-                  if (r) {
-                    r.rollName = v
+                .onChange((newValue: string) => {
+                  this.rollNameInput = newValue
+                  const roll = this.resolveRoll()
+                  if (roll) {
+                    roll.rollName = newValue
                     this.notifyEdit()
                   }
                 })
@@ -104,14 +104,14 @@ export struct RollDetailEditor {
 
             List({ space: 8 }) {
               ForEach(this.resolveRoll()!.rollItems,
-                (item: RollItem, itemIdx: number) => {
+                (item: RollItem, itemIndex: number) => {
                   ListItem() {
-                    this.ItemEditor(item, itemIdx)
+                    this.ItemEditor(item, itemIndex)
                   }
                   .swipeAction({
                     end: {
-                      builder: () => { this.DeleteItemSwipeButton(itemIdx) },
-                      onAction: () => { this.deleteItem(itemIdx) },
+                      builder: () => { this.DeleteItemSwipeButton(itemIndex) },
+                      onAction: () => { this.deleteItem(itemIndex) },
                       actionAreaDistance: 72
                     }
                   })
@@ -160,7 +160,7 @@ export struct RollDetailEditor {
    * 子选项编辑卡片 — 单行：颜色 | 名称 | 占比
    */
   @Builder
-  ItemEditor(item: RollItem, itemIdx: number) {
+  ItemEditor(item: RollItem, itemIndex: number) {
     Column({ space: 0 }) {
       Row({ space: 6 }) {
         // 颜色 — 最左侧，无文字标签
@@ -194,10 +194,10 @@ export struct RollDetailEditor {
           .backgroundColor($r('app.color.Comp_Bg2'))
           .borderRadius(6)
           .textAlign(TextAlign.Center)
-          .onChange((v: string) => {
-            const n = parseInt(v)
-            if (!isNaN(n) && n > 0) {
-              item.weight = n
+          .onChange((value: string) => {
+            const parsedValue = parseInt(value)
+            if (!isNaN(parsedValue) && parsedValue > 0) {
+              item.weight = parsedValue
               this.notifyEdit()
             }
           })
@@ -270,13 +270,13 @@ export struct RollDetailEditor {
   }
 
   private confirmDeleteRoll(): void {
-    const r = this.resolveRoll()
-    if (!r) {
+    const roll = this.resolveRoll()
+    if (!roll) {
       return
     }
     AlertDialog.show({
       title: '确认删除',
-      message: `确定要删除转盘「${r.rollName}」吗？此操作不可撤销。`,
+      message: `确定要删除转盘「${roll.rollName}」吗？此操作不可撤销。`,
       autoCancel: true,
       alignment: DialogAlignment.Center,
       primaryButton: { value: '取消', action: () => {} },

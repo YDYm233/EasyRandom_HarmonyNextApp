@@ -1,6 +1,6 @@
 import { BreakpointState, BreakpointSystem, Random } from '@ohos/common';
 import{RollWheel}from './RollWheel'
-import { Roll, rolls, initRollsData } from './RollDataManager';
+import { Roll, defaultRolls, initRollsData } from './RollDataManager';
 import { RollEditSheet } from './RollEditor';
 
 @Entry
@@ -36,7 +36,7 @@ struct RollPage {
 
 @Component
 struct RollWheelsShow {
-  @StorageLink('allRolls') @Watch('onDataListChange') dataList: Roll[] = rolls
+  @StorageLink('allRolls') @Watch('onDataListChange') dataList: Roll[] = defaultRolls
   @Prop breakpoint: BreakpointState<string>
   @State title: string = this.dataList.length > 0 ? this.dataList[0].rollName : ''
   @State rotateAngle: number = 0
@@ -123,9 +123,9 @@ struct RollWheelsShow {
 
       // 转盘轮播区
       Swiper(this.swiperController) {
-        ForEach(this.dataList, (item: Roll) => {
+        ForEach(this.dataList, (roll: Roll) => {
           Row() {
-            RollWheel({ data: item })
+            RollWheel({ data: roll })
               .width('100%')
               .position({ top: 0, left: 0 })
               .rotate({
@@ -151,7 +151,7 @@ struct RollWheelsShow {
           .margin('5%')
           .aspectRatio(1)
 
-        }, (item: Roll) => `${item.index}_v${this.dataVersion}`)
+        }, (roll: Roll) => `${roll.index}_v${this.dataVersion}`)
 
       }
       .width('100%')
@@ -169,10 +169,10 @@ struct RollWheelsShow {
       .onClick(() => {
         this.showPoint = !this.showPoint;
       })
-      .onChange((index: number) => {
-        this.swiperIndex = index
-        if (index < this.dataList.length) {
-          this.title = this.dataList[index].rollName
+      .onChange((newIndex: number) => {
+        this.swiperIndex = newIndex
+        if (newIndex < this.dataList.length) {
+          this.title = this.dataList[newIndex].rollName
         }
       })
       .onAnimationStart(() => {
