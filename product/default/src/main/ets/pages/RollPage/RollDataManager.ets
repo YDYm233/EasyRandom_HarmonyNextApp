@@ -180,8 +180,23 @@ export function loadRollsFromPrefs(context: Context): Roll[] {
 }
 
 /**
+ * 将转盘数据序列化写入 Preferences（不更新 AppStorage）
+ * 用于编辑页面中的属性修改（颜色/名称/权重），避免深拷贝触发的全组件重建打断 TextInput。
+ */
+export function writeRollsToPrefs(context: Context, data: Roll[]): void {
+  try {
+    const pref = preferences.getPreferencesSync(context, { name: PREF_NAME })
+    pref.putSync(KEY_ROLLS, JSON.stringify(data))
+    pref.flushSync()
+  } catch (_e) {
+    // ignore
+  }
+}
+
+/**
  * 将转盘数据保存到 Preferences，并同步更新 AppStorage
  * 深拷贝所有 Roll / RollItem 对象，确保 @Prop 等引用型装饰器能检测到变化
+ * 仅用于结构性变更（增删选项/转盘），日常属性修改请用 writeRollsToPrefs
  */
 export function saveRollsToPrefs(context: Context, data: Roll[]): void {
   try {

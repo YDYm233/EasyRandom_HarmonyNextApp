@@ -2,7 +2,8 @@ import { RollWheel } from './RollWheel'
 import { promptAction } from '@kit.ArkUI'
 import {
   Roll, RollItem,
-  saveRollsToPrefs, removeRollItem, removeRoll, addRollItem
+  writeRollsToPrefs, saveRollsToPrefs,
+  removeRollItem, removeRoll, addRollItem
 } from './RollDataManager'
 import { ColorPickerButton } from '@ohos/common'
 
@@ -75,7 +76,7 @@ export struct RollDetailEditor {
                   const r = this.resolveRoll()
                   if (r) {
                     r.rollName = v
-                    this.persist()
+                    this.notifyEdit()
                   }
                 })
               SymbolGlyph($r('sys.symbol.trash'))
@@ -167,7 +168,7 @@ export struct RollDetailEditor {
           initialColor: item.color,
           onColorChange: (color: string) => {
             item.color = color
-            this.persist()
+            this.notifyEdit()
           }
         })
 
@@ -180,7 +181,7 @@ export struct RollDetailEditor {
           .padding({ left: 10, right: 10 })
           .onChange((v: string) => {
             item.text = v
-            this.persist()
+            this.notifyEdit()
           })
 
         // 占比
@@ -197,7 +198,7 @@ export struct RollDetailEditor {
             const n = parseInt(v)
             if (!isNaN(n) && n > 0) {
               item.weight = n
-              this.persist()
+              this.notifyEdit()
             }
           })
       }
@@ -210,7 +211,7 @@ export struct RollDetailEditor {
   }
 
   @Builder
-  DeleteItemSwipeButton(itemIndex:number) {
+  DeleteItemSwipeButton(itemIndex: number) {
     Row() {
       SymbolGlyph($r('sys.symbol.trash'))
         .fontSize(20)
@@ -221,16 +222,31 @@ export struct RollDetailEditor {
     .justifyContent(FlexAlign.Center)
     .backgroundColor('#FFE74C3C')
     .borderRadius({ topRight: 12, bottomRight: 12 })
-    .onClick(()=>{this.deleteItem(itemIndex)})
+    .onClick(() => { this.deleteItem(itemIndex) })
   }
 
-  // ════════════════ 操作方法 ════════════════
+  // ════════════════ 持久化策略 ════════════════
 
-  private persist(): void {
+  /**
+   * 属性编辑通知：先改内存对象，再静默写 Preferences，最后仅刷新预览轮盘。
+   * 不触发 AppStorage 深拷贝，TextInput 不受干扰。
+   */
+  private notifyEdit(): void {
+    const ctx = getContext(this).getApplicationContext()
+    writeRollsToPrefs(ctx, this.allRolls)
+    this.editorVersion++
+  }
+
+  /**
+   * 结构性变更：增删选项/转盘后，需要完整 AppStorage 深拷贝以驱动列表刷新。
+   */
+  private notifyStructureChange(): void {
     const ctx = getContext(this).getApplicationContext()
     saveRollsToPrefs(ctx, this.allRolls)
     this.editorVersion++
   }
+
+  // ════════════════ 操作方法 ════════════════
 
   private addItem(): void {
     const roll = this.resolveRoll()
@@ -238,7 +254,7 @@ export struct RollDetailEditor {
       return
     }
     addRollItem(roll)
-    this.persist()
+    this.notifyStructureChange()
   }
 
   private deleteItem(itemIdx: number): void {
@@ -250,7 +266,7 @@ export struct RollDetailEditor {
       promptAction.showToast({ message: '至少保留 2 个选项' })
       return
     }
-    this.persist()
+    this.notifyStructureChange()
   }
 
   private confirmDeleteRoll(): void {
@@ -278,7 +294,7 @@ export struct RollDetailEditor {
       return
     }
     removeRoll(this.allRolls, roll)
-    this.persist()
+    this.notifyStructureChange()
     promptAction.showToast({ message: '转盘已删除' })
     this.navPathStack.pop()
   }
