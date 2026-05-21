@@ -18,6 +18,7 @@ struct AllasOne {
   @StorageLink('cardAddedToDesktop') cardAddedToDesktop: boolean = false
 
   @Builder AddFormMenu(formName: string, compId: string, dim: number) {
+
     Menu() {
       AddFormMenuItem(
         {
