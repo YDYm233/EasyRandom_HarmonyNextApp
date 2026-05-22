@@ -41,6 +41,7 @@ class Params {
 @Component
 struct Setting {
   @Provide('pageInfos') pageInfos: NavPathStack = new NavPathStack()
+  @StorageProp('statusBarHeight') statusBarHeight: number = 0
   @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
   @State appInfoText: string = 'App'
 onPageShow(): void {
@@ -141,7 +142,7 @@ onPageShow(): void {
           .alignItems(VerticalAlign.Center)
           .justifyContent(FlexAlign.Center)
           .onClick(() => {
-            router.back({ url: 'pages/Index' })
+            router.back({ url: 'pages/IndexPage/Index' })
           })
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
 
@@ -232,6 +233,7 @@ onPageShow(): void {
        // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
       }
       .width('100%')
+        .padding({ top: this.statusBarHeight })
         .height('100%')
         .backgroundColor($r("app.color.Comp_Bg3"))
        // .backgroundColor(0xfff000)

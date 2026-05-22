@@ -14,7 +14,7 @@ class Params {
 @Component
 struct HonestOrChallenge {
 
-
+  @StorageProp('statusBarHeight') statusBarHeight: number = 0
   @State honests: string[] = honests
   @State challenges: string[] = challenges
   @State selectedText: string = this.challenges[Random(0, this.challenges.length - 1, true)]
@@ -115,7 +115,7 @@ struct HonestOrChallenge {
             Image($r("app.media.func_back")).height('24vp').width('24vp').fillColor($r("app.color.FontIcon_Fore1"))
           }
           .onClick(() => {
-            router.back({ url: 'pages/Index' })
+            router.back({ url: 'pages/IndexPage/Index' })
           })
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .width('100%')
@@ -276,7 +276,7 @@ struct HonestOrChallenge {
       .height('100%')
       .padding({ top: $r("app.float.header_height") })
       .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
-    }.height('100%')
+    }.padding({ top: this.statusBarHeight }).height('100%')
     .backgroundColor(this.honestColor)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }

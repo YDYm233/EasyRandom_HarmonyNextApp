@@ -5,6 +5,7 @@ import { router } from '@kit.ArkUI';
 @Entry
 @Component
 struct AStandard {
+  @StorageProp('statusBarHeight') statusBarHeight: number = 0
   @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
   aboutToAppear() {
     BreakpointSystem.getInstance().attach(this.currentBreakpoint)
@@ -27,7 +28,7 @@ struct AStandard {
             Image($r("app.media.func_back")).height('24vp').width('24vp').fillColor($r("app.color.FontIcon_Fore1"))
           }
           .onClick(() => {
-            router.back({ url: 'pages/Index' })
+            router.back({ url: 'pages/IndexPage/Index' })
           })
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .width('100%')
@@ -68,7 +69,7 @@ struct AStandard {
         AStandardComponent()      .height('100%')
           .padding({ top: $r("app.float.header_height") })
           .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
-    }.height('100%')
+    }.padding({ top: this.statusBarHeight }).height('100%')
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }

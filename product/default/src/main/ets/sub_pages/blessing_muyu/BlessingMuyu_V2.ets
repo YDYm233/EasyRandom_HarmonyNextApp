@@ -21,6 +21,7 @@ const KEY_CLICK_COUNT: string = 'click_count'
 struct RollBlessings_V2 {
   /** 功德计数 —— 由 @Entry 持有，@Link 传递给子组件 */
   @State clickCount: number = 0
+  @StorageProp('statusBarHeight') statusBarHeight: number = 0
 
   /**
    * 页面每次回到前台时，从 Preferences 重新读取最新计数
@@ -56,7 +57,7 @@ struct RollBlessings_V2 {
             Image($r("app.media.func_back")).height('24vp').width('24vp').fillColor($r("app.color.FontIcon_Fore1"))
           }
           .onClick(() => {
-            router.back({ url: 'pages/Index' })
+            router.back({ url: 'pages/IndexPage/Index' })
           })
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .width('100%')
@@ -126,6 +127,7 @@ struct RollBlessings_V2 {
       .height('100%')
       .padding({ top: $r("app.float.header_height") })
     }
+    .padding({ top: this.statusBarHeight })
     .height('100%')
     .backgroundColor($r("app.color.Comp_Bg3"))
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])

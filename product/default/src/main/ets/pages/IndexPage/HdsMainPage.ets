@@ -66,6 +66,7 @@ export struct HdsMainPage {
     }
     .width('100%')
     .height('100%')
+    // .padding({ bottom: this.navIndicatorHeight })
     .justifyContent(FlexAlign.Center)
     .alignItems(HorizontalAlign.Center)
     .onClick(() => {
@@ -142,9 +143,9 @@ export struct HdsMainPage {
     //
 
 
-      // ========== HdsTabs 悬浮导航 ==========
-      // 使用 ignoreLayoutSafeArea + LayoutPolicy.matchParent 将容器扩展到安全区外
-      // padding 统一处理状态栏和导航条避让，子页面无需各自添加 padding
+      // ========== HdsTabs 悬浮导航 + 沉浸光感（仅 API23+）==========
+      // 窗口全屏完全沉浸，HdsTabs 悬浮于内容之上
+      // systemMaterialEffect: ADAPTIVE 自适应设备算力，自动渲染光感材质
       HdsTabs({
         controller: this.hdsController,
         index: 0,
@@ -189,16 +190,28 @@ export struct HdsMainPage {
       .vertical(false)
       .barOverlap(true)
       .barPosition(BarPosition.End)
+
       .barFloatingStyle({
+        barWidth: {
+          smallWidth: 240,
+          mediumWidth: 320,
+          largeWidth: 400
+        },
+        barBottomMargin: this.statusBarHeight,
+        gradientMask: {
+          maskColor: '#00F1F3F5',
+          maskHeight: 92
+        },
+        lightColor: Color.White,
+        barOpacity: 1,
         systemMaterialEffect: {
           materialType: hdsMaterial.MaterialType.ADAPTIVE,
           materialLevel: hdsMaterial.MaterialLevel.ADAPTIVE
         }
       })
       .animationDuration(0)
-      // .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.TOP, LayoutSafeAreaEdge.BOTTOM])
       .height('100%')
-      // .padding({ top: this.statusBarHeight, bottom: this.navIndicatorHeight })
       .width('100%')
+      // 窗口全屏完全沉浸；底部 padding 由 tabBarBuilder 内部避开导航条
   }
 }

@@ -13,6 +13,7 @@ class Params {
 @Entry
 @Component
 struct AnswerPage {
+  @StorageProp('statusBarHeight') statusBarHeight: number = 0
   build() {
     Column() {
       // Header
@@ -22,7 +23,7 @@ struct AnswerPage {
             Image($r("app.media.func_back")).height('24vp').width('24vp').fillColor($r("app.color.FontIcon_Fore1"))
           }
           .onClick(() => {
-            router.back({ url: 'pages/Index' })
+            router.back({ url: 'pages/IndexPage/Index' })
           })
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .width('100%')
@@ -88,6 +89,7 @@ struct AnswerPage {
       .height('100%')
       .padding({ top: $r("app.float.header_height") })
     }
+    .padding({ top: this.statusBarHeight })
     .height('100%')
     .backgroundColor($r("app.color.Comp_Bg3"))
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])

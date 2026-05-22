@@ -3,6 +3,7 @@
 @Component
 struct TextMarquee {
   @Provide('pageInfos') pageInfos: NavPathStack = new NavPathStack()
+  @StorageProp('statusBarHeight') statusBarHeight: number = 0
   @State text:string = '测试文本TestText测试文本TestText测试文本TestText'
   @State fontColor:Color = 0xffffff
   @State backColor:Color = 0x000000
@@ -46,6 +47,7 @@ struct TextMarquee {
         this.pageInfos.pushPath({ name: 'MarqueeView'})
       })
       .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+      .padding({ top: this.statusBarHeight })
       .width('100%')
       .height('100%')
       .backgroundColor(0xf1f3f5)

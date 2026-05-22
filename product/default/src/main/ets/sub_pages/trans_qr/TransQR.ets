@@ -12,6 +12,7 @@ class Params {
 @Entry
 @Component
 struct TransQR {
+  @StorageProp('statusBarHeight') statusBarHeight: number = 0
   build() {
     Column() {
       GridRow({ columns: { sm: 12, md: 12, lg: 12 } }) {
@@ -20,7 +21,7 @@ struct TransQR {
             Image($r("app.media.func_back")).height('24vp').width('24vp').fillColor($r("app.color.FontIcon_Fore1"))
           }
           .onClick(() => {
-            router.back({ url: 'pages/Index' })
+            router.back({ url: 'pages/IndexPage/Index' })
           })
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .width('100%')
@@ -99,7 +100,7 @@ struct TransQR {
       }
       .width('100%')
       .height('100%')  .padding({ top: $r("app.float.header_height") })
-    }.height('100%').backgroundColor($r("app.color.Comp_Bg2"))    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+    }.padding({ top: this.statusBarHeight }).height('100%').backgroundColor($r("app.color.Comp_Bg2")).expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
