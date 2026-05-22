@@ -3,7 +3,7 @@ import { productViewManager } from '@kit.StoreKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import type { common, Want } from '@kit.AbilityKit';
 import { BusinessError } from '@kit.BasicServicesKit';
-import { promptAction, PromptAction } from '@kit.ArkUI';
+import { promptAction } from '@kit.ArkUI';
 class AppItem {
   name: string|Resource
   img: Resource
@@ -308,7 +308,7 @@ struct IllustrateComponent {
               const want: Want = {
                 uri: `store://appgallery.huawei.com/app/detail?id=${AppBundleName}`
               };
-              promptAction.openToast({
+              promptAction.showToast({
                 message: '正在尝试转到应用商店查看'+AppName
               })
               context.startAbility(want).then(() => {
