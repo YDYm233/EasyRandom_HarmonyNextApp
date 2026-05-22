@@ -1,7 +1,6 @@
 ﻿import { BreakpointState, BreakpointSystem } from '@ohos/common'
 import { router } from '@kit.ArkUI'
 
-@Entry
 @Component
 struct RandomPage {
   @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })

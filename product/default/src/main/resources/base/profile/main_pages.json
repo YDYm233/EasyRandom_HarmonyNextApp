@@ -1,8 +1,6 @@
 {
   "src": [
     "pages/IndexPage/Index",
-    "pages/RandomPage",
-    "pages/RollPage/RollWheelPage",
     "pages/SettingPage/SettingPage",
     "pages/AnswerPage",
     "pages/MorePage",

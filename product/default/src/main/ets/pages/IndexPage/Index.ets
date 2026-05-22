@@ -142,11 +142,14 @@ struct Index {
       // 当前项目 target API 12，加载 LegacyMainPage
       // 升级 API 23+ 后，将 import 替换并切换为 HdsMainPage
       if (this.isHdsSupported) {
-        HdsMainPage().backgroundColor(Color.Blue)
+        HdsMainPage()
+          // .backgroundColor(Color.Blue)
       } else {
-        LegacyMainPage().backgroundColor(Color.Red)
+        LegacyMainPage()
+          // .backgroundColor(Color.Red)
       }
-    }.backgroundColor(Color.Green)
+    }
+    // .backgroundColor(Color.Green)
     .width('100%')
     .height('100%')
   }

@@ -3,7 +3,6 @@ import{RollWheel}from './RollWheel'
 import { Roll, defaultRolls, initRollsData } from './RollDataManager';
 import { RollEditSheet } from './RollEditor';
 
-@Entry
 @Component
 struct RollPage {
   @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
@@ -253,6 +252,7 @@ struct RollWheelsShow {
       .position({ left: 0, bottom: 0 })
 
     }
+
     .width('100%')
     .aspectRatio(7 / 9)
     .border({
