@@ -1,6 +1,6 @@
 {
   "src": [
-    "pages/Index",
+    "pages/IndexPage/Index",
     "pages/RandomPage",
     "pages/RollPage/RollWheelPage",
     "pages/SettingPage/SettingPage",
