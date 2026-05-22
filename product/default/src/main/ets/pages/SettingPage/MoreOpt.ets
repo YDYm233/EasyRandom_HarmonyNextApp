@@ -1,4 +1,4 @@
-import { BreakpointState, BreakpointSystem } from '@ohos/common';
+﻿import { BreakpointState, BreakpointSystem } from '@ohos/common';
 import { productViewManager } from '@kit.StoreKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import type { common, Want } from '@kit.AbilityKit';

@@ -1,4 +1,4 @@
-import RollPage from './RollPage/RollWheelPage'
+﻿import RollPage from './RollPage/RollWheelPage'
 import MorePage from './MorePage'
 import AnswerPage from './AnswerPage'
 import AllasOne from './AllasOne'
@@ -258,7 +258,7 @@ struct TabBar {
             //})
           })
           .width('100%')
-          .height($r("app.string.header_height"))
+          .height($r("app.float.header_height"))
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
           .padding({ left: 12 })
@@ -269,7 +269,7 @@ struct TabBar {
             Text(this.title).fontColor($r("app.color.FontIcon_Fore1"))
           }
           .width('100%')
-          .height($r("app.string.header_height"))
+          .height($r("app.float.header_height"))
           .justifyContent(FlexAlign.Center)
           .alignItems(VerticalAlign.Center)
         }
@@ -279,7 +279,7 @@ struct TabBar {
             Image($r("app.media.func_setting")).height(24).width(24).fillColor($r("app.color.FontIcon_Fore1"))
           }
           .width('100%')
-          .height($r("app.string.header_height"))
+          .height($r("app.float.header_height"))
           .justifyContent(FlexAlign.End)
           .alignItems(VerticalAlign.Center)
           .padding({ right: 12 })
@@ -297,10 +297,10 @@ struct TabBar {
         }
       }
       .width('100%')
-      .height($r("app.string.header_height"))
+      .height($r("app.float.header_height"))
       .backgroundColor($r("app.color.Comp_Bg1"))
       .zIndex(10)
-      .position({ top: $r("app.string.header_margin") })
+      .position({ top: $r("app.float.header_margin") })
 
       //导航
 
@@ -313,7 +313,7 @@ struct TabBar {
         TabContent() {
           RollPage()
         }
-        .padding({ top: $r("app.string.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
+        .padding({ top: $r("app.float.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
         .tabBar(this.tabBarBuilder($r('app.string.page_name1'), 0, $r('app.media.page_icon1_selected'),
           $r('app.media.page_icon1')));
 
@@ -322,21 +322,21 @@ struct TabBar {
         TabContent() {
           AnswerPage()
         }
-        .padding({ top: $r("app.string.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
+        .padding({ top: $r("app.float.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
         .tabBar(this.tabBarBuilder($r('app.string.page_name3'), 1, $r('app.media.page_icon3_selected'),
           $r('app.media.page_icon3')));
 
         TabContent() {
           TollsPage()
         }
-        .padding({ top: $r("app.string.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
+        .padding({ top: $r("app.float.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
         .tabBar(this.tabBarBuilder($r('app.string.page_name4'), 2, $r('app.media.page_icon4_selected'),
           $r('app.media.page_icon4')));
 
         TabContent() {
           AllasOne()
         }
-        .padding({ top: $r("app.string.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
+        .padding({ top: $r("app.float.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
         .tabBar(this.tabBarBuilder($r('app.string.page_name2'), 3, $r('app.media.page_icon2_selected'),
           $r('app.media.page_icon2')));
       }
@@ -350,7 +350,7 @@ struct TabBar {
         color: $r("app.color.FontIcon_Fore4")
       })
       .backgroundColor($r("app.color.Comp_Bg1"))
-      .padding({ top: $r("app.string.header_margin"), bottom: $r("app.string.footer_margin") })
+      .padding({ top: $r("app.float.header_margin"), bottom: $r("app.float.footer_margin") })
       .barHeight(56)
     }
 

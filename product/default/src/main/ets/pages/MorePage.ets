@@ -1,4 +1,4 @@
-import { BreakpointState, BreakpointSystem } from '@ohos/common';
+﻿import { BreakpointState, BreakpointSystem } from '@ohos/common';
 import router from '@ohos.router';
 
 class AppItem {

@@ -1,4 +1,4 @@
-import { preferences } from '@kit.ArkData'
+﻿import { preferences } from '@kit.ArkData'
 
 // ═══════════════════════════════════════════
 //  常量 & 预设

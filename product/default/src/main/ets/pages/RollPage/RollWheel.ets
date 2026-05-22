@@ -1,4 +1,4 @@
-import { Roll, RollItem } from "./RollDataManager"
+﻿import { Roll, RollItem } from "./RollDataManager"
 
 @Component
 export struct RollWheel {

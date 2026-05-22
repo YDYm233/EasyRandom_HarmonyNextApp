@@ -1,4 +1,4 @@
-@Preview
+﻿@Preview
 @Component
 struct Components{
   build() {

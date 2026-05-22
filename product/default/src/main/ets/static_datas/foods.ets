@@ -1,4 +1,4 @@
-export const foodsArray = [
+﻿export const foodsArray = [
 //河南美食
   "烩面",
   "胡辣汤",

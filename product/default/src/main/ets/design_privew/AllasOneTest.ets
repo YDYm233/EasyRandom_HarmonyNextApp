@@ -1,4 +1,4 @@
-import BaGuaCard from '../form_cards/BaGuaCard'
+﻿import BaGuaCard from '../form_cards/BaGuaCard'
 import BlessingMuyuCard from '../form_cards/BlessingMuyuCard'
 import FlipCoinCard from '../form_cards/FlipCoinCard'
 import RandomColorsCard from '../form_cards/RandomColorsCard'

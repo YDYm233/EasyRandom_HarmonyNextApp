@@ -1,4 +1,4 @@
-
+﻿
 @Entry
 @Component
 struct TextMarquee {

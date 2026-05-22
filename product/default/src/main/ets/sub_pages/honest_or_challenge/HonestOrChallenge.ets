@@ -1,4 +1,4 @@
-import { BreakpointState, BreakpointSystem, Random } from '@ohos/common';
+﻿import { BreakpointState, BreakpointSystem, Random } from '@ohos/common';
 import router from '@ohos.router';
 import { promptAction } from '@kit.ArkUI';
 import { challenges, honests } from '../../static_datas/challenges';
@@ -119,7 +119,7 @@ struct HonestOrChallenge {
           })
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .width('100%')
-          .height($r("app.string.header_height"))
+          .height($r("app.float.header_height"))
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
           .padding({ left: 12 })
@@ -130,7 +130,7 @@ struct HonestOrChallenge {
             Text($r("app.string.page_honest_or_challenge")).fontColor($r("app.color.FontIcon_Fore1"))
           }
           .width('100%')
-          .height($r("app.string.header_height"))
+          .height($r("app.float.header_height"))
           .justifyContent(FlexAlign.Center)
           .alignItems(VerticalAlign.Center)
         }
@@ -149,18 +149,18 @@ struct HonestOrChallenge {
           })
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .width('100%')
-          .height($r("app.string.header_height"))
+          .height($r("app.float.header_height"))
           .justifyContent(FlexAlign.End)
           .alignItems(VerticalAlign.Center)
           .padding({ right: 12 })
         }
       }
       .width('100%')
-      .height($r("app.string.header_height"))
+      .height($r("app.float.header_height"))
       .backgroundColor($r("app.color.Comp_Bg1"))
       .zIndex(10)
-      .margin({ top: $r("app.string.header_margin") })
-      .position({ top: $r("app.string.header_margin") })
+      .margin({ top: $r("app.float.header_margin") })
+      .position({ top: $r("app.float.header_margin") })
       Row() {
         Column() {
             Image($r("app.media.needle"))
@@ -274,7 +274,7 @@ struct HonestOrChallenge {
         })
       }
       .height('100%')
-      .padding({ top: $r("app.string.header_height") })
+      .padding({ top: $r("app.float.header_height") })
       .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
     }.height('100%')
     .backgroundColor(this.honestColor)

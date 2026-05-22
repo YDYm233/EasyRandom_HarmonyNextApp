@@ -1,4 +1,4 @@
-import { Randoms } from '@ohos/common';
+﻿import { Randoms } from '@ohos/common';
 import router from '@ohos.router';
 import { names } from '../../static_datas/names'
 
@@ -23,7 +23,7 @@ struct RandomNames {
           })
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .width('100%')
-          .height($r("app.string.header_height"))
+          .height($r("app.float.header_height"))
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
           .padding({ left: 12 })
@@ -34,7 +34,7 @@ struct RandomNames {
             Text($r("app.string.page_random_names")).fontColor($r("app.color.FontIcon_Fore1"))
           }
           .width('100%')
-          .height($r("app.string.header_height"))
+          .height($r("app.float.header_height"))
           .justifyContent(FlexAlign.Center)
           .alignItems(VerticalAlign.Center)
         }
@@ -53,18 +53,18 @@ struct RandomNames {
           })
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .width('100%')
-          .height($r("app.string.header_height"))
+          .height($r("app.float.header_height"))
           .justifyContent(FlexAlign.End)
           .alignItems(VerticalAlign.Center)
           .padding({ right: 12 })
         }
       }
       .width('100%')
-      .height($r("app.string.header_height"))
+      .height($r("app.float.header_height"))
       .backgroundColor($r("app.color.Comp_Bg1"))
       .zIndex(10)
-      .margin({ top: $r("app.string.header_margin") })
-      .position({ top: $r("app.string.header_margin") })
+      .margin({ top: $r("app.float.header_margin") })
+      .position({ top: $r("app.float.header_margin") })
       Scroll() {
         GridRow({
           columns: {
@@ -97,7 +97,7 @@ struct RandomNames {
         .margin(24)  .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
       }
       .width('100%')
-      .height('100%')  .padding({ top: $r("app.string.header_height") })
+      .height('100%')  .padding({ top: $r("app.float.header_height") })
     }.height('100%')          .backgroundColor($r("app.color.Comp_Bg3"))  .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }

@@ -1,4 +1,4 @@
-import { Random } from '@ohos/common'
+﻿import { Random } from '@ohos/common'
 import router from '@ohos.router';
 
 class Params {
@@ -24,7 +24,7 @@ struct RollFlip {
           })
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .width('100%')
-          .height($r("app.string.header_height"))
+          .height($r("app.float.header_height"))
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
           .padding({ left: 12 })
@@ -35,7 +35,7 @@ struct RollFlip {
             Text($r("app.string.page_flip_coin")).fontColor($r("app.color.FontIcon_Fore1"))
           }
           .width('100%')
-          .height($r("app.string.header_height"))
+          .height($r("app.float.header_height"))
           .justifyContent(FlexAlign.Center)
           .alignItems(VerticalAlign.Center)
         }
@@ -54,18 +54,18 @@ struct RollFlip {
           })
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .width('100%')
-          .height($r("app.string.header_height"))
+          .height($r("app.float.header_height"))
           .justifyContent(FlexAlign.End)
           .alignItems(VerticalAlign.Center)
           .padding({ right: 12 })
         }
       }
       .width('100%')
-      .height($r("app.string.header_height"))
+      .height($r("app.float.header_height"))
       .backgroundColor($r("app.color.Comp_Bg1"))
       .zIndex(10)
-      .margin({ top: $r("app.string.header_margin") })
-      .position({ top: $r("app.string.header_margin") })
+      .margin({ top: $r("app.float.header_margin") })
+      .position({ top: $r("app.float.header_margin") })
       Scroll() {
         GridRow({
           columns: {
@@ -98,7 +98,7 @@ struct RollFlip {
         .margin(24)  .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
       }
       .width('100%')
-      .height('100%')  .padding({ top: $r("app.string.header_height") })
+      .height('100%')  .padding({ top: $r("app.float.header_height") })
     }.height('100%')          .backgroundColor($r("app.color.Comp_Bg3"))   .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }

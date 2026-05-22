@@ -1,4 +1,4 @@
-export const challenges: string[] = [
+﻿export const challenges: string[] = [
   "用新闻联播的腔调进行一分钟即兴演讲",
   "站在大街上大声唱《两只老虎》",
   "给未在场的朋友的朋友圈点赞，从第一条开始，一直点到最新的一条",

@@ -1,4 +1,4 @@
-import router from '@ohos.router';
+﻿import router from '@ohos.router';
 import { AboutUs } from './AboutUs';
 import { ContactUs } from './ContactUs';
 import { Options } from './Options';

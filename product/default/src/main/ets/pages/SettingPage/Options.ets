@@ -1,4 +1,4 @@
-import { SymbolGlyphModifier } from '@kit.ArkUI'
+﻿import { SymbolGlyphModifier } from '@kit.ArkUI'
 import { preferences } from '@kit.ArkData'
 import { ConfigurationConstant, common } from '@kit.AbilityKit'
 import { CommonConstants } from '@ohos/common'

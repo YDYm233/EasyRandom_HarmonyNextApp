@@ -1,4 +1,4 @@
-import BaGuaCard from '../form_cards/BaGuaCard'
+﻿import BaGuaCard from '../form_cards/BaGuaCard'
 import BlessingMuyuCard from '../form_cards/BlessingMuyuCard'
 import FlipCoinCard from '../form_cards/FlipCoinCard'
 import RandomColorsCard from '../form_cards/RandomColorsCard'
@@ -292,7 +292,7 @@ struct AllasOne {
 
           }
           .padding(24)
-          .backgroundColor($r("app.color.Comp_Bg2"))
+          // .backgroundColor($r("app.color.Comp_Bg2"))
           .width('100%')
         }
       }
@@ -336,7 +336,7 @@ struct AllasOne {
             )
           )
       }
-    }
+    }    .backgroundColor($r("app.color.Comp_Bg3"))
     .height('100%')
     .width('100%')
   }

@@ -1,4 +1,4 @@
-import { BreakpointState, BreakpointSystem, Random } from '@ohos/common';
+﻿import { BreakpointState, BreakpointSystem, Random } from '@ohos/common';
 import{RollWheel}from './RollWheel'
 import { Roll, defaultRolls, initRollsData } from './RollDataManager';
 import { RollEditSheet } from './RollEditor';

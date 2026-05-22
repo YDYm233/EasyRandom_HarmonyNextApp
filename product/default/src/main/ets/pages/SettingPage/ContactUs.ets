@@ -1,4 +1,4 @@
-@Component
+﻿@Component
 struct Container {
   build() {
     Column() {

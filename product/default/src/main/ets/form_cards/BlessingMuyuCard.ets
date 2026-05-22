@@ -1,4 +1,4 @@
-import { Random } from '@ohos/common'
+﻿import { Random } from '@ohos/common'
 
 @Entry
 @Component

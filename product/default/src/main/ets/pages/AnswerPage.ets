@@ -1,4 +1,4 @@
-import { Random } from '@ohos/common';
+﻿import { Random } from '@ohos/common';
 import { answers } from '../static_datas/answers';
 import { resourceManager } from '@kit.LocalizationKit';
 

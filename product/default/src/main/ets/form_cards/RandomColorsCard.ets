@@ -1,4 +1,4 @@
-import {Random,ExColor} from '@ohos/common'
+﻿import {Random,ExColor} from '@ohos/common'
 @Entry
 @Component
 struct RandomColorsCard {

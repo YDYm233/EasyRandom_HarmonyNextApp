@@ -1,4 +1,4 @@
-@Builder
+﻿@Builder
 export function CopyRight() {
   CopyRightComponent();
 }

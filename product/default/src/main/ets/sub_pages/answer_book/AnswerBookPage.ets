@@ -1,4 +1,4 @@
-import { Random } from '@ohos/common';
+﻿import { Random } from '@ohos/common';
 import { answers } from '../../static_datas/answers';
 import { resourceManager } from '@kit.LocalizationKit';
 import router from '@ohos.router';
@@ -26,7 +26,7 @@ struct AnswerPage {
           })
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .width('100%')
-          .height($r("app.string.header_height"))
+          .height($r("app.float.header_height"))
           .justifyContent(FlexAlign.Start)
           .alignItems(VerticalAlign.Center)
           .padding({ left: 12 })
@@ -37,7 +37,7 @@ struct AnswerPage {
             Text($r("app.string.AnswerBook")).fontColor($r("app.color.FontIcon_Fore1"))
           }
           .width('100%')
-          .height($r("app.string.header_height"))
+          .height($r("app.float.header_height"))
           .justifyContent(FlexAlign.Center)
           .alignItems(VerticalAlign.Center)
         }
@@ -56,18 +56,18 @@ struct AnswerPage {
           })
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .width('100%')
-          .height($r("app.string.header_height"))
+          .height($r("app.float.header_height"))
           .justifyContent(FlexAlign.End)
           .alignItems(VerticalAlign.Center)
           .padding({ right: 12 })
         }
       }
       .width('100%')
-      .height($r("app.string.header_height"))
+      .height($r("app.float.header_height"))
       .backgroundColor($r("app.color.Comp_Bg1"))
       .zIndex(10)
-      .margin({ top: $r("app.string.header_margin") })
-      .position({ top: $r("app.string.header_margin") })
+      .margin({ top: $r("app.float.header_margin") })
+      .position({ top: $r("app.float.header_margin") })
 
       Scroll() {
         GridRow({
@@ -86,7 +86,7 @@ struct AnswerPage {
       }
       .width('100%')
       .height('100%')
-      .padding({ top: $r("app.string.header_height") })
+      .padding({ top: $r("app.float.header_height") })
     }
     .height('100%')
     .backgroundColor($r("app.color.Comp_Bg3"))

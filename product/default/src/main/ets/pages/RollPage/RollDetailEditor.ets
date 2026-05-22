@@ -1,4 +1,4 @@
-import { RollWheel } from './RollWheel'
+﻿import { RollWheel } from './RollWheel'
 import { promptAction } from '@kit.ArkUI'
 import {
   Roll, RollItem,
