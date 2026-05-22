@@ -201,6 +201,6 @@ export struct LegacyMainPage {
       .backgroundColor($r("app.color.Comp_Bg1"))
       .padding({ top: $r("app.float.header_margin"), bottom: $r("app.float.footer_margin") })
       .barHeight(56)
-    }
+    }.width('100%').height('100%')
   }
 }

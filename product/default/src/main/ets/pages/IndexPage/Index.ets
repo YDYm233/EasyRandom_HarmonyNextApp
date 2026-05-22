@@ -1,7 +1,7 @@
 /**
- * Index — 应用入口，按 API 版本加载不同页面模式：
- *   API < 23  → LegacyMainPage（传统 Tabs）
- *   API >= 23 → HdsMainPage（HdsTabs 悬浮导航 + 半透明 Header）
+ * Index — 应用入口
+ *   当前 target API 12，默认加载 LegacyMainPage（传统 Tabs）
+ *   待项目升级至 API 23+ 后，切换到 HdsMainPage（HdsTabs 悬浮导航 + 半透明 Header）
  */
 import router from '@ohos.router'
 import { BusinessError } from '@kit.BasicServicesKit'
@@ -11,8 +11,7 @@ import { webview } from '@kit.ArkWeb'
 import { preferences } from '@kit.ArkData'
 import deviceInfo from '@ohos.deviceInfo'
 import { LegacyMainPage } from './LegacyMainPage'
-import { HdsMainPage } from './HdsMainPage'
-
+import{HdsMainPage}from './HdsMainPage'
 class Params {
   type: string
   constructor(tuple: string) {
@@ -29,7 +28,7 @@ struct Index {
   controller: webview.WebviewController = new webview.WebviewController()
 
   aboutToAppear() {
-    // 检测 API 版本：>=23 启用 HdsTabs 悬浮导航
+    // 检测 API 版本：>=23 可启用 HdsTabs 悬浮导航
     try {
       this.isHdsSupported = deviceInfo.sdkApiVersion >= 23
     } catch (e) {
@@ -139,10 +138,16 @@ struct Index {
   }
 
   build() {
-    if (this.isHdsSupported) {
-      HdsMainPage()
-    } else {
-      LegacyMainPage()
-    }
+    Column() {
+      // 当前项目 target API 12，加载 LegacyMainPage
+      // 升级 API 23+ 后，将 import 替换并切换为 HdsMainPage
+      if (this.isHdsSupported) {
+        HdsMainPage().backgroundColor(Color.Blue)
+      } else {
+        LegacyMainPage().backgroundColor(Color.Red)
+      }
+    }.backgroundColor(Color.Green)
+    .width('100%')
+    .height('100%')
   }
 }
