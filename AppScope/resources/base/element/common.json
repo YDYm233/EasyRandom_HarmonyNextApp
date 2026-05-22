@@ -23,38 +23,6 @@
       "attr": {
         "translatable": false
       }
-    },
-    {
-      "name": "header_height",
-      "value": "50",
-      "comment": "TODO: 应迁移到float.json。顶部安全距离，布局常量",
-      "attr": {
-        "translatable": false
-      }
-    },
-    {
-      "name": "footer_height",
-      "value": "56",
-      "comment": "TODO: 应迁移到float.json。底部安全距离，布局常量",
-      "attr": {
-        "translatable": false
-      }
-    },
-    {
-      "name": "header_margin",
-      "value": "0",
-      "comment": "TODO: 应迁移到float.json。顶部边距，布局常量",
-      "attr": {
-        "translatable": false
-      }
-    },
-    {
-      "name": "footer_margin",
-      "value": "0",
-      "comment": "TODO: 应迁移到float.json。底部边距，布局常量",
-      "attr": {
-        "translatable": false
-      }
     }
   ]
 }
