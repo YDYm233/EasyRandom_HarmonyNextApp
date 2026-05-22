@@ -43,7 +43,12 @@ const TOOLS_FUN: Array<ToolItem> = [
     'sub_pages/honest_or_challenge/HonestOrChallenge', '趣味玩法'),
   new ToolItem('👤', $r("app.string.page_random_names"), 'sub_pages/random_names/RandomNames', '趣味玩法'),
 ];
-
+class Params {
+  type: string
+  constructor(tuple: string) {
+    this.type = tuple
+  }
+}
 @Entry
 @Component
 struct ToolsPage {
@@ -144,6 +149,9 @@ struct ToolsPage {
     Column() {
       Scroll() {
         Column() {
+
+
+
           // 热门推荐
           this.SectionHeader('🔥', '热门推荐')
           this.CapsuleSection(TOOLS_HOT, true)
@@ -157,6 +165,25 @@ struct ToolsPage {
           this.CapsuleSection(TOOLS_FUN, false)
 
           Blank().height(24)
+          Row() {
+            Image($r("app.media.func_setting")).height(24).width(24).fillColor($r("app.color.FontIcon_Fore1"))
+              .onClick(
+                () => {
+              router.pushUrl({
+                url: 'pages/SettingPage/SettingPage',
+                params: new Params('aboutus')
+              })
+            })
+          }
+          .width('100%')
+          .height($r("app.float.header_height"))
+          .justifyContent(FlexAlign.End)
+          .alignItems(VerticalAlign.Center)
+          .padding({ right: 12 })
+
+
+
+
         }.alignItems(HorizontalAlign.Start)
         .width('100%')
       }    .height('100%')

@@ -29,7 +29,8 @@ export struct LegacyMainPage {
   @State title: Resource = this.titles[0]
   @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
   private tabsController: TabsController = new TabsController()
-
+  @StorageProp('statusBarHeight') statusBarHeight: number = 0
+  @StorageProp('navIndicatorHeight') navIndicatorHeight: number = 0
   aboutToAppear() {
     this.tabsController.changeIndex(this.currentIndex)
     BreakpointSystem.getInstance().attach(this.currentBreakpoint)
@@ -198,9 +199,10 @@ export struct LegacyMainPage {
         strokeWidth: 0.8,
         color: $r("app.color.FontIcon_Fore4")
       })
+
       .backgroundColor($r("app.color.Comp_Bg1"))
       .padding({ top: $r("app.float.header_margin"), bottom: $r("app.float.footer_margin") })
       .barHeight(56)
-    }.width('100%').height('100%')
+    }.width('100%').height('100%')      .padding({ top: this.statusBarHeight, bottom: this.navIndicatorHeight })
   }
 }

@@ -30,6 +30,9 @@ export struct HdsMainPage {
   @State title: Resource = this.titles[0]
   @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
   private hdsController: HdsTabsController = new HdsTabsController()
+  // 从 AppStorage 读取窗口沉浸后的安全区域高度，用于内容避让
+  @StorageProp('statusBarHeight') statusBarHeight: number = 0
+  @StorageProp('navIndicatorHeight') navIndicatorHeight: number = 0
 
   aboutToAppear() {
     this.hdsController.changeIndex(this.currentIndex)
@@ -140,45 +143,41 @@ export struct HdsMainPage {
 
 
       // ========== HdsTabs 悬浮导航 ==========
+      // 使用 ignoreLayoutSafeArea + LayoutPolicy.matchParent 将容器扩展到安全区外
+      // padding 统一处理状态栏和导航条避让，子页面无需各自添加 padding
       HdsTabs({
         controller: this.hdsController,
         index: 0,
         barPosition: BarPosition.End
       }) {
         TabContent() {
-          RollPage()        .height('100%')
+          RollPage().height('100%')
         }
-        // .padding({ top: $r("app.float.header_height"), bottom: 100 })
         .height('100%')
         .backgroundColor($r("app.color.Comp_Bg2"))
-        .borderWidth(5)
-        .borderColor(Color.Orange)
-        .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.TOP,LayoutSafeAreaEdge.BOTTOM,])
         .tabBar(this.tabBarBuilder($r('app.string.page_name1'), 0, $r('app.media.page_icon1_selected'),
           $r('app.media.page_icon1')))
 
         TabContent() {
-          AnswerPage()
+          AnswerPage().height('100%')
         }
-        // .padding({ top: $r("app.float.header_height"), bottom: 100 })
+        .height('100%')
         .backgroundColor($r("app.color.Comp_Bg2"))
-        .borderWidth(5)
-        .borderColor(Color.Orange)
         .tabBar(this.tabBarBuilder($r('app.string.page_name3'), 1, $r('app.media.page_icon3_selected'),
           $r('app.media.page_icon3')))
 
         TabContent() {
-          TollsPage()
+          TollsPage().height('100%')
         }
-        // .padding({ top: $r("app.float.header_height"), bottom: 100 })
+        .height('100%')
         .backgroundColor($r("app.color.Comp_Bg2"))
         .tabBar(this.tabBarBuilder($r('app.string.page_name4'), 2, $r('app.media.page_icon4_selected'),
           $r('app.media.page_icon4')))
 
         TabContent() {
-          AllasOne()
+          AllasOne().height('100%')
         }
-        // .padding({ top: $r("app.float.header_height"), bottom: 100 })
+        .height('100%')
         .backgroundColor($r("app.color.Comp_Bg2"))
         .tabBar(this.tabBarBuilder($r('app.string.page_name2'), 3, $r('app.media.page_icon2_selected'),
           $r('app.media.page_icon2')))
@@ -191,25 +190,15 @@ export struct HdsMainPage {
       .barOverlap(true)
       .barPosition(BarPosition.End)
       .barFloatingStyle({
-        // barBottomMargin: 10,
-        // gradientMask: {
-        //   maskColor: '#99FFFFFF',
-        //   maskHeight: 120
-        // },
         systemMaterialEffect: {
           materialType: hdsMaterial.MaterialType.ADAPTIVE,
           materialLevel: hdsMaterial.MaterialLevel.ADAPTIVE
         }
       })
       .animationDuration(0)
-      .borderWidth(5)
-      .borderColor(Color.Red)
-      .width('100%').height('100%')
-      .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
-      // .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.TOP,LayoutSafeAreaEdge.BOTTOM,])  // 设置布局区域延伸取左和上方向，至系统避让区SYSTEM
-
-    // .backgroundColor($r("app.color.Comp_Bg1"))
-    // }.width('100%').height('100%')      .borderWidth(5)
-    // .borderColor(Color.Green)
+      // .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.TOP, LayoutSafeAreaEdge.BOTTOM])
+      .height('100%')
+      // .padding({ top: this.statusBarHeight, bottom: this.navIndicatorHeight })
+      .width('100%')
   }
 }
