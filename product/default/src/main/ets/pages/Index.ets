@@ -199,7 +199,7 @@ struct TabBar {
   build() {
     //头部内容显示
     Column() {
-      GridRow() {
+      GridRow({ columns: 12 }) {
         GridCol({ span: { sm: 3, md: 2, lg: 1 } }) {
           Row() {
              Image($r("app.media.link_myApp")).height('24vp').width('24vp').fillColor($r("app.color.FontIcon_Fore1"))
@@ -300,7 +300,6 @@ struct TabBar {
       .height($r("app.string.header_height"))
       .backgroundColor($r("app.color.Comp_Bg1"))
       .zIndex(10)
-      .margin({ top: $r("app.string.header_margin") })
       .position({ top: $r("app.string.header_margin") })
 
       //导航
