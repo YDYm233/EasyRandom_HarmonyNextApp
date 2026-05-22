@@ -38,7 +38,7 @@ const TOOLS_FUN: Array<ToolItem> = [
   new ToolItem('☯️', $r("app.string.page_bagua"), 'sub_pages/devine_bagua/DevineBaGua', '趣味玩法'),
   new ToolItem('🪵', $r("app.string.page_muyu"), 'sub_pages/blessing_muyu/BlessingMuyu_V2', '趣味玩法'),
   new ToolItem('🍔🍜', $r("app.string.page_random_foods"), 'sub_pages/random_foods/RandomFoods', '趣味玩法'),
-  new ToolItem('📖 ', $r("app.string.page_answer_book"), ' sub_pages/answer_book/AnswerBookPage', '趣味玩法'),
+  new ToolItem('📖 ', $r("app.string.page_answer_book"), 'sub_pages/answer_book/AnswerBookPage', '趣味玩法'),
   new ToolItem('🎭', $r("app.string.page_honest_or_challenge"),
     'sub_pages/honest_or_challenge/HonestOrChallenge', '趣味玩法'),
   new ToolItem('👤', $r("app.string.page_random_names"), 'sub_pages/random_names/RandomNames', '趣味玩法'),

@@ -308,7 +308,7 @@ struct IllustrateComponent {
               const want: Want = {
                 uri: `store://appgallery.huawei.com/app/detail?id=${AppBundleName}`
               };
-              promptAction.showToast({
+              promptAction.openToast({
                 message: '正在尝试转到应用商店查看'+AppName
               })
               context.startAbility(want).then(() => {
