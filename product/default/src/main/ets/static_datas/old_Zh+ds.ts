@@ -821,7 +821,7 @@ export const zh_CN: TranslationMap = {
       errorHint: "错误率 = 错误数 / 消息总数。越低越好。",
       avgSession: "平均会话",
       cacheHitRate: "缓存命中率",
-      cacheHint: "缓存命中率 = 缓存读取 /（输入 + 缓存读取）。越高越好。",
+      cacheHint: "缓存命中率 = 缓存读取 /（输入 + 缓存读取 + 缓存写入）。越高越好。",
       cached: "已缓存",
       prompt: "提示",
       calls: "调用",
@@ -940,7 +940,7 @@ export const zh_CN: TranslationMap = {
         summary: "Gateway 可以访问，但此浏览器连接前需要匹配的令牌或密码。",
         stepPaste: "粘贴 openclaw dashboard --no-open 提供的令牌，或输入已配置的密码。",
         stepGenerate:
-        "如果未配置令牌，请在 Gateway 主机上运行 openclaw doctor --generate-gateway-token。",
+          "如果未配置令牌，请在 Gateway 主机上运行 openclaw doctor --generate-gateway-token。",
         stepConnect: "更新凭据后再次点击 Connect。",
       },
       authFailed: {
@@ -1072,7 +1072,7 @@ export const zh_CN: TranslationMap = {
     en: "English(英语)",
     zhCN: "简体中文",
     zhTW: "繁體中文",
-    ptBR: "Português (巴西)",
+    ptBR: "Português (巴西葡萄牙语)",
     de: "Deutsch (德语)",
     es: "Español (西班牙语)",
     jaJP: "日本語 (日语)",
