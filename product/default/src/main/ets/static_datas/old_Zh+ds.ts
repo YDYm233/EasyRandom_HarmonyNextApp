@@ -452,7 +452,7 @@ export const zh_CN: TranslationMap = {
       subtitle: "最新的网关握手信息。",
       status: "状态",
       uptime: "运行时间",
-      tickInterval: "刻度间隔",
+      tickInterval: "更新间隔",
       lastChannelsRefresh: "最后频道刷新",
       channelsHint: "使用频道链接 WhatsApp、Telegram、Discord、Signal 或 iMessage。",
     },
@@ -600,7 +600,7 @@ export const zh_CN: TranslationMap = {
       nextSweepPrefix: "下次扫描",
     },
     scene: {
-      backfill: "回填",
+      backfill: "回溯填充",
       dedupeDiary: "去重日记",
       reset: "重置",
       clearGrounded: "清除已落地",
