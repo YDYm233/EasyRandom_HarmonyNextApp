@@ -8,7 +8,7 @@ import AllasOne from '../AllasOne'
 import TollsPage from '../ToolsPage'
 import router from '@ohos.router'
 import { BusinessError } from '@kit.BasicServicesKit'
-import { promptAction } from '@kit.ArkUI'
+import { promptAction, curves } from '@kit.ArkUI'
 import { BreakpointState, BreakpointSystem } from '@ohos/common'
 import { productViewManager } from '@kit.StoreKit'
 import { hilog } from '@kit.PerformanceAnalysisKit'
@@ -31,6 +31,11 @@ export struct LegacyMainPage {
   private tabsController: TabsController = new TabsController()
   @StorageProp('statusBarHeight') statusBarHeight: number = 0
   @StorageProp('navIndicatorHeight') navIndicatorHeight: number = 0
+  // Header 悬浮按钮按压动效
+  @State linkBtnScale: number = 1.0
+  @State settingBtnScale: number = 1.0
+  @State linkBtnGlow: number = 0
+  @State settingBtnGlow: number = 0
   aboutToAppear() {
     this.tabsController.changeIndex(this.currentIndex)
     BreakpointSystem.getInstance().attach(this.currentBreakpoint)
@@ -50,10 +55,11 @@ export struct LegacyMainPage {
     unselectIcon: Resource,
   ) {
     Column() {
-      Image(this.currentIndex === targetIndex ? selectedIcon : unselectIcon)
-        .width(24)
-        .height(24)
-        .fillColor(this.currentIndex === targetIndex ? $r("app.color.Brand") : $r("app.color.FontIcon_Fore2"))
+      SymbolGlyph(this.currentIndex === targetIndex ? selectedIcon : unselectIcon)
+        .fontSize(24)
+        .fontColor([this.currentIndex === targetIndex
+          ? $r('sys.color.ohos_id_color_activated')
+          : $r('sys.color.ohos_id_color_bottom_tab_icon_off')])
       Text(title)
         .fontSize(10)
         .fontColor(this.currentIndex === targetIndex ? $r("app.color.Brand") : $r("app.color.FontIcon_Fore2"))
@@ -77,40 +83,70 @@ export struct LegacyMainPage {
       GridRow({ columns: 12 }) {
         GridCol({ span: { sm: 3, md: 2, lg: 1 } }) {
           Row() {
-            Image($r("app.media.link_myApp")).height('24vp').width('24vp').fillColor($r("app.color.FontIcon_Fore1"))
-          }
-          .onClick(() => {
-            let want: Want = {
-              deviceId: '',
-              bundleName: 'com.atomicservice.5765880207854873613',
-              abilityName: 'EntryAbility',
-              moduleName: "entry"
+            Button() {
+              SymbolGlyph($r('sys.symbol.link'))
+                .fontSize(20)
+                .fontColor([$r('app.color.FontIcon_Fore1')])
             }
-            promptAction.showToast({ message: `正在尝试打开随易元服务` })
-            let context = getContext(this) as common.UIAbilityContext
-            context.startAbility(want, (err: BusinessError) => {
-              if (err.code) {
-                console.error(`Failed to startAbility. Code: ${err.code}, message: ${err.message}`)
-                promptAction.showToast({ message: `尝试打开应用商店` })
-                const storeWant: Want = {
-                  uri: `store://appgallery.huawei.com/app/detail?id=com.atomicservice.5765880207854873613`
-                }
-                context.startAbility(storeWant).then(() => {
-                }).catch(() => {
-                  const wantParam: Want = {
-                    parameters: { bundleName: 'com.atomicservice.5765880207854873613' }
-                  }
-                  const callback: productViewManager.ProductViewCallback = {
-                    onError: (error: BusinessError) => {
-                      hilog.error(0x0001, 'TAG', `loadService onError.code is ${error.code}, message is ${error.message}`)
-                      promptAction.showToast({ message: '跳转失败' })
-                    }
-                  }
-                  productViewManager.loadProduct(context, wantParam, callback)
+            .width(36)
+            .height(36)
+            .borderRadius(18)
+            .backgroundColor('rgba(255,255,255,0.15)')
+            .backgroundBlurStyle(BlurStyle.COMPONENT_ULTRA_THICK)
+            .shadow({
+              radius: 8 * this.linkBtnGlow,
+              color: 'rgba(255,255,255,0.6)',
+              offsetX: 0,
+              offsetY: 0
+            })
+            .scale({ x: this.linkBtnScale, y: this.linkBtnScale })
+            .onTouch((event: TouchEvent) => {
+              if (event.type === TouchType.Down) {
+                animateTo({ duration: 120, curve: Curve.EaseOut }, () => {
+                  this.linkBtnScale = 0.88
+                  this.linkBtnGlow = 1
+                })
+              } else if (event.type === TouchType.Up || event.type === TouchType.Cancel) {
+                animateTo({ duration: 350, curve: curves.springMotion(0.5, 0.8) }, () => {
+                  this.linkBtnScale = 1.0
+                  this.linkBtnGlow = 0
                 })
               }
             })
-          })
+            .onClick(() => {
+              let want: Want = {
+                deviceId: '',
+                bundleName: 'com.atomicservice.5765880207854873613',
+                abilityName: 'EntryAbility',
+                moduleName: "entry"
+              }
+              promptAction.showToast({ message: `正在尝试打开随易元服务` })
+              let context = getContext(this) as common.UIAbilityContext
+              context.startAbility(want, (err: BusinessError) => {
+                if (err.code) {
+                  console.error(`Failed to startAbility. Code: ${err.code}, message: ${err.message}`)
+                  promptAction.showToast({ message: `尝试打开应用商店` })
+                  const storeWant: Want = {
+                    uri: `store://appgallery.huawei.com/app/detail?id=com.atomicservice.5765880207854873613`
+                  }
+                  context.startAbility(storeWant).then(() => {
+                  }).catch(() => {
+                    const wantParam: Want = {
+                      parameters: { bundleName: 'com.atomicservice.5765880207854873613' }
+                    }
+                    const callback: productViewManager.ProductViewCallback = {
+                      onError: (error: BusinessError) => {
+                        hilog.error(0x0001, 'TAG',
+                          `loadService onError.code is ${error.code}, message is ${error.message}`)
+                        promptAction.showToast({ message: '跳转失败' })
+                      }
+                    }
+                    productViewManager.loadProduct(context, wantParam, callback)
+                  })
+                }
+              })
+            })
+          }
           .width('100%')
           .height($r("app.float.header_height"))
           .justifyContent(FlexAlign.Start)
@@ -130,24 +166,52 @@ export struct LegacyMainPage {
 
         GridCol({ span: { sm: 3, md: 2, lg: 1 } }) {
           Row() {
-            Image($r("app.media.func_setting")).height(24).width(24).fillColor($r("app.color.FontIcon_Fore1"))
+            Button() {
+              SymbolGlyph($r('sys.symbol.gearshape'))
+                .fontSize(20)
+                .fontColor([$r('app.color.FontIcon_Fore1')])
+            }
+            .width(36)
+            .height(36)
+            .borderRadius(18)
+            .backgroundColor('rgba(255,255,255,0.15)')
+            .backgroundBlurStyle(BlurStyle.COMPONENT_ULTRA_THICK)
+            .shadow({
+              radius: 8 * this.settingBtnGlow,
+              color: 'rgba(255,255,255,0.6)',
+              offsetX: 0,
+              offsetY: 0
+            })
+            .scale({ x: this.settingBtnScale, y: this.settingBtnScale })
+            .onTouch((event: TouchEvent) => {
+              if (event.type === TouchType.Down) {
+                animateTo({ duration: 120, curve: Curve.EaseOut }, () => {
+                  this.settingBtnScale = 0.88
+                  this.settingBtnGlow = 1
+                })
+              } else if (event.type === TouchType.Up || event.type === TouchType.Cancel) {
+                animateTo({ duration: 350, curve: curves.springMotion(0.5, 0.8) }, () => {
+                  this.settingBtnScale = 1.0
+                  this.settingBtnGlow = 0
+                })
+              }
+            })
+            .onClick(() => {
+              router.pushUrl({
+                url: 'pages/SettingPage/SettingPage',
+                params: new Params('aboutus')
+              }).then(() => {
+                console.info("success.")
+              }).catch((err: BusinessError) => {
+                console.error(`err, code is ${err.code}, message is ${err.message}.`)
+              })
+            })
           }
           .width('100%')
           .height($r("app.float.header_height"))
           .justifyContent(FlexAlign.End)
           .alignItems(VerticalAlign.Center)
           .padding({ right: 12 })
-          .onClick(() => {
-            router.pushUrl({
-              url: 'pages/SettingPage/SettingPage',
-              params: new Params('aboutus')
-            }).then(() => {
-              console.info("success.")
-            }).catch((err: BusinessError) => {
-              console.error(`err, code is ${err.code}, message is ${err.message}.`)
-            })
-          })
-          .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
         }
       }
       .width('100%')
@@ -166,29 +230,29 @@ export struct LegacyMainPage {
           RollPage()
         }
         .padding({ top: $r("app.float.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
-        .tabBar(this.tabBarBuilder($r('app.string.page_name1'), 0, $r('app.media.page_icon1_selected'),
-          $r('app.media.page_icon1')))
+        .tabBar(this.tabBarBuilder($r('app.string.page_name1'), 0, $r('sys.symbol.puzzle_fill'),
+          $r('sys.symbol.puzzle')))
 
         TabContent() {
           AnswerPage()
         }
         .padding({ top: $r("app.float.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
-        .tabBar(this.tabBarBuilder($r('app.string.page_name3'), 1, $r('app.media.page_icon3_selected'),
-          $r('app.media.page_icon3')))
+        .tabBar(this.tabBarBuilder($r('app.string.page_name3'), 1, $r('sys.symbol.book_open_fill'),
+          $r('sys.symbol.book_pages_fill')))
 
         TabContent() {
           TollsPage()
         }
         .padding({ top: $r("app.float.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
-        .tabBar(this.tabBarBuilder($r('app.string.page_name4'), 2, $r('app.media.page_icon4_selected'),
-          $r('app.media.page_icon4')))
+        .tabBar(this.tabBarBuilder($r('app.string.page_name4'), 2, $r('sys.symbol.briefcase_fill'),
+          $r('sys.symbol.briefcase')))
 
         TabContent() {
           AllasOne()
         }
         .padding({ top: $r("app.float.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
-        .tabBar(this.tabBarBuilder($r('app.string.page_name2'), 3, $r('app.media.page_icon2_selected'),
-          $r('app.media.page_icon2')))
+        .tabBar(this.tabBarBuilder($r('app.string.page_name2'), 3, $r('sys.symbol.rectangle_on_rectangle_fill'),
+          $r('sys.symbol.rectangle_on_rectangle')))
       }
       .onChange((index: number) => {
         this.title = this.titles[index]
