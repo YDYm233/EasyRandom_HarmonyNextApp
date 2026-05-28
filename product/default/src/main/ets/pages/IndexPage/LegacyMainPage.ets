@@ -57,9 +57,10 @@ export struct LegacyMainPage {
     Column() {
       SymbolGlyph(this.currentIndex === targetIndex ? selectedIcon : unselectIcon)
         .fontSize(24)
+        .renderingStrategy(SymbolRenderingStrategy.MULTIPLE_OPACITY)
         .fontColor([this.currentIndex === targetIndex
           ? $r('app.color.Brand')
-          : $r('sys.color.ohos_id_color_bottom_tab_icon_off')])
+          : $r('app.color.FontIcon_Fore3')])
         .symbolEffect(
           new BounceSymbolEffect(EffectScope.WHOLE, EffectDirection.UP),
           this.currentIndex === targetIndex
@@ -243,7 +244,7 @@ export struct LegacyMainPage {
           AnswerPage()
         }
         .padding({ top: $r("app.float.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
-        .tabBar(this.tabBarBuilder($r('app.string.page_name3'), 1, $r('sys.symbol.book_open_fill'),
+        .tabBar(this.tabBarBuilder($r('app.string.page_name3'), 1, $r('sys.symbol.book_pages_fill'),
           $r('sys.symbol.book_pages_fill')))
 
         TabContent() {
