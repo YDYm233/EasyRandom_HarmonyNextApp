@@ -36,6 +36,7 @@ export struct LegacyMainPage {
   @State settingBtnScale: number = 1.0
   @State linkBtnGlow: number = 0
   @State settingBtnGlow: number = 0
+  @State tabTrigger: number = -1
   aboutToAppear() {
     this.tabsController.changeIndex(this.currentIndex)
     BreakpointSystem.getInstance().attach(this.currentBreakpoint)
@@ -62,9 +63,12 @@ export struct LegacyMainPage {
         .fontColor([this.currentIndex === targetIndex
           ? $r('app.color.Brand')
           : $r('app.color.FontIcon_Fore3')])
+        // .symbolShadow(this.currentIndex === targetIndex
+        //   ? { radius: 8, color: 'rgba(0,0,0,0.12)', offsetX: 0, offsetY: 2 }
+        //   : { radius: 0, color: Color.Transparent, offsetX: 0, offsetY: 0 })
         .symbolEffect(
           new BounceSymbolEffect(EffectScope.WHOLE, EffectDirection.UP),
-          this.currentIndex === targetIndex
+          this.tabTrigger === targetIndex ? this.tabTrigger : -1
         )
       Text(title)
         .fontSize(10)
@@ -82,6 +86,7 @@ export struct LegacyMainPage {
         animateTo({ duration: 300, curve: Curve.EaseInOut }, () => {
           this.currentIndex = targetIndex
         })
+        this.tabTrigger = targetIndex
         this.tabsController.changeIndex(targetIndex)
       }
     })
