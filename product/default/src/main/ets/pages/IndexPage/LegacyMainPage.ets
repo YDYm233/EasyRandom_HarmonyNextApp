@@ -237,7 +237,7 @@ export struct LegacyMainPage {
         }
         .padding({ top: $r("app.float.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
         .tabBar(this.tabBarBuilder($r('app.string.page_name1'), 0, $r('sys.symbol.puzzle_fill'),
-          $r('sys.symbol.puzzle')))
+          $r('sys.symbol.puzzle_fill')))
 
         TabContent() {
           AnswerPage()
@@ -251,14 +251,14 @@ export struct LegacyMainPage {
         }
         .padding({ top: $r("app.float.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
         .tabBar(this.tabBarBuilder($r('app.string.page_name4'), 2, $r('sys.symbol.briefcase_fill'),
-          $r('sys.symbol.briefcase')))
+          $r('sys.symbol.briefcase_fill')))
 
         TabContent() {
           AllasOne()
         }
         .padding({ top: $r("app.float.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
         .tabBar(this.tabBarBuilder($r('app.string.page_name2'), 3, $r('sys.symbol.rectangle_on_rectangle_fill'),
-          $r('sys.symbol.rectangle_on_rectangle')))
+          $r('sys.symbol.rectangle_on_rectangle_fill')))
       }
       .onChange((index: number) => {
         this.title = this.titles[index]
