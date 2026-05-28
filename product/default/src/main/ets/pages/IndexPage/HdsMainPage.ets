@@ -55,27 +55,27 @@ export struct HdsMainPage {
   // Tab3 → AllasOne（全部/收藏）  → heart
   private tabSymbols: TabSymbolConfig[] = [
     {
-      normal: new SymbolGlyphModifier($r('sys.symbol.repeat'))
+      normal: new SymbolGlyphModifier($r('sys.symbol.puzzle'))
         .fontColor([$r('sys.color.ohos_id_color_bottom_tab_icon_off')]),
-      selected: new SymbolGlyphModifier($r('sys.symbol.repeat'))
+      selected: new SymbolGlyphModifier($r('sys.symbol.puzzle_fill'))
         .fontColor([$r('sys.color.ohos_id_color_activated')])
     },
     {
-      normal: new SymbolGlyphModifier($r('sys.symbol.questionmark_circle'))
+      normal: new SymbolGlyphModifier($r('sys.symbol.book_pages_fill'))
         .fontColor([$r('sys.color.ohos_id_color_bottom_tab_icon_off')]),
-      selected: new SymbolGlyphModifier($r('sys.symbol.questionmark_circle'))
+      selected: new SymbolGlyphModifier($r('sys.symbol.book_open_fill'))
         .fontColor([$r('sys.color.ohos_id_color_activated')])
     },
     {
-      normal: new SymbolGlyphModifier($r('sys.symbol.gearshape'))
+      normal: new SymbolGlyphModifier($r('sys.symbol.briefcase'))
         .fontColor([$r('sys.color.ohos_id_color_bottom_tab_icon_off')]),
-      selected: new SymbolGlyphModifier($r('sys.symbol.gearshape'))
+      selected: new SymbolGlyphModifier($r('sys.symbol.briefcase_fill'))
         .fontColor([$r('sys.color.ohos_id_color_activated')])
     },
     {
-      normal: new SymbolGlyphModifier($r('sys.symbol.heart'))
+      normal: new SymbolGlyphModifier($r('sys.symbol.rectangle_on_rectangle'))
         .fontColor([$r('sys.color.ohos_id_color_bottom_tab_icon_off')]),
-      selected: new SymbolGlyphModifier($r('sys.symbol.heart'))
+      selected: new SymbolGlyphModifier($r('sys.symbol.rectangle_on_rectangle_fill'))
         .fontColor([$r('sys.color.ohos_id_color_activated')])
     }
   ]
