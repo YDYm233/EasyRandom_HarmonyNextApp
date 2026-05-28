@@ -37,6 +37,8 @@ export struct LegacyMainPage {
   @State linkBtnGlow: number = 0
   @State settingBtnGlow: number = 0
   @State tabTrigger: number = -1
+  @State tabPressTarget: number = -1
+  @State tabPressScale: number = 1.0
   aboutToAppear() {
     this.tabsController.changeIndex(this.currentIndex)
     BreakpointSystem.getInstance().attach(this.currentBreakpoint)
@@ -81,12 +83,19 @@ export struct LegacyMainPage {
     .height('100%')
     .justifyContent(FlexAlign.Center)
     .alignItems(HorizontalAlign.Center)
+    .scale({
+      x: this.tabPressTarget === targetIndex ? this.tabPressScale : 1.0,
+      y: this.tabPressTarget === targetIndex ? this.tabPressScale : 1.0
+    })
     .onClick(() => {
       if (this.currentIndex !== targetIndex) {
-        animateTo({ duration: 300, curve: Curve.EaseInOut }, () => {
+        this.tabPressTarget = targetIndex
+        this.tabPressScale = 0.92
+        animateTo({ duration: 400, curve: curves.springMotion(0.55, 0.85) }, () => {
           this.currentIndex = targetIndex
+          this.tabTrigger = targetIndex
+          this.tabPressScale = 1.0
         })
-        this.tabTrigger = targetIndex
         this.tabsController.changeIndex(targetIndex)
       }
     })
