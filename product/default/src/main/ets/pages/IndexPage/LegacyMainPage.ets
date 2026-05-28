@@ -53,23 +53,17 @@ export struct LegacyMainPage {
     targetIndex: number,
     selectedIcon: Resource,
     unselectIcon: Resource,
-    useSymbolEffect: boolean = false,
   ) {
     Column() {
-      if (useSymbolEffect) {
-        SymbolGlyph(unselectIcon)
-          .fontSize(24)
-          .fontColor([this.currentIndex === targetIndex
-            ? $r('app.color.Brand')
-            : $r('sys.color.ohos_id_color_bottom_tab_icon_off')])
-          .symbolEffect(this.currentIndex === targetIndex)
-      } else {
-        SymbolGlyph(this.currentIndex === targetIndex ? selectedIcon : unselectIcon)
-          .fontSize(24)
-          .fontColor([this.currentIndex === targetIndex
-            ? $r('app.color.Brand')
-            : $r('sys.color.ohos_id_color_bottom_tab_icon_off')])
-      }
+      SymbolGlyph(this.currentIndex === targetIndex ? selectedIcon : unselectIcon)
+        .fontSize(24)
+        .fontColor([this.currentIndex === targetIndex
+          ? $r('app.color.Brand')
+          : $r('sys.color.ohos_id_color_bottom_tab_icon_off')])
+        .symbolEffect(
+          new BounceSymbolEffect(EffectScope.WHOLE, EffectDirection.UP),
+          this.currentIndex === targetIndex
+        )
       Text(title)
         .fontSize(10)
         .fontColor(this.currentIndex === targetIndex ? $r("app.color.Brand") : $r("app.color.FontIcon_Fore2"))
@@ -243,7 +237,7 @@ export struct LegacyMainPage {
         }
         .padding({ top: $r("app.float.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
         .tabBar(this.tabBarBuilder($r('app.string.page_name1'), 0, $r('sys.symbol.puzzle_fill'),
-          $r('sys.symbol.puzzle'), true))
+          $r('sys.symbol.puzzle')))
 
         TabContent() {
           AnswerPage()
@@ -257,14 +251,14 @@ export struct LegacyMainPage {
         }
         .padding({ top: $r("app.float.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
         .tabBar(this.tabBarBuilder($r('app.string.page_name4'), 2, $r('sys.symbol.briefcase_fill'),
-          $r('sys.symbol.briefcase'), true))
+          $r('sys.symbol.briefcase')))
 
         TabContent() {
           AllasOne()
         }
         .padding({ top: $r("app.float.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
         .tabBar(this.tabBarBuilder($r('app.string.page_name2'), 3, $r('sys.symbol.rectangle_on_rectangle_fill'),
-          $r('sys.symbol.rectangle_on_rectangle'), true))
+          $r('sys.symbol.rectangle_on_rectangle')))
       }
       .onChange((index: number) => {
         this.title = this.titles[index]
