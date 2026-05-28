@@ -57,6 +57,7 @@ export struct LegacyMainPage {
     Column() {
       SymbolGlyph(this.currentIndex === targetIndex ? selectedIcon : unselectIcon)
         .fontSize(24)
+        .fontWeight(this.currentIndex === targetIndex ? FontWeight.Bold : FontWeight.Normal)
         .renderingStrategy(SymbolRenderingStrategy.MULTIPLE_OPACITY)
         .fontColor([this.currentIndex === targetIndex
           ? $r('app.color.Brand')
@@ -77,10 +78,12 @@ export struct LegacyMainPage {
     .justifyContent(FlexAlign.Center)
     .alignItems(HorizontalAlign.Center)
     .onClick(() => {
-      animateTo({ duration: 300, curve: Curve.EaseInOut }, () => {
-        this.currentIndex = targetIndex
-      })
-      this.tabsController.changeIndex(targetIndex)
+      if (this.currentIndex !== targetIndex) {
+        animateTo({ duration: 300, curve: Curve.EaseInOut }, () => {
+          this.currentIndex = targetIndex
+        })
+        this.tabsController.changeIndex(targetIndex)
+      }
     })
   }
 
@@ -261,8 +264,8 @@ export struct LegacyMainPage {
         .tabBar(this.tabBarBuilder($r('app.string.page_name2'), 3, $r('sys.symbol.rectangle_on_rectangle_fill'),
           $r('sys.symbol.rectangle_on_rectangle_fill')))
       }
-      .onChange((index: number) => {
-        this.title = this.titles[index]
+      .onAnimationStart((index: number, targetIndex: number) => {
+        this.title = this.titles[targetIndex]
       })
       .scrollable(false)
       .vertical(false)
