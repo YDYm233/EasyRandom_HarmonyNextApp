@@ -143,6 +143,14 @@
     {
       "name": "popup_mask",
       "value": "#66000000"
+    },
+    {
+      "name": "floating_btn_bg",
+      "value": "#26FFFFFF"
+    },
+    {
+      "name": "floating_btn_bg_solid",
+      "value": "#80FFFFFF"
     }
   ]
 }
