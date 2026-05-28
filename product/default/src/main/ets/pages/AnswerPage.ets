@@ -111,7 +111,7 @@ struct AnswerBook {
 
       })
     }.height('100%').aspectRatio(1 / 2)
-
+    .margin({ top: $r("app.float.header_height") })
     //.margin({bottom:'5%'})
   }
 }

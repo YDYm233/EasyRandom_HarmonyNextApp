@@ -189,6 +189,7 @@ struct ToolsPage {
       }    .height('100%')
       .scrollBar(BarState.Auto)
       .edgeEffect(EdgeEffect.Spring)
+      .padding({ top: $r("app.float.header_height") })
     }
 
     .backgroundColor($r("app.color.Comp_Bg3"))

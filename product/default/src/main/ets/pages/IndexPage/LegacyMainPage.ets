@@ -250,28 +250,32 @@ export struct LegacyMainPage {
         TabContent() {
           RollPage()
         }
-        .padding({ top: $r("app.float.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
+        // .padding({ top: $r("app.float.header_height") })
+        .backgroundColor($r("app.color.Comp_Bg2"))
         .tabBar(this.tabBarBuilder($r('app.string.page_name1'), 0, $r('sys.symbol.puzzle_fill'),
           $r('sys.symbol.puzzle_fill')))
 
         TabContent() {
           AnswerPage()
         }
-        .padding({ top: $r("app.float.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
+        // .padding({ top: $r("app.float.header_height") })
+        .backgroundColor($r("app.color.Comp_Bg2"))
         .tabBar(this.tabBarBuilder($r('app.string.page_name3'), 1, $r('sys.symbol.book_pages_fill'),
           $r('sys.symbol.book_pages_fill')))
 
         TabContent() {
           TollsPage()
         }
-        .padding({ top: $r("app.float.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
+        // .padding({ top: $r("app.float.header_height") })
+        .backgroundColor($r("app.color.Comp_Bg2"))
         .tabBar(this.tabBarBuilder($r('app.string.page_name4'), 2, $r('sys.symbol.briefcase_fill'),
           $r('sys.symbol.briefcase_fill')))
 
         TabContent() {
           AllasOne()
         }
-        .padding({ top: $r("app.float.header_height") }).backgroundColor($r("app.color.Comp_Bg2"))
+        // .padding({ top: $r("app.float.header_height") })
+        .backgroundColor($r("app.color.Comp_Bg2"))
         .tabBar(this.tabBarBuilder($r('app.string.page_name2'), 3, $r('sys.symbol.rectangle_on_rectangle_fill'),
           $r('sys.symbol.rectangle_on_rectangle_fill')))
       }
@@ -280,14 +284,17 @@ export struct LegacyMainPage {
       })
       .scrollable(false)
       .vertical(false)
+      // .barOverlap(true)
       .divider({
         strokeWidth: 0.8,
         color: $r("app.color.FontIcon_Fore4")
       })
 
       .backgroundColor($r("app.color.Comp_Bg1"))
-      .padding({ top: $r("app.float.header_margin"), bottom: $r("app.float.footer_margin") })
+      // .padding({ top: $r("app.float.header_margin"), bottom: $r("app.float.footer_margin") })
       .barHeight(56)
-    }.width('100%').height('100%')      .padding({ top: this.statusBarHeight, bottom: this.navIndicatorHeight })
+    }.width('100%').height('100%')
+    .padding({ bottom: this.statusBarHeight, top: this.navIndicatorHeight })
+
   }
 }

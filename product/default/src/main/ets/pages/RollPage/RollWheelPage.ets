@@ -275,6 +275,7 @@ struct RollWheelsShow {
         }
       }
     })
+    .margin({ top: $r("app.float.header_height") })
   }
 }
 

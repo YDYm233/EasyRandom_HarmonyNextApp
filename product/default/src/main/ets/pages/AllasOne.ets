@@ -299,7 +299,8 @@ struct AllasOne {
       .height('100%')
       .width('100%')
       .scrollable(ScrollDirection.Vertical)
-
+      .edgeEffect(EdgeEffect.Spring)
+      .padding({ top: $r("app.float.header_height") })
       // 悬浮提示 —— 首次添加卡片成功后消失并持久化
       if (!this.cardAddedToDesktop) {
         Text($r("app.string.allasone_hint"))
@@ -336,7 +337,9 @@ struct AllasOne {
             )
           )
       }
-    }    .backgroundColor($r("app.color.Comp_Bg3"))
+    }
+
+    .backgroundColor($r("app.color.Comp_Bg3"))
     .height('100%')
     .width('100%')
   }
