@@ -4,6 +4,7 @@ import router from '@ohos.router';
 
 class Params {
   type: string
+
   constructor(tuple: string) {
     this.type = tuple
   }
@@ -104,6 +105,7 @@ struct RollBlessings_V2 {
       .zIndex(10)
       .margin({ top: $r("app.float.header_margin") })
       .position({ top: $r("app.float.header_margin") })
+
       Scroll() {
         GridRow({
           columns: { sm: 4, md: 8, lg: 12 },
@@ -140,7 +142,6 @@ struct RollBlessingsBox_V2 {
   // ── 祝福词库 ──
   private readonly blessingWords: string[] =
     ['幸福', '财力', '智力', '运气', '力量', '勇气', '实力', '美貌', '健康', '快乐']
-
   // ── 祝福数值池（加权分布）──
   private readonly luckValues: number[] =
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -148,7 +149,6 @@ struct RollBlessingsBox_V2 {
       3, 3, 3, 3, 3,
       5, 5,
       0]
-
   // ── 祝福项池 ──
   @State words: string[] = new Array(POOL_SIZE).fill('')
   @State values: number[] = new Array(POOL_SIZE).fill(0)
@@ -157,14 +157,11 @@ struct RollBlessingsBox_V2 {
   @State scales: number[] = new Array(POOL_SIZE).fill(1)
   @State zIndices: number[] = new Array(POOL_SIZE).fill(0)
   @State muyuScale: number = 1
-
   /** 功德计数 —— 父组件 @State → 子组件 @Link 双向绑定 */
   @Link clickCount: number
-
   private poolIndex: number = 0
   private maxZIndex: number = 0
   private poolIndices: number[] = [0, 1, 2, 3, 4, 5]
-
   private pref?: preferences.Preferences
   private appCtx?: Context
 
@@ -255,7 +252,12 @@ struct RollBlessingsBox_V2 {
             }
             .backgroundColor($r("app.color.Comp_Bg1"))
             .borderRadius(14)
-            .padding({ left: 12, right: 12, top: 5, bottom: 5 })
+            .padding({
+              left: 12,
+              right: 12,
+              top: 5,
+              bottom: 5
+            })
             .translate({ y: this.translateY[i] })
             .opacity(this.opacities[i])
             .scale({ x: this.scales[i], y: this.scales[i] })

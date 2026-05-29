@@ -4,14 +4,17 @@ import { names } from '../../static_datas/names'
 
 class Params {
   type: string
+
   constructor(tuple: string) {
     this.type = tuple
   }
 }
+
 @Entry
 @Component
 struct RandomNames {
   @StorageProp('statusBarHeight') statusBarHeight: number = 0
+
   build() {
     Column() {
       GridRow({ columns: { sm: 12, md: 12, lg: 12 } }) {
@@ -67,6 +70,7 @@ struct RandomNames {
       .margin({ top: $r("app.float.header_margin") })
       .position({ top: $r("app.float.header_margin") })
       .padding({ top: this.statusBarHeight })
+
       Scroll() {
         GridRow({
           columns: {
@@ -96,18 +100,22 @@ struct RandomNames {
             .alignItems(VerticalAlign.Center)
           }
         }
-        .margin(24)  .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+        .margin(24).expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
       }
       .width('100%')
-      .height('100%')  .padding({ top: $r("app.float.header_height") })
-    }.padding({ top: this.statusBarHeight }).height('100%').backgroundColor($r("app.color.Comp_Bg3")).expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+      .height('100%').padding({ top: $r("app.float.header_height") })
+    }
+    .padding({ top: this.statusBarHeight })
+    .height('100%')
+    .backgroundColor($r("app.color.Comp_Bg3"))
+    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
 
 @Component
 struct NamesBox {
-  @State textValue: string =names
+  @State textValue: string = names
   @State texts: string[] = []
   @State indexs: number[] = []
   @State number: number = 1;
@@ -137,7 +145,7 @@ struct NamesBox {
     //.margin('5%')
     .justifyContent(FlexAlign.Center)
     .alignItems(VerticalAlign.Center)
-.borderRadius(6)
+    .borderRadius(6)
     .backgroundColor($r("app.color.Comp_Bg1"))
 
   }
@@ -172,7 +180,7 @@ struct NamesBox {
           .padding({ top: '5%' })
           .aspectRatio(1)
           .backgroundColor($r("app.color.Comp_Bg2"))
-          .border({ width: 4, color:$r("app.color.Comp_Bg2"), radius: 12 })
+          .border({ width: 4, color: $r("app.color.Comp_Bg2"), radius: 12 })
         }.borderRadius(24).backgroundColor($r("app.color.Comp_Bg1"))
 
 
@@ -208,24 +216,24 @@ struct NamesBox {
               Row() {
                 Text('数量:').height('100%').fontWeight(FontWeight.Bold)
                 Row() {
-                Counter() {
-                  Text(this.number.toString())
-                }
-                .onInc(() => {
-                  this.number++
-                  if (this.number > this.max) {
-                    this.number = this.max;
+                  Counter() {
+                    Text(this.number.toString())
                   }
-                })
-                .onDec(() => {
-                  this.number--
-                  if (this.number < 0) {
-                    this.number = 0;
-                  }
-                })
+                  .onInc(() => {
+                    this.number++
+                    if (this.number > this.max) {
+                      this.number = this.max;
+                    }
+                  })
+                  .onDec(() => {
+                    this.number--
+                    if (this.number < 0) {
+                      this.number = 0;
+                    }
+                  })
                   .height('80%')
                   .aspectRatio(3)
-              }
+                }
                 .height('80%')
               }
               .justifyContent(FlexAlign.SpaceBetween)
@@ -244,7 +252,7 @@ struct NamesBox {
                 //console.log('valueArray:'+filterArray)
                 // console.log('indexs:'+this.indexs.toString())
                 let i: number = 0;
-                this.texts=[''];
+                this.texts = [''];
                 while (i < this.number) {
                   let x: number = this.indexs[i]
                   this.texts[i] = filterArray[x]
@@ -272,7 +280,7 @@ struct NamesBox {
         .width('100%')
         .aspectRatio(1)
         .backgroundColor($r("app.color.Comp_Bg1"))
-        .border({ width: 0, color: $r("app.color.Comp_Bg2") ,radius: 24 })
+        .border({ width: 0, color: $r("app.color.Comp_Bg2"), radius: 24 })
       }
     }
   }

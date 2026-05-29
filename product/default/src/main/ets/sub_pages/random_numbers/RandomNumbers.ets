@@ -4,14 +4,17 @@ import { CounterComponent, CounterType } from '@kit.ArkUI';
 
 class Params {
   type: string
+
   constructor(tuple: string) {
     this.type = tuple
   }
 }
+
 @Entry
 @Component
 struct RandomNames {
   @StorageProp('statusBarHeight') statusBarHeight: number = 0
+
   build() {
     Column() {
       GridRow({ columns: { sm: 12, md: 12, lg: 12 } }) {
@@ -67,6 +70,7 @@ struct RandomNames {
       .margin({ top: $r("app.float.header_margin") })
       .position({ top: $r("app.float.header_margin") })
       .padding({ top: this.statusBarHeight })
+
       Scroll() {
         GridRow({
           columns: {
@@ -96,11 +100,15 @@ struct RandomNames {
             .alignItems(VerticalAlign.Center)
           }
         }
-        .margin(24)  .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+        .margin(24).expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
       }
       .width('100%')
-      .height('100%')  .padding({ top: $r("app.float.header_height") })
-    }.padding({ top: this.statusBarHeight }).height('100%').backgroundColor($r("app.color.Comp_Bg3")).expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+      .height('100%').padding({ top: $r("app.float.header_height") })
+    }
+    .padding({ top: this.statusBarHeight })
+    .height('100%')
+    .backgroundColor($r("app.color.Comp_Bg3"))
+    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
@@ -153,14 +161,14 @@ struct NumbersBox {
         }.width('100%')
       }
       .width('100%')
-      .border({ width: 2, color:$r("app.color.Comp_Bg3"), radius: 12 })
+      .border({ width: 2, color: $r("app.color.Comp_Bg3"), radius: 12 })
       .backgroundColor($r("app.color.Comp_Bg2"))
       .layoutWeight(5)
       .clip(true)
 
       Row() {
         Row() {
-          Text('最小值:').height('100%').fontWeight(FontWeight.Bold)   .fontColor($r("app.color.FontIcon_Fore1"))
+          Text('最小值:').height('100%').fontWeight(FontWeight.Bold).fontColor($r("app.color.FontIcon_Fore1"))
           TextInput({ text: this.min.toString(), placeholder: '最小值' })
             .padding(0)
             .height('60%')
@@ -183,7 +191,7 @@ struct NumbersBox {
         }
 
         Row() {
-          Text('最大值:').height('100%').fontWeight(FontWeight.Bold)   .fontColor($r("app.color.FontIcon_Fore1"))
+          Text('最大值:').height('100%').fontWeight(FontWeight.Bold).fontColor($r("app.color.FontIcon_Fore1"))
           TextInput({ text: this.max.toString(), placeholder: '最大值' })
             .padding(0)
             .height('70%')
@@ -191,7 +199,7 @@ struct NumbersBox {
             .fontColor($r("app.color.FontIcon_Fore1"))
             .textAlign(TextAlign.Center)
             .fontWeight(FontWeight.Bold)
-           //.underlineColor($r("app.color.FontIcon_Fore1"))
+            //.underlineColor($r("app.color.FontIcon_Fore1"))
             .type(InputType.Number)
             .enterKeyType(EnterKeyType.Done)
             .onChange((value: string) => {
@@ -210,7 +218,7 @@ struct NumbersBox {
 
       Row() {
         Row() {
-          Text('数量:').height('100%').fontWeight(FontWeight.Bold)   .fontColor($r("app.color.FontIcon_Fore1"))
+          Text('数量:').height('100%').fontWeight(FontWeight.Bold).fontColor($r("app.color.FontIcon_Fore1"))
           CounterComponent({
             options: {
               type: CounterType.COMPACT,
