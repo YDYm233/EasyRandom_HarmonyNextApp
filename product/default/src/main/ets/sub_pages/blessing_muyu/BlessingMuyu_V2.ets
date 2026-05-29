@@ -124,7 +124,7 @@ struct RollBlessings_V2 {
           }
         }
         .margin(24)
-        .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+        // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
       }
       .width('100%')
       .height('100%')
@@ -133,7 +133,7 @@ struct RollBlessings_V2 {
 
     .height('100%')
     .backgroundColor($r("app.color.Comp_Bg3"))
-    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+    // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
 

@@ -233,13 +233,14 @@ onPageShow(): void {
        // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
       }
       .width('100%')
-        .padding({ top: this.statusBarHeight })
+
         .height('100%')
         .backgroundColor($r("app.color.Comp_Bg3"))
        // .backgroundColor(0xfff000)
        // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
       }
-      .padding(0)
+      // .padding(0)
+      .padding({ top: this.statusBarHeight })
       .width('100%')
       .height('100%')
       .backgroundColor($r("app.color.Comp_Bg1"))
@@ -249,7 +250,7 @@ onPageShow(): void {
       .hideToolBar(true)
       .minContentWidth('420vp')
       .backButtonIcon(this.currentBreakpoint.value=='sm'?$r("app.media.func_back"):null)
-      .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.BOTTOM])
+      // .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.BOTTOM])
      // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }

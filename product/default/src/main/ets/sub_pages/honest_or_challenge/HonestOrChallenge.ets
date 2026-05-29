@@ -282,7 +282,9 @@ struct HonestOrChallenge {
       .height('100%')
       .padding({ top: $r("app.float.header_height") })
       .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
-    }.padding({ top: this.statusBarHeight }).height('100%')
+    }
+    // .padding({ top: this.statusBarHeight })
+    .height('100%')
     .backgroundColor(this.honestColor)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }

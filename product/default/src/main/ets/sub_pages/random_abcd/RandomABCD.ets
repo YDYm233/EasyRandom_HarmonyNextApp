@@ -105,11 +105,11 @@ struct RollFlip {
       .width('100%')
       .height('100%').padding({ top: $r("app.float.header_height") })
     }
-    .padding({ top: this.statusBarHeight })
+    // .padding({ top: this.statusBarHeight })
     .height('100%')
     .backgroundColor($r("app.color.Comp_Bg3"))
-    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
-    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+    // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+    // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
 
