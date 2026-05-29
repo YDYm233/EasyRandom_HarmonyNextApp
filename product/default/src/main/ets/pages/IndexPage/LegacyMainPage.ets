@@ -297,7 +297,7 @@ export struct LegacyMainPage {
       // .padding({ top: $r("app.float.header_margin"), bottom: $r("app.float.footer_margin") })
       .barHeight(56)
     }.width('100%').height('100%')
-    .padding({ bottom: this.statusBarHeight, top: this.navIndicatorHeight })
+    .padding({ top: this.statusBarHeight, bottom: this.navIndicatorHeight })
 
   }
 }

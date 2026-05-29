@@ -6,7 +6,7 @@ import { RollEditSheet } from './RollEditor';
 @Component
 struct RollPage {
   @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
-
+  @StorageProp('statusBarHeight') statusBarHeight: number = 0
   aboutToAppear() {
     BreakpointSystem.getInstance().attach(this.currentBreakpoint)
     BreakpointSystem.getInstance().start()
@@ -28,7 +28,9 @@ struct RollPage {
     .justifyContent(FlexAlign.Center)
     .alignItems(HorizontalAlign.Center)
     .backgroundColor($r("app.color.Comp_Bg3"))
-    .padding({ left:6, right:6 })
+    // .padding({ left:12, right:12 })
+    .padding({ left:18, right:18,top: $r("app.float.header_height") ,bottom:$r('app.float.footer_height')})
+    // .margin({bottom:this.statusBarHeight })
   }
 }
 
@@ -275,7 +277,7 @@ struct RollWheelsShow {
         }
       }
     })
-    .margin({ top: $r("app.float.header_height") ,bottom:$r('app.float.footer_height')})
+
   }
 }
 

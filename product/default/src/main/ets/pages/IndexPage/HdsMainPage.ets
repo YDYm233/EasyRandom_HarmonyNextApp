@@ -53,41 +53,49 @@ export struct HdsMainPage {
   private tabSymbols: TabSymbolConfig[] = [
     {
       normal: new SymbolGlyphModifier($r('sys.symbol.puzzle'))
-        .fontColor([$r('sys.color.ohos_id_color_bottom_tab_icon_off')])
+        .fontColor([$r('sys.color.ohos_id_color_bottom_tab_icon_off'),
+          $r('sys.color.ohos_id_color_bottom_tab_icon_auxcolor_off02')])
         .renderingStrategy(SymbolRenderingStrategy.MULTIPLE_COLOR)
         .fontWeight(FontWeight.Normal),
       selected: new SymbolGlyphModifier($r('sys.symbol.puzzle_fill'))
-        .fontColor([$r('sys.color.ohos_id_color_activated')])
+        .fontColor([$r('sys.color.ohos_id_color_activated'),
+          $r('app.color.SubBrand')])
         .renderingStrategy(SymbolRenderingStrategy.MULTIPLE_COLOR)
         .fontWeight(FontWeight.Bold)
     },
     {
       normal: new SymbolGlyphModifier($r('sys.symbol.book_pages_fill'))
-        .fontColor([$r('sys.color.ohos_id_color_bottom_tab_icon_off')])
+        .fontColor([$r('sys.color.ohos_id_color_bottom_tab_icon_off'),
+          $r('sys.color.ohos_id_color_bottom_tab_icon_auxcolor_off02')])
         .renderingStrategy(SymbolRenderingStrategy.MULTIPLE_COLOR)
         .fontWeight(FontWeight.Normal),
       selected: new SymbolGlyphModifier($r('sys.symbol.book_open_fill'))
-        .fontColor([$r('sys.color.ohos_id_color_activated')])
+        .fontColor([$r('sys.color.ohos_id_color_activated'),
+          $r('app.color.SubBrand')])
         .renderingStrategy(SymbolRenderingStrategy.MULTIPLE_COLOR)
         .fontWeight(FontWeight.Bold)
     },
     {
       normal: new SymbolGlyphModifier($r('sys.symbol.briefcase'))
-        .fontColor([$r('sys.color.ohos_id_color_bottom_tab_icon_off')])
+        .fontColor([$r('sys.color.ohos_id_color_bottom_tab_icon_off'),
+          $r('sys.color.ohos_id_color_bottom_tab_icon_auxcolor_off02')])
         .renderingStrategy(SymbolRenderingStrategy.MULTIPLE_COLOR)
         .fontWeight(FontWeight.Normal),
       selected: new SymbolGlyphModifier($r('sys.symbol.briefcase_fill'))
-        .fontColor([$r('sys.color.ohos_id_color_activated')])
+        .fontColor([$r('sys.color.ohos_id_color_activated'),
+          $r('app.color.SubBrand')])
         .renderingStrategy(SymbolRenderingStrategy.MULTIPLE_COLOR)
         .fontWeight(FontWeight.Bold)
     },
     {
       normal: new SymbolGlyphModifier($r('sys.symbol.rectangle_on_rectangle'))
-        .fontColor([$r('sys.color.ohos_id_color_bottom_tab_icon_off')])
+        .fontColor([$r('sys.color.ohos_id_color_bottom_tab_icon_off'),
+          $r('sys.color.ohos_id_color_bottom_tab_icon_auxcolor_off02')])
         .renderingStrategy(SymbolRenderingStrategy.MULTIPLE_COLOR)
         .fontWeight(FontWeight.Normal),
       selected: new SymbolGlyphModifier($r('sys.symbol.rectangle_on_rectangle_fill'))
-        .fontColor([$r('sys.color.ohos_id_color_activated')])
+        .fontColor([$r('sys.color.ohos_id_color_activated'),
+          $r('app.color.SubBrand')])
         .renderingStrategy(SymbolRenderingStrategy.MULTIPLE_COLOR)
         .fontWeight(FontWeight.Bold)
     }

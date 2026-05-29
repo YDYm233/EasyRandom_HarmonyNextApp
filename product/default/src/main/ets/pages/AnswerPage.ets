@@ -4,7 +4,9 @@ import { resourceManager } from '@kit.LocalizationKit';
 
 @Entry
 @Component
+
 struct AnswerPage {
+  @StorageProp('statusBarHeight') statusBarHeight: number = 0
   build() {
     Row() {
       AnswerBook()
@@ -15,6 +17,9 @@ struct AnswerPage {
     .backgroundColor($r("app.color.Comp_Bg3"))
     .alignItems(VerticalAlign.Center)
     .justifyContent(FlexAlign.Center)
+
+    .padding({ top: $r("app.float.header_height") ,bottom:$r('app.float.footer_height')})
+    // .margin({bottom:this.statusBarHeight })
   }
 }
 
@@ -111,8 +116,7 @@ struct AnswerBook {
 
       })
     }.height('100%').aspectRatio(1 / 2)
-    .padding({ top: $r("app.float.header_height") ,bottom:$r('app.float.footer_height')})
-    //.margin({bottom:'5%'})
+
   }
 }
 

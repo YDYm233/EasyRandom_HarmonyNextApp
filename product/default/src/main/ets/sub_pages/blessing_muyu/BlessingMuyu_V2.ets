@@ -98,7 +98,8 @@ struct RollBlessings_V2 {
         }
       }
       .width('100%')
-      .height($r("app.float.header_height"))
+      .padding({ top: this.statusBarHeight })
+      // .height($r("app.float.header_height"))
       .backgroundColor($r("app.color.Comp_Bg1"))
       .zIndex(10)
       .margin({ top: $r("app.float.header_margin") })
@@ -127,7 +128,7 @@ struct RollBlessings_V2 {
       .height('100%')
       .padding({ top: $r("app.float.header_height") })
     }
-    .padding({ top: this.statusBarHeight })
+
     .height('100%')
     .backgroundColor($r("app.color.Comp_Bg3"))
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
