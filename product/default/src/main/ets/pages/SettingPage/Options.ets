@@ -148,7 +148,8 @@ struct FullScreenToggle{
         AppStorage.setOrCreate('navIndicatorHeight', 0)
       } else {
         win.setWindowSystemBarEnable(['status', 'navigation'])
-        // 系统栏显示后，延迟一帧确保 avoid area 已更新
+        // 等待系统栏动画完成（约 150ms），否则 getWindowAvoidArea 读到旧值 0
+        await new Promise<void>(resolve => setTimeout(resolve, 150))
         const systemAvoidArea = win.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM)
         const navIndicatorArea = win.getWindowAvoidArea(window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR)
         AppStorage.setOrCreate('statusBarHeight', px2vp(systemAvoidArea.topRect.height))
