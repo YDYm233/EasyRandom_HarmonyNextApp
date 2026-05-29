@@ -1,13 +1,14 @@
-﻿@Entry
+﻿
+@Entry
 @Component
 struct TextMarquee {
   @Provide('pageInfos') pageInfos: NavPathStack = new NavPathStack()
   @StorageProp('statusBarHeight') statusBarHeight: number = 0
-  @State text: string = '测试文本TestText测试文本TestText测试文本TestText'
-  @State fontColor: Color = 0xffffff
-  @State backColor: Color = 0x000000
-  @State isStart: boolean = true
-  @State isRotate: boolean = false
+  @State text:string = '测试文本TestText测试文本TestText测试文本TestText'
+  @State fontColor:Color = 0xffffff
+  @State backColor:Color = 0x000000
+  @State isStart:boolean=true
+  @State isRotate:boolean=false
 
   // @Builder
   // MarqueeView() {
@@ -38,12 +39,12 @@ struct TextMarquee {
   // }
   build() {
     Navigation(this.pageInfos) {
-      Column() {
+      Column(){
 
 
       }
       .onClick(() => {
-        this.pageInfos.pushPath({ name: 'MarqueeView' })
+        this.pageInfos.pushPath({ name: 'MarqueeView'})
       })
       .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
       .padding({ top: this.statusBarHeight })
@@ -60,7 +61,6 @@ struct TextMarquee {
     .hideTitleBar(true)
     .hideToolBar(true)
     .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.BOTTOM])
-
     // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
@@ -73,12 +73,12 @@ export function MarqueeViewBuilder() {
 @Component
 struct TextMarqueeView {
   @Consume('pageInfos') pageInfos: NavPathStack;
-  @State isStart: boolean = true
-  @State isRotate: boolean = false
-  @State text: string = '测试文本TestText测试文本TestText测试文本TestText'
-  @State fontColor: Color = 0xffffff
-  @State backColor: Color = 0x000000
-
+  @State isStart:boolean=true
+  @State isRotate:boolean=false
+  @State text:string = '测试文本TestText测试文本TestText测试文本TestText'
+  @State fontColor:Color = 0xffffff
+  @State backColor:Color = 0x000000
+  
   build() {
     NavDestination() {
       Row() {
@@ -88,11 +88,11 @@ struct TextMarqueeView {
           .fontSize(80)
           .fontWeight(800)
           .fontColor(this.fontColor)
-          .rotate({ z: 1, angle: this.isRotate ? 0 : 90 })
+        .rotate({z:1,angle:this.isRotate?0:90})
       }
       .backgroundColor(this.backColor)
-      .onClick(() => {
-        this.isStart = !this.isStart;
+      .onClick(()=>{
+        this.isStart=!this.isStart;
       })
       .justifyContent(FlexAlign.Center)
       .alignItems(VerticalAlign.Center)

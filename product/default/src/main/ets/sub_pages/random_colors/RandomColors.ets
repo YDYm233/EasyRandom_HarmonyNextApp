@@ -1,7 +1,8 @@
-﻿iimport { ExColor } from '@ohos/common';
+﻿import { ExColor, Random } from '@ohos/common'
+import router from '@ohos.router';
+
 class Params {
   type: string
-
   constructor(tuple: string) {
     this.type = tuple
   }
@@ -11,7 +12,6 @@ class Params {
 @Component
 struct RandomColors {
   @StorageProp('statusBarHeight') statusBarHeight: number = 0
-
   build() {
     Column() {
       GridRow({ columns: { sm: 12, md: 12, lg: 12 } }) {
@@ -67,7 +67,6 @@ struct RandomColors {
       .margin({ top: $r("app.float.header_margin") })
       .position({ top: $r("app.float.header_margin") })
       .padding({ top: this.statusBarHeight })
-
       Scroll() {
         GridRow({
           columns: {
@@ -89,7 +88,7 @@ struct RandomColors {
               lg: 2
             }
           }) {
-            Row() {
+           Row() {
               ColorsBox().width('100%')
             }
             .width('100%')
@@ -97,15 +96,11 @@ struct RandomColors {
             .alignItems(VerticalAlign.Center)
           }
         }
-        .margin(24).expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+        .margin(24)  .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
       }
       .width('100%')
-      .height('100%').padding({ top: $r("app.float.header_height") })
-    }
-    .padding({ top: this.statusBarHeight })
-    .height('100%')
-    .backgroundColor($r("app.color.Comp_Bg3"))
-    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+      .height('100%')  .padding({ top: $r("app.float.header_height") })
+    }.padding({ top: this.statusBarHeight }).height('100%').backgroundColor($r("app.color.Comp_Bg3")).expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
@@ -124,9 +119,9 @@ struct ColorsBox {
     new LinearGradient([{ color: this.RGB, offset: 0 }, { color: this.RGBA, offset: 1 }])
   @State blurRedColor: LinearGradient =
     new LinearGradient([{ color: this.RGBA, offset: 0 }, { color: 0xffffcc, offset: 1 }])
-  @State blurGreenColor: LinearGradient =
+  @State  blurGreenColor: LinearGradient =
     new LinearGradient([{ color: this.RGBA, offset: 0 }, { color: 0xbbffcc, offset: 1 }])
-  @State blurBlueColor: LinearGradient =
+  @State  blurBlueColor: LinearGradient =
     new LinearGradient([{ color: this.RGB, offset: 0 }, { color: 0xbbffff, offset: 1 }])
 
   build() {
@@ -165,10 +160,7 @@ struct ColorsBox {
         }) {
           Column() {
             Row() {
-              Text(this.RGBA)
-                .fontWeight(FontWeight.Bold)
-                .textCase(TextCase.UpperCase)
-                .fontColor($r("app.color.FontIcon_Fore1"))
+              Text(this.RGBA).fontWeight(FontWeight.Bold).textCase(TextCase.UpperCase)            .fontColor($r("app.color.FontIcon_Fore1"))
             }
             .layoutWeight(1)
             .onClick(() => {

@@ -1,10 +1,10 @@
-﻿import { BreakpointState, BreakpointSystem, Random } from '@ohos/common';
+﻿import { Random } from '@ohos/common'
 import router from '@ohos.router';
 import { promptAction } from '@kit.ArkUI';
+import { BreakpointState, BreakpointSystem } from '@ohos/common';
 
 class Params {
   type: string
-
   constructor(tuple: string) {
     this.type = tuple
   }
@@ -14,7 +14,6 @@ class Params {
 @Component
 struct DevineBaGua {
   @StorageProp('statusBarHeight') statusBarHeight: number = 0
-
   build() {
     Column() {
       GridRow({ columns: { sm: 12, md: 12, lg: 12 } }) {
@@ -70,7 +69,6 @@ struct DevineBaGua {
       .zIndex(10)
       .margin({ top: $r("app.float.header_margin") })
       .position({ top: $r("app.float.header_margin") })
-
       Scroll() {
         GridRow({
           columns: {
@@ -100,15 +98,12 @@ struct DevineBaGua {
             .alignItems(VerticalAlign.Center)
           }
         }
-        .margin(24).expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+        .margin(24)  .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
       }
       .width('100%')
-      .height('100%').padding({ top: $r("app.float.header_height") })
+      .height('100%')  .padding({ top: $r("app.float.header_height") })
     }
-    .height('100%')
-    .backgroundColor($r("app.color.Comp_Bg3"))
-    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
-
+    .height('100%').backgroundColor($r("app.color.Comp_Bg3")).expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
     // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
@@ -293,26 +288,23 @@ struct BaGuaBox {
   readonly widthPer: string = this.widthRate.toString() + '%';
   readonly heightMargin: string = 3 + '%'
   readonly widthMargin: string = ((100 - this.widthRate) / 2).toString() + '%';
-  public guas: Array<string> = ['太极', '坎', '坤', '震', '巽', '乾', '兑', '艮', '离']
+  public guas: Array<string> = ['太极','坎', '坤', '震', '巽',  '乾', '兑', '艮', '离']
   public angles: Array<number> = [180, 45, 270, 315, 135, 90, 225, 0];
-  readonly duration: number = 2000;
+  readonly  duration: number = 2000;
   @State angle: number = 0;
-  @State gua: string = ''
+  @State gua:string = ''
   @State isRoll: boolean = false;
-  @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
 
+  @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
   aboutToAppear() {
     BreakpointSystem.getInstance().attach(this.currentBreakpoint)
     BreakpointSystem.getInstance().start()
   }
-
   aboutToDisappear() {
     BreakpointSystem.getInstance().attach(this.currentBreakpoint)
     BreakpointSystem.getInstance().stop()
   }
-
   @State customDialogId: number = 0
-
   showPopup() {
     promptAction.openCustomDialog({
       builder: () => {
@@ -326,206 +318,212 @@ struct BaGuaBox {
       width: this.currentBreakpoint.value == 'sm' ? '80%' :
         (this.currentBreakpoint.value == 'md' ? '50%' : '30%'),
       //height: this.currentBreakpoint.value == 'sm' ? '40%' :
-      // (this.currentBreakpoint.value == 'md' ? '50%' : '50%'),
+       // (this.currentBreakpoint.value == 'md' ? '50%' : '50%'),
     }).then((dialogId: number) => {
       this.customDialogId = dialogId
     })
   }
 
-  @Builder
-  result() {
-    Column() {
-      Row().layoutWeight(1)
-      Row() {
-        //'太极','坎', '坤', '震', '巽', '乾', '兑', '艮', '离']
-        if (this.gua == '坎') {
-          Kan()
-        } else if (this.gua == '坤') {
-          Kun()
-        } else if (this.gua == '震') {
-          Zhen()
-        } else if (this.gua == '巽') {
-          Xun()
-        } else if (this.gua == '乾') {
-          Qian()
-        } else if (this.gua == '兑') {
-          Dui()
-        } else if (this.gua == '艮') {
-          Gen()
-        } else if (this.gua == '离') {
-          Li()
-        } else {
-          Text('')
-        }
+@Builder result(){
+  Column() {
+Row().layoutWeight(1)
+    Row(){
+      //'太极','坎', '坤', '震', '巽', '乾', '兑', '艮', '离']
+      if(this.gua=='坎'){
+        Kan()
       }
-      .padding(36)
-      .layoutWeight(3)
-
-      Text(this.gua)
-        .fontSize(48)
-        .fontWeight(600)
-        .layoutWeight(2)
-        .fontColor($r("app.color.FontIcon_Fore1"))
+      else if(this.gua=='坤'){
+        Kun()
+      }
+      else if(this.gua=='震'){
+        Zhen()
+      }
+      else if(this.gua=='巽'){
+        Xun()
+      }
+      else if(this.gua=='乾'){
+        Qian()
+      }
+      else if(this.gua=='兑'){
+        Dui()
+      }
+      else if(this.gua=='艮'){
+        Gen()
+      }
+      else if(this.gua=='离'){
+        Li()
+      }
+      else{
+        Text('')
+      }
     }
-    .width('100%')
-    .aspectRatio(1)
-    .backgroundColor($r("app.color.FontIcon_Back2"))
+    .padding(36)
+    .layoutWeight(3)
+    Text(this.gua)
+      .fontSize(48)
+      .fontWeight(600)
+      .layoutWeight(2)
+      .fontColor($r("app.color.FontIcon_Fore1"))
   }
-
+  .width('100%')
+  .aspectRatio(1)
+  .backgroundColor($r("app.color.FontIcon_Back2"))
+}
   build() {
-    Column() {
-      Row() {
-        Row() {
-          Row() {
-            TaiJi()
-              .width('40%').margin('30%').border({ width: 2, color: 0xf1f3f5, radius: '50%' })
+          Column() {
+            Row() {
+              Row() {
+                Row() {
+                  TaiJi()
+                    .width('40%').margin('30%').border({ width: 2, color: 0xf1f3f5, radius: '50%' })
+                }
+                .width('100%')
+                .height('100%')
+                .position({ top: 0, left: 0 })
+                .rotate({ angle: 0 })
+
+
+                Row() {
+                  Kan()
+                    .width(this.widthPer)
+                    .position({ y: this.heightMargin, x: this.widthMargin })
+                }
+                .width('100%')
+                .height('100%')
+                .position({ top: 0, left: 0 })
+                .rotate({ angle: this.angles[0] })
+
+
+                Row() {
+                  Kun()
+                    .width(this.widthPer)
+                    .position({ y: this.heightMargin, x: this.widthMargin })
+                }
+                .width('100%')
+                .height('100%')
+                .position({ top: 0, left: 0 })
+                .rotate({ angle: this.angles[1] })
+
+
+                Row() {
+                  Zhen()
+                    .width(this.widthPer)
+                    .position({ y: this.heightMargin, x: this.widthMargin })
+                }
+                .width('100%')
+                .height('100%')
+                .position({ top: 0, left: 0 })
+                .rotate({ angle: this.angles[2] })
+
+
+                Row() {
+                  Xun()
+                    .width(this.widthPer)
+                    .position({ y: this.heightMargin, x: this.widthMargin })
+                }
+                .width('100%')
+                .height('100%')
+                .position({ top: 0, left: 0 })
+                .rotate({ angle: this.angles[3] })
+
+
+                Row() {
+                  Qian()
+                    .width(this.widthPer)
+                    .position({ y: this.heightMargin, x: this.widthMargin })
+                }
+                .width('100%')
+                .height('100%')
+                .position({ top: 0, left: 0 })
+                .rotate({ angle: this.angles[4] })
+
+
+                Row() {
+                  Dui()
+                    .width(this.widthPer)
+                    .position({ y: this.heightMargin, x: this.widthMargin })
+                }
+                .width('100%')
+                .height('100%')
+                .position({ top: 0, left: 0 })
+                .rotate({ angle: this.angles[5] })
+
+
+                Row() {
+                  Gen()
+                    .width(this.widthPer)
+                    .position({ y: this.heightMargin, x: this.widthMargin })
+                }
+                .width('100%')
+                .height('100%')
+                .position({ top: 0, left: 0 })
+                .rotate({ angle: this.angles[6] })
+
+
+                Row() {
+                  Li()
+                    .width(this.widthPer)
+                    .position({ y: this.heightMargin, x: this.widthMargin })
+                }
+                .width('100%')
+                .height('100%')
+                .position({ top: 0, left: 0 })
+                .rotate({ angle: this.angles[7] })
+              }
+                .width('90%')
+                .aspectRatio(1)// .animation({ duration: 1000,curve:Curve.Linear,playMode: PlayMode.Normal})
+                .rotate({ z: 1, angle: this.angle })
+            }
+            .alignItems(VerticalAlign.Center)
+            .justifyContent(FlexAlign.Center)
+            .backgroundColor($r("app.color.Comp_Bg1"))
+            .width('100%')
+            .aspectRatio(1)
+            .borderRadius(12)
+            .clip(true)
+            Row() {
+              Button() {
+                if (!this.isRoll) {
+                  Text('开始').fontColor($r("app.color.control_fc_1")).fontWeight(FontWeight.Bold)
+                }
+                else{
+                  LoadingProgress()
+                }
+              }
+              .enabled(!this.isRoll)
+              .onClick(() => {
+                this.isRoll = true;
+                let index =Random(0, 7, true);
+                //this.angle = Math.floor(this.angle/360)*360+(360-this.angles[index]) + 360 * 6;
+                animateTo ( {
+                  duration: this.duration,
+                  iterations: 1,
+                  curve:Curve.Linear
+                }, () => {
+                  this.angle = Math.floor(this.angle/360)*360+(360-this.angles[index]) + 360 * 6;
+                })
+
+                console.log(index.toString())
+                console.log(this.angle.toString()+' ~~~ '+(this.angle%360).toString())
+                setTimeout(() => {
+                  this.gua=this.guas[index+1];
+                  this.showPopup()
+                  console.log(this.gua)
+                  this.isRoll = false;
+                }, this.duration)
+              })
+              .backgroundColor($r("app.color.Brand"))
+              .height('80%')
+              .aspectRatio(2)
+              .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+            }.width('100%').justifyContent(FlexAlign.Center).alignItems(VerticalAlign.Center).aspectRatio(6)
           }
+          .alignItems(HorizontalAlign.Center)
+          .justifyContent(FlexAlign.Center)
+          //.position({top:0,left:0})
           .width('100%')
-          .height('100%')
-          .position({ top: 0, left: 0 })
-          .rotate({ angle: 0 })
+          .aspectRatio(5/6)
 
-
-          Row() {
-            Kan()
-              .width(this.widthPer)
-              .position({ y: this.heightMargin, x: this.widthMargin })
-          }
-          .width('100%')
-          .height('100%')
-          .position({ top: 0, left: 0 })
-          .rotate({ angle: this.angles[0] })
-
-
-          Row() {
-            Kun()
-              .width(this.widthPer)
-              .position({ y: this.heightMargin, x: this.widthMargin })
-          }
-          .width('100%')
-          .height('100%')
-          .position({ top: 0, left: 0 })
-          .rotate({ angle: this.angles[1] })
-
-
-          Row() {
-            Zhen()
-              .width(this.widthPer)
-              .position({ y: this.heightMargin, x: this.widthMargin })
-          }
-          .width('100%')
-          .height('100%')
-          .position({ top: 0, left: 0 })
-          .rotate({ angle: this.angles[2] })
-
-
-          Row() {
-            Xun()
-              .width(this.widthPer)
-              .position({ y: this.heightMargin, x: this.widthMargin })
-          }
-          .width('100%')
-          .height('100%')
-          .position({ top: 0, left: 0 })
-          .rotate({ angle: this.angles[3] })
-
-
-          Row() {
-            Qian()
-              .width(this.widthPer)
-              .position({ y: this.heightMargin, x: this.widthMargin })
-          }
-          .width('100%')
-          .height('100%')
-          .position({ top: 0, left: 0 })
-          .rotate({ angle: this.angles[4] })
-
-
-          Row() {
-            Dui()
-              .width(this.widthPer)
-              .position({ y: this.heightMargin, x: this.widthMargin })
-          }
-          .width('100%')
-          .height('100%')
-          .position({ top: 0, left: 0 })
-          .rotate({ angle: this.angles[5] })
-
-
-          Row() {
-            Gen()
-              .width(this.widthPer)
-              .position({ y: this.heightMargin, x: this.widthMargin })
-          }
-          .width('100%')
-          .height('100%')
-          .position({ top: 0, left: 0 })
-          .rotate({ angle: this.angles[6] })
-
-
-          Row() {
-            Li()
-              .width(this.widthPer)
-              .position({ y: this.heightMargin, x: this.widthMargin })
-          }
-          .width('100%')
-          .height('100%')
-          .position({ top: 0, left: 0 })
-          .rotate({ angle: this.angles[7] })
-        }
-        .width('90%')
-        .aspectRatio(1) // .animation({ duration: 1000,curve:Curve.Linear,playMode: PlayMode.Normal})
-        .rotate({ z: 1, angle: this.angle })
-      }
-      .alignItems(VerticalAlign.Center)
-      .justifyContent(FlexAlign.Center)
-      .backgroundColor($r("app.color.Comp_Bg1"))
-      .width('100%')
-      .aspectRatio(1)
-      .borderRadius(12)
-      .clip(true)
-
-      Row() {
-        Button() {
-          if (!this.isRoll) {
-            Text('开始').fontColor($r("app.color.control_fc_1")).fontWeight(FontWeight.Bold)
-          } else {
-            LoadingProgress()
-          }
-        }
-        .enabled(!this.isRoll)
-        .onClick(() => {
-          this.isRoll = true;
-          let index = Random(0, 7, true);
-          //this.angle = Math.floor(this.angle/360)*360+(360-this.angles[index]) + 360 * 6;
-          animateTo({
-            duration: this.duration,
-            iterations: 1,
-            curve: Curve.Linear
-          }, () => {
-            this.angle = Math.floor(this.angle / 360) * 360 + (360 - this.angles[index]) + 360 * 6;
-          })
-
-          console.log(index.toString())
-          console.log(this.angle.toString() + ' ~~~ ' + (this.angle % 360).toString())
-          setTimeout(() => {
-            this.gua = this.guas[index+1];
-            this.showPopup()
-            console.log(this.gua)
-            this.isRoll = false;
-          }, this.duration)
-        })
-        .backgroundColor($r("app.color.Brand"))
-        .height('80%')
-        .aspectRatio(2)
-        .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
-      }.width('100%').justifyContent(FlexAlign.Center).alignItems(VerticalAlign.Center).aspectRatio(6)
-    }
-    .alignItems(HorizontalAlign.Center)
-    .justifyContent(FlexAlign.Center)
-    //.position({top:0,left:0})
-    .width('100%')
-    .aspectRatio(5 / 6)
 
   }
 }

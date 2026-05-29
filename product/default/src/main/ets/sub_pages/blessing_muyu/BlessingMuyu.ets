@@ -1,6 +1,8 @@
-﻿iclass Params {
-  type: string
+﻿import { Random } from '@ohos/common'
+import router from '@ohos.router';
 
+class Params {
+  type: string
   constructor(tuple: string) {
     this.type = tuple
   }
@@ -10,7 +12,6 @@
 @Component
 struct RollBlessings {
   @StorageProp('statusBarHeight') statusBarHeight: number = 0
-
   build() {
     Column() {
       GridRow({ columns: { sm: 12, md: 12, lg: 12 } }) {
@@ -65,7 +66,6 @@ struct RollBlessings {
       .zIndex(10)
       .margin({ top: $r("app.float.header_margin") })
       .position({ top: $r("app.float.header_margin") })
-
       Scroll() {
         GridRow({
           columns: {
@@ -135,12 +135,7 @@ struct RollBlessingsBox {
         }
         .backgroundColor($r("app.color.Comp_Bg1"))
         .borderRadius(16)
-        .padding({
-          left: 14,
-          right: 14,
-          top: 6,
-          bottom: 6
-        })
+        .padding({ left: 14, right: 14, top: 6, bottom: 6 })
         .translate({ y: this.translateY[0] })
         .opacity(this.opacityArray[0])
         .scale({ x: this.scaleArray[0], y: this.scaleArray[0] })
@@ -156,12 +151,7 @@ struct RollBlessingsBox {
         }
         .backgroundColor($r("app.color.Comp_Bg1"))
         .borderRadius(16)
-        .padding({
-          left: 14,
-          right: 14,
-          top: 6,
-          bottom: 6
-        })
+        .padding({ left: 14, right: 14, top: 6, bottom: 6 })
         .translate({ y: this.translateY[1] })
         .opacity(this.opacityArray[1])
         .scale({ x: this.scaleArray[1], y: this.scaleArray[1] })
@@ -177,12 +167,7 @@ struct RollBlessingsBox {
         }
         .backgroundColor($r("app.color.Comp_Bg1"))
         .borderRadius(16)
-        .padding({
-          left: 14,
-          right: 14,
-          top: 6,
-          bottom: 6
-        })
+        .padding({ left: 14, right: 14, top: 6, bottom: 6 })
         .translate({ y: this.translateY[2] })
         .opacity(this.opacityArray[2])
         .scale({ x: this.scaleArray[2], y: this.scaleArray[2] })
@@ -198,12 +183,7 @@ struct RollBlessingsBox {
         }
         .backgroundColor($r("app.color.Comp_Bg1"))
         .borderRadius(16)
-        .padding({
-          left: 14,
-          right: 14,
-          top: 6,
-          bottom: 6
-        })
+        .padding({ left: 14, right: 14, top: 6, bottom: 6 })
         .translate({ y: this.translateY[3] })
         .opacity(this.opacityArray[3])
         .scale({ x: this.scaleArray[3], y: this.scaleArray[3] })
@@ -219,12 +199,7 @@ struct RollBlessingsBox {
         }
         .backgroundColor($r("app.color.Comp_Bg1"))
         .borderRadius(16)
-        .padding({
-          left: 14,
-          right: 14,
-          top: 6,
-          bottom: 6
-        })
+        .padding({ left: 14, right: 14, top: 6, bottom: 6 })
         .translate({ y: this.translateY[4] })
         .opacity(this.opacityArray[4])
         .scale({ x: this.scaleArray[4], y: this.scaleArray[4] })
@@ -240,12 +215,7 @@ struct RollBlessingsBox {
         }
         .backgroundColor($r("app.color.Comp_Bg1"))
         .borderRadius(16)
-        .padding({
-          left: 14,
-          right: 14,
-          top: 6,
-          bottom: 6
-        })
+        .padding({ left: 14, right: 14, top: 6, bottom: 6 })
         .translate({ y: this.translateY[5] })
         .opacity(this.opacityArray[5])
         .scale({ x: this.scaleArray[5], y: this.scaleArray[5] })
@@ -261,12 +231,7 @@ struct RollBlessingsBox {
         }
         .backgroundColor($r("app.color.Comp_Bg1"))
         .borderRadius(16)
-        .padding({
-          left: 14,
-          right: 14,
-          top: 6,
-          bottom: 6
-        })
+        .padding({ left: 14, right: 14, top: 6, bottom: 6 })
         .translate({ y: this.translateY[6] })
         .opacity(this.opacityArray[6])
         .scale({ x: this.scaleArray[6], y: this.scaleArray[6] })
@@ -282,12 +247,7 @@ struct RollBlessingsBox {
         }
         .backgroundColor($r("app.color.Comp_Bg1"))
         .borderRadius(16)
-        .padding({
-          left: 14,
-          right: 14,
-          top: 6,
-          bottom: 6
-        })
+        .padding({ left: 14, right: 14, top: 6, bottom: 6 })
         .translate({ y: this.translateY[7] })
         .opacity(this.opacityArray[7])
         .scale({ x: this.scaleArray[7], y: this.scaleArray[7] })
@@ -303,12 +263,7 @@ struct RollBlessingsBox {
         }
         .backgroundColor($r("app.color.Comp_Bg1"))
         .borderRadius(16)
-        .padding({
-          left: 14,
-          right: 14,
-          top: 6,
-          bottom: 6
-        })
+        .padding({ left: 14, right: 14, top: 6, bottom: 6 })
         .translate({ y: this.translateY[8] })
         .opacity(this.opacityArray[8])
         .scale({ x: this.scaleArray[8], y: this.scaleArray[8] })
@@ -324,12 +279,7 @@ struct RollBlessingsBox {
         }
         .backgroundColor($r("app.color.Comp_Bg1"))
         .borderRadius(16)
-        .padding({
-          left: 14,
-          right: 14,
-          top: 6,
-          bottom: 6
-        })
+        .padding({ left: 14, right: 14, top: 6, bottom: 6 })
         .translate({ y: this.translateY[9] })
         .opacity(this.opacityArray[9])
         .scale({ x: this.scaleArray[9], y: this.scaleArray[9] })
