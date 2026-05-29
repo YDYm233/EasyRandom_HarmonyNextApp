@@ -325,7 +325,7 @@ struct AllasOne {
             color: $r("app.color.hint_shadow"),
             offsetY: 6
           })
-          .margin({ bottom: 60, left: 24, right: 24 })
+          .margin({ bottom:120, left: 24, right: 24 })
           .transition(
             TransitionEffect.asymmetric(
               // 进场：从下方淡入上浮

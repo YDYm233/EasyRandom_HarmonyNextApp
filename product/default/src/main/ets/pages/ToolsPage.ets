@@ -165,21 +165,21 @@ struct ToolsPage {
           this.CapsuleSection(TOOLS_FUN, false)
 
           Blank().height(24)
-          Row() {
-            Image($r("app.media.func_setting")).height(24).width(24).fillColor($r("app.color.FontIcon_Fore1"))
-              .onClick(
-                () => {
-              router.pushUrl({
-                url: 'pages/SettingPage/SettingPage',
-                params: new Params('aboutus')
-              })
-            })
-          }
-          .width('100%')
-          .height($r("app.float.header_height"))
-          .justifyContent(FlexAlign.End)
-          .alignItems(VerticalAlign.Center)
-          .padding({ right: 12 })
+          // Row() {
+          //   Image($r("app.media.func_setting")).height(24).width(24).fillColor($r("app.color.FontIcon_Fore1"))
+          //     .onClick(
+          //       () => {
+          //     router.pushUrl({
+          //       url: 'pages/SettingPage/SettingPage',
+          //       params: new Params('aboutus')
+          //     })
+          //   })
+          // }
+          // .width('100%')
+          // .height($r("app.float.header_height"))
+          // .justifyContent(FlexAlign.End)
+          // .alignItems(VerticalAlign.Center)
+          // .padding({ right: 12 })
 
 
 
@@ -189,7 +189,7 @@ struct ToolsPage {
       }    .height('100%')
       .scrollBar(BarState.Auto)
       .edgeEffect(EdgeEffect.Spring)
-      .padding({ top: $r("app.float.header_height") ,bottom:$r('app.float.footer_height')})
+      .padding({ top: $r("app.float.header_height") ,bottom:$r('app.float.footer_height'),left:12,right:12})
     }
 
     .backgroundColor($r("app.color.Comp_Bg3"))
