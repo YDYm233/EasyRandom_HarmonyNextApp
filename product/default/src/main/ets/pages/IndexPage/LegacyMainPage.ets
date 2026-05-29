@@ -284,12 +284,15 @@ export struct LegacyMainPage {
       })
       .scrollable(false)
       .vertical(false)
-      // .barOverlap(true)
+      .barOverlap(true)
+      .backgroundColor($r("app.color.Comp_Bg1"))
+
       .divider({
         strokeWidth: 0.8,
         color: $r("app.color.FontIcon_Fore4")
       })
-
+.barBackgroundColor($r("app.color.Comp_Bg1"))
+      .barBackgroundBlurStyle(BlurStyle.NONE)
       .backgroundColor($r("app.color.Comp_Bg1"))
       // .padding({ top: $r("app.float.header_margin"), bottom: $r("app.float.footer_margin") })
       .barHeight(56)

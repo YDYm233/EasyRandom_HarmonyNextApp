@@ -111,89 +111,93 @@ export struct HdsMainPage {
 
   build() {
     Stack({ alignContent: Alignment.TopEnd }) {
-      HdsTabs({
-        controller: this.hdsController,
-        index: 0,
-        barPosition: BarPosition.End
-      }) {
-        TabContent() {
-          RollPage().height('100%')
+      Column() {
+        // Row().height(this.navIndicatorHeight).width('100%').border({ color: Color.Red, width: 3 }).backgroundColor(Color.Transparent)
+        HdsTabs({
+          controller: this.hdsController,
+          index: 0,
+          barPosition: BarPosition.End
+        }) {
+          TabContent() {
+            RollPage().height('100%')
+          }
+          .height('100%')
+          // .padding({ top:this.navIndicatorHeight,bottom: this.statusBarHeight})
+          .tabBar(new BottomTabBarStyle({
+            normal: this.tabSymbols[0].normal,
+            selected: this.tabSymbols[0].selected
+          }, $r('app.string.page_name1')))
+          .backgroundColor(Color.Transparent)
+
+
+          TabContent() {
+            AnswerPage().height('100%')
+          }
+          .height('100%')
+          // .padding({ top:this.navIndicatorHeight,bottom: this.statusBarHeight})
+          .tabBar(new BottomTabBarStyle({
+            normal: this.tabSymbols[1].normal,
+            selected: this.tabSymbols[1].selected
+          }, $r('app.string.page_name3')))
+          .backgroundColor(Color.Transparent)
+
+
+          TabContent() {
+            TollsPage().height('100%')
+          }
+          .height('100%')
+          // .padding({ top:this.navIndicatorHeight,bottom: this.statusBarHeight})
+          .tabBar(new BottomTabBarStyle({
+            normal: this.tabSymbols[2].normal,
+            selected: this.tabSymbols[2].selected
+          }, $r('app.string.page_name4')))
+          // .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.KEYBOARD], [SafeAreaEdge.BOTTOM, SafeAreaEdge.TOP])
+          // .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.TOP, LayoutSafeAreaEdge.BOTTOM])
+          // .backgroundColor(Color.Transparent)
+          .backgroundColor(Color.Transparent)
+
+
+          TabContent() {
+            AllasOne().height('100%')
+          }
+          .height('100%')
+          // .padding({ top:this.navIndicatorHeight,bottom: this.statusBarHeight})
+          .tabBar(new BottomTabBarStyle({
+            normal: this.tabSymbols[3].normal,
+            selected: this.tabSymbols[3].selected
+          }, $r('app.string.page_name2')))
+          .backgroundColor(Color.Transparent)
+
         }
-        .height('100%')
-         // .padding({ top:this.navIndicatorHeight,bottom: this.statusBarHeight})
-        .tabBar(new BottomTabBarStyle({
-          normal: this.tabSymbols[0].normal,
-          selected: this.tabSymbols[0].selected
-        }, $r('app.string.page_name1')))
-        .backgroundColor(Color.Transparent)
+        // .border({width:3,color:Color.Red})
+        // .backgroundColor($r('app.color.Harmony'))
+        // .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.TOP, LayoutSafeAreaEdge.BOTTOM])
+        .onChange((index: number) => {
+          this.currentIndex = index
+        })
+        .scrollable(false)
+        .vertical(false)
+        .barOverlap(true)
+        .barPosition(BarPosition.End)
+        .barFloatingStyle({
+          barBottomMargin: this.statusBarHeight,
+          barWidth: { smallWidth: 300, mediumWidth: 360, largeWidth: 400 },
+          // gradientMask: { maskColor: '#99FFFFFF', maskHeight: 100 },
+          systemMaterialEffect: {
+            materialType: hdsMaterial.MaterialType.ADAPTIVE,
+            materialLevel: this.customMaterialLevel
+          }
+        })
+        .animationDuration(300)
 
-
-        TabContent() {
-          AnswerPage().height('100%')
-        }
-        .height('100%')
-        // .padding({ top:this.navIndicatorHeight,bottom: this.statusBarHeight})
-        .tabBar(new BottomTabBarStyle({
-          normal: this.tabSymbols[1].normal,
-          selected: this.tabSymbols[1].selected
-        }, $r('app.string.page_name3')))
-        .backgroundColor(Color.Transparent)
-
-
-        TabContent() {
-          TollsPage().height('100%')
-        }
-        .height('100%')
-        // .padding({ top:this.navIndicatorHeight,bottom: this.statusBarHeight})
-        .tabBar(new BottomTabBarStyle({
-          normal: this.tabSymbols[2].normal,
-          selected: this.tabSymbols[2].selected
-        }, $r('app.string.page_name4')))
+        // .height('100%')
+        // .width('100%')
+        // .backgroundColor(Color.Transparent)
         // .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.KEYBOARD], [SafeAreaEdge.BOTTOM, SafeAreaEdge.TOP])
         // .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.TOP, LayoutSafeAreaEdge.BOTTOM])
-        // .backgroundColor(Color.Transparent)
-        .backgroundColor(Color.Transparent)
-
-
-        TabContent() {
-          AllasOne().height('100%')
-        }
-        .height('100%')
-        // .padding({ top:this.navIndicatorHeight,bottom: this.statusBarHeight})
-        .tabBar(new BottomTabBarStyle({
-          normal: this.tabSymbols[3].normal,
-          selected: this.tabSymbols[3].selected
-        }, $r('app.string.page_name2')))
-        .backgroundColor(Color.Transparent)
-
-      }
-      // .border({width:3,color:Color.Red})
-      // .backgroundColor($r('app.color.Harmony'))
-      // .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.TOP, LayoutSafeAreaEdge.BOTTOM])
-      .onChange((index: number) => {
-         this.currentIndex = index
-      })
-      .scrollable(false)
-      .vertical(false)
-      .barOverlap(true)
-      .barPosition(BarPosition.End)
-      .barFloatingStyle({
-        barBottomMargin: this.statusBarHeight,
-        barWidth: { smallWidth: 300, mediumWidth: 360, largeWidth: 400 },
-        // gradientMask: { maskColor: '#99FFFFFF', maskHeight: 100 },
-        systemMaterialEffect: {
-          materialType: hdsMaterial.MaterialType.ADAPTIVE,
-          materialLevel: this.customMaterialLevel
-        }
-      })
-      .animationDuration(300)
-      // .height('100%')
-      // .width('100%')
-      // .backgroundColor(Color.Transparent)
-      // .expandSafeArea([SafeAreaType.SYSTEM, SafeAreaType.KEYBOARD], [SafeAreaEdge.BOTTOM, SafeAreaEdge.TOP])
-      // .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.TOP, LayoutSafeAreaEdge.BOTTOM])
-      // .height(LayoutPolicy.matchParent)
-      // .padding({bottom:this.statusBarHeight})
+        // .height(LayoutPolicy.matchParent)
+        // .padding({bottom:this.statusBarHeight})
+      }.backgroundColor(Color.Transparent)
       // ========== 右上方沉浸光感悬浮按钮（按压动效 + 光感材质）==========
       Row({ space: 8 }) {
         // 按钮1：打开随易元服务

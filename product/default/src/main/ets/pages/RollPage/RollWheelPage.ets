@@ -28,7 +28,7 @@ struct RollPage {
     .justifyContent(FlexAlign.Center)
     .alignItems(HorizontalAlign.Center)
     .backgroundColor($r("app.color.Comp_Bg3"))
-    .padding({ left: 12, right: 12 })
+    .padding({ left:6, right:6 })
   }
 }
 
@@ -275,7 +275,7 @@ struct RollWheelsShow {
         }
       }
     })
-    .margin({ top: $r("app.float.header_height") })
+    .margin({ top: $r("app.float.header_height") ,bottom:$r('app.float.footer_height')})
   }
 }
 

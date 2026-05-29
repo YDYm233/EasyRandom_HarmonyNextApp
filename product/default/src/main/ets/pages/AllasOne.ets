@@ -300,7 +300,11 @@ struct AllasOne {
       .width('100%')
       .scrollable(ScrollDirection.Vertical)
       .edgeEffect(EdgeEffect.Spring)
-      .padding({ top: $r("app.float.header_height") })
+
+
+      .padding({ top: $r("app.float.header_height") ,bottom:$r('app.float.footer_height')})
+
+
       // 悬浮提示 —— 首次添加卡片成功后消失并持久化
       if (!this.cardAddedToDesktop) {
         Text($r("app.string.allasone_hint"))
