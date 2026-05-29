@@ -8,6 +8,7 @@ export default class CommonConstants {
   static readonly PREFERENCES_FILE_NAME: string = 'myStore';
   static readonly PREFERENCES_KEY_INDEX: string = 'RollsIndex';
   static readonly PREFERENCES_KEY_COLOR_MODE: string = 'colorMode';
+  static readonly PREFERENCES_KEY_FULLSCREEN: string = 'isFullScreen';
   static readonly LAUNCHER_DELAY_TIME: number = 3000;
   static readonly LAUNCHER_IMAGE_MARGIN_TOP: string = '16.2%';
   static readonly LAUNCHER_LIFE_TEXT_SPACING: number = 0.1;

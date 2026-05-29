@@ -11,7 +11,7 @@ import { webview } from '@kit.ArkWeb'
 import { preferences } from '@kit.ArkData'
 import deviceInfo from '@ohos.deviceInfo'
 import { LegacyMainPage } from './LegacyMainPage'
-import{HdsMainPage}from './HdsMainPage'
+import { HdsMainPage } from './HdsMainPage'
 class Params {
   type: string
   constructor(tuple: string) {
@@ -26,6 +26,8 @@ struct Index {
   @State isFirst: string = '首次'
   @State isHdsSupported: boolean = false
   controller: webview.WebviewController = new webview.WebviewController()
+  /** Options 页面 Toggle 切换时同步到此标志位 */
+  @StorageLink('isFullScreenEnabled') isFullScreenEnabled: boolean = false
 
   aboutToAppear() {
     // 检测 API 版本：>=23 可启用 HdsTabs 悬浮导航

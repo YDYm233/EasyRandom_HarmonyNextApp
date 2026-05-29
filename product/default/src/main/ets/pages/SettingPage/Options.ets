@@ -1,10 +1,12 @@
 ﻿import { SymbolGlyphModifier } from '@kit.ArkUI'
 import { preferences } from '@kit.ArkData'
 import { ConfigurationConstant, common } from '@kit.AbilityKit'
+import { window } from '@kit.ArkUI'
 import { CommonConstants } from '@ohos/common'
 
 const PREF_NAME = CommonConstants.PREFERENCES_FILE_NAME
 const KEY_COLOR_MODE = CommonConstants.PREFERENCES_KEY_COLOR_MODE
+const KEY_FULLSCREEN = CommonConstants.PREFERENCES_KEY_FULLSCREEN
 
 /** 将 Select 组件 index 映射为 ConfigurationConstant.ColorMode */
 function indexToColorMode(index: number): ConfigurationConstant.ColorMode {
@@ -112,6 +114,77 @@ struct Level{
 }
 
 @Component
+struct FullScreenToggle{
+  @State isOn: boolean = false
+
+  aboutToAppear(): void {
+    this.loadFullScreenSetting()
+  }
+
+  loadFullScreenSetting(): void {
+    try {
+      const ctx = getContext(this) as common.UIAbilityContext
+      const pref = preferences.getPreferencesSync(ctx, { name: PREF_NAME })
+      this.isOn = pref.getSync(KEY_FULLSCREEN, false) as boolean
+    } catch (e) {
+      console.error('FullScreenToggle load failed:', JSON.stringify(e))
+      this.isOn = false
+    }
+  }
+
+  async applyFullScreenSetting(enabled: boolean): Promise<void> {
+    try {
+      const ctx = getContext(this) as common.UIAbilityContext
+      // 保存偏好设置
+      const pref = preferences.getPreferencesSync(ctx, { name: PREF_NAME })
+      pref.putSync(KEY_FULLSCREEN, enabled)
+      pref.flush()
+      // 先通过当前页面 context 获取窗口，等待系统栏状态切换完成
+      const win: window.Window = await window.getLastWindow(ctx)
+      win.setWindowLayoutFullScreen(true)
+      if (enabled) {
+        win.setWindowSystemBarEnable([])
+        AppStorage.setOrCreate('statusBarHeight', 0)
+        AppStorage.setOrCreate('navIndicatorHeight', 0)
+      } else {
+        win.setWindowSystemBarEnable(['status', 'navigation'])
+        // 系统栏显示后，延迟一帧确保 avoid area 已更新
+        const systemAvoidArea = win.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM)
+        const navIndicatorArea = win.getWindowAvoidArea(window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR)
+        AppStorage.setOrCreate('statusBarHeight', px2vp(systemAvoidArea.topRect.height))
+        AppStorage.setOrCreate('navIndicatorHeight', px2vp(navIndicatorArea.bottomRect.height))
+      }
+      // 最后才更新标志位，确保高度先就绪，消费方不会读到过渡态的 0
+      AppStorage.setOrCreate('isFullScreenEnabled', enabled)
+    } catch (e) {
+      console.error('FullScreenToggle apply failed:', JSON.stringify(e))
+    }
+  }
+
+  build() {
+    Row() {
+      Text('完全全屏:')
+        .height('70%')
+        .fontSize(18)
+        .fontColor($r("app.color.FontIcon_Fore1"))
+      Toggle({ type: ToggleType.Switch, isOn: this.isOn })
+        .selectedColor('#007DFF')
+        .onChange((isOn: boolean) => {
+          this.isOn = isOn
+          this.applyFullScreenSetting(isOn)
+        })
+    }
+    .justifyContent(FlexAlign.SpaceBetween)
+    .alignItems(VerticalAlign.Center)
+    .width('100%')
+    .height(60)
+    .backgroundColor($r("app.color.Comp_Bg1"))
+    .borderRadius(12)
+    .padding({ left: 24, right: 24 })
+  }
+}
+
+@Component
 struct Container{
   @Consume('pageInfos') pageInfos: NavPathStack;
   build(){
@@ -119,6 +192,11 @@ struct Container{
       List({ space: 12 }) {
         ListItem() {
           Level()
+        }
+        .width('100%')
+
+        ListItem() {
+          FullScreenToggle()
         }
         .width('100%')
 
