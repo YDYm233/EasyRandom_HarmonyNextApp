@@ -5,6 +5,7 @@ import { challenges, honests } from '../../static_datas/challenges';
 
 class Params {
   type: string
+
   constructor(tuple: string) {
     this.type = tuple
   }
@@ -13,18 +14,18 @@ class Params {
 @Entry
 @Component
 struct HonestOrChallenge {
-
   @StorageProp('statusBarHeight') statusBarHeight: number = 0
   @State honests: string[] = honests
   @State challenges: string[] = challenges
   @State selectedText: string = this.challenges[Random(0, this.challenges.length - 1, true)]
   @State HorC: boolean = true;
   @State pointAngle: number = 0;
-  readonly  duration: number = 1000
+  readonly duration: number = 1000
   @State index: number = 0
   @State honestColor: Color = 0xFF7299
   @State challengeColor: Color = 0x23ADE5
   @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
+
   aboutToAppear() {
     BreakpointSystem.getInstance().attach(this.currentBreakpoint)
     BreakpointSystem.getInstance().start()
@@ -53,7 +54,9 @@ struct HonestOrChallenge {
       this.customDialogId = dialogId
     })
   }
+
   @State customDialogId: number = 0
+
   @Builder
   customDialogBuilder() {
     Column() {
@@ -162,18 +165,19 @@ struct HonestOrChallenge {
       .margin({ top: $r("app.float.header_margin") })
       .position({ top: $r("app.float.header_margin") })
       .padding({ top: this.statusBarHeight })
+
       Row() {
         Column() {
-            Image($r("app.media.needle"))
-              .width('100%')
-              .aspectRatio(1)
-              .fillColor(0xffffff)
-          .rotate({ z: 1, angle: this.currentBreakpoint.value == 'sm' ? this.pointAngle + 90 : this.pointAngle })
-          .animation({ duration: this.duration, curve: Curve.Ease })
+          Image($r("app.media.needle"))
+            .width('100%')
+            .aspectRatio(1)
+            .fillColor(0xffffff)
+            .rotate({ z: 1, angle: this.currentBreakpoint.value == 'sm' ? this.pointAngle + 90 : this.pointAngle })
+            .animation({ duration: this.duration, curve: Curve.Ease })
         }
         .onClick(() => {
           let target = Random(1, 360, true) + 360 * 3;
-          this.pointAngle+= target;
+          this.pointAngle += target;
           //console.log(this.pointAngle.toString())
           if (this.pointAngle > 3600000) {
             this.pointAngle = this.pointAngle - 3600000
@@ -193,7 +197,7 @@ struct HonestOrChallenge {
               this.selectedText = this.honests[Random(0, this.challenges.length - 1, true)]
             }
             setTimeout(() => {
-                  this.showPopup()
+              this.showPopup()
             }, this.duration)
           }
         })
@@ -205,6 +209,7 @@ struct HonestOrChallenge {
       .margin({ top: 25 })
       .alignItems(VerticalAlign.Center)
       .justifyContent(FlexAlign.Center)
+
       //.backgroundColor(0x333333)
       //.padding({top:50})
       GridRow({

@@ -1,10 +1,10 @@
 ﻿import { Random } from '@ohos/common';
 import { answers } from '../../static_datas/answers';
-import { resourceManager } from '@kit.LocalizationKit';
 import router from '@ohos.router';
 
 class Params {
   type: string
+
   constructor(tuple: string) {
     this.type = tuple
   }
@@ -14,6 +14,7 @@ class Params {
 @Component
 struct AnswerPage {
   @StorageProp('statusBarHeight') statusBarHeight: number = 0
+
   build() {
     Column() {
       // Header
@@ -93,6 +94,7 @@ struct AnswerPage {
 
     .height('100%')
     .backgroundColor($r("app.color.Comp_Bg3"))
+
     // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }

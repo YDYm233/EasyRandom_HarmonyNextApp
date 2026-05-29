@@ -1,7 +1,5 @@
 ﻿import { Random } from '@ohos/common';
-import router from '@ohos.router';
-
-class Params {
+iclass Params {
   type: string
 
   constructor(tuple: string) {

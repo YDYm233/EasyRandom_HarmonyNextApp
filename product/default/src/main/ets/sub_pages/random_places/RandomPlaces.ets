@@ -1,10 +1,8 @@
-﻿import { Random } from '@ohos/common'
-import router from '@ohos.router';
-import { placeAttraction, placesArray } from '../../static_datas/places'
-import { promptAction } from '@kit.ArkUI'
-
+﻿iimport { Random } from '@ohos/common';
+import { placeAttraction, placesArray } from '../../static_datas/places';
 class Params {
   type: string
+
   constructor(tuple: string) {
     this.type = tuple
   }
@@ -14,6 +12,7 @@ class Params {
 @Component
 struct RandomFoods {
   @StorageProp('statusBarHeight') statusBarHeight: number = 0
+
   build() {
     Column() {
       GridRow({ columns: { sm: 12, md: 12, lg: 12 } }) {
@@ -69,6 +68,7 @@ struct RandomFoods {
       .margin({ top: $r("app.float.header_margin") })
       .position({ top: $r("app.float.header_margin") })
       .padding({ top: this.statusBarHeight })
+
       Scroll() {
         GridRow({
           columns: {
@@ -107,7 +107,8 @@ struct RandomFoods {
     .height('100%')
     .backgroundColor($r("app.color.Comp_Bg3"))
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
-   // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+
+    // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
 
@@ -133,7 +134,11 @@ struct Places {
           .fontSize(16)
           .fontColor($r("app.color.FontIcon_Fore2"))
           .fontStyle(FontStyle.Italic)
-        Text('' + this.place.country).width('100%').textAlign(TextAlign.End).fontSize(16).fontColor($r("app.color.FontIcon_Fore2"))
+        Text('' + this.place.country)
+          .width('100%')
+          .textAlign(TextAlign.End)
+          .fontSize(16)
+          .fontColor($r("app.color.FontIcon_Fore2"))
       }
       .alignItems(VerticalAlign.Center)
       .justifyContent(FlexAlign.SpaceBetween)
@@ -201,10 +206,9 @@ struct Places {
             let index = Random(0, this.places.length - 1, true)
             let count = 0;
             let loop = setInterval(() => {
-              if(count<8) {
+              if (count < 8) {
                 this.placeTitle = this.places[Random(0, this.places.length - 1, true)].name;
-              }
-              else if (count == 8) {
+              } else if (count == 8) {
                 this.placeTitle = this.placeNames[index];
                 this.place = this.places[index];
                 this.isRoll = false;
