@@ -1,12 +1,12 @@
 ﻿//这是一个模版空页面，制作新页面时可以参�?
-import { BreakpointState, BreakpointSystem} from '@ohos/common';
-import { router } from '@kit.ArkUI';
+import { BreakpointState } from '@ohos/common';
 
 @Entry
 @Component
 struct AStandard {
   @StorageProp('statusBarHeight') statusBarHeight: number = 0
   @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
+
   aboutToAppear() {
     BreakpointSystem.getInstance().attach(this.currentBreakpoint)
     BreakpointSystem.getInstance().start()
@@ -18,7 +18,6 @@ struct AStandard {
   }
 
   @State customDialogId: number = 0
-
 
   build() {
     Column() {
@@ -66,19 +65,20 @@ struct AStandard {
       .zIndex(10)
       .margin({ top: $r("app.float.header_margin") })
       .position({ top: $r("app.float.header_margin") })
-        AStandardComponent()      .height('100%')
-          .padding({ top: $r("app.float.header_height") })
-          .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+
+      AStandardComponent().height('100%')
+        .padding({ top: $r("app.float.header_height") })
+        .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
     }.padding({ top: this.statusBarHeight }).height('100%')
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
 
 @Component
-struct AStandardComponent{
+struct AStandardComponent {
   build() {
-      Column(){
+    Column() {
 
-      }
+    }
   }
 }

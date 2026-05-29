@@ -1,9 +1,8 @@
-﻿import { Randoms } from '@ohos/common';
-import router from '@ohos.router';
-import { CounterComponent, CounterType } from '@kit.ArkUI';
+﻿import router from '@ohos.router';
 
 class Params {
   type: string
+
   constructor(tuple: string) {
     this.type = tuple
   }
@@ -13,6 +12,7 @@ class Params {
 @Component
 struct TransQR {
   @StorageProp('statusBarHeight') statusBarHeight: number = 0
+
   build() {
     Column() {
       GridRow({ columns: { sm: 12, md: 12, lg: 12 } }) {
@@ -62,11 +62,13 @@ struct TransQR {
         }
       }
       .width('100%')
-      .height($r("app.float.header_height"))
+      // .height($r("app.float.header_height"))
       .backgroundColor($r("app.color.Comp_Bg1"))
       .zIndex(10)
       .margin({ top: $r("app.float.header_margin") })
       .position({ top: $r("app.float.header_margin") })
+      .padding({ top: this.statusBarHeight })
+
       Scroll() {
         GridRow({
           columns: {
@@ -96,19 +98,24 @@ struct TransQR {
             .alignItems(VerticalAlign.Center)
           }
         }
-        .margin(24)  .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+        .margin(24).expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
       }
       .width('100%')
-      .height('100%')  .padding({ top: $r("app.float.header_height") })
-    }.padding({ top: this.statusBarHeight }).height('100%').backgroundColor($r("app.color.Comp_Bg2")).expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+      .height('100%').padding({ top: $r("app.float.header_height") })
+    }
+    .padding({ top: this.statusBarHeight })
+    .height('100%')
+    .backgroundColor($r("app.color.Comp_Bg2"))
+    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
 
 @Component
 struct NamesBox {
-  @State QrCode:string = 'https://developer.huawei.com/consumer/cn/'
+  @State QrCode: string = 'https://developer.huawei.com/consumer/cn/'
   @State WebSrc: string = '示例地址 ：华为开发者 \n https://developer.huawei.com/consumer/cn/'
+
   build() {
     Column() {
       GridRow({
@@ -126,7 +133,7 @@ struct NamesBox {
             lg: 6
           }
         }) {
-          Row(){
+          Row() {
             QRCode(this.QrCode).width('90%').margin('5%')
               .color($r("app.color.FontIcon_Fore1"))
               .backgroundColor($r("app.color.Comp_Bg1"))
@@ -156,6 +163,7 @@ struct NamesBox {
             }
             .width('100%')
             .layoutWeight(1)
+
             TextArea({ text: this.WebSrc, placeholder: '\n本app不会收集或保存您在此输入的数据' })
               .padding(12)
               .layoutWeight(4)
@@ -169,7 +177,7 @@ struct NamesBox {
                 Text('确认').fontColor($r("app.color.control_fc_1")).fontWeight(FontWeight.Bold)
               }
               .onClick(() => {
-                this.QrCode=this.WebSrc;
+                this.QrCode = this.WebSrc;
               })
 
               .backgroundColor($r("app.color.control_bgc_1"))

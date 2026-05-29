@@ -63,11 +63,12 @@ struct RandomFoods {
         }
       }
       .width('100%')
-      .height($r("app.float.header_height"))
+      // .height($r("app.float.header_height"))
       .backgroundColor($r("app.color.Comp_Bg1"))
       .zIndex(10)
       .margin({ top: $r("app.float.header_margin") })
       .position({ top: $r("app.float.header_margin") })
+      .padding({ top: this.statusBarHeight })
       Scroll() {
         GridRow({
           columns: {

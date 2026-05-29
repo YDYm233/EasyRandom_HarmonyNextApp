@@ -3,6 +3,7 @@ import router from '@ohos.router';
 
 class Params {
   type: string
+
   constructor(tuple: string) {
     this.type = tuple
   }
@@ -12,6 +13,7 @@ class Params {
 @Component
 struct RollDices {
   @StorageProp('statusBarHeight') statusBarHeight: number = 0
+
   build() {
     Column() {
       GridRow({ columns: { sm: 12, md: 12, lg: 12 } }) {
@@ -61,11 +63,13 @@ struct RollDices {
         }
       }
       .width('100%')
-      .height($r("app.float.header_height"))
+      // .height($r("app.float.header_height"))
       .backgroundColor($r("app.color.Comp_Bg1"))
       .zIndex(10)
       .margin({ top: $r("app.float.header_margin") })
       .position({ top: $r("app.float.header_margin") })
+      .padding({ top: this.statusBarHeight })
+
       Scroll() {
         GridRow({
           columns: {
@@ -95,11 +99,15 @@ struct RollDices {
             .alignItems(VerticalAlign.Center)
           }
         }
-        .margin(24)  .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+        .margin(24).expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
       }
       .width('100%')
-      .height('100%')  .padding({ top: $r("app.float.header_height") })
-    }.padding({ top: this.statusBarHeight }).height('100%').backgroundColor($r("app.color.Comp_Bg3")).expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+      .height('100%').padding({ top: $r("app.float.header_height") })
+    }
+    .padding({ top: this.statusBarHeight })
+    .height('100%')
+    .backgroundColor($r("app.color.Comp_Bg3"))
+    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
@@ -137,6 +145,6 @@ struct RollDiceBox {
             }, 60)
           })
       }.height('20%')
-    }.aspectRatio(1)    .backgroundColor($r("app.color.Comp_Bg1")) .borderRadius(24)
+    }.aspectRatio(1).backgroundColor($r("app.color.Comp_Bg1")).borderRadius(24)
   }
 }

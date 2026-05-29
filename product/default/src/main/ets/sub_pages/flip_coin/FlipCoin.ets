@@ -1,8 +1,9 @@
-﻿import { Random } from '@ohos/common'
+﻿import { Random } from '@ohos/common';
 import router from '@ohos.router';
 
 class Params {
   type: string
+
   constructor(tuple: string) {
     this.type = tuple
   }
@@ -13,6 +14,7 @@ class Params {
 @Component
 struct RollFlip {
   @StorageProp('statusBarHeight') statusBarHeight: number = 0
+
   build() {
     Column() {
       GridRow({ columns: { sm: 12, md: 12, lg: 12 } }) {
@@ -62,11 +64,13 @@ struct RollFlip {
         }
       }
       .width('100%')
-      .height($r("app.float.header_height"))
+      .padding({ top: this.statusBarHeight })
+      // .height($r("app.float.header_height"))
       .backgroundColor($r("app.color.Comp_Bg1"))
       .zIndex(10)
       .margin({ top: $r("app.float.header_margin") })
       .position({ top: $r("app.float.header_margin") })
+
       Scroll() {
         GridRow({
           columns: {
@@ -89,19 +93,24 @@ struct RollFlip {
             }
           }) {
             Row() {
-             Coin().width('100%')
+              Coin().width('100%')
             }
             .width('100%')
             .justifyContent(FlexAlign.Center)
             .alignItems(VerticalAlign.Center)
           }
         }
-        .margin(24)  .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+        .margin(24)
+
+        // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
       }
       .width('100%')
-      .height('100%')  .padding({ top: $r("app.float.header_height") })
-    }.padding({ top: this.statusBarHeight }).height('100%').backgroundColor($r("app.color.Comp_Bg3")).expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
-    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+      .height('100%').padding({ top: $r("app.float.header_height") })
+    }
+    .height('100%').backgroundColor($r("app.color.Comp_Bg3"))
+
+    // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+    // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
 
@@ -109,12 +118,12 @@ struct RollFlip {
 struct Coin {
   @State angle: number = 0
   @State x: string = '0%'
-  @State duration: number =1200
+  @State duration: number = 1200
   @State ForB: boolean = true
   @State F: number = 1
   @State B: number = 0
   @State isFliping: boolean = false
-  @State profit:number =0
+  @State profit: number = 0
 
   build() {
     Column() {
@@ -124,12 +133,12 @@ struct Coin {
             .width('100%')
             .aspectRatio(1)
             .position({ top: 0, left: 0 })
-              .opacity(this.B)
+            .opacity(this.B)
           Image($r("app.media.coin2"))
             .width('100%')
             .aspectRatio(1)
             .position({ top: 0, left: 0 })
-           .opacity(this.F)
+            .opacity(this.F)
             .objectFit(ImageFit.Contain)
         }
         .width('40%')
@@ -139,7 +148,8 @@ struct Coin {
         .clip(true)
         .margin({ bottom: '10%' })
         .rotate({ x: 1, angle: this.angle })
-        .animation({ duration: this.duration / this.profit,curve:Curve.Linear })
+        .animation({ duration: this.duration / this.profit, curve: Curve.Linear })
+
         //.translate({ y: this.x })
       }
       .height('80%').width('100%').alignItems(VerticalAlign.Bottom).justifyContent(FlexAlign.Center)
@@ -151,35 +161,35 @@ struct Coin {
         }
         .onClick(() => {
           this.duration = 2000;
-          this.profit=  Random(1, 4, true)+2;
+          this.profit = Random(1, 4, true) + 2;
           this.isFliping = true;
-          let count =1;
-          this.x='-40%'
+          let count = 1;
+          this.x = '-40%'
           let loop = setInterval(() => {
-            this.angle=this.angle+180;
-              setTimeout(()=>{
-                this.ForB = !this.ForB;
-                if (this.ForB) {
-                  this.F = 0;
-                  this.B = 1;
-                }
-                else if(!this.ForB){
-                  this.F = 1;
-                  this.B = 0;
-                }
-              },this.duration/this.profit/2)
-           if(count>=this.profit){
-             clearInterval(loop)
-           }
-           count++;
-          }, this.duration / (this.profit) );
+            this.angle = this.angle + 180;
+            setTimeout(() => {
+              this.ForB = !this.ForB;
+              if (this.ForB) {
+                this.F = 0;
+                this.B = 1;
+              } else if (!this.ForB) {
+                this.F = 1;
+                this.B = 0;
+              }
+            }, this.duration / this.profit / 2)
+            if (count >= this.profit) {
+              clearInterval(loop)
+            }
+            count++;
+          }, this.duration / (this.profit));
           //setTimeout(()=>{this.x='0%'},this.duration/2)
 
-          setTimeout(()=>{
-            this.x='0%'
+          setTimeout(() => {
+            this.x = '0%'
             this.isFliping = false
-            console.log('次数'+this.profit.toString()+'间隔:'+(this.duration / (this.profit)).toString() + '正反？' + this.ForB);
-          },this.duration-30)
+            console.log('次数' + this.profit.toString() + '间隔:' + (this.duration / (this.profit)).toString() +
+              '正反？' + this.ForB);
+          }, this.duration - 30)
         })
         .enabled(!this.isFliping)
         .backgroundColor($r("app.color.control_bgc_1"))
