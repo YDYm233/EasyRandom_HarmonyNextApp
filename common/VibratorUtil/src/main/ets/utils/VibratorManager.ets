@@ -151,15 +151,36 @@ export class VibratorManager {
       hilog.warn(DOMAIN, TAG, 'vibratePattern: durations is empty, skipped');
       return;
     }
-    try {
-      vibrator.startVibration(
-        { type: 'time', duration: durations[0] },
-        { usage, parameters: { pattern: durations, count } },
-        VibratorManager.createCallback('vibratePattern')
-      );
-    } catch (err) {
-      VibratorManager.logError('vibratePattern', err as Error);
-    }
+    // 限制重复次数，防止无限递归
+    const repeat = count < 0 ? 1 : count;
+    const execPattern = (cycle: number): void => {
+      if (cycle >= repeat) {
+        return;
+      }
+      let elapsed = 0;
+      for (let i = 0; i < durations.length; i++) {
+        const delay = elapsed;
+        if (i % 2 === 0) {
+          // 偶数下标：振动段
+          setTimeout(() => {
+            vibrator.startVibration(
+              { type: 'time', duration: durations[i] },
+              { usage },
+              VibratorManager.createCallback('vibratePattern')
+            );
+          }, delay);
+        }
+        // 奇数下标：静默段，仅累加时间不做操作
+        elapsed += durations[i];
+      }
+      // 当前周期结束后触发下一周期
+      if (repeat > 1) {
+        setTimeout(() => {
+          execPattern(cycle + 1);
+        }, elapsed);
+      }
+    };
+    execPattern(0);
   }
 
   // ═══════════════════════════════════════════════════════════════
