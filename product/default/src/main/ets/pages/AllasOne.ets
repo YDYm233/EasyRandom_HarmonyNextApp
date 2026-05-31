@@ -1,9 +1,11 @@
-﻿import BaGuaCard from '../form_cards/BaGuaCard'
-import BlessingMuyuCard from '../form_cards/BlessingMuyuCard'
-import FlipCoinCard from '../form_cards/FlipCoinCard'
-import RandomColorsCard from '../form_cards/RandomColorsCard'
-import RollDiceCard from '../form_cards/RollDiceCard'
+﻿import {BaGuaCardDisplay} from '../form_display/BaGuaCardDisplay'
+import {ABCDCardDisplay} from '../form_display/ABCDCardDisplay'
+import {BlessingMuyuCardDisplay} from '../form_display/BlessingMuyuCardDisplay'
+import {FlipCoinCardDisplay} from '../form_display/FlipCoinCardDisplay'
+import {RandomColorsCardDisplay} from '../form_display/RandomColorsCardDisplay'
+import {RollDiceCardDisplay} from '../form_display/RollDiceCardDisplay'
 import RollWheelCard from '../form_cards/RollWheelCard'
+
 import { AddFormMenuItem, promptAction } from '@kit.ArkUI'
 import { formBindingData } from '@kit.FormKit'
 
@@ -65,7 +67,7 @@ struct AllasOne {
               offset: 0
             }) {
               Column() {
-                BaGuaCard()
+                BaGuaCardDisplay()
                   .width('100%')
                   .aspectRatio(1)
                   .backgroundColor($r("app.color.Comp_Bg1"))
@@ -98,7 +100,7 @@ struct AllasOne {
               offset: 0
             }) {
               Column() {
-                FlipCoinCard()
+                FlipCoinCardDisplay()
                   .width('100%')
                   .aspectRatio(1)
                   .backgroundColor($r("app.color.Comp_Bg1"))
@@ -131,7 +133,7 @@ struct AllasOne {
               offset: 0
             }) {
               Column() {
-                RollDiceCard()
+                RollDiceCardDisplay()
                   .width('100%')
                   .aspectRatio(1)
                   .backgroundColor($r("app.color.Comp_Bg1"))
@@ -164,7 +166,7 @@ struct AllasOne {
               offset: 0
             }) {
               Column() {
-                RandomColorsCard()
+                RandomColorsCardDisplay()
                   .width('100%')
                   .aspectRatio(1)
                   .backgroundColor($r("app.color.Comp_Bg1"))
@@ -230,7 +232,7 @@ struct AllasOne {
               offset: 0
             }) {
               Column() {
-                BlessingMuyuCard()
+                BlessingMuyuCardDisplay()
                   .width('100%')
                   .aspectRatio(1)
                   .backgroundColor($r("app.color.Comp_Bg1"))
@@ -254,6 +256,39 @@ struct AllasOne {
             }
             .aspectRatio(10/12)
             .bindContextMenu(this.AddFormMenu('BlessingMuyuCard', 'card_blessingMuyu', 2), ResponseType.LongPress, {
+              placement: Placement.TopLeft
+            })
+
+            //ABCD
+            GridCol({
+              span: 2,
+              offset: 0
+            }) {
+              Column() {
+                ABCDCardDisplay()
+                  .width('100%')
+                  .aspectRatio(1)
+                  .backgroundColor($r("app.color.Comp_Bg1"))
+                  .borderRadius(this.cardRadius)
+                  .clip(true)
+                  .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+                  .id('card_ABCD')
+                Row() {
+                  Text($r("app.string.ABCDCard_display_name"))
+                    .textAlign(TextAlign.Center)
+                    .fontSize(16)
+                    .fontColor($r("app.color.FontIcon_Fore1"))
+                }
+                .width('100%')
+                .aspectRatio(5)
+                .justifyContent(FlexAlign.Center)
+                .alignItems(VerticalAlign.Center)
+              }
+              .width('100%')
+              .height('100%')
+            }
+            .aspectRatio(10/12)
+            .bindContextMenu(this.AddFormMenu('ABCDCard', 'card_ABCD', 2), ResponseType.LongPress, {
               placement: Placement.TopLeft
             })
 
