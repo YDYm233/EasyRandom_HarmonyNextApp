@@ -2,6 +2,7 @@
 import router from '@ohos.router';
 import { promptAction } from '@kit.ArkUI';
 import { challenges, honests } from '../../static_datas/challenges';
+import { VibratorManager } from '@ohos/vibratorutil';
 
 class Params {
   type: string
@@ -198,6 +199,7 @@ struct HonestOrChallenge {
             }
             setTimeout(() => {
               this.showPopup()
+              VibratorManager.vibrateResult();
             }, this.duration)
           }
         })
@@ -247,6 +249,7 @@ struct HonestOrChallenge {
         .onClick(() => {
           this.selectedText = this.honests[Random(0, this.challenges.length - 1, true)]
           this.HorC = true
+          VibratorManager.vibrateResult();
           this.showPopup()
         })
 
@@ -276,6 +279,7 @@ struct HonestOrChallenge {
         .onClick(() => {
           this.selectedText = this.challenges[Random(0, this.challenges.length - 1, true)]
           this.HorC = false
+          VibratorManager.vibrateResult();
           this.showPopup()
         })
       }

@@ -1,5 +1,6 @@
 ﻿import { Random } from '@ohos/common'
 import router from '@ohos.router';
+import { VibratorManager } from '@ohos/vibratorutil';
 
 class Params {
   type: string
@@ -349,6 +350,7 @@ struct RollBlessingsBox {
           .width('90%').aspectRatio(1)
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .onClick(() => {
+            VibratorManager.vibrateMuyu();
             let index = Random(0, this.blessings.length - 1, true)
             let riseMs = Random(300, 450, true)
             let holdMs = Random(700, 1100, true)

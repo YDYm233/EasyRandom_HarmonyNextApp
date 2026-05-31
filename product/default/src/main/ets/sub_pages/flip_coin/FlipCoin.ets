@@ -1,5 +1,6 @@
 ﻿import { Random } from '@ohos/common';
 import router from '@ohos.router';
+import { VibratorManager } from '@ohos/vibratorutil';
 
 class Params {
   type: string
@@ -160,6 +161,7 @@ struct Coin {
           Text('开始').fontColor($r("app.color.control_fc_1")).fontWeight(FontWeight.Bold).fontSize('50%')
         }
         .onClick(() => {
+          VibratorManager.vibrateTap();
           this.duration = 2000;
           this.profit = Random(1, 4, true) + 2;
           this.isFliping = true;
@@ -187,6 +189,7 @@ struct Coin {
           setTimeout(() => {
             this.x = '0%'
             this.isFliping = false
+            VibratorManager.vibrateResult();
             console.log('次数' + this.profit.toString() + '间隔:' + (this.duration / (this.profit)).toString() +
               '正反？' + this.ForB);
           }, this.duration - 30)

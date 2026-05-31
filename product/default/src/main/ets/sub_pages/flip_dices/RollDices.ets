@@ -1,5 +1,6 @@
 ﻿import { Random } from '@ohos/common';
 import router from '@ohos.router';
+import { VibratorManager } from '@ohos/vibratorutil';
 
 class Params {
   type: string
@@ -133,6 +134,7 @@ struct RollDiceBox {
           .aspectRatio(2)
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .onClick(() => {
+            VibratorManager.vibrateRoll();
             let selected: Resource = this.diceImageArray[Random(0, this.diceImageArray.length - 1, true)];
             let index = 0;
             let loop = setInterval(() => {
@@ -140,6 +142,7 @@ struct RollDiceBox {
               if (index > 15) {
                 this.diceImageIndex = selected
                 clearInterval(loop)
+                VibratorManager.vibrateResult();
               }
               index++;
             }, 60)

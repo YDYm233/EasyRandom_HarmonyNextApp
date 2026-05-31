@@ -2,6 +2,7 @@
 import{RollWheel}from './RollWheel'
 import { Roll, defaultRolls, initRollsData } from './RollDataManager';
 import { RollEditSheet } from './RollEditor';
+import { VibratorManager } from '@ohos/vibratorutil';
 
 @Component
 struct RollPage {
@@ -215,6 +216,7 @@ struct RollWheelsShow {
           }
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .onClick(() => {
+            VibratorManager.vibrateRoll();
             this.duration = 1600
             this.isRoll = true;
             this.rotateAngle = Random(0, 360, true) + 360 * 18;
@@ -222,6 +224,7 @@ struct RollWheelsShow {
               this.isRoll = false;
               this.duration = 0;
               this.rotateAngle = this.rotateAngle - 360 * 18
+              VibratorManager.vibrateVictory();
             }, this.duration);
           })
           .backgroundColor($r("app.color.Brand"))

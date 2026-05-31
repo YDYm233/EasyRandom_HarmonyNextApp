@@ -1,6 +1,7 @@
 ﻿import { Random } from '@ohos/common';
 import { answers } from '../static_datas/answers';
 import { resourceManager } from '@kit.LocalizationKit';
+import { VibratorManager } from '@ohos/vibratorutil';
 
 @Entry
 @Component
@@ -93,6 +94,7 @@ struct AnswerBook {
       .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
       .enabled(!this.isRolling)
       .onClick(() => {
+        VibratorManager.vibrateReveal();
         this.isRolling=true
         if (this.ForB == false) {
           this.ForB = true;

@@ -1,5 +1,6 @@
 ﻿import { ExColor, Random } from '@ohos/common'
 import router from '@ohos.router';
+import { VibratorManager } from '@ohos/vibratorutil';
 
 class Params {
   type: string
@@ -175,6 +176,7 @@ struct ColorsBox {
             }
             .layoutWeight(1)
             .onClick(() => {
+              VibratorManager.vibrateMagic();
               this.RGBA = ExColor(this.RGBA);
             })
 

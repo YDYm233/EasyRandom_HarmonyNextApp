@@ -2,6 +2,7 @@
 import router from '@ohos.router';
 import { promptAction } from '@kit.ArkUI';
 import { BreakpointState, BreakpointSystem } from '@ohos/common';
+import { VibratorManager } from '@ohos/vibratorutil';
 
 class Params {
   type: string
@@ -498,6 +499,7 @@ struct BaGuaBox {
         }
         .enabled(!this.isRoll)
         .onClick(() => {
+          VibratorManager.vibrateMagic();
           this.isRoll = true;
           let index = Random(0, 7, true);
           //this.angle = Math.floor(this.angle/360)*360+(360-this.angles[index]) + 360 * 6;
@@ -514,6 +516,7 @@ struct BaGuaBox {
           setTimeout(() => {
             this.gua = this.guas[index+1];
             this.showPopup()
+            VibratorManager.vibrateReveal();
             console.log(this.gua)
             this.isRoll = false;
           }, this.duration)
