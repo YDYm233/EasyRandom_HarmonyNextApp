@@ -47,6 +47,10 @@
     {
       "name": "page_random_numbers",
       "value": "Random Numbers"
+    },
+    {
+      "name": "page_answer_book",
+      "value": "Answer Book"
     }
   ]
 }

@@ -46,7 +46,7 @@
     },
     {
       "name": "BlessingMuyuCard_desc",
-      "value": "Get a blessed from mokugyo"
+      "value": "木魚から祝福をもらう"
     },
     {
       "name": "ABCDCard_display_name",
@@ -55,7 +55,7 @@
   ,
     {
       "name": "ABCDCard_desc",
-      "value": "ABCD"
+      "value": "迷ったら量子力学"
     }
   ]
 }
