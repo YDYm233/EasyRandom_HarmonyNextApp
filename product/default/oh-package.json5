@@ -7,6 +7,7 @@
   "license": "",
   "dependencies": {
     "@ohos/common": "file:../../common/basic",
-    "@ohos/vitalui": "file:../../common/VitalUI"
+    "@ohos/vitalui": "file:../../common/VitalUI",
+    "@ohos/vibratorutil": "file:../../common/VibratorUtil"
   }
 }

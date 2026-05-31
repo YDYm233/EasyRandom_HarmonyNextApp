@@ -45,6 +45,28 @@ export enum HapticEffect {
  */
 export class VibratorManager {
   /**
+   * 统一错误日志输出
+   * @param methodName 调用方法名
+   * @param err 错误对象
+   */
+  private static logError(methodName: string, err: BusinessError | Error): void {
+    const businessErr = err as BusinessError;
+    hilog.error(DOMAIN, TAG, `${methodName} failed: ${businessErr.code ?? ''}, ${businessErr.message}`);
+  }
+
+  /**
+   * 创建标准异步错误回调：统一日志格式，避免重复代码
+   * @param methodName 方法名，用于日志标识
+   */
+  private static createCallback(methodName: string): (error: BusinessError) => void {
+    return (error: BusinessError) => {
+      if (error) {
+        VibratorManager.logError(methodName, error);
+      }
+    };
+  }
+
+  /**
    * 按指定时长触发振动
    * @param duration 振动时长，单位ms
    * @param usage 振动场景，默认TOUCH
@@ -54,14 +76,10 @@ export class VibratorManager {
       vibrator.startVibration(
         { type: 'time', duration },
         { usage },
-        (error: BusinessError) => {
-          if (error) {
-            hilog.error(DOMAIN, TAG, `vibrateTime failed: ${error.code}, ${error.message}`);
-          }
-        }
+        VibratorManager.createCallback('vibrateTime')
       );
     } catch (err) {
-      hilog.error(DOMAIN, TAG, `vibrateTime exception: ${(err as BusinessError).message}`);
+      VibratorManager.logError('vibrateTime', err as Error);
     }
   }
 
@@ -82,14 +100,37 @@ export class VibratorManager {
       vibrator.startVibration(
         { type: 'preset', effectId, count, intensity },
         { usage },
-        (error: BusinessError) => {
-          if (error) {
-            hilog.error(DOMAIN, TAG, `vibratePreset failed: ${error.code}, ${error.message}`);
-          }
-        }
+        VibratorManager.createCallback('vibratePreset')
       );
     } catch (err) {
-      hilog.error(DOMAIN, TAG, `vibratePreset exception: ${(err as BusinessError).message}`);
+      VibratorManager.logError('vibratePreset', err as Error);
+    }
+  }
+
+  /**
+   * 按自定义振动序列触发振动（pattern模式）
+   * 可实现长短交替、渐强渐弱等复杂振动效果
+   * @param durations 振动时长序列，单位ms，例如 [100, 50, 200] 表示振100ms→停50ms→振200ms
+   * @param count 序列重复次数，默认1；-1表示无限重复（需手动stop）
+   * @param usage 振动场景，默认TOUCH
+   */
+  static vibratePattern(
+    durations: number[],
+    count: number = 1,
+    usage: VibrationUsage = VibrationUsage.TOUCH
+  ): void {
+    if (!durations || durations.length === 0) {
+      hilog.warn(DOMAIN, TAG, 'vibratePattern: durations is empty, skipped');
+      return;
+    }
+    try {
+      vibrator.startVibration(
+        { type: 'time', duration: durations[0] },
+        { usage, parameters: { pattern: durations, count } },
+        VibratorManager.createCallback('vibratePattern')
+      );
+    } catch (err) {
+      VibratorManager.logError('vibratePattern', err as Error);
     }
   }
 
@@ -140,20 +181,12 @@ export class VibratorManager {
   static stop(stopMode?: string): void {
     try {
       if (stopMode) {
-        vibrator.stopVibration(stopMode as vibrator.VibratorStopMode, (error: BusinessError) => {
-          if (error) {
-            hilog.error(DOMAIN, TAG, `stop failed: ${error.code}, ${error.message}`);
-          }
-        });
+        vibrator.stopVibration(stopMode as vibrator.VibratorStopMode, VibratorManager.createCallback('stop'));
       } else {
-        vibrator.stopVibration((error: BusinessError) => {
-          if (error) {
-            hilog.error(DOMAIN, TAG, `stop all failed: ${error.code}, ${error.message}`);
-          }
-        });
+        vibrator.stopVibration(VibratorManager.createCallback('stop'));
       }
     } catch (err) {
-      hilog.error(DOMAIN, TAG, `stop exception: ${(err as BusinessError).message}`);
+      VibratorManager.logError('stop', err as Error);
     }
   }
 
@@ -164,7 +197,7 @@ export class VibratorManager {
     try {
       vibrator.stopVibrationSync();
     } catch (err) {
-      hilog.error(DOMAIN, TAG, `stopSync exception: ${(err as BusinessError).message}`);
+      VibratorManager.logError('stopSync', err as Error);
     }
   }
 
@@ -177,7 +210,7 @@ export class VibratorManager {
     try {
       return vibrator.isSupportEffectSync(effectId);
     } catch (err) {
-      hilog.error(DOMAIN, TAG, `isEffectSupported exception: ${(err as BusinessError).message}`);
+      VibratorManager.logError('isEffectSupported', err as Error);
       return false;
     }
   }
@@ -190,7 +223,7 @@ export class VibratorManager {
     try {
       return vibrator.isHdHapticSupported();
     } catch (err) {
-      hilog.error(DOMAIN, TAG, `isHdSupported exception: ${(err as BusinessError).message}`);
+      VibratorManager.logError('isHdSupported', err as Error);
       return false;
     }
   }

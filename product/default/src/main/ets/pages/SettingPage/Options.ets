@@ -3,10 +3,12 @@ import { preferences } from '@kit.ArkData'
 import { ConfigurationConstant, common } from '@kit.AbilityKit'
 import { window } from '@kit.ArkUI'
 import { CommonConstants } from '@ohos/common'
+import { VibratorManager } from '@ohos/vibratorutil'
 
 const PREF_NAME = CommonConstants.PREFERENCES_FILE_NAME
 const KEY_COLOR_MODE = CommonConstants.PREFERENCES_KEY_COLOR_MODE
 const KEY_FULLSCREEN = CommonConstants.PREFERENCES_KEY_FULLSCREEN
+const KEY_VIBRATION = CommonConstants.PREFERENCES_KEY_VIBRATION
 
 /** 将 Select 组件 index 映射为 ConfigurationConstant.ColorMode */
 function indexToColorMode(index: number): ConfigurationConstant.ColorMode {
@@ -186,6 +188,62 @@ struct FullScreenToggle{
 }
 
 @Component
+struct VibrationToggle {
+  @State isOn: boolean = true
+
+  aboutToAppear(): void {
+    this.loadVibrationSetting()
+  }
+
+  loadVibrationSetting(): void {
+    try {
+      const ctx = getContext(this) as common.UIAbilityContext
+      const pref = preferences.getPreferencesSync(ctx, { name: PREF_NAME })
+      this.isOn = pref.getSync(KEY_VIBRATION, true) as boolean
+    } catch (e) {
+      console.error('VibrationToggle load failed:', JSON.stringify(e))
+      this.isOn = true
+    }
+  }
+
+  applyVibrationSetting(enabled: boolean): void {
+    try {
+      const ctx = getContext(this) as common.UIAbilityContext
+      const pref = preferences.getPreferencesSync(ctx, { name: PREF_NAME })
+      pref.putSync(KEY_VIBRATION, enabled)
+      pref.flush()
+    } catch (e) {
+      console.error('VibrationToggle save failed:', JSON.stringify(e))
+    }
+  }
+
+  build() {
+    Row() {
+      Text('触感反馈:')
+        .height('70%')
+        .fontSize(18)
+        .fontColor($r("app.color.FontIcon_Fore1"))
+      Toggle({ type: ToggleType.Switch, isOn: this.isOn })
+        .selectedColor('#007DFF')
+        .onChange((isOn: boolean) => {
+          this.isOn = isOn
+          this.applyVibrationSetting(isOn)
+          if (isOn) {
+            VibratorManager.vibrateTap()
+          }
+        })
+    }
+    .justifyContent(FlexAlign.SpaceBetween)
+    .alignItems(VerticalAlign.Center)
+    .width('100%')
+    .height(60)
+    .backgroundColor($r("app.color.Comp_Bg1"))
+    .borderRadius(12)
+    .padding({ left: 24, right: 24 })
+  }
+}
+
+@Component
 struct Container{
   @Consume('pageInfos') pageInfos: NavPathStack;
   build(){
@@ -198,6 +256,11 @@ struct Container{
 
         ListItem() {
           FullScreenToggle()
+        }
+        .width('100%')
+
+        ListItem() {
+          VibrationToggle()
         }
         .width('100%')
 
