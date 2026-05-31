@@ -53,7 +53,7 @@
     {
       "name": "VitalUI",
       "srcPath": "./common/VitalUI"
-    }
+    },
     // {
     //   "name": "wearable",
     //   "srcPath": "./product/wearable",
@@ -64,5 +64,9 @@
     //     }
     //   ]
     // }
+    {
+      "name": "VibratorUtil",
+      "srcPath": "./common/VibratorUtil",
+    }
   ]
 }
