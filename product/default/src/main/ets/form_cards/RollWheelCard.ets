@@ -11,14 +11,27 @@ struct RollWheelCard {
   @State rotateAngle: number = 0;
 
   /**
+   * 缓存：避免每次 rebuild 都创建新 Roll 对象 → 防止 @Prop → @Watch 触发不必要的 Canvas 重绘
+   */
+  private _cachedItemsJson: string = ''
+  private _cachedRoll: Roll = defaultRolls[0]
+
+  /**
    * 从 LocalStorage 传入的序列化数据重建 Roll 对象
    * 有传入数据则使用传入数据，否则回退到默认转盘
+   * 使用缓存避免在 rotateAngle 变化导致的 rebuild 中触发 RollBox 的 @Watch
    */
   private buildWheelData(): Roll {
     if (this.rollItemsJson.length > 0) {
+      // 数据未变化时返回缓存的同一对象引用，避免 @Prop 变化检测
+      if (this._cachedItemsJson === this.rollItemsJson) {
+        return this._cachedRoll
+      }
       try {
         const items: RollItem[] = JSON.parse(this.rollItemsJson)
-        return new Roll('card', this.rollName, items)
+        this._cachedRoll = new Roll('card', this.rollName, items)
+        this._cachedItemsJson = this.rollItemsJson
+        return this._cachedRoll
       } catch (_e) {
         // 解析失败回退默认
       }
@@ -34,7 +47,8 @@ struct RollWheelCard {
         .rotate({
           angle: this.rotateAngle
         })
-        .animation({ duration: 1000, curve: Curve.Ease })
+      // 注意：不使用 .animation() 隐式动画，改为 onClick 中 animateTo() 显式动画
+      // 隐式动画在卡片中因渲染缓存仅生效一次，后续点击动画丢失
     }
     .justifyContent(FlexAlign.Center)
     .alignItems(VerticalAlign.Center)
@@ -54,7 +68,10 @@ struct RollWheelCard {
           items: itemNames
         }
       })
-      this.rotateAngle = Random(0, 360, true) + 360 * 8;
+      // 显式动画：每次点击累加旋转角度，animateTo 强制创建新动画
+      animateTo({ duration: 1000, curve: Curve.Ease }, () => {
+        this.rotateAngle += Random(0, 360, true) + 360 * 8
+      })
     })
   }
 }
@@ -84,8 +101,14 @@ struct RollBox {
     ctx.clearRect(0, 0, canvasWidth, canvasWidth)
     const radius = canvasWidth / 2
     const rollItems: Array<RollItem> = this.data.rollItems
+    if (rollItems.length === 0) {
+      return
+    }
     const totalWeight = rollItems.reduce<number>(
       (sum: number, rollItem: RollItem) => sum + rollItem.weight, 0)
+    if (totalWeight === 0) {
+      return
+    }
     let startAngle = -rollItems[0].weight / totalWeight * 180 + 90
 
     rollItems.forEach((rollItem: RollItem) => {
