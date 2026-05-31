@@ -5,7 +5,7 @@
     "pages/AnswerPage",
     "pages/MorePage",
     "pages/ToolsPage",
-    "pages/AllasOne",
+    "pages/CardsPage",
     "sub_pages/random_colors/RandomColors",
     "sub_pages/random_names/RandomNames",
     "sub_pages/devine_bagua/DevineBaGua",

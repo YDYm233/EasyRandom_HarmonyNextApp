@@ -4,7 +4,7 @@ import {BlessingMuyuCardDisplay} from '../form_display/BlessingMuyuCardDisplay'
 import {FlipCoinCardDisplay} from '../form_display/FlipCoinCardDisplay'
 import {RandomColorsCardDisplay} from '../form_display/RandomColorsCardDisplay'
 import {RollDiceCardDisplay} from '../form_display/RollDiceCardDisplay'
-import RollWheelCard from '../form_cards/RollWheelCard'
+import {RollWheelCardDisplay} from '../form_display/RollWheelCardDisplay'
 
 import { AddFormMenuItem, promptAction } from '@kit.ArkUI'
 import { formBindingData } from '@kit.FormKit'
@@ -199,7 +199,7 @@ struct AllasOne {
               offset: 0
             }) {
               Column() {
-                RollWheelCard()
+                RollWheelCardDisplay()
                   .width('100%')
                   .aspectRatio(1)
                   .backgroundColor($r("app.color.Comp_Bg1"))
@@ -298,7 +298,7 @@ struct AllasOne {
               offset: 0
             }) {
               Column() {
-                RollWheelCard()
+                RollWheelCardDisplay()
                   .width('100%')
                   .aspectRatio(1)
                   .backgroundColor($r("app.color.Comp_Bg1"))

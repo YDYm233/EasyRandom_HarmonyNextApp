@@ -1,63 +1,37 @@
 import { Random } from '@ohos/common'
 import { Roll, RollItem, defaultRolls } from '../pages/RollPage/RollDataManager';
 
-let storage = new LocalStorage()
-
-@Entry(storage)
+// @Entry
 @Component
-struct RollWheelCardDisplay {
+export struct RollWheelCardDisplay {
   readonly FULL_WIDTH_PERCENT: string = '90%';
-  @LocalStorageProp('formId') formId: string = ''
-  @LocalStorageProp('rollName') rollName: string = ''
-  @LocalStorageProp('rollItemsJson') rollItemsJson: string = ''
+  @State dataList: Roll[] = defaultRolls
   @State rotateAngle: number = 0;
 
-  /**
-   * 从 LocalStorage 传入的序列化数据重建 Roll 对象
-   * 有传入数据则使用传入数据，否则回退到默认转盘
-   */
-  private buildWheelData(): Roll {
-    if (this.rollItemsJson.length > 0) {
-      try {
-        const items: RollItem[] = JSON.parse(this.rollItemsJson)
-        return new Roll('card', this.rollName, items)
-      } catch (_e) {
-        // 解析失败回退默认
-      }
-    }
-    return defaultRolls[0]
-  }
-
   build() {
-    Row() {
-      RollBox({ data: this.buildWheelData() })
-        .width(this.FULL_WIDTH_PERCENT)
-        .aspectRatio(1)
-        .rotate({
-          angle: this.rotateAngle
-        })
-        .animation({ duration: 1000, curve: Curve.Ease })
-    }
-    .justifyContent(FlexAlign.Center)
-    .alignItems(VerticalAlign.Center)
-    .width('100%')
-    .height('100%')
-    .onClick(() => {
-      const wheelData = this.buildWheelData()
-      const itemNames = wheelData.rollItems.map((item: RollItem) => item.text).join(', ')
-      // 通过 postCardAction 发送 message 到 FormExtensionAbility，在 onFormEvent 中输出日志
-      postCardAction(this, {
-        action: 'message',
-        params: {
-          event: 'roll_wheel_click',
-          formId: this.formId,
-          rollName: wheelData.rollName,
-          itemCount: wheelData.rollItems.length,
-          items: itemNames
+    Swiper() {
+      ForEach(this.dataList, (roll: Roll) => {
+        Row() {
+          RollBox({ data: roll })
+            .width(this.FULL_WIDTH_PERCENT)
+            .aspectRatio(1)
+            .animation({ duration: 600 })
+            .rotate({
+              angle: this.rotateAngle
+            })
+            .animation({ duration: 1000, curve: Curve.Ease })
         }
-      })
-      this.rotateAngle = Random(0, 360, true) + 360 * 8;
-    })
+        .justifyContent(FlexAlign.Center)
+        .alignItems(VerticalAlign.Center)
+        .width('100%')
+        .height('100%')
+        .onClick(() => {
+          this.rotateAngle = this.rotateAngle + this.rotateAngle + Random(0, 360, true) + 360 * 8;
+        })
+      }, (roll: Roll) => roll.index)
+    }
+    .loop(true)
+    .indicator(false)
   }
 }
 
@@ -135,4 +109,4 @@ struct RollBox {
   }
 }
 
-export default RollWheelCardDisplay
+// export default RollWheelCard

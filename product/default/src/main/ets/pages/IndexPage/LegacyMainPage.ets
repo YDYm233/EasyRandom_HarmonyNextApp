@@ -4,7 +4,7 @@
  */
 import RollPage from '../RollPage/RollWheelPage'
 import AnswerPage from '../AnswerPage'
-import AllasOne from '../AllasOne'
+import AllasOne from '../CardsPage'
 import TollsPage from '../ToolsPage'
 import router from '@ohos.router'
 import { BusinessError } from '@kit.BasicServicesKit'
