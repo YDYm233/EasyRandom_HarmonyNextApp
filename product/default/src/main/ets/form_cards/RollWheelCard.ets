@@ -1,6 +1,5 @@
 import { Random } from '@ohos/common'
 import { Roll, RollItem, defaultRolls } from '../pages/RollPage/RollDataManager';
-import { hilog } from '@kit.PerformanceAnalysisKit'
 
 let storage = new LocalStorage()
 
@@ -23,7 +22,7 @@ struct RollWheelCard {
         const items: RollItem[] = JSON.parse(this.rollItemsJson)
         return new Roll('card', this.rollName, items)
       } catch (_e) {
-        hilog.error(0x0000, 'RollWheelCard', '解析转盘数据失败')
+        // 解析失败回退默认
       }
     }
     return defaultRolls[0]
@@ -46,8 +45,17 @@ struct RollWheelCard {
     .onClick(() => {
       const wheelData = this.buildWheelData()
       const itemNames = wheelData.rollItems.map((item: RollItem) => item.text).join(', ')
-      hilog.info(0x0000, 'RollWheelCard',
-        `[卡片点击] formId: ${this.formId}, 转盘名称: ${wheelData.rollName}, 选项数: ${wheelData.rollItems.length}, 选项: [${itemNames}]`)
+      // 通过 postCardAction 发送 message 到 FormExtensionAbility，在 onFormEvent 中输出日志
+      postCardAction(this, {
+        action: 'message',
+        params: {
+          event: 'roll_wheel_click',
+          formId: this.formId,
+          rollName: wheelData.rollName,
+          itemCount: wheelData.rollItems.length,
+          items: itemNames
+        }
+      })
       this.rotateAngle = Random(0, 360, true) + 360 * 8;
     })
   }

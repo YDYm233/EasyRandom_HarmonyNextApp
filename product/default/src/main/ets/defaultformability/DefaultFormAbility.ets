@@ -20,17 +20,17 @@ export default class DefaultFormAbility extends FormExtensionAbility {
         const rollJson = pref.getSync(KEY_PINNED_ROLL, '') as string
 
         if (rollJson.length > 0) {
-          const roll = JSON.parse(rollJson)
+          const roll: Record<string, Object> = JSON.parse(rollJson) as Record<string, Object>
           const formId = want.parameters?.[formInfo.FormParam.IDENTITY_KEY] as string
 
           hilog.info(0x0000, 'testTag',
             '[RollWheelCard onAddForm] formId: %{public}s, rollName: %{public}s, items: %{public}d',
-            formId, roll.rollName, roll.rollItems.length)
+            formId, roll['rollName'] as string, (roll['rollItems'] as Array<Object>).length)
 
           const formData: Record<string, string> = {
             'formId': formId,
-            'rollName': roll.rollName,
-            'rollItemsJson': JSON.stringify(roll.rollItems)
+            'rollName': roll['rollName'] as string,
+            'rollItemsJson': JSON.stringify(roll['rollItems'])
           }
           return formBindingData.createFormBindingData(formData)
         }
@@ -50,11 +50,20 @@ export default class DefaultFormAbility extends FormExtensionAbility {
 
   /**
    * 卡片 message 事件回调
-   * 卡片点击不打开应用，通过此回调自增计数到 Preferences
    */
   onFormEvent(formId: string, message: string): void {
     try {
-      const params: Record<string, string> = JSON.parse(message)
+      const params: Record<string, Object> = JSON.parse(message) as Record<string, Object>
+
+      // RollWheelCard 点击事件：输出卡片数据和 formId 日志
+      if (params['event'] === 'roll_wheel_click') {
+        hilog.info(0x0000, 'testTag',
+          '[卡片点击] formId: %{public}s, 转盘名称: %{public}s, 选项数: %{public}d, 选项: %{public}s',
+          formId, params['rollName'] as string, params['itemCount'] as number, params['items'] as string)
+        return
+      }
+
+      // BlessingMuyu 功德计数
       if (params['event'] === 'blessing_muyu_click') {
         const ctx = this.context.getApplicationContext()
         preferences.removePreferencesFromCacheSync(ctx, PREF_NAME)
@@ -66,7 +75,7 @@ export default class DefaultFormAbility extends FormExtensionAbility {
         hilog.info(0x0000, 'testTag', '功德总数(卡片): %{public}d', newCount)
       }
     } catch (e) {
-      hilog.error(0x0000, 'testTag', '卡片计数失败: %{public}s', JSON.stringify(e))
+      hilog.error(0x0000, 'testTag', '卡片事件处理失败: %{public}s', JSON.stringify(e))
     }
   }
 

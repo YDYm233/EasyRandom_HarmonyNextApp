@@ -1,11 +1,10 @@
 ﻿import { BreakpointState, BreakpointSystem, Random } from '@ohos/common';
-import { BreakpointState, BreakpointSystem, Random } from '@ohos/common';
 import{RollWheel}from './RollWheel'
 import { Roll, defaultRolls, initRollsData } from './RollDataManager';
 import { RollEditSheet } from './RollEditor';
 import { VibratorManager } from '@ohos/vibratorutil';
 import { formProvider, formInfo } from '@kit.FormKit'
-import { common, Want } from '@kit.AbilityKit'
+import { Want } from '@kit.AbilityKit'
 import { preferences } from '@kit.ArkData'
 import { hilog } from '@kit.PerformanceAnalysisKit'
 import { BusinessError } from '@kit.BasicServicesKit'
@@ -220,18 +219,16 @@ struct RollWheelsShow {
 
               // 打开卡片管理器，让用户选择添加 RollWheelCard 到桌面
               const want: Want = {
-                bundleName: ctx.bundleName,
-                moduleName: 'default',
+                bundleName: 'ydy.App.EasyRandom',
                 abilityName: 'DefaultFormAbility',
                 parameters: {
-                  [formInfo.FormParam.NAME_KEY]: 'RollWheelCard'
+                  'ohos.extra.param.key.form_dimension': 2,
+                  'ohos.extra.param.key.form_name': 'RollWheelCard',
+                  'ohos.extra.param.key.module_name': 'default'
                 }
               }
-              formProvider.openFormManager(want).then(() => {
-                hilog.info(0x0000, 'testTag', '[Pin按钮] formProvider.openFormManager 成功打开')
-              }).catch((err: BusinessError) => {
-                hilog.error(0x0000, 'testTag', '[Pin按钮] openFormManager 失败: %{public}s', JSON.stringify(err))
-              })
+              formProvider.openFormManager(want)
+              hilog.info(0x0000, 'testTag', '[Pin按钮] formProvider.openFormManager 成功打开')
             } catch (e) {
               hilog.error(0x0000, 'testTag', '[Pin按钮] 异常: %{public}s', JSON.stringify(e))
             }
