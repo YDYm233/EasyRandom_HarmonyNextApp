@@ -16,6 +16,8 @@ export default class DefaultFormAbility extends FormExtensionAbility {
     if (formName === 'RollWheelCard') {
       try {
         const ctx = this.context.getApplicationContext()
+        // 清除缓存以确保跨进程读取到最新数据
+        preferences.removePreferencesFromCacheSync(ctx, PIN_PREF_NAME)
         const pref = preferences.getPreferencesSync(ctx, { name: PIN_PREF_NAME })
         const rollJson = pref.getSync(KEY_PINNED_ROLL, '') as string
 
