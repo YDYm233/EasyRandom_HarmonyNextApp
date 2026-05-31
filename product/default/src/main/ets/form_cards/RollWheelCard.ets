@@ -1,37 +1,55 @@
-﻿import { Random } from '@ohos/common'
+import { Random } from '@ohos/common'
 import { Roll, RollItem, defaultRolls } from '../pages/RollPage/RollDataManager';
+import { hilog } from '@kit.PerformanceAnalysisKit'
 
-@Entry
+let storage = new LocalStorage()
+
+@Entry(storage)
 @Component
 struct RollWheelCard {
   readonly FULL_WIDTH_PERCENT: string = '90%';
-  @State dataList: Roll[] = defaultRolls
+  @LocalStorageProp('formId') formId: string = ''
+  @LocalStorageProp('rollName') rollName: string = ''
+  @LocalStorageProp('rollItemsJson') rollItemsJson: string = ''
   @State rotateAngle: number = 0;
 
-  build() {
-    Swiper() {
-      ForEach(this.dataList, (roll: Roll) => {
-        Row() {
-          RollBox({ data: roll })
-            .width(this.FULL_WIDTH_PERCENT)
-            .aspectRatio(1)
-            .animation({ duration: 600 })
-            .rotate({
-              angle: this.rotateAngle
-            })
-            .animation({ duration: 1000, curve: Curve.Ease })
-        }
-        .justifyContent(FlexAlign.Center)
-        .alignItems(VerticalAlign.Center)
-        .width('100%')
-        .height('100%')
-        .onClick(() => {
-          this.rotateAngle = this.rotateAngle + this.rotateAngle + Random(0, 360, true) + 360 * 8;
-        })
-      }, (roll: Roll) => roll.index)
+  /**
+   * 从 LocalStorage 传入的序列化数据重建 Roll 对象
+   * 有传入数据则使用传入数据，否则回退到默认转盘
+   */
+  private buildWheelData(): Roll {
+    if (this.rollItemsJson.length > 0) {
+      try {
+        const items: RollItem[] = JSON.parse(this.rollItemsJson)
+        return new Roll('card', this.rollName, items)
+      } catch (_e) {
+        hilog.error(0x0000, 'RollWheelCard', '解析转盘数据失败')
+      }
     }
-    .loop(true)
-    .indicator(false)
+    return defaultRolls[0]
+  }
+
+  build() {
+    Row() {
+      RollBox({ data: this.buildWheelData() })
+        .width(this.FULL_WIDTH_PERCENT)
+        .aspectRatio(1)
+        .rotate({
+          angle: this.rotateAngle
+        })
+        .animation({ duration: 1000, curve: Curve.Ease })
+    }
+    .justifyContent(FlexAlign.Center)
+    .alignItems(VerticalAlign.Center)
+    .width('100%')
+    .height('100%')
+    .onClick(() => {
+      const wheelData = this.buildWheelData()
+      const itemNames = wheelData.rollItems.map((item: RollItem) => item.text).join(', ')
+      hilog.info(0x0000, 'RollWheelCard',
+        `[卡片点击] formId: ${this.formId}, 转盘名称: ${wheelData.rollName}, 选项数: ${wheelData.rollItems.length}, 选项: [${itemNames}]`)
+      this.rotateAngle = Random(0, 360, true) + 360 * 8;
+    })
   }
 }
 

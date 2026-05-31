@@ -1,8 +1,14 @@
 ﻿import { BreakpointState, BreakpointSystem, Random } from '@ohos/common';
+import { BreakpointState, BreakpointSystem, Random } from '@ohos/common';
 import{RollWheel}from './RollWheel'
 import { Roll, defaultRolls, initRollsData } from './RollDataManager';
 import { RollEditSheet } from './RollEditor';
 import { VibratorManager } from '@ohos/vibratorutil';
+import { formProvider, formInfo } from '@kit.FormKit'
+import { common, Want } from '@kit.AbilityKit'
+import { preferences } from '@kit.ArkData'
+import { hilog } from '@kit.PerformanceAnalysisKit'
+import { BusinessError } from '@kit.BasicServicesKit'
 
 @Component
 struct RollPage {
@@ -196,10 +202,38 @@ struct RollWheelsShow {
           .height('100%')
           .aspectRatio(1)
           .onClick(() => {
-            if (this.loveIndex != this.swiperIndex) {
-              this.loveIndex = this.swiperIndex;
-            } else {
-              this.loveIndex = -1;
+            // 获取当前展示的转盘数据
+            const currentRoll = this.dataList[this.swiperIndex]
+            if (!currentRoll) {
+              return
+            }
+
+            // 将当前转盘数据序列化并保存到 Preferences，供 DefaultFormAbility 在 onAddForm 中读取
+            try {
+              const ctx = getContext(this).getApplicationContext()
+              const pref = preferences.getPreferencesSync(ctx, { name: 'roll_wheel_card_pin' })
+              pref.putSync('pinned_roll_data', JSON.stringify(currentRoll))
+              pref.flushSync()
+              hilog.info(0x0000, 'testTag',
+                '[Pin按钮] 已保存转盘数据: %{public}s, 选项数: %{public}d',
+                currentRoll.rollName, currentRoll.rollItems.length)
+
+              // 打开卡片管理器，让用户选择添加 RollWheelCard 到桌面
+              const want: Want = {
+                bundleName: ctx.bundleName,
+                moduleName: 'default',
+                abilityName: 'DefaultFormAbility',
+                parameters: {
+                  [formInfo.FormParam.NAME_KEY]: 'RollWheelCard'
+                }
+              }
+              formProvider.openFormManager(want).then(() => {
+                hilog.info(0x0000, 'testTag', '[Pin按钮] formProvider.openFormManager 成功打开')
+              }).catch((err: BusinessError) => {
+                hilog.error(0x0000, 'testTag', '[Pin按钮] openFormManager 失败: %{public}s', JSON.stringify(err))
+              })
+            } catch (e) {
+              hilog.error(0x0000, 'testTag', '[Pin按钮] 异常: %{public}s', JSON.stringify(e))
             }
           })
         }

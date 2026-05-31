@@ -1,13 +1,44 @@
-﻿import { formBindingData, FormExtensionAbility, formInfo } from '@kit.FormKit'
+import { formBindingData, FormExtensionAbility, formInfo } from '@kit.FormKit'
 import { Want } from '@kit.AbilityKit'
 import { preferences } from '@kit.ArkData'
 import { hilog } from '@kit.PerformanceAnalysisKit'
 
 const PREF_NAME: string = 'blessing_muyu'
 const KEY_CLICK_COUNT: string = 'click_count'
+const PIN_PREF_NAME: string = 'roll_wheel_card_pin'
+const KEY_PINNED_ROLL: string = 'pinned_roll_data'
 
 export default class DefaultFormAbility extends FormExtensionAbility {
   onAddForm(want: Want) {
+    const formName = want.parameters?.[formInfo.FormParam.NAME_KEY] as string
+
+    // RollWheelCard：从 Preferences 读取 pin 按钮保存的转盘数据
+    if (formName === 'RollWheelCard') {
+      try {
+        const ctx = this.context.getApplicationContext()
+        const pref = preferences.getPreferencesSync(ctx, { name: PIN_PREF_NAME })
+        const rollJson = pref.getSync(KEY_PINNED_ROLL, '') as string
+
+        if (rollJson.length > 0) {
+          const roll = JSON.parse(rollJson)
+          const formId = want.parameters?.[formInfo.FormParam.IDENTITY_KEY] as string
+
+          hilog.info(0x0000, 'testTag',
+            '[RollWheelCard onAddForm] formId: %{public}s, rollName: %{public}s, items: %{public}d',
+            formId, roll.rollName, roll.rollItems.length)
+
+          const formData: Record<string, string> = {
+            'formId': formId,
+            'rollName': roll.rollName,
+            'rollItemsJson': JSON.stringify(roll.rollItems)
+          }
+          return formBindingData.createFormBindingData(formData)
+        }
+      } catch (e) {
+        hilog.error(0x0000, 'testTag', '[RollWheelCard onAddForm] 读取转盘数据失败: %{public}s', JSON.stringify(e))
+      }
+    }
+
     return formBindingData.createFormBindingData('')
   }
 
