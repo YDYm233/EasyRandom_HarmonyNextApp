@@ -1,26 +1,26 @@
-﻿//这是一个模版空页面，制作新页面时可以参�?
-import { BreakpointState } from '@ohos/common';
+﻿// 页面路径要注册进 file:../product/default/src/main/resources/base/profile/main_pages.json
+// 页面名称要注册进 file:../AppScope/resources/base/element/page_desc.json
+// 页面入口要写进 file:../product/default/src/main/ets/pages/ToolsPage.ets
+
+import { Random } from '@ohos/common';
+import router from '@ohos.router';
+
+class Params {
+  type: string
+
+  constructor(tuple: string) {
+    this.type = tuple
+  }
+}
 
 @Entry
 @Component
 struct AStandard {
   @StorageProp('statusBarHeight') statusBarHeight: number = 0
-  @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
-
-  aboutToAppear() {
-    BreakpointSystem.getInstance().attach(this.currentBreakpoint)
-    BreakpointSystem.getInstance().start()
-  }
-
-  aboutToDisappear() {
-    BreakpointSystem.getInstance().attach(this.currentBreakpoint)
-    BreakpointSystem.getInstance().stop()
-  }
-
-  @State customDialogId: number = 0
 
   build() {
     Column() {
+      // ────────────────── 标题栏 ──────────────────
       GridRow({ columns: { sm: 12, md: 12, lg: 12 } }) {
         GridCol({ span: { sm: 3, md: 2, lg: 1 } }) {
           Row() {
@@ -39,7 +39,7 @@ struct AStandard {
 
         GridCol({ span: { sm: 6, md: 8, lg: 10 } }) {
           Row() {
-            Text("新页").fontColor($r("app.color.FontIcon_Fore1"))
+            Text($r("app.string.page_xxx")).fontColor($r("app.color.FontIcon_Fore1"))
           }
           .width('100%')
           .height($r("app.float.header_height"))
@@ -51,6 +51,14 @@ struct AStandard {
           Row() {
             Image($r("app.media.func_setting")).height(24).width(24).fillColor($r("app.color.FontIcon_Fore1"))
           }
+          .onClick(() => {
+            router.pushUrl({
+              url: 'pages/SettingPage/SettingPage',
+              params: new Params('no')
+            }).then(() => {
+              console.info("success.");
+            })
+          })
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .width('100%')
           .height($r("app.float.header_height"))
@@ -60,25 +68,53 @@ struct AStandard {
         }
       }
       .width('100%')
-      .height($r("app.float.header_height"))
       .backgroundColor($r("app.color.Comp_Bg1"))
       .zIndex(10)
       .margin({ top: $r("app.float.header_margin") })
       .position({ top: $r("app.float.header_margin") })
+      .padding({ top: this.statusBarHeight })
 
-      AStandardComponent().height('100%')
-        .padding({ top: $r("app.float.header_height") })
-        .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
-    }.padding({ top: this.statusBarHeight }).height('100%')
-    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+      // ────────────────── 内容区域 ──────────────────
+      Scroll() {
+        GridRow({
+          columns: { sm: 4, md: 8, lg: 12 },
+          gutter: 12
+        }) {
+          GridCol({
+            span: { sm: 4, md: 4, lg: 4 },
+            offset: { sm: 0, md: 2, lg: 4 }
+          }) {
+            Row() {
+              ContentBox().width('100%')
+            }
+            .width('100%')
+            .justifyContent(FlexAlign.Center)
+            .alignItems(VerticalAlign.Center)
+          }
+        }
+        .margin(24)
+      }
+      .width('100%')
+      .height('100%')
+      .padding({ top: $r("app.float.header_height") })
+    }
+    .height('100%')
+    .backgroundColor($r("app.color.Comp_Bg3"))
   }
 }
 
 @Component
-struct AStandardComponent {
+struct ContentBox {
   build() {
     Column() {
 
     }
+    .width('100%')
+    .aspectRatio(1)
+    .borderRadius(12)
+    .backgroundColor($r("app.color.Comp_Bg1"))
+    .clip(true)
   }
 }
+
+export default AStandard

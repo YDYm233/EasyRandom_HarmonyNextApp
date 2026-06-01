@@ -29,11 +29,6 @@
       "name": "开发者团队",
       "pageSourceFile": "src/main/ets/pages/SettingPage/AboutUs.ets",
       "buildFunction": "AboutUs"
-    },
-    {
-      "name": "MarqueeView",
-      "pageSourceFile": "src/main/ets/sub_pages/text_marquee/TextMarquee.ets",
-      "buildFunction": "MarqueeViewBuilder"
     }
   ]
 }
