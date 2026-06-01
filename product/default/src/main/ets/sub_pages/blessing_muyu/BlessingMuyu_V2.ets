@@ -1,5 +1,6 @@
 ﻿import { preferences } from '@kit.ArkData'
 import { Random } from '@ohos/common'
+import { hilog } from '@kit.PerformanceAnalysisKit'
 import router from '@ohos.router';
 
 class Params {
@@ -149,9 +150,14 @@ struct RollBlessingsBox_V2 {
       3, 3, 3, 3, 3,
       5, 5,
       0]
+  private readonly COLOR_PRESETS: string[] = [
+    '#FFD700', '#FF6B6B', '#FF8C00', '#FF1493', '#00CED1',
+    '#7B68EE', '#FF4500', '#32CD32', '#FF69B4', '#00BFFF'
+  ]
   // ── 祝福项池 ──
   @State words: string[] = new Array(POOL_SIZE).fill('')
   @State values: number[] = new Array(POOL_SIZE).fill(0)
+  @State textColors: string[] = new Array(POOL_SIZE).fill(this.COLOR_PRESETS[0])
   @State translateY: number[] = new Array(POOL_SIZE).fill(0)
   @State opacities: number[] = new Array(POOL_SIZE).fill(0)
   @State scales: number[] = new Array(POOL_SIZE).fill(1)
@@ -189,7 +195,7 @@ struct RollBlessingsBox_V2 {
 
     // 自增（@Link 直接修改父组件 @State）
     this.clickCount++
-    console.info(`功德总数:${this.clickCount}`)
+    hilog.info(0x0000, 'testTag', '祝福木鱼[页面]总数：%{public}d', this.clickCount)
 
     // 持久化到磁盘
     try {
@@ -206,6 +212,7 @@ struct RollBlessingsBox_V2 {
     this.poolIndex++
     this.words[idx] = this.blessingWords[Random(0, this.blessingWords.length - 1, true)]
     this.values[idx] = this.luckValues[Random(0, this.luckValues.length - 1, true)]
+    this.textColors[idx] = this.COLOR_PRESETS[Random(0, this.COLOR_PRESETS.length - 1, true)]
     this.zIndices[idx] = ++this.maxZIndex
 
     const riseMs: number = Random(260, 340, true)
@@ -241,7 +248,7 @@ struct RollBlessingsBox_V2 {
               Text(this.words[i] + ' +' + this.values[i])
                 .fontSize(18)
                 .fontWeight(FontWeight.Bold)
-                .fontColor('#FFD700')
+                .fontColor(this.textColors[i])
                 .textAlign(TextAlign.Center)
                 .textShadow({
                   radius: 6,

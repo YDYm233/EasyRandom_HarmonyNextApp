@@ -10,11 +10,17 @@ struct BlessingMuyuCard {
       3, 3, 3, 3, 3,
       5, 5,
       0]
+  private readonly COLOR_PRESETS: string[] = [
+    '#D4A017', '#FF6B6B', '#FF8C00', '#FF1493', '#00CED1',
+    '#7B68EE', '#FF4500', '#32CD32', '#FF69B4', '#00BFFF'
+  ]
 
   @State blessingText: string = '点击木鱼'
+  @State blessingColor: string = this.COLOR_PRESETS[0]
   @State bubbleScale: number = 1
   @State bubbleTranslateY: number = 0
   @State tapVersion: number = 0
+  @State tapCount: number = 0
 
   build() {
     Stack() {
@@ -22,7 +28,7 @@ struct BlessingMuyuCard {
         Text(this.blessingText)
           .fontSize(16)
           .fontWeight(FontWeight.Bold)
-          .fontColor('#D4A017')
+          .fontColor(this.blessingColor)
           .scale({ x: this.bubbleScale, y: this.bubbleScale })
           .translate({ y: this.bubbleTranslateY })
           .shadow({ radius: 4, color: '#40000000', offsetX: 0, offsetY: 2 })
@@ -40,6 +46,7 @@ struct BlessingMuyuCard {
             let idx = Random(0, this.BLESSINGS.length - 1, true)
             let count = this.LUCK[Random(0, this.LUCK.length - 1, true)]
             this.blessingText = this.BLESSINGS[idx] + ' +' + count
+            this.blessingColor = this.COLOR_PRESETS[Random(0, this.COLOR_PRESETS.length - 1, true)]
             this.bubbleScale = 0.6
             this.bubbleTranslateY = 15
             animateTo({ duration: 300, curve: Curve.EaseOut, onFinish: () => {
@@ -54,9 +61,11 @@ struct BlessingMuyuCard {
             })
 
             // ── 计数：message → DefaultFormAbility.onFormEvent → Preferences ──
+            this.tapCount++
+            console.info('祝福木鱼[卡片]总数：' + this.tapCount)
             postCardAction(this, {
               action: 'message',
-              params: { event: 'blessing_muyu_click' }
+              params: { event: 'blessing_muyu_click', source: 'card' }
             })
           })
       }
