@@ -50,7 +50,7 @@ export struct BlessingMuyuCardDisplay {
           .fontColor(this.blessingColor)
           .scale({ x: this.bubbleScale, y: this.bubbleScale })
           .translate({ y: this.bubbleTranslateY })
-          .shadow({ radius: 4, color: '#40000000', offsetX: 0, offsetY: 2 })
+          // .shadow({ radius: 4, color: '#40000000', offsetX: 0, offsetY: 2 })
 
         Blank()
 

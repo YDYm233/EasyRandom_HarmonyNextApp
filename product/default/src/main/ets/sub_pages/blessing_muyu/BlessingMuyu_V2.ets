@@ -250,12 +250,12 @@ struct RollBlessingsBox_V2 {
                 .fontWeight(FontWeight.Bold)
                 .fontColor(this.textColors[i])
                 .textAlign(TextAlign.Center)
-                .textShadow({
-                  radius: 6,
-                  color: 'rgba(255, 215, 0, 0.45)',
-                  offsetX: 0,
-                  offsetY: 0
-                })
+                // .textShadow({
+                //   radius: 6,
+                //   color: 'rgba(255, 215, 0, 0.45)',
+                //   offsetX: 0,
+                //   offsetY: 0
+                // })
             }
             .backgroundColor($r("app.color.Comp_Bg1"))
             .borderRadius(14)
