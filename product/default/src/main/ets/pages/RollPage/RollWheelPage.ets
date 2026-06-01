@@ -146,7 +146,7 @@ struct RollWheelsShow {
               })
               .animation({ duration: this.duration, curve: Curve.Ease })
             if (this.showPoint) {
-              Image($r("app.media.needle"))
+              Image($r("app.media.pointer_xl"))
                 .zIndex(8)
                 .width('40%')
                 .aspectRatio(1)

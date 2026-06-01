@@ -49,6 +49,12 @@ struct RollWheelCard {
         })
       // 注意：不使用 .animation() 隐式动画，改为 onClick 中 animateTo() 显式动画
       // 隐式动画在卡片中因渲染缓存仅生效一次，后续点击动画丢失
+      Image($r("app.media.pointer_m"))
+        .zIndex(8)
+        .width('30%')
+        .aspectRatio(1)
+        .fillColor($r("app.color.FontIcon_Back1"))
+        .position({ top: '35%', left: '35%' })
     }
     .justifyContent(FlexAlign.Center)
     .alignItems(VerticalAlign.Center)

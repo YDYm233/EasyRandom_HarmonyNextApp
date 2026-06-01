@@ -20,6 +20,12 @@ export struct RollWheelCardDisplay {
               angle: this.rotateAngle
             })
             .animation({ duration: 1000, curve: Curve.Ease })
+          Image($r("app.media.pointer_m"))
+            .zIndex(8)
+            .width('30%')
+            .aspectRatio(1)
+            .fillColor($r("app.color.FontIcon_Back1"))
+            .position({ top: '35%', left: '35%' })
         }
         .justifyContent(FlexAlign.Center)
         .alignItems(VerticalAlign.Center)
