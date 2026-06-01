@@ -1,12 +1,16 @@
 import { Random } from '@ohos/common'
-import { Roll, RollItem, defaultRolls } from '../pages/RollPage/RollDataManager';
+import { Roll, RollItem, defaultRolls, initRollsData } from '../pages/RollPage/RollDataManager';
 
 // @Entry
 @Component
 export struct RollWheelCardDisplay {
   readonly FULL_WIDTH_PERCENT: string = '90%';
-  @State dataList: Roll[] = defaultRolls
+  @StorageLink('allRolls') dataList: Roll[] = defaultRolls
   @State rotateAngle: number = 0;
+
+  aboutToAppear() {
+    initRollsData(getContext(this).getApplicationContext())
+  }
 
   build() {
     Swiper() {
@@ -43,65 +47,82 @@ export struct RollWheelCardDisplay {
 
 @Component
 struct RollBox {
-  @Prop data: Roll
+  @Prop @Watch('onDataChange') data: Roll
   private settings: RenderingContextSettings = new RenderingContextSettings(true)
   private canvasContext: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings)
+
+  onDataChange(): void {
+    this.drawWheel()
+  }
+
+  private drawWheel(): void {
+    const ctx = this.canvasContext
+    const canvasWidth = ctx.width
+    if (canvasWidth <= 0) {
+      return
+    }
+    ctx.clearRect(0, 0, canvasWidth, canvasWidth)
+    const radius = canvasWidth / 2
+    const rollItems: Array<RollItem> = this.data.rollItems
+    if (rollItems.length === 0) {
+      return
+    }
+    const totalWeight = rollItems.reduce<number>(
+      (sum: number, rollItem: RollItem) => sum + rollItem.weight, 0)
+    if (totalWeight === 0) {
+      return
+    }
+    let startAngle = -rollItems[0].weight / totalWeight * 180 + 90
+
+    rollItems.forEach((rollItem: RollItem) => {
+      const endAngle: number = startAngle + (rollItem.weight / totalWeight) * 360
+      const centerAngle = (startAngle + endAngle) / 2
+
+      ctx.globalCompositeOperation = 'xor'
+      ctx.beginPath()
+      ctx.moveTo(radius, radius)
+      ctx.arc(radius, radius, radius,
+        startAngle * Math.PI / 180,
+        endAngle * Math.PI / 180, false)
+      ctx.closePath()
+      ctx.fillStyle = rollItem.color
+      ctx.fill()
+
+      ctx.fillStyle = '#FFFFFF'
+      ctx.textAlign = 'center'
+      ctx.save()
+      ctx.translate(radius, radius)
+      ctx.rotate((centerAngle + 90) * Math.PI / 180)
+
+      const chars: Array<string> = rollItem.text.split('')
+      const topOffset = radius * 0.1 + (radius * 0.1 / chars.length)
+      const lineHeight = (radius - topOffset) / (chars.length + 1)
+      const fontSizePx = lineHeight
+      ctx.font = fontSizePx.toString() + 'vp'
+
+      for (let i: number = 0; i < chars.length; i++) {
+        ctx.fillText(chars[i], 0,
+          (-radius + lineHeight + topOffset / 2 + i * lineHeight),
+          fontSizePx)
+      }
+      ctx.restore()
+
+      startAngle = endAngle
+    })
+
+    ctx.beginPath()
+    ctx.moveTo(radius, radius)
+    ctx.arc(radius, radius, radius / 10, -45, 275, false)
+    ctx.closePath()
+    ctx.fillStyle = 0xf1f3f5
+    ctx.fill()
+  }
 
   build() {
     Flex({ direction: FlexDirection.Column, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Center }) {
       Canvas(this.canvasContext)
         .onReady(() => {
-          const ctx = this.canvasContext
-          ctx.clearRect(0, 0, ctx.width, ctx.width)
-          const contextWidth = ctx.width
-          const radius = contextWidth / 2
-          const rollItems: Array<RollItem> = this.data.rollItems
-          const totalWeight = rollItems.reduce<number>(
-            (sum: number, rollItem: RollItem) => sum + rollItem.weight, 0)
-          let startAngle = -rollItems[0].weight / totalWeight * 180 + 90
-
-          rollItems.forEach((rollItem: RollItem) => {
-            const endAngle: number = startAngle + (rollItem.weight / totalWeight) * 360
-            const centerAngle = (startAngle + endAngle) / 2
-
-            ctx.globalCompositeOperation = 'xor'
-            ctx.beginPath()
-            ctx.moveTo(radius, radius)
-            ctx.arc(radius, radius, radius,
-              startAngle * Math.PI / 180,
-              endAngle * Math.PI / 180, false)
-            ctx.closePath()
-            ctx.fillStyle = rollItem.color
-            ctx.fill()
-
-            ctx.fillStyle = '#FFFFFF'
-            ctx.textAlign = 'center'
-            ctx.save()
-            ctx.translate(radius, radius)
-            ctx.rotate((centerAngle + 90) * Math.PI / 180)
-
-            const chars: Array<string> = rollItem.text.split('')
-            const topOffset = radius * 0.1 + (radius * 0.1 / chars.length)
-            const lineHeight = (radius - topOffset) / (chars.length + 1)
-            const fontSizePx = lineHeight
-            ctx.font = fontSizePx.toString() + 'vp'
-
-            for (let i: number = 0; i < chars.length; i++) {
-              ctx.fillText(chars[i], 0,
-                (-radius + lineHeight + topOffset / 2 + i * lineHeight),
-                fontSizePx)
-            }
-            ctx.restore()
-
-            startAngle = endAngle
-          })
-
-          ctx.beginPath()
-          ctx.moveTo(radius, radius)
-          ctx.arc(radius, radius, radius / 10, -45, 275, false)
-          ctx.closePath()
-          ctx.fillStyle = 0xf1f3f5
-          ctx.fill()
+          this.drawWheel()
         })
         .width('100%')
         .aspectRatio(1)
