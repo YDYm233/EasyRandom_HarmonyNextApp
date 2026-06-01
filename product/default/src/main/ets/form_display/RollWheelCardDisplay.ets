@@ -5,11 +5,16 @@ import { Roll, RollItem, defaultRolls, initRollsData } from '../pages/RollPage/R
 @Component
 export struct RollWheelCardDisplay {
   readonly FULL_WIDTH_PERCENT: string = '90%';
-  @StorageLink('allRolls') dataList: Roll[] = defaultRolls
+  @StorageLink('allRolls') @Watch('onDataListChange') dataList: Roll[] = defaultRolls
   @State rotateAngle: number = 0;
+  @State dataVersion: number = 0;
 
   aboutToAppear() {
     initRollsData(getContext(this).getApplicationContext())
+  }
+
+  onDataListChange() {
+    this.dataVersion++
   }
 
   build() {
@@ -38,7 +43,7 @@ export struct RollWheelCardDisplay {
         .onClick(() => {
           this.rotateAngle = this.rotateAngle + this.rotateAngle + Random(0, 360, true) + 360 * 8;
         })
-      }, (roll: Roll) => roll.index)
+      }, (roll: Roll) => `${roll.index}_v${this.dataVersion}`)
     }
     .loop(true)
     .indicator(false)
@@ -47,13 +52,9 @@ export struct RollWheelCardDisplay {
 
 @Component
 struct RollBox {
-  @Prop @Watch('onDataChange') data: Roll
+  @Prop data: Roll
   private settings: RenderingContextSettings = new RenderingContextSettings(true)
   private canvasContext: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings)
-
-  onDataChange(): void {
-    this.drawWheel()
-  }
 
   private drawWheel(): void {
     const ctx = this.canvasContext
