@@ -178,6 +178,20 @@ struct MarqueeEditor {
     return index >= 0 ? index : 0
   }
 
+  private getSpeedLabel(): string {
+    if (this.speed === -1) {
+      return '不滚动'
+    } else if (this.speed <= 30) {
+      return '慢速'
+    } else if (this.speed <= 60) {
+      return '中速'
+    } else if (this.speed <= 90) {
+      return '快速'
+    } else {
+      return '极速'
+    }
+  }
+
   @Builder
   FontSheetBuilder() {
     Column({ space: 24 }) {
@@ -188,11 +202,11 @@ struct MarqueeEditor {
           .fontWeight(FontWeight.Bold)
           .fontColor($r("app.color.FontIcon_Fore1"))
         Blank()
-        Image($r("app.media.func_cancle"))
-          .width(24)
-          .height(24)
-          .fillColor($r("app.color.FontIcon_Fore2"))
-          .onClick(() => { this.showFontSheet = false })
+        // Image($r("app.media.func_cancle"))
+        //   .width(24)
+        //   .height(24)
+        //   .fillColor($r("app.color.FontIcon_Fore2"))
+        //   .onClick(() => { this.showFontSheet = false })
       }
       .width('100%')
 
@@ -262,34 +276,37 @@ struct MarqueeEditor {
       }
       .width('100%')
 
-      // ── 字体效果预览 ──
+      // ── 字体样式预览 ──
       Column({ space: 8 }) {
         Row() {
-          Text('字体效果')
+          Text('字体样式预览')
             .fontSize(14)
             .fontWeight(FontWeight.Medium)
             .fontColor($r("app.color.FontIcon_Fore1"))
           Blank()
-          Text(this.fontSize.toString() + 'px')
+          Text(this.fontSize.toString() + 'vp')
             .fontSize(12)
             .fontColor($r("app.color.Brand"))
         }
         .width('100%')
+        
+        // 预览区域
         Column() {
-          Text( '预览文字TextDisplay')
-            .fontSize(Math.min(this.fontSize, 28))
+          Text('字Aaα')
+            .fontSize(Math.min(this.fontSize,160))
             .fontColor(this.fontColor)
             .fontFamily(this.fontFamily)
             .fontWeight(this.fontWeight)
             .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
+            .textOverflow({ overflow: TextOverflow.MARQUEE})
         }
         .width('100%')
-        .height(44)
+        // .height(64)
+        .aspectRatio(1)
         .justifyContent(FlexAlign.Center)
-        .padding({ left: 12, right: 12 })
+        .padding({ left: 16, right: 16 })
         .backgroundColor(this.bgColor)
-        .borderRadius(8)
+        .borderRadius(12)
       }
       .width('100%')
     }
@@ -342,33 +359,56 @@ struct MarqueeEditor {
         .borderRadius(8)
         .layoutWeight(0.7) // 占70%宽度
 
-        // 颜色按钮（竖向排列）
-        Column({ space: 8 }) {
-          ColorPickerButton({
-            initialColor: this.fontColor,
-            onColorChange: (color: string) => { this.fontColor = color }
-          })
-          ColorPickerButton({
-            initialColor: this.bgColor,
-            onColorChange: (color: string) => { this.bgColor = color }
-          })
-
-          Row({ space: 8 }) {
-            Text(this.fontLabel)
-              .fontSize(12)
+        // 功能按钮区（竖向排列）
+        Column({ space: 12 }) {
+          // 文字颜色
+          Column({ space: 4 }) {
+            Text('文字颜色')
+              .fontSize(11)
               .fontColor($r("app.color.FontIcon_Fore2"))
-            Image($r("sys.media.textformat_size_square_fill"))
-              .width(16)
-              .height(16)
-              .fillColor($r("app.color.FontIcon_Fore3"))
+            ColorPickerButton({
+              initialColor: this.fontColor,
+              onColorChange: (color: string) => { this.fontColor = color }
+            })
           }
-          .padding({ left: 12, right: 12, top: 8, bottom: 8 })
-          .backgroundColor($r("app.color.Comp_Bg2"))
-          .borderRadius(8)
-          .onClick(() => {
-            this.showFontSheet = true
-          })
-        }      .layoutWeight(0.3)
+
+          // 背景颜色
+          Column({ space: 4 }) {
+            Text('背景颜色')
+              .fontSize(11)
+              .fontColor($r("app.color.FontIcon_Fore2"))
+            ColorPickerButton({
+              initialColor: this.bgColor,
+              onColorChange: (color: string) => { this.bgColor = color }
+            })
+          }
+
+          // 字体设置
+          Column({ space: 4 }) {
+            Text('字体设置')
+              .fontSize(11)
+              .fontColor($r("app.color.FontIcon_Fore2"))
+            Row({ space: 6 }) {
+              Image($r("sys.media.textformat_size_square_fill"))
+                .width(16)
+                .height(16)
+                .fillColor($r("app.color.Brand"))
+              Text(this.fontSize.toString())
+                .fontSize(12)
+                .fontColor($r("app.color.Brand"))
+                .fontWeight(FontWeight.Medium)
+            }
+            .width('100%')
+            .justifyContent(FlexAlign.Center)
+            .padding({ top: 6, bottom: 6 })
+            .backgroundColor($r("app.color.Comp_Bg2"))
+            .borderRadius(8)
+            .onClick(() => {
+              this.showFontSheet = true
+            })
+          }
+        }
+        .layoutWeight(0.3)
       }
       .width('100%')
 
@@ -434,20 +474,28 @@ struct MarqueeEditor {
             .fontWeight(FontWeight.Medium)
             .fontColor($r("app.color.FontIcon_Fore1"))
           Blank()
-          Text(this.speed.toString())
+          Text(this.getSpeedLabel())
+            .fontSize(12)
+            .fontColor($r("app.color.FontIcon_Fore2"))
+          Text(this.speed === -1 ? '静止' : this.speed.toString())
             .fontSize(14)
             .fontWeight(FontWeight.Bold)
             .fontColor($r("app.color.Brand"))
+            .margin({ left: 8 })
         }
         .width('100%')
         Slider({
           value: this.speed,
-          min: 30,
+          min: -1,
           max: 120,
-          step: 10,
+          step: 1,
           style: SliderStyle.OutSet
         })
-        .onChange((value: number) => { this.speed = value })
+        .blockColor($r("app.color.Brand"))
+        .trackColor($r("app.color.Comp_Bg3"))
+        .selectedColor($r("app.color.Brand"))
+        .showSteps(true)
+        .onChange((value: number) => { this.speed = Math.round(value) })
       }
       .width('100%')
 

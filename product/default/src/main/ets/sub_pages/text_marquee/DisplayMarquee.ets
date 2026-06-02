@@ -13,6 +13,7 @@ struct DisplayMarquee {
   @State fontSize: number = 64
   @State fontFamily: string = 'HarmonyOS Sans'
   @State fontWeight: number = 700
+  @State speed: number = 60 // 滚动速度
   @State isVertical: boolean = false
   @State scrollFromLeft: boolean = false
   @State loopInterval: number = 0
@@ -44,9 +45,15 @@ struct DisplayMarquee {
     this.fontSize = (params['fontSize'] as number) || 64
     this.fontFamily = (params['fontFamily'] as string) || 'HarmonyOS Sans'
     this.fontWeight = (params['fontWeight'] as number) || 700
+    this.speed = (params['speed'] as number) ?? 60
     this.isVertical = (params['isVertical'] as boolean) || false
     this.scrollFromLeft = (params['scrollFromLeft'] as boolean) || false
     this.loopInterval = (params['loopInterval'] as number) ?? 0
+    
+    // 如果速度为-1，则不启动滚动
+    if (this.speed === -1) {
+      this.marqueeStart = false
+    }
     
     // 获取窗口并设置全屏模式
     try {
@@ -115,7 +122,7 @@ struct DisplayMarquee {
           Column() {
             Marquee({
               start: this.marqueeStart,
-              step: 10,
+              step: this.speed === -1 ? 0 : this.speed,
               fromStart: this.scrollFromLeft,
               src: this.padText(this.text)
             })
@@ -123,19 +130,19 @@ struct DisplayMarquee {
               .fontWeight(this.fontWeight)
               .fontColor(this.fontColor)
               .fontFamily(this.fontFamily)
-              // .width(this.deviceWidth)  // 显式设置宽度，确保能滚动
+              .width(this.deviceWidth)  // 显式设置宽度，确保能滚动
               .onFinish(() => {
                 this.handleMarqueeFinish()
               })
           }
           .width(this.deviceHeight)      // 宽度：设备宽度（保证Marquee能滚动）
           .height(this.deviceWidth)    // 高度：设备高度（旋转后变成宽度，撑满屏幕）
-          .justifyContent(FlexAlign.Start)
+          .justifyContent(FlexAlign.Center)
           .rotate({ z: 1, angle: 90 })  // 旋转90度
 
         } else {
           // 横向弹幕：文字从右往左（或从左往右）滚动
-          Marquee({ start: this.marqueeStart, step: 10, fromStart: this.scrollFromLeft, src: this.padText(this.text) })
+          Marquee({ start: this.marqueeStart, step: this.speed === -1 ? 0 : this.speed, fromStart: this.scrollFromLeft, src: this.padText(this.text) })
             .fontSize(this.fontSize)
             .fontWeight(this.fontWeight)
             .fontColor(this.fontColor)
