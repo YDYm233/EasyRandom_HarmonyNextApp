@@ -342,23 +342,7 @@ struct MarqueeEditor {
       }
       .width('100%')
 
-      // ── 文字输入 ──
-      Column({ space: 8 }) {
-        Text('弹幕内容')
-          .fontSize(14)
-          .fontWeight(FontWeight.Medium)
-          .fontColor($r("app.color.FontIcon_Fore1"))
-          .width('100%')
-        TextArea({ text: this.text, placeholder: '请输入要展示的文字...' })
-          .height(90)
-          .fontSize(16)
-          .fontColor($r("app.color.FontIcon_Fore1"))
-          .backgroundColor($r("app.color.Comp_Bg2"))
-          .borderRadius(12)
-          .padding(12)
-          .onChange((value: string) => { this.text = value })
-      }
-      .width('100%')
+
 
       // ── 颜色 & 字体设置 ──
       Row() {
@@ -479,7 +463,23 @@ struct MarqueeEditor {
       }
       .width('100%')
       .height(48)
-
+      // ── 文字输入 ──
+      Column({ space: 8 }) {
+        Text('弹幕内容')
+          .fontSize(14)
+          .fontWeight(FontWeight.Medium)
+          .fontColor($r("app.color.FontIcon_Fore1"))
+          .width('100%')
+        TextArea({ text: this.text, placeholder: '请输入要展示的文字...' })
+          .height(90)
+          .fontSize(16)
+          .fontColor($r("app.color.FontIcon_Fore1"))
+          .backgroundColor($r("app.color.Comp_Bg2"))
+          .borderRadius(12)
+          .padding(12)
+          .onChange((value: string) => { this.text = value })
+      }
+      .width('100%')
       // ── 开始按钮 ──
       Button('开始弹幕')
         .width('100%')
