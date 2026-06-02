@@ -19,6 +19,7 @@ struct DisplayMarquee {
   @State loopInterval: number = 0
   @State marqueeStart: boolean = true
   @State isPaused: boolean = false // 是否暂停
+  @State showControlPanel: boolean = false // 是否显示控制面板
   @State verticalOffset: number = 0 // 竖向滚动偏移量
   @State deviceWidth: number = 1080 // 设备屏幕宽度
   @State deviceHeight: number = 2340 // 设备屏幕高度
@@ -97,7 +98,6 @@ struct DisplayMarquee {
   }
   
 
-
   private handleMarqueeFinish(): void {
     // 停止当前滚动
     this.marqueeStart = false
@@ -111,6 +111,32 @@ struct DisplayMarquee {
   private togglePause(): void {
     this.isPaused = !this.isPaused
     this.marqueeStart = !this.isPaused
+  }
+
+  // 显示控制面板并暂停滚动
+  private showControlPanelAndPause(): void {
+    this.isPaused = true
+    this.marqueeStart = false
+    this.showControlPanel = true
+  }
+
+  // 继续滚动并隐藏控制面板
+  private resumeMarquee(): void {
+    this.isPaused = false
+    this.marqueeStart = true
+    this.showControlPanel = false
+  }
+
+  // 暂停滚动并隐藏控制面板
+  private pauseMarquee(): void {
+    this.isPaused = true
+    this.marqueeStart = false
+    this.showControlPanel = false
+  }
+
+  // 返回上一页
+  private goBack(): void {
+    router.back()
   }
 
   build() {
@@ -159,31 +185,65 @@ struct DisplayMarquee {
       .backgroundColor(this.bgColor)
       .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
       .onClick(() => {
-        this.togglePause()  // 点击暂停/继续滚动
+        this.showControlPanelAndPause()  // 点击显示控制面板并暂停滚动
       })
       
-      // 返回按钮（左上角）
-      Button({ type: ButtonType.Circle }) {
-        Text('←')
-          .fontSize(24)
-          .fontColor('#FFFFFF')
-      }
-      .width(50)
-      .height(50)
-      .backgroundColor('rgba(0, 0, 0, 0.3)')
-      .margin({ top: 20, left: 20 })
-      .onClick(() => {
-        router.back()  // 点击返回按钮退出页面
-      })
-      
-      // 暂停提示（居中显示）
-      if (this.isPaused) {
-        Text('已暂停')
-          .fontSize(32)
-          .fontColor('#FFFFFF')
-          .backgroundColor('rgba(0, 0, 0, 0.5)')
-          .padding(10)
-          .borderRadius(8)
+      // 控制面板浮层
+      if (this.showControlPanel) {
+        Column() {
+          Row({ space: 20 }) {
+            // 继续按钮
+            Button() {
+              Text('▶')
+                .fontSize(24)
+                .fontColor('#FFFFFF')
+            }
+            .width(80)
+            .height(80)
+            .backgroundColor('rgba(0, 0, 0, 0.7)')
+            .borderRadius(40)
+            .onClick(() => {
+              this.resumeMarquee()
+            })
+
+            // 暂停按钮
+            Button() {
+              Text('⏸')
+                .fontSize(24)
+                .fontColor('#FFFFFF')
+            }
+            .width(80)
+            .height(80)
+            .backgroundColor('rgba(0, 0, 0, 0.7)')
+            .borderRadius(40)
+            .onClick(() => {
+              this.pauseMarquee()
+            })
+
+            // 返回按钮
+            Button() {
+              Text('←')
+                .fontSize(24)
+                .fontColor('#FFFFFF')
+            }
+            .width(80)
+            .height(80)
+            .backgroundColor('rgba(0, 0, 0, 0.7)')
+            .borderRadius(40)
+            .onClick(() => {
+              this.goBack()
+            })
+          }
+        }
+        .width('100%')
+        .height('100%')
+        .justifyContent(FlexAlign.Center)
+        .alignItems(HorizontalAlign.Center)
+        .backgroundColor('rgba(0, 0, 0, 0.5)')
+        .onClick(() => {
+          // 点击背景隐藏面板
+          this.showControlPanel = false
+        })
       }
     }
     .width('100%')

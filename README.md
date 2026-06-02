@@ -9,13 +9,14 @@
 <p align="center">
   <strong>面向生活的随机工具箱 · 纯血鸿蒙原生应用</strong>
 </p>
-
 <p align="center">
-  <img src="https://img.shields.io/badge/HarmonyOS-NEXT%205.0-blue" alt="HarmonyOS"/>
-  <img src="https://img.shields.io/badge/API-12-brightgreen" alt="API 12"/>
+  <img src="https://img.shields.io/badge/HarmonyOS-NEXT%205.0+-blue" alt="HarmonyOS"/>
+  <img src="https://img.shields.io/badge/API-13+-brightgreen" alt="API 13~~23"/>
+      <img src="https://img.shields.io/badge/API-23-brightgreen" alt="API 13~~23"/>
   <img src="https://img.shields.io/badge/Version-1.0.16-orange" alt="Version"/>
   <img src="https://img.shields.io/badge/License-Apache%202.0-lightgrey" alt="License"/>
 </p>
+
 
 ---
 
@@ -27,7 +28,7 @@
 >
 > 同时提供一些有趣的功能，例如：幸运转盘、真心话大冒险、答案之书、祝福木鱼等。
 >
-> ⚠️ **注意**：本应用某些功能如**答案之书**由随机算法生成结果，不会偏向任何结果，请勿过度依赖随机结果。
+> 
 
 **目标**：打造一个覆盖手机、平板、折叠屏、车机、手表等多形态设备的全场景鸿蒙工具箱，充分利用 HarmonyOS 新特性（服务卡片、元服务、多设备协同等）。
 
@@ -40,7 +41,7 @@
 | 🧩 **多设备适配** | 支持手机、平板、2in1、车机，手表端开发中 |
 | 📱 **服务卡片** | 桌面服务卡片，无需打开应用即可使用 |
 | 🔗 **元服务** | 提供轻量级元服务版本，即点即用 |
-| 🌐 **多语言** | 支持中文简体、English |
+| 🌐 **多语言** | 支持中文简体、English,部分支持Japanese，其他语言适配中 |
 | 🌙 **暗夜模式** | 完整适配深色主题 |
 | 📐 **响应式布局** | 基于断点系统的自适应栅格布局 |
 | 🔒 **隐私合规** | 内置隐私政策弹窗，符合应用市场审核要求 |
@@ -205,9 +206,9 @@ product/wearable  ──→  @ohos/common (basic)
 
 ## 🗺️ 未来计划
 
-- [ ] 主页面 UI 重构
-- [ ] 液态玻璃效果适配
-- [ ] 震动反馈
+- [x] 主页面 UI 重构
+- [x] 液态玻璃效果适配
+- [x] 震动反馈
 - [ ] 手表端 (wearable) 完整适配
 - [ ] 折叠屏深度适配
 - [ ] PC 端 (2in1) 大屏适配
@@ -254,12 +255,7 @@ hvigorw assembleHap
 | BrakePoint 断点系统                                                                               |  ---   | ---        | 华为开发者官网示例代码  |
 | Logger 日志系统                                                                                   |  ---   | ---        | 华为开发者官网示例代码  |
 
-### 自研模块
 
-| 模块 | 类型 | 协议 | 说明                  |
-|------|:----:|------|---------------------|
-| @ohos/common (basic) | HAR | Apache 2.0 | 颜色选择器               |
-| @ohos/vitalui (VitalUI) | HAR | Apache 2.0 | 自研图表组件库（饼图、玫瑰图、雷达图） |
 
 ---
 
