@@ -122,7 +122,7 @@ struct MarqueeEditor {
   @State showFontSheet: boolean = false
   @State speed: number = 60
   @State fontSize: number = 64
-  @State isVertical: boolean = false
+  @State isVertical: boolean = true
   @State scrollFromLeft: boolean = false
   @State loopInterval: number = 0 // 循环间隔（毫秒）
 
@@ -144,8 +144,8 @@ struct MarqueeEditor {
     { value: '竖向' }
   ]
   private readonly scrollDirectionOptions: SelectOpt[] = [
-    { value: '← 左→右' },
-    { value: '右→左 →' }
+    { value: '<<<从右至左' },
+    { value: '>>>从左至右' }
   ]
   private readonly loopIntervalOptions: SelectOpt[] = [
     { value: '无间隔' },
@@ -309,13 +309,19 @@ struct MarqueeEditor {
         // 预览区域（正方形）
         Column() {
           if (this.isVertical) {
-            // 竖向预览
-            Text(this.text || '预览文字')
-              .fontSize(18)
-              .fontColor(this.fontColor)
-              .fontFamily(this.fontFamily)
-              .fontWeight(this.fontWeight)
-              .maxLines(1)
+            // 竖向预览：使用Marquee并旋转
+            Column() {
+              Marquee({ start: true, fromStart: this.scrollFromLeft, src: this.padText(this.text) })
+                .width('100%')
+                .fontSize(18)
+                .fontColor(this.fontColor)
+                .fontFamily(this.fontFamily)
+                .fontWeight(this.fontWeight)
+            }
+            .width('100%')
+            .height('100%')
+            .justifyContent(FlexAlign.Center)
+            .rotate({ z: 1, angle: 90 })
           } else {
             // 横向预览
             Marquee({ start: true, fromStart: this.scrollFromLeft, src: this.padText(this.text) })
@@ -332,7 +338,6 @@ struct MarqueeEditor {
         .padding(12)
         .backgroundColor(this.bgColor)
         .borderRadius(8)
-        .rotate({ z: 1, angle: this.isVertical ? 90 : 0 })
         .layoutWeight(0.7) // 占70%宽度
 
         // 颜色按钮（竖向排列）
@@ -404,7 +409,7 @@ struct MarqueeEditor {
           .fontColor($r("app.color.FontIcon_Fore1"))
         Select(this.scrollDirectionOptions)
           .selected(this.scrollFromLeft ? 0 : 1)
-          .value(this.scrollFromLeft ? '← 左→右' : '右→左 →')
+          .value(this.scrollFromLeft ? '从右至左’' : '从左至右')
           .width(100)
           .font({ size: 13 })
           .fontColor($r("app.color.FontIcon_Fore1"))
