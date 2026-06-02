@@ -196,52 +196,47 @@ struct MarqueeEditor {
       }
       .width('100%')
 
-      // ── 字体族 ──
-      Column({ space: 10 }) {
+      // ── 字体 & 字重 ──
+      Row() {
         Text('字体')
           .fontSize(14)
           .fontWeight(FontWeight.Medium)
           .fontColor($r("app.color.FontIcon_Fore1"))
-          .width('100%')
         Select(this.fontFamilies.map((f: string): SelectOpt => ({ value: f })))
           .selected(this.fontFamilyIndex)
           .value(this.fontFamily)
-          .height(48)
-          .font({ size: 14 })
+          .width(140)
+          .font({ size: 13 })
           .fontColor($r("app.color.FontIcon_Fore1"))
-          .selectedOptionFont({ size: 14 })
-          .optionFont({ size: 14 })
+          .selectedOptionFont({ size: 13 })
+          .optionFont({ size: 13 })
           .onSelect((index: number, _value: string) => {
             this.fontFamilyIndex = index
             this.fontFamily = this.fontFamilies[index]
           })
-      }
-      .width('100%')
-
-      // ── 字重 ──
-      Column({ space: 10 }) {
+        Blank()
         Text('字重')
           .fontSize(14)
           .fontWeight(FontWeight.Medium)
           .fontColor($r("app.color.FontIcon_Fore1"))
-          .width('100%')
         Select(this.fontWeightOptions.map((opt: FontWeightOption): SelectOpt => ({ value: opt.label })))
           .selected(this.fontWeightIndex)
           .value(this.fontWeightOptions[this.fontWeightIndex].label)
-          .height(48)
-          .font({ size: 14 })
+          .width(80)
+          .font({ size: 13 })
           .fontColor($r("app.color.FontIcon_Fore1"))
-          .selectedOptionFont({ size: 14 })
-          .optionFont({ size: 14 })
+          .selectedOptionFont({ size: 13 })
+          .optionFont({ size: 13 })
           .onSelect((index: number, _value: string) => {
             this.fontWeightIndex = index
             this.fontWeight = this.fontWeightOptions[index].value
           })
       }
       .width('100%')
+      .height(48)
 
-      // ── 字号（吸附式拖条）──
-      Column({ space: 10 }) {
+      // ── 字号 ──
+      Column({ space: 8 }) {
         Row() {
           Text('字号')
             .fontSize(14)
@@ -249,21 +244,11 @@ struct MarqueeEditor {
             .fontColor($r("app.color.FontIcon_Fore1"))
           Blank()
           Text(this.fontSize.toString())
-            .fontSize(16)
+            .fontSize(14)
             .fontWeight(FontWeight.Bold)
             .fontColor($r("app.color.Brand"))
         }
         .width('100%')
-        Row({ space: 6 }) {
-          ForEach(this.fontSizePresets, (size: number) => {
-            Text(size.toString())
-              .fontSize(10)
-              .fontColor(this.fontSize === size ? $r("app.color.Brand") : $r("app.color.FontIcon_Fore3"))
-              .fontWeight(this.fontSize === size ? FontWeight.Bold : FontWeight.Regular)
-          })
-        }
-        .width('100%')
-        .justifyContent(FlexAlign.SpaceBetween)
         Slider({
           value: this.fontSize,
           min: this.fontSizePresets[0],
@@ -279,24 +264,32 @@ struct MarqueeEditor {
 
       // ── 字体效果预览 ──
       Column({ space: 8 }) {
-        Text('预览效果')
-          .fontSize(14)
-          .fontWeight(FontWeight.Medium)
-          .fontColor($r("app.color.FontIcon_Fore1"))
-          .width('100%')
+        Row() {
+          Text('预览效果')
+            .fontSize(14)
+            .fontWeight(FontWeight.Medium)
+            .fontColor($r("app.color.FontIcon_Fore1"))
+          Blank()
+          Text(this.fontSize.toString() + 'px')
+            .fontSize(12)
+            .fontColor($r("app.color.Brand"))
+        }
+        .width('100%')
         Column() {
-          Marquee({ start: true, fromStart: this.scrollFromLeft, src: this.padText(this.text) })
-            .width('100%')
-            .height(44)
-            .fontSize(22)
+          Text(this.text || '预览文字')
+            .fontSize(Math.min(this.fontSize, 28))
             .fontColor(this.fontColor)
             .fontFamily(this.fontFamily)
             .fontWeight(this.fontWeight)
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
         }
         .width('100%')
-        .padding(12)
+        .height(44)
+        .justifyContent(FlexAlign.Center)
+        .padding({ left: 12, right: 12 })
         .backgroundColor(this.bgColor)
-        .borderRadius(12)
+        .borderRadius(8)
       }
       .width('100%')
     }
@@ -306,6 +299,49 @@ struct MarqueeEditor {
 
   build() {
     Column({ space: 20 }) {
+      // ── 预览 ──
+      Column({ space: 8 }) {
+        Row() {
+          Text('效果预览')
+            .fontSize(14)
+            .fontWeight(FontWeight.Medium)
+            .fontColor($r("app.color.FontIcon_Fore1"))
+          Blank()
+          Text(this.isVertical ? '竖向' : '横向')
+            .fontSize(12)
+            .fontColor($r("app.color.FontIcon_Fore3"))
+        }
+        .width('100%')
+        Column() {
+          if (this.isVertical) {
+            // 竖向预览
+            Text(this.text || '预览文字')
+              .fontSize(18)
+              .fontColor(this.fontColor)
+              .fontFamily(this.fontFamily)
+              .fontWeight(this.fontWeight)
+              .maxLines(1)
+          } else {
+            // 横向预览
+            Marquee({ start: true, fromStart: this.scrollFromLeft, src: this.padText(this.text) })
+              .width('100%')
+              .height(28)
+              .fontSize(18)
+              .fontColor(this.fontColor)
+              .fontFamily(this.fontFamily)
+              .fontWeight(this.fontWeight)
+          }
+        }
+        .width('100%')
+        .height(this.isVertical ? 60 : 44)
+        .justifyContent(FlexAlign.Center)
+        .padding({ left: 16, right: 16, top: 8, bottom: 8 })
+        .backgroundColor(this.bgColor)
+        .borderRadius(8)
+        .rotate({ z: 1, angle: this.isVertical ? 90 : 0 })
+      }
+      .width('100%')
+
       // ── 文字输入 ──
       Column({ space: 8 }) {
         Text('弹幕内容')
@@ -324,60 +360,41 @@ struct MarqueeEditor {
       }
       .width('100%')
 
-      // ── 颜色选择 ──
-      Column({ space: 8 }) {
-        Text('颜色设置')
-          .fontSize(14)
-          .fontWeight(FontWeight.Medium)
-          .fontColor($r("app.color.FontIcon_Fore1"))
-          .width('100%')
-        Row({ space: 16 }) {
-          Row({ space: 8 }) {
-            Text('文字').fontSize(13).fontColor($r("app.color.FontIcon_Fore2"))
-            ColorPickerButton({
-              initialColor: this.fontColor,
-              onColorChange: (color: string) => { this.fontColor = color }
-            })
-          }
-          .alignItems(VerticalAlign.Center)
-          .layoutWeight(1)
-
-          Row({ space: 8 }) {
-            Text('背景').fontSize(13).fontColor($r("app.color.FontIcon_Fore2"))
-            ColorPickerButton({
-              initialColor: this.bgColor,
-              onColorChange: (color: string) => { this.bgColor = color }
-            })
-          }
-          .alignItems(VerticalAlign.Center)
-          .layoutWeight(1)
+      // ── 颜色 & 字体设置 ──
+      Row() {
+        // 颜色选择
+        Row({ space: 6 }) {
+          ColorPickerButton({
+            initialColor: this.fontColor,
+            onColorChange: (color: string) => { this.fontColor = color }
+          })
+          ColorPickerButton({
+            initialColor: this.bgColor,
+            onColorChange: (color: string) => { this.bgColor = color }
+          })
         }
-        .width('100%')
-      }
-      .width('100%')
 
-      // ── 字体设置（次级菜单入口）──
-      Column({ space: 8 }) {
-        Text('字体设置')
-          .fontSize(14)
-          .fontWeight(FontWeight.Medium)
-          .fontColor($r("app.color.FontIcon_Fore1"))
-          .width('100%')
-        Row() {
-          Text(this.fontLabel).fontSize(13).fontColor($r("app.color.FontIcon_Fore2"))
-          Blank()
-          Image($r("app.media.func_setting")).width(16).height(16).fillColor($r("app.color.FontIcon_Fore3"))
+        Blank()
+
+        // 字体设置入口
+        Row({ space: 8 }) {
+          Text(this.fontLabel)
+            .fontSize(12)
+            .fontColor($r("app.color.FontIcon_Fore2"))
+          Image($r("app.media.func_setting"))
+            .width(16)
+            .height(16)
+            .fillColor($r("app.color.FontIcon_Fore3"))
         }
-        .height(48)
-        .width('100%')
-        .padding({ left: 16, right: 16 })
+        .padding({ left: 12, right: 12, top: 8, bottom: 8 })
         .backgroundColor($r("app.color.Comp_Bg2"))
-        .borderRadius(12)
+        .borderRadius(8)
         .onClick(() => {
           this.showFontSheet = true
         })
       }
       .width('100%')
+      .height(48)
 
       // ── 速度 ──
       Column({ space: 8 }) {
@@ -404,43 +421,36 @@ struct MarqueeEditor {
       }
       .width('100%')
 
-      // ── 展示方向 ──
+      // ── 展示方向 & 滚动方向 ──
       Row() {
-        Text('展示方向')
+        Text('展示')
           .fontSize(14)
           .fontWeight(FontWeight.Medium)
           .fontColor($r("app.color.FontIcon_Fore1"))
-        Blank()
         Select(this.displayDirectionOptions)
           .selected(this.isVertical ? 1 : 0)
           .value(this.isVertical ? '竖向' : '横向')
-          .width(100)
-          .font({ size: 14 })
+          .width(80)
+          .font({ size: 13 })
           .fontColor($r("app.color.FontIcon_Fore1"))
-          .selectedOptionFont({ size: 14 })
-          .optionFont({ size: 14 })
+          .selectedOptionFont({ size: 13 })
+          .optionFont({ size: 13 })
           .onSelect((index: number, _value: string) => {
             this.isVertical = index === 1
           })
-      }
-      .width('100%')
-      .height(48)
-
-      // ── 滚动方向 ──
-      Row() {
-        Text('滚动方向')
+        Blank()
+        Text('滚动')
           .fontSize(14)
           .fontWeight(FontWeight.Medium)
           .fontColor($r("app.color.FontIcon_Fore1"))
-        Blank()
         Select(this.scrollDirectionOptions)
           .selected(this.scrollFromLeft ? 0 : 1)
           .value(this.scrollFromLeft ? '← 左→右' : '右→左 →')
           .width(100)
-          .font({ size: 14 })
+          .font({ size: 13 })
           .fontColor($r("app.color.FontIcon_Fore1"))
-          .selectedOptionFont({ size: 14 })
-          .optionFont({ size: 14 })
+          .selectedOptionFont({ size: 13 })
+          .optionFont({ size: 13 })
           .onSelect((index: number, _value: string) => {
             this.scrollFromLeft = index === 0
           })
@@ -469,29 +479,6 @@ struct MarqueeEditor {
       }
       .width('100%')
       .height(48)
-
-      // ── 预览 ──
-      Column({ space: 8 }) {
-        Text('效果预览')
-          .fontSize(14)
-          .fontWeight(FontWeight.Medium)
-          .fontColor($r("app.color.FontIcon_Fore1"))
-          .width('100%')
-        Column() {
-          Marquee({ start: true, fromStart: this.scrollFromLeft, src: this.padText(this.text) })
-            .width('100%')
-            .height(48)
-            .fontSize(22)
-            .fontColor(this.fontColor)
-            .fontFamily(this.fontFamily)
-            .fontWeight(this.fontWeight)
-        }
-        .width('100%')
-        .padding(16)
-        .backgroundColor(this.bgColor)
-        .borderRadius(12)
-      }
-      .width('100%')
 
       // ── 开始按钮 ──
       Button('开始弹幕')

@@ -16,6 +16,8 @@ struct DisplayMarquee {
   @State scrollFromLeft: boolean = false
   @State loopInterval: number = 0
   @State marqueeStart: boolean = true
+  @State textOffset: number = 0
+  @State isAnimating: boolean = true
 
   private padText(src: string): string {
     if (src.length >= 20) {
@@ -49,18 +51,22 @@ struct DisplayMarquee {
   build() {
     Column() {
       if (this.isVertical) {
-        Marquee({ start: this.marqueeStart, fromStart: this.scrollFromLeft, src: this.padText(this.text) })
-          .fontSize(this.fontSize)
-          .fontWeight(this.fontWeight)
-          .fontColor(this.fontColor)
-          .fontFamily(this.fontFamily)
-          .width(2000)
-          .height(this.fontSize + 32)
-          .rotate({ z: 1, angle: 90 })
-          .onFinish(() => {
-            this.handleMarqueeFinish()
-          })
+        // 竖向模式：文字垂直排列，从下往上或从上往下滚动
+        Column() {
+          Text(this.text)
+            .fontSize(this.fontSize)
+            .fontWeight(this.fontWeight)
+            .fontColor(this.fontColor)
+            .fontFamily(this.fontFamily)
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Clip })
+        }
+        .width(this.fontSize + 32)
+        .height('100%')
+        .justifyContent(FlexAlign.Center)
+        .rotate({ z: 1, angle: 90 })
       } else {
+        // 横向模式
         Marquee({ start: this.marqueeStart, fromStart: this.scrollFromLeft, src: this.padText(this.text) })
           .fontSize(this.fontSize)
           .fontWeight(this.fontWeight)
