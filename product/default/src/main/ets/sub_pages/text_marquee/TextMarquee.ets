@@ -265,7 +265,7 @@ struct MarqueeEditor {
       // ── 字体效果预览 ──
       Column({ space: 8 }) {
         Row() {
-          Text('预览效果')
+          Text('字体效果')
             .fontSize(14)
             .fontWeight(FontWeight.Medium)
             .fontColor($r("app.color.FontIcon_Fore1"))
@@ -276,7 +276,7 @@ struct MarqueeEditor {
         }
         .width('100%')
         Column() {
-          Text(this.text || '预览文字')
+          Text( '预览文字TextDisplay')
             .fontSize(Math.min(this.fontSize, 28))
             .fontColor(this.fontColor)
             .fontFamily(this.fontFamily)
