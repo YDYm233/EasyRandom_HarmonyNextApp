@@ -112,7 +112,7 @@ interface FontWeightOption {
 
 @Component
 struct MarqueeEditor {
-  @State text: string = '手持弹幕'
+  @State text: string = '欢迎使用随易工具箱！Hello World!'
   @State fontColor: string = '#FFFFFF'
   @State bgColor: string = '#000000'
   @State fontFamily: string = 'HarmonyOS Sans'
@@ -299,19 +299,9 @@ struct MarqueeEditor {
 
   build() {
     Column({ space: 20 }) {
-      // ── 预览 ──
-      Column({ space: 8 }) {
-        Row() {
-          Text('效果预览')
-            .fontSize(14)
-            .fontWeight(FontWeight.Medium)
-            .fontColor($r("app.color.FontIcon_Fore1"))
-          Blank()
-          Text(this.isVertical ? '竖向' : '横向')
-            .fontSize(12)
-            .fontColor($r("app.color.FontIcon_Fore3"))
-        }
-        .width('100%')
+      // ── 预览 & 颜色设置 ──
+      Row({ space: 12 }) {
+        // 预览区域（正方形）
         Column() {
           if (this.isVertical) {
             // 竖向预览
@@ -332,22 +322,16 @@ struct MarqueeEditor {
               .fontWeight(this.fontWeight)
           }
         }
-        .width('100%')
-        .height(this.isVertical ? 60 : 44)
+        .aspectRatio(1) // 1:1 正方形
         .justifyContent(FlexAlign.Center)
-        .padding({ left: 16, right: 16, top: 8, bottom: 8 })
+        .padding(12)
         .backgroundColor(this.bgColor)
         .borderRadius(8)
         .rotate({ z: 1, angle: this.isVertical ? 90 : 0 })
-      }
-      .width('100%')
+        .layoutWeight(0.7) // 占70%宽度
 
-
-
-      // ── 颜色 & 字体设置 ──
-      Row() {
-        // 颜色选择
-        Row({ space: 6 }) {
+        // 颜色按钮（竖向排列）
+        Column({ space: 8 }) {
           ColorPickerButton({
             initialColor: this.fontColor,
             onColorChange: (color: string) => { this.fontColor = color }
@@ -356,55 +340,41 @@ struct MarqueeEditor {
             initialColor: this.bgColor,
             onColorChange: (color: string) => { this.bgColor = color }
           })
-        }
 
-        Blank()
-
-        // 字体设置入口
-        Row({ space: 8 }) {
-          Text(this.fontLabel)
-            .fontSize(12)
-            .fontColor($r("app.color.FontIcon_Fore2"))
-          Image($r("app.media.func_setting"))
-            .width(16)
-            .height(16)
-            .fillColor($r("app.color.FontIcon_Fore3"))
-        }
-        .padding({ left: 12, right: 12, top: 8, bottom: 8 })
-        .backgroundColor($r("app.color.Comp_Bg2"))
-        .borderRadius(8)
-        .onClick(() => {
-          this.showFontSheet = true
-        })
-      }
-      .width('100%')
-      .height(48)
-
-      // ── 速度 ──
-      Column({ space: 8 }) {
-        Row() {
-          Text('滚动速度')
-            .fontSize(14)
-            .fontWeight(FontWeight.Medium)
-            .fontColor($r("app.color.FontIcon_Fore1"))
-          Blank()
-          Text(this.speed.toString())
-            .fontSize(14)
-            .fontWeight(FontWeight.Bold)
-            .fontColor($r("app.color.Brand"))
-        }
-        .width('100%')
-        Slider({
-          value: this.speed,
-          min: 30,
-          max: 120,
-          step: 10,
-          style: SliderStyle.OutSet
-        })
-        .onChange((value: number) => { this.speed = value })
+          Row({ space: 8 }) {
+            Text(this.fontLabel)
+              .fontSize(12)
+              .fontColor($r("app.color.FontIcon_Fore2"))
+            Image($r("app.media.func_setting"))
+              .width(16)
+              .height(16)
+              .fillColor($r("app.color.FontIcon_Fore3"))
+          }
+          .padding({ left: 12, right: 12, top: 8, bottom: 8 })
+          .backgroundColor($r("app.color.Comp_Bg2"))
+          .borderRadius(8)
+          .onClick(() => {
+            this.showFontSheet = true
+          })
+        }      .layoutWeight(0.3)
       }
       .width('100%')
 
+      .alignItems(VerticalAlign.Center)
+
+
+
+      // ── 字体设置 ──
+      // Row() {
+      //   Text('字体设置')
+      //     .fontSize(14)
+      //     .fontWeight(FontWeight.Medium)
+      //     .fontColor($r("app.color.FontIcon_Fore1"))
+      //   Blank()
+      //
+      // }
+      // .width('100%')
+      // .height(48)
       // ── 展示方向 & 滚动方向 ──
       Row() {
         Text('展示')
@@ -441,6 +411,34 @@ struct MarqueeEditor {
       }
       .width('100%')
       .height(48)
+
+
+
+      // ── 速度 ──
+      Column({ space: 8 }) {
+        Row() {
+          Text('滚动速度')
+            .fontSize(14)
+            .fontWeight(FontWeight.Medium)
+            .fontColor($r("app.color.FontIcon_Fore1"))
+          Blank()
+          Text(this.speed.toString())
+            .fontSize(14)
+            .fontWeight(FontWeight.Bold)
+            .fontColor($r("app.color.Brand"))
+        }
+        .width('100%')
+        Slider({
+          value: this.speed,
+          min: 30,
+          max: 120,
+          step: 10,
+          style: SliderStyle.OutSet
+        })
+        .onChange((value: number) => { this.speed = value })
+      }
+      .width('100%')
+
 
       // ── 循环间隔 ──
       Row() {
