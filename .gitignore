@@ -87,3 +87,4 @@ coverage/
 .codegenie
 .codex
 .claude
+/push_all.bat
