@@ -37,21 +37,23 @@ struct DisplayMarquee {
   build() {
     Column() {
       if (this.isVertical) {
-        Marquee({ start: true, fromStart: this.scrollFromLeft, src: this.padText(this.text) })
-          .fontSize(this.fontSize)
-          .fontWeight(this.fontWeight)
-          .fontColor(this.fontColor)
-          .width(Math.max(this.fontSize + 40, 160))
-          .height('100%')
-          .fontFamily(this.fontFamily)
-          .rotate({ z: 1, angle: 90 })
-      } else {
-        Marquee({ start: true, fromStart: this.scrollFromLeft, src: this.padText(this.text) })
+        Marquee({ start: true, src: this.padText(this.text) })
           .fontSize(this.fontSize)
           .fontWeight(this.fontWeight)
           .fontColor(this.fontColor)
           .fontFamily(this.fontFamily)
           .width('100%')
+          .height('100%')
+          .scrollDirection(this.scrollFromLeft ? MarqueeScrollDirection.RIGHT : MarqueeScrollDirection.LEFT)
+          .rotate({ z: 1, angle: 90 })
+      } else {
+        Marquee({ start: true, src: this.padText(this.text) })
+          .fontSize(this.fontSize)
+          .fontWeight(this.fontWeight)
+          .fontColor(this.fontColor)
+          .fontFamily(this.fontFamily)
+          .width('100%')
+          .scrollDirection(this.scrollFromLeft ? MarqueeScrollDirection.RIGHT : MarqueeScrollDirection.LEFT)
       }
     }
     .justifyContent(FlexAlign.Center)
