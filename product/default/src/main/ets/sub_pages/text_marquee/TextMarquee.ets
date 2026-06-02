@@ -123,7 +123,7 @@ struct MarqueeEditor {
   @State speed: number = 60
   @State fontSize: number = 64
   @State isVertical: boolean = true
-  @State scrollFromLeft: boolean = false
+  @State scrollFromLeft: boolean = true
   @State loopInterval: number = 0 // 循环间隔（毫秒）
 
   private readonly fontFamilies: string[] = ['HarmonyOS Sans', 'HarmonyOS Sans SC', 'HarmonyOS Sans TC']
