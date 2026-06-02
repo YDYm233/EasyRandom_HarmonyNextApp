@@ -18,16 +18,20 @@ struct DisplayMarquee {
   @State loopInterval: number = 0
   @State marqueeStart: boolean = true
   @State verticalOffset: number = 0 // 竖向滚动偏移量
-  @State deviceWidth: number = 0 // 设备屏幕宽度
-  @State deviceHeight: number = 0 // 设备屏幕高度
+  @State deviceWidth: number = 1080 // 设备屏幕宽度
+  @State deviceHeight: number = 2340 // 设备屏幕高度
   
   private scrollTimer: number = -1
 
   private padText(src: string): string {
-    if (src.length >= 20) {
+    // 确保文本足够长以触发滚动（至少需要超过屏幕宽度的文本）
+    // 每个全角字符宽度约等于fontSize，需要至少20个字符才能超过1080px（假设fontSize=64）
+    const minChars = 30 // 确保足够长
+    if (src.length >= minChars) {
       return src
     }
-    return src + '　　　　'.repeat(12)
+    // 填充全角空格，确保文本足够长
+    return src + '　　　　'.repeat(10) // 添加80个全角空格
   }
 
   aboutToAppear(): void {
@@ -78,7 +82,7 @@ struct DisplayMarquee {
     Column() {
       if (this.isVertical) {
         // 竖向弹幕：文字横向排列，从下往上（或从上往下）滚动
-        // 宽度设为设备宽度（保证能滚动），高度设为设备高度（旋转后变成宽度，撑满屏幕）
+        // Column宽度设为设备宽度（保证Marquee能滚动），高度设为设备高度（旋转后变成宽度，撑满屏幕）
         Column() {
           Marquee({
             start: this.marqueeStart,
@@ -90,17 +94,15 @@ struct DisplayMarquee {
             .fontWeight(this.fontWeight)
             .fontColor(this.fontColor)
             .fontFamily(this.fontFamily)
-
+            .width(this.deviceWidth)  // 显式设置宽度，确保能滚动
             .onFinish(() => {
               this.handleMarqueeFinish()
             })
-            .width('100%')          .border({width:3,color:Color.Red})
         }
-          .rotate({ z: 1, angle: 90 })
-          .border({width:3,color:Color.Blue})
-          .width(this.deviceHeight-20)
-          // .height(this.deviceWidth)
+        .width(this.deviceHeight)      // 宽度：设备宽度（保证Marquee能滚动）
+        .height(this.deviceWidth)    // 高度：设备高度（旋转后变成宽度，撑满屏幕）
         .justifyContent(FlexAlign.Center)
+        .rotate({ z: 1, angle: 90 })  // 旋转90度
 
       } else {
         // 横向弹幕：文字从右往左（或从左往右）滚动
@@ -113,14 +115,13 @@ struct DisplayMarquee {
           .onFinish(() => {
             this.handleMarqueeFinish()
           })
-          .border({width:3,color:Color.Green})
       }
     }
     .justifyContent(FlexAlign.Center)
     .width('100%')
     .height('100%')
     .backgroundColor(this.bgColor)
-    // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
+    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
     .onClick(() => {
       router.back()
     })
