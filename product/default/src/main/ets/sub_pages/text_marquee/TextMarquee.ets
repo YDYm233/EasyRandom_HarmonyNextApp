@@ -181,14 +181,12 @@ struct MarqueeEditor {
   private getSpeedLabel(): string {
     if (this.speed === -1) {
       return '不滚动'
-    } else if (this.speed <= 30) {
+    } else if (this.speed <= 20) {
       return '慢速'
-    } else if (this.speed <= 60) {
+    } else if (this.speed <= 40) {
       return '中速'
-    } else if (this.speed <= 90) {
-      return '快速'
     } else {
-      return '极速'
+      return '快速'
     }
   }
 
@@ -487,7 +485,7 @@ struct MarqueeEditor {
         Slider({
           value: this.speed,
           min: -1,
-          max: 120,
+          max: 60,
           step: 1,
           style: SliderStyle.OutSet
         })
