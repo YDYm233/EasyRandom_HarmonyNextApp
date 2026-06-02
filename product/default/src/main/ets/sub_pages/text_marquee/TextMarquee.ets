@@ -124,8 +124,7 @@ struct MarqueeEditor {
   @State fontSize: number = 64
   @State isVertical: boolean = false
   @State scrollFromLeft: boolean = false
-  @State isLoop: boolean = true
-  @State loopCount: number = -1 // -1表示无限循环
+  @State loopInterval: number = 0 // 循环间隔（毫秒）
 
   private readonly fontFamilies: string[] = ['HarmonyOS Sans', 'HarmonyOS Sans SC', 'HarmonyOS Sans TC']
   private readonly fontWeightOptions: FontWeightOption[] = [
@@ -141,20 +140,21 @@ struct MarqueeEditor {
   ]
   private readonly fontSizePresets: number[] = [24, 32, 40, 48, 56, 64, 72, 80, 96, 112, 128, 144, 160]
   private readonly displayDirectionOptions: SelectOpt[] = [
-    { value: '横向展示' },
-    { value: '竖向展示' }
+    { value: '横向' },
+    { value: '竖向' }
   ]
   private readonly scrollDirectionOptions: SelectOpt[] = [
-    { value: '← 从左向右' },
-    { value: '从右向左 →' }
+    { value: '← 左→右' },
+    { value: '右→左 →' }
   ]
-  private readonly loopCountOptions: SelectOpt[] = [
-    { value: '无限循环' },
-    { value: '循环 1 次' },
-    { value: '循环 3 次' },
-    { value: '循环 5 次' },
-    { value: '循环 10 次' }
+  private readonly loopIntervalOptions: SelectOpt[] = [
+    { value: '无间隔' },
+    { value: '0.5 秒' },
+    { value: '1 秒' },
+    { value: '2 秒' },
+    { value: '3 秒' }
   ]
+  private readonly loopIntervalValues: number[] = [0, 500, 1000, 2000, 3000]
 
   private padText(src: string): string {
     if (src.length >= 20) {
@@ -173,34 +173,9 @@ struct MarqueeEditor {
     return this.fontFamily + ' / ' + this.fontWeightOptions[this.fontWeightIndex].label + ' / ' + this.fontSize.toString()
   }
 
-  private getLoopCountIndex(): number {
-    switch (this.loopCount) {
-      case -1: return 0
-      case 1: return 1
-      case 3: return 2
-      case 5: return 3
-      case 10: return 4
-      default: return 0
-    }
-  }
-
-  private getLoopCountLabel(): string {
-    if (this.loopCount === -1) {
-      return '无限循环'
-    }
-    return '循环 ' + this.loopCount + ' 次'
-  }
-
-  private setLoopCountByIndex(index: number): void {
-    switch (index) {
-      case 0: this.loopCount = -1; break
-      case 1: this.loopCount = 1; break
-      case 2: this.loopCount = 3; break
-      case 3: this.loopCount = 5; break
-      case 4: this.loopCount = 10; break
-      default: this.loopCount = -1
-    }
-    this.isLoop = this.loopCount !== 0
+  private getLoopIntervalIndex(): number {
+    const index = this.loopIntervalValues.indexOf(this.loopInterval)
+    return index >= 0 ? index : 0
   }
 
   @Builder
@@ -430,16 +405,16 @@ struct MarqueeEditor {
       .width('100%')
 
       // ── 展示方向 ──
-      Column({ space: 8 }) {
+      Row() {
         Text('展示方向')
           .fontSize(14)
           .fontWeight(FontWeight.Medium)
           .fontColor($r("app.color.FontIcon_Fore1"))
-          .width('100%')
+        Blank()
         Select(this.displayDirectionOptions)
           .selected(this.isVertical ? 1 : 0)
-          .value(this.isVertical ? '竖向展示' : '横向展示')
-          .height(48)
+          .value(this.isVertical ? '竖向' : '横向')
+          .width(100)
           .font({ size: 14 })
           .fontColor($r("app.color.FontIcon_Fore1"))
           .selectedOptionFont({ size: 14 })
@@ -449,18 +424,19 @@ struct MarqueeEditor {
           })
       }
       .width('100%')
+      .height(48)
 
       // ── 滚动方向 ──
-      Column({ space: 8 }) {
+      Row() {
         Text('滚动方向')
           .fontSize(14)
           .fontWeight(FontWeight.Medium)
           .fontColor($r("app.color.FontIcon_Fore1"))
-          .width('100%')
+        Blank()
         Select(this.scrollDirectionOptions)
           .selected(this.scrollFromLeft ? 0 : 1)
-          .value(this.scrollFromLeft ? '← 从左向右' : '从右向左 →')
-          .height(48)
+          .value(this.scrollFromLeft ? '← 左→右' : '右→左 →')
+          .width(100)
           .font({ size: 14 })
           .fontColor($r("app.color.FontIcon_Fore1"))
           .selectedOptionFont({ size: 14 })
@@ -470,27 +446,29 @@ struct MarqueeEditor {
           })
       }
       .width('100%')
+      .height(48)
 
-      // ── 循环设置 ──
-      Column({ space: 8 }) {
-        Text('循环设置')
+      // ── 循环间隔 ──
+      Row() {
+        Text('循环间隔')
           .fontSize(14)
           .fontWeight(FontWeight.Medium)
           .fontColor($r("app.color.FontIcon_Fore1"))
-          .width('100%')
-        Select(this.loopCountOptions)
-          .selected(this.getLoopCountIndex())
-          .value(this.getLoopCountLabel())
-          .height(48)
+        Blank()
+        Select(this.loopIntervalOptions)
+          .selected(this.getLoopIntervalIndex())
+          .value(this.loopIntervalOptions[this.getLoopIntervalIndex()].value)
+          .width(100)
           .font({ size: 14 })
           .fontColor($r("app.color.FontIcon_Fore1"))
           .selectedOptionFont({ size: 14 })
           .optionFont({ size: 14 })
           .onSelect((index: number, _value: string) => {
-            this.setLoopCountByIndex(index)
+            this.loopInterval = this.loopIntervalValues[index]
           })
       }
       .width('100%')
+      .height(48)
 
       // ── 预览 ──
       Column({ space: 8 }) {
@@ -541,8 +519,7 @@ struct MarqueeEditor {
               fontSize: this.fontSize,
               isVertical: this.isVertical,
               scrollFromLeft: this.scrollFromLeft,
-              isLoop: this.isLoop,
-              loopCount: this.loopCount
+              loopInterval: this.loopInterval
             }
           })
         })
