@@ -300,6 +300,11 @@ struct MarqueeEditor {
   build() {
     Column({ space: 20 }) {
       // ── 预览 & 颜色设置 ──
+      Text('样式预览')
+        .fontSize(14)
+        .fontWeight(FontWeight.Medium)
+        .fontColor($r("app.color.FontIcon_Fore1"))
+        .width('100%')
       Row({ space: 12 }) {
         // 预览区域（正方形）
         Column() {
@@ -345,7 +350,7 @@ struct MarqueeEditor {
             Text(this.fontLabel)
               .fontSize(12)
               .fontColor($r("app.color.FontIcon_Fore2"))
-            Image($r("app.media.func_setting"))
+            Image($r("sys.media.textformat_size_square_fill"))
               .width(16)
               .height(16)
               .fillColor($r("app.color.FontIcon_Fore3"))
