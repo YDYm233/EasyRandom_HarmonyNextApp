@@ -220,14 +220,13 @@ struct MarqueeEditor {
 
       // ── 字体效果预览 ──
       Column() {
-        Marquee({ start: true, src: this.padText(this.text) })
+        Marquee({ start: true, fromStart: this.scrollFromLeft, src: this.padText(this.text) })
           .width('100%')
           .height(36)
           .fontSize(20)
           .fontColor(this.fontColor)
           .fontFamily(this.fontFamily)
           .fontWeight(this.fontWeight)
-          .scrollDirection(this.scrollFromLeft ? MarqueeScrollDirection.RIGHT : MarqueeScrollDirection.LEFT)
       }
       .width('100%')
       .padding(8)
@@ -352,14 +351,13 @@ struct MarqueeEditor {
 
       // ── 预览 ──
       Column() {
-        Marquee({ start: true, src: this.padText(this.text) })
+        Marquee({ start: true, fromStart: this.scrollFromLeft, src: this.padText(this.text) })
           .width('100%')
           .height(40)
           .fontSize(20)
           .fontColor(this.fontColor)
           .fontFamily(this.fontFamily)
           .fontWeight(this.fontWeight)
-          .scrollDirection(this.scrollFromLeft ? MarqueeScrollDirection.RIGHT : MarqueeScrollDirection.LEFT)
         Text('预览').fontSize(11).fontColor($r("app.color.FontIcon_Fore3")).width('100%').textAlign(TextAlign.Center).margin({ top: 4 })
       }
       .width('100%')
