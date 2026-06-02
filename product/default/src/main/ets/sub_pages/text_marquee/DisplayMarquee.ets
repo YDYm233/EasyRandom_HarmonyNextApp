@@ -11,6 +11,7 @@ struct DisplayMarquee {
   @State bgColor: string = '#000000'
   @State fontSize: number = 64
   @State fontFamily: string = 'HarmonyOS Sans'
+  @State fontWeight: number = 700
   @State isVertical: boolean = false
   @State scrollFromLeft: boolean = false
 
@@ -28,6 +29,7 @@ struct DisplayMarquee {
     this.bgColor = (params['bgColor'] as string) || '#000000'
     this.fontSize = (params['fontSize'] as number) || 64
     this.fontFamily = (params['fontFamily'] as string) || 'HarmonyOS Sans'
+    this.fontWeight = (params['fontWeight'] as number) || 700
     this.isVertical = (params['isVertical'] as boolean) || false
     this.scrollFromLeft = (params['scrollFromLeft'] as boolean) || false
   }
@@ -37,16 +39,16 @@ struct DisplayMarquee {
       if (this.isVertical) {
         Marquee({ start: true, fromStart: this.scrollFromLeft, src: this.padText(this.text) })
           .fontSize(this.fontSize)
-          .fontWeight(FontWeight.Bold)
+          .fontWeight(this.fontWeight)
           .fontColor(this.fontColor)
-          .width(this.fontSize + 40)
+          .width(Math.max(this.fontSize + 40, 160))
           .height('100%')
           .fontFamily(this.fontFamily)
           .rotate({ z: 1, angle: 90 })
       } else {
         Marquee({ start: true, fromStart: this.scrollFromLeft, src: this.padText(this.text) })
           .fontSize(this.fontSize)
-          .fontWeight(FontWeight.Bold)
+          .fontWeight(this.fontWeight)
           .fontColor(this.fontColor)
           .fontFamily(this.fontFamily)
           .width('100%')
