@@ -30,6 +30,7 @@ const TOOLS_SMALL: Array<ToolItem> = [
   new ToolItem('🔤', $r("app.string.page_abcd"), 'sub_pages/random_abcd/RandomABCD', '小工具'),
   new ToolItem('🎯', $r("app.string.page_random_places"), 'sub_pages/random_places/RandomPlaces', '小工具'),
   new ToolItem('📱', $r("app.string.page_qrcode"), 'sub_pages/trans_qr/TransQR', '小工具'),
+  new ToolItem('💬', $r("app.string.page_text_marquee"), 'sub_pages/text_marquee/TextMarquee', '小工具'),
   new ToolItem('🎨', $r("app.string.page_random_colors"), 'sub_pages/random_colors/RandomColors', '小工具'),
 ];
 

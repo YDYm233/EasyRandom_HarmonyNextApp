@@ -51,6 +51,10 @@
     {
       "name": "page_answer_book",
       "value": "Answer Book"
+    },
+    {
+      "name": "page_text_marquee",
+      "value": "Text Marquee"
     }
   ]
 }

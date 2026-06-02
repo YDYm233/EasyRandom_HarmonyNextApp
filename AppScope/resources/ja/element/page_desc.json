@@ -51,6 +51,10 @@
     {
       "name": "page_answer_book",
       "value": "アンサーブック"
+    },
+    {
+      "name": "page_text_marquee",
+      "value": "手持ち弾幕"
     }
   ]
 }

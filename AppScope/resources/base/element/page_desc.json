@@ -115,6 +115,15 @@
         "translatable": true,
         "priority": "LT"
       }
+    },
+    {
+      "name": "page_text_marquee",
+      "value": "手持弹幕",
+      "comment": "工具箱入口 - 手持弹幕",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     }
   ]
 }

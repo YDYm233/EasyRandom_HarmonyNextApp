@@ -20,6 +20,7 @@
     "sub_pages/random_places/RandomPlaces",
     "sub_pages/text_marquee/TextMarquee",
     "sub_pages/random_abcd/RandomABCD",
-    "sub_pages/answer_book/AnswerBookPage"
+    "sub_pages/answer_book/AnswerBookPage",
+    "sub_pages/text_marquee/DisplayMarquee"
   ]
 }
