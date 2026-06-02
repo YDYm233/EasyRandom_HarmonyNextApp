@@ -10,10 +10,10 @@ struct DisplayMarquee {
   @State text: string = ''
   @State fontColor: string = '#FFFFFF'
   @State bgColor: string = '#000000'
-  @State fontSize: number = 64
+  @State fontSize: number = 160
   @State fontFamily: string = 'HarmonyOS Sans'
   @State fontWeight: number = 700
-  @State speed: number = 60 // 滚动速度
+  @State speed: number = 15 // 滚动速度
   @State isVertical: boolean = false
   @State scrollFromLeft: boolean = false
   @State loopInterval: number = 0
@@ -42,10 +42,10 @@ struct DisplayMarquee {
     this.text = (params['text'] as string) || '手持弹幕'
     this.fontColor = (params['fontColor'] as string) || '#FFFFFF'
     this.bgColor = (params['bgColor'] as string) || '#000000'
-    this.fontSize = (params['fontSize'] as number) || 64
+    this.fontSize = (params['fontSize'] as number) || 160
     this.fontFamily = (params['fontFamily'] as string) || 'HarmonyOS Sans'
     this.fontWeight = (params['fontWeight'] as number) || 700
-    this.speed = (params['speed'] as number) ?? 60
+    this.speed = (params['speed'] as number) ?? 15
     this.isVertical = (params['isVertical'] as boolean) || false
     this.scrollFromLeft = (params['scrollFromLeft'] as boolean) || false
     this.loopInterval = (params['loopInterval'] as number) ?? 0

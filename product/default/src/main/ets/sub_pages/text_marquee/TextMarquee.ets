@@ -120,8 +120,8 @@ struct MarqueeEditor {
   @State fontWeight: number = 700
   @State fontWeightIndex: number = 4
   @State showFontSheet: boolean = false
-  @State speed: number = 60
-  @State fontSize: number = 64
+  @State speed: number = 15
+  @State fontSize: number = 160
   @State isVertical: boolean = true
   @State scrollFromLeft: boolean = true
   @State loopInterval: number = 0 // 循环间隔（毫秒）
@@ -138,7 +138,7 @@ struct MarqueeEditor {
     { label: '特粗', value: 800 },
     { label: '黑体', value: 900 },
   ]
-  private readonly fontSizePresets: number[] = [24, 32, 40, 48, 56, 64, 72, 80, 96, 112, 128, 144, 160]
+  private readonly fontSizePresets: number[] = [24, 32, 40, 48, 56, 64, 72, 80, 96, 112, 128, 144, 160, 176, 192, 200]
   private readonly displayDirectionOptions: SelectOpt[] = [
     { value: '横向滚动' },
     { value: '竖向滚动' }
