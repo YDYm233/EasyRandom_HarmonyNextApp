@@ -291,7 +291,7 @@ struct MarqueeEditor {
         // 预览区域
         Column() {
           Text('字Aaα')
-            .fontSize(Math.min(this.fontSize,160))
+            .fontSize(Math.min(this.fontSize,200))
             .fontColor(this.fontColor)
             .fontFamily(this.fontFamily)
             .fontWeight(this.fontWeight)
