@@ -310,9 +310,11 @@ struct MarqueeEditor {
         Column() {
           if (this.isVertical) {
             // 竖向预览：使用Marquee并旋转
+            // 设置Marquee高度为100%，旋转后高度变成宽度，能撑满预览区域
             Column() {
               Marquee({ start: true, fromStart: this.scrollFromLeft, src: this.padText(this.text) })
                 .width('100%')
+                .height('100%')
                 .fontSize(18)
                 .fontColor(this.fontColor)
                 .fontFamily(this.fontFamily)
