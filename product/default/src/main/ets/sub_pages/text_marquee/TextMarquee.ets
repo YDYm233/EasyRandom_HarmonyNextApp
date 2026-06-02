@@ -124,6 +124,8 @@ struct MarqueeEditor {
   @State fontSize: number = 64
   @State isVertical: boolean = false
   @State scrollFromLeft: boolean = false
+  @State isLoop: boolean = true
+  @State loopCount: number = -1 // -1表示无限循环
 
   private readonly fontFamilies: string[] = ['HarmonyOS Sans', 'HarmonyOS Sans SC', 'HarmonyOS Sans TC']
   private readonly fontWeightOptions: FontWeightOption[] = [
@@ -138,6 +140,21 @@ struct MarqueeEditor {
     { label: '黑体', value: 900 },
   ]
   private readonly fontSizePresets: number[] = [24, 32, 40, 48, 56, 64, 72, 80, 96, 112, 128, 144, 160]
+  private readonly displayDirectionOptions: SelectOpt[] = [
+    { value: '横向展示' },
+    { value: '竖向展示' }
+  ]
+  private readonly scrollDirectionOptions: SelectOpt[] = [
+    { value: '← 从左向右' },
+    { value: '从右向左 →' }
+  ]
+  private readonly loopCountOptions: SelectOpt[] = [
+    { value: '无限循环' },
+    { value: '循环 1 次' },
+    { value: '循环 3 次' },
+    { value: '循环 5 次' },
+    { value: '循环 10 次' }
+  ]
 
   private padText(src: string): string {
     if (src.length >= 20) {
@@ -156,16 +173,69 @@ struct MarqueeEditor {
     return this.fontFamily + ' / ' + this.fontWeightOptions[this.fontWeightIndex].label + ' / ' + this.fontSize.toString()
   }
 
+  private getLoopCountIndex(): number {
+    switch (this.loopCount) {
+      case -1: return 0
+      case 1: return 1
+      case 3: return 2
+      case 5: return 3
+      case 10: return 4
+      default: return 0
+    }
+  }
+
+  private getLoopCountLabel(): string {
+    if (this.loopCount === -1) {
+      return '无限循环'
+    }
+    return '循环 ' + this.loopCount + ' 次'
+  }
+
+  private setLoopCountByIndex(index: number): void {
+    switch (index) {
+      case 0: this.loopCount = -1; break
+      case 1: this.loopCount = 1; break
+      case 2: this.loopCount = 3; break
+      case 3: this.loopCount = 5; break
+      case 4: this.loopCount = 10; break
+      default: this.loopCount = -1
+    }
+    this.isLoop = this.loopCount !== 0
+  }
+
   @Builder
   FontSheetBuilder() {
-    Column({ space: 20 }) {
+    Column({ space: 24 }) {
+      // ── 标题 ──
+      Row() {
+        Text('字体设置')
+          .fontSize(18)
+          .fontWeight(FontWeight.Bold)
+          .fontColor($r("app.color.FontIcon_Fore1"))
+        Blank()
+        Image($r("app.media.func_cancle"))
+          .width(24)
+          .height(24)
+          .fillColor($r("app.color.FontIcon_Fore2"))
+          .onClick(() => { this.showFontSheet = false })
+      }
+      .width('100%')
+
       // ── 字体族 ──
-      Column({ space: 8 }) {
-        Text('字体').fontSize(15).fontWeight(FontWeight.Bold).width('100%')
+      Column({ space: 10 }) {
+        Text('字体')
+          .fontSize(14)
+          .fontWeight(FontWeight.Medium)
+          .fontColor($r("app.color.FontIcon_Fore1"))
+          .width('100%')
         Select(this.fontFamilies.map((f: string): SelectOpt => ({ value: f })))
           .selected(this.fontFamilyIndex)
           .value(this.fontFamily)
-          .height(44)
+          .height(48)
+          .font({ size: 14 })
+          .fontColor($r("app.color.FontIcon_Fore1"))
+          .selectedOptionFont({ size: 14 })
+          .optionFont({ size: 14 })
           .onSelect((index: number, _value: string) => {
             this.fontFamilyIndex = index
             this.fontFamily = this.fontFamilies[index]
@@ -174,12 +244,20 @@ struct MarqueeEditor {
       .width('100%')
 
       // ── 字重 ──
-      Column({ space: 8 }) {
-        Text('字重').fontSize(15).fontWeight(FontWeight.Bold).width('100%')
+      Column({ space: 10 }) {
+        Text('字重')
+          .fontSize(14)
+          .fontWeight(FontWeight.Medium)
+          .fontColor($r("app.color.FontIcon_Fore1"))
+          .width('100%')
         Select(this.fontWeightOptions.map((opt: FontWeightOption): SelectOpt => ({ value: opt.label })))
           .selected(this.fontWeightIndex)
           .value(this.fontWeightOptions[this.fontWeightIndex].label)
-          .height(44)
+          .height(48)
+          .font({ size: 14 })
+          .fontColor($r("app.color.FontIcon_Fore1"))
+          .selectedOptionFont({ size: 14 })
+          .optionFont({ size: 14 })
           .onSelect((index: number, _value: string) => {
             this.fontWeightIndex = index
             this.fontWeight = this.fontWeightOptions[index].value
@@ -188,17 +266,23 @@ struct MarqueeEditor {
       .width('100%')
 
       // ── 字号（吸附式拖条）──
-      Column({ space: 6 }) {
+      Column({ space: 10 }) {
         Row() {
-          Text('字号').fontSize(15).fontWeight(FontWeight.Bold)
+          Text('字号')
+            .fontSize(14)
+            .fontWeight(FontWeight.Medium)
+            .fontColor($r("app.color.FontIcon_Fore1"))
           Blank()
-          Text(this.fontSize.toString()).fontSize(14).fontColor($r("app.color.FontIcon_Fore1")).fontWeight(FontWeight.Bold)
+          Text(this.fontSize.toString())
+            .fontSize(16)
+            .fontWeight(FontWeight.Bold)
+            .fontColor($r("app.color.Brand"))
         }
         .width('100%')
-        Row({ space: 4 }) {
+        Row({ space: 6 }) {
           ForEach(this.fontSizePresets, (size: number) => {
             Text(size.toString())
-              .fontSize(9)
+              .fontSize(10)
               .fontColor(this.fontSize === size ? $r("app.color.Brand") : $r("app.color.FontIcon_Fore3"))
               .fontWeight(this.fontSize === size ? FontWeight.Bold : FontWeight.Regular)
           })
@@ -219,75 +303,101 @@ struct MarqueeEditor {
       .width('100%')
 
       // ── 字体效果预览 ──
-      Column() {
-        Marquee({ start: true, fromStart: this.scrollFromLeft, src: this.padText(this.text) })
+      Column({ space: 8 }) {
+        Text('预览效果')
+          .fontSize(14)
+          .fontWeight(FontWeight.Medium)
+          .fontColor($r("app.color.FontIcon_Fore1"))
           .width('100%')
-          .height(36)
-          .fontSize(20)
-          .fontColor(this.fontColor)
-          .fontFamily(this.fontFamily)
-          .fontWeight(this.fontWeight)
+        Column() {
+          Marquee({ start: true, fromStart: this.scrollFromLeft, src: this.padText(this.text) })
+            .width('100%')
+            .height(44)
+            .fontSize(22)
+            .fontColor(this.fontColor)
+            .fontFamily(this.fontFamily)
+            .fontWeight(this.fontWeight)
+        }
+        .width('100%')
+        .padding(12)
+        .backgroundColor(this.bgColor)
+        .borderRadius(12)
       }
       .width('100%')
-      .padding(8)
-      .backgroundColor(this.bgColor)
-      .borderRadius(8)
     }
     .width('100%')
-    .padding(24)
+    .padding({ left: 24, right: 24, top: 20, bottom: 32 })
   }
 
   build() {
-    Column({ space: 16 }) {
+    Column({ space: 20 }) {
       // ── 文字输入 ──
-      Column({ space: 6 }) {
-        Text('弹幕内容').fontSize(13).fontColor($r("app.color.FontIcon_Fore2")).width('100%')
+      Column({ space: 8 }) {
+        Text('弹幕内容')
+          .fontSize(14)
+          .fontWeight(FontWeight.Medium)
+          .fontColor($r("app.color.FontIcon_Fore1"))
+          .width('100%')
         TextArea({ text: this.text, placeholder: '请输入要展示的文字...' })
-          .height(80)
+          .height(90)
           .fontSize(16)
           .fontColor($r("app.color.FontIcon_Fore1"))
           .backgroundColor($r("app.color.Comp_Bg2"))
-          .borderRadius(8)
-          .padding(10)
+          .borderRadius(12)
+          .padding(12)
           .onChange((value: string) => { this.text = value })
       }
       .width('100%')
 
       // ── 颜色选择 ──
-      Row({ space: 20 }) {
-        Row({ space: 8 }) {
-          Text('颜色').fontSize(13).fontColor($r("app.color.FontIcon_Fore2"))
-          ColorPickerButton({
-            initialColor: this.fontColor,
-            onColorChange: (color: string) => { this.fontColor = color }
-          })
-        }
-        .alignItems(VerticalAlign.Center)
+      Column({ space: 8 }) {
+        Text('颜色设置')
+          .fontSize(14)
+          .fontWeight(FontWeight.Medium)
+          .fontColor($r("app.color.FontIcon_Fore1"))
+          .width('100%')
+        Row({ space: 16 }) {
+          Row({ space: 8 }) {
+            Text('文字').fontSize(13).fontColor($r("app.color.FontIcon_Fore2"))
+            ColorPickerButton({
+              initialColor: this.fontColor,
+              onColorChange: (color: string) => { this.fontColor = color }
+            })
+          }
+          .alignItems(VerticalAlign.Center)
+          .layoutWeight(1)
 
-        Row({ space: 8 }) {
-          Text('背景').fontSize(13).fontColor($r("app.color.FontIcon_Fore2"))
-          ColorPickerButton({
-            initialColor: this.bgColor,
-            onColorChange: (color: string) => { this.bgColor = color }
-          })
+          Row({ space: 8 }) {
+            Text('背景').fontSize(13).fontColor($r("app.color.FontIcon_Fore2"))
+            ColorPickerButton({
+              initialColor: this.bgColor,
+              onColorChange: (color: string) => { this.bgColor = color }
+            })
+          }
+          .alignItems(VerticalAlign.Center)
+          .layoutWeight(1)
         }
-        .alignItems(VerticalAlign.Center)
+        .width('100%')
       }
       .width('100%')
 
       // ── 字体设置（次级菜单入口）──
-      Row() {
+      Column({ space: 8 }) {
+        Text('字体设置')
+          .fontSize(14)
+          .fontWeight(FontWeight.Medium)
+          .fontColor($r("app.color.FontIcon_Fore1"))
+          .width('100%')
         Row() {
-          Text('字体').fontSize(13).fontColor($r("app.color.FontIcon_Fore2"))
+          Text(this.fontLabel).fontSize(13).fontColor($r("app.color.FontIcon_Fore2"))
           Blank()
-          Text(this.fontLabel).fontSize(13).fontColor($r("app.color.FontIcon_Fore1"))
-          Image($r("app.media.func_setting")).width(16).height(16).fillColor($r("app.color.FontIcon_Fore3")).margin({ left: 4 })
+          Image($r("app.media.func_setting")).width(16).height(16).fillColor($r("app.color.FontIcon_Fore3"))
         }
-        .height(44)
+        .height(48)
         .width('100%')
-        .padding({ left: 12, right: 12 })
+        .padding({ left: 16, right: 16 })
         .backgroundColor($r("app.color.Comp_Bg2"))
-        .borderRadius(8)
+        .borderRadius(12)
         .onClick(() => {
           this.showFontSheet = true
         })
@@ -295,8 +405,19 @@ struct MarqueeEditor {
       .width('100%')
 
       // ── 速度 ──
-      Row({ space: 12 }) {
-        Text('速度').fontSize(13).fontColor($r("app.color.FontIcon_Fore2"))
+      Column({ space: 8 }) {
+        Row() {
+          Text('滚动速度')
+            .fontSize(14)
+            .fontWeight(FontWeight.Medium)
+            .fontColor($r("app.color.FontIcon_Fore1"))
+          Blank()
+          Text(this.speed.toString())
+            .fontSize(14)
+            .fontWeight(FontWeight.Bold)
+            .fontColor($r("app.color.Brand"))
+        }
+        .width('100%')
         Slider({
           value: this.speed,
           min: 30,
@@ -304,77 +425,106 @@ struct MarqueeEditor {
           step: 10,
           style: SliderStyle.OutSet
         })
-        .layoutWeight(1)
         .onChange((value: number) => { this.speed = value })
-        Text(this.speed.toString()).fontSize(12).fontColor($r("app.color.FontIcon_Fore2")).width(24).textAlign(TextAlign.End)
       }
       .width('100%')
-      .alignItems(VerticalAlign.Center)
 
-      // ── 展示方向（横向 / 竖向）──
-      Row({ space: 12 }) {
-        Text('展示').fontSize(13).fontColor($r("app.color.FontIcon_Fore2"))
-        Row({ space: 8 }) {
-          Button('横向')
-            .fontSize(12).height(32)
-            .fontColor($r("app.color.FontIcon_Fore1"))
-            .backgroundColor(this.isVertical ? $r("app.color.Comp_Bg2") : $r("app.color.Brand"))
-            .onClick(() => { this.isVertical = false })
-          Button('竖向')
-            .fontSize(12).height(32)
-            .fontColor($r("app.color.FontIcon_Fore1"))
-            .backgroundColor(this.isVertical ? $r("app.color.Brand") : $r("app.color.Comp_Bg2"))
-            .onClick(() => { this.isVertical = true })
-        }
+      // ── 展示方向 ──
+      Column({ space: 8 }) {
+        Text('展示方向')
+          .fontSize(14)
+          .fontWeight(FontWeight.Medium)
+          .fontColor($r("app.color.FontIcon_Fore1"))
+          .width('100%')
+        Select(this.displayDirectionOptions)
+          .selected(this.isVertical ? 1 : 0)
+          .value(this.isVertical ? '竖向展示' : '横向展示')
+          .height(48)
+          .font({ size: 14 })
+          .fontColor($r("app.color.FontIcon_Fore1"))
+          .selectedOptionFont({ size: 14 })
+          .optionFont({ size: 14 })
+          .onSelect((index: number, _value: string) => {
+            this.isVertical = index === 1
+          })
       }
       .width('100%')
-      .alignItems(VerticalAlign.Center)
 
-      // ── 滚动方向（左→右 / 右→左）──
-      Row({ space: 12 }) {
-        Text('滚动').fontSize(13).fontColor($r("app.color.FontIcon_Fore2"))
-        Row({ space: 8 }) {
-          Button('左→右')
-            .fontSize(12).height(32)
-            .fontColor($r("app.color.FontIcon_Fore1"))
-            .backgroundColor(this.scrollFromLeft ? $r("app.color.Brand") : $r("app.color.Comp_Bg2"))
-            .onClick(() => { this.scrollFromLeft = true })
-          Button('右→左')
-            .fontSize(12).height(32)
-            .fontColor($r("app.color.FontIcon_Fore1"))
-            .backgroundColor(this.scrollFromLeft ? $r("app.color.Comp_Bg2") : $r("app.color.Brand"))
-            .onClick(() => { this.scrollFromLeft = false })
-        }
+      // ── 滚动方向 ──
+      Column({ space: 8 }) {
+        Text('滚动方向')
+          .fontSize(14)
+          .fontWeight(FontWeight.Medium)
+          .fontColor($r("app.color.FontIcon_Fore1"))
+          .width('100%')
+        Select(this.scrollDirectionOptions)
+          .selected(this.scrollFromLeft ? 0 : 1)
+          .value(this.scrollFromLeft ? '← 从左向右' : '从右向左 →')
+          .height(48)
+          .font({ size: 14 })
+          .fontColor($r("app.color.FontIcon_Fore1"))
+          .selectedOptionFont({ size: 14 })
+          .optionFont({ size: 14 })
+          .onSelect((index: number, _value: string) => {
+            this.scrollFromLeft = index === 0
+          })
       }
       .width('100%')
-      .alignItems(VerticalAlign.Center)
+
+      // ── 循环设置 ──
+      Column({ space: 8 }) {
+        Text('循环设置')
+          .fontSize(14)
+          .fontWeight(FontWeight.Medium)
+          .fontColor($r("app.color.FontIcon_Fore1"))
+          .width('100%')
+        Select(this.loopCountOptions)
+          .selected(this.getLoopCountIndex())
+          .value(this.getLoopCountLabel())
+          .height(48)
+          .font({ size: 14 })
+          .fontColor($r("app.color.FontIcon_Fore1"))
+          .selectedOptionFont({ size: 14 })
+          .optionFont({ size: 14 })
+          .onSelect((index: number, _value: string) => {
+            this.setLoopCountByIndex(index)
+          })
+      }
+      .width('100%')
 
       // ── 预览 ──
-      Column() {
-        Marquee({ start: true, fromStart: this.scrollFromLeft, src: this.padText(this.text) })
+      Column({ space: 8 }) {
+        Text('效果预览')
+          .fontSize(14)
+          .fontWeight(FontWeight.Medium)
+          .fontColor($r("app.color.FontIcon_Fore1"))
           .width('100%')
-          .height(40)
-          .fontSize(20)
-          .fontColor(this.fontColor)
-          .fontFamily(this.fontFamily)
-          .fontWeight(this.fontWeight)
-        Text('预览').fontSize(11).fontColor($r("app.color.FontIcon_Fore3")).width('100%').textAlign(TextAlign.Center).margin({ top: 4 })
+        Column() {
+          Marquee({ start: true, fromStart: this.scrollFromLeft, src: this.padText(this.text) })
+            .width('100%')
+            .height(48)
+            .fontSize(22)
+            .fontColor(this.fontColor)
+            .fontFamily(this.fontFamily)
+            .fontWeight(this.fontWeight)
+        }
+        .width('100%')
+        .padding(16)
+        .backgroundColor(this.bgColor)
+        .borderRadius(12)
       }
       .width('100%')
-      .padding(8)
-      .backgroundColor(this.bgColor)
-      .borderRadius(8)
 
       // ── 开始按钮 ──
       Button('开始弹幕')
         .width('100%')
-        .height(48)
-        .fontSize(16)
+        .height(52)
+        .fontSize(17)
         .fontWeight(FontWeight.Bold)
         .fontColor($r("app.color.control_fc_1"))
         .backgroundColor($r("app.color.Brand"))
-        .borderRadius(24)
-        .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+        .borderRadius(26)
+        .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.95 })
         .onClick(() => {
           if (!this.text.trim()) {
             return
@@ -390,14 +540,16 @@ struct MarqueeEditor {
               speed: this.speed,
               fontSize: this.fontSize,
               isVertical: this.isVertical,
-              scrollFromLeft: this.scrollFromLeft
+              scrollFromLeft: this.scrollFromLeft,
+              isLoop: this.isLoop,
+              loopCount: this.loopCount
             }
           })
         })
     }
     .width('100%')
-    .padding(20)
-    .borderRadius(16)
+    .padding(24)
+    .borderRadius(20)
     .backgroundColor($r("app.color.Comp_Bg1"))
     .bindSheet($$this.showFontSheet, this.FontSheetBuilder(), { height: 420 })
   }

@@ -14,6 +14,10 @@ struct DisplayMarquee {
   @State fontWeight: number = 700
   @State isVertical: boolean = false
   @State scrollFromLeft: boolean = false
+  @State isLoop: boolean = true
+  @State loopCount: number = -1
+  @State marqueeStart: boolean = true
+  @State currentLoop: number = 0
 
   private padText(src: string): string {
     if (src.length >= 20) {
@@ -32,12 +36,38 @@ struct DisplayMarquee {
     this.fontWeight = (params['fontWeight'] as number) || 700
     this.isVertical = (params['isVertical'] as boolean) || false
     this.scrollFromLeft = (params['scrollFromLeft'] as boolean) || false
+    this.isLoop = (params['isLoop'] as boolean) ?? true
+    this.loopCount = (params['loopCount'] as number) ?? -1
+  }
+
+  private handleMarqueeFinish(): void {
+    if (this.loopCount === -1) {
+      // 无限循环，重新开始
+      this.marqueeStart = false
+      setTimeout(() => {
+        this.marqueeStart = true
+      }, 100)
+    } else {
+      this.currentLoop++
+      if (this.currentLoop < this.loopCount) {
+        // 继续循环
+        this.marqueeStart = false
+        setTimeout(() => {
+          this.marqueeStart = true
+        }, 100)
+      } else {
+        // 循环结束，返回上一页
+        setTimeout(() => {
+          router.back()
+        }, 500)
+      }
+    }
   }
 
   build() {
     Column() {
       if (this.isVertical) {
-        Marquee({ start: true, fromStart: this.scrollFromLeft, src: this.padText(this.text) })
+        Marquee({ start: this.marqueeStart, fromStart: this.scrollFromLeft, src: this.padText(this.text) })
           .fontSize(this.fontSize)
           .fontWeight(this.fontWeight)
           .fontColor(this.fontColor)
@@ -45,15 +75,19 @@ struct DisplayMarquee {
           .width(2000)
           .height(this.fontSize + 32)
           .rotate({ z: 1, angle: 90 })
-          .border({width:3,color:Color.Green})
+          .onFinish(() => {
+            this.handleMarqueeFinish()
+          })
       } else {
-        Marquee({ start: true, fromStart: this.scrollFromLeft, src: this.padText(this.text) })
+        Marquee({ start: this.marqueeStart, fromStart: this.scrollFromLeft, src: this.padText(this.text) })
           .fontSize(this.fontSize)
           .fontWeight(this.fontWeight)
           .fontColor(this.fontColor)
           .fontFamily(this.fontFamily)
           .width('100%')
-          .border({width:3,color:Color.Blue})
+          .onFinish(() => {
+            this.handleMarqueeFinish()
+          })
       }
     }
     .justifyContent(FlexAlign.Center)
