@@ -140,8 +140,8 @@ struct MarqueeEditor {
   ]
   private readonly fontSizePresets: number[] = [24, 32, 40, 48, 56, 64, 72, 80, 96, 112, 128, 144, 160]
   private readonly displayDirectionOptions: SelectOpt[] = [
-    { value: '横向' },
-    { value: '竖向' }
+    { value: '横向滚动' },
+    { value: '竖向滚动' }
   ]
   private readonly scrollDirectionOptions: SelectOpt[] = [
     { value: '<<<从右至左' },
