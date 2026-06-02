@@ -42,9 +42,10 @@ struct DisplayMarquee {
           .fontWeight(this.fontWeight)
           .fontColor(this.fontColor)
           .fontFamily(this.fontFamily)
-          .width('100%')
-          .height('100%')
+          .width(2000)
+          .height(this.fontSize + 32)
           .rotate({ z: 1, angle: 90 })
+          .border({width:3,color:Color.Green})
       } else {
         Marquee({ start: true, fromStart: this.scrollFromLeft, src: this.padText(this.text) })
           .fontSize(this.fontSize)
@@ -52,6 +53,7 @@ struct DisplayMarquee {
           .fontColor(this.fontColor)
           .fontFamily(this.fontFamily)
           .width('100%')
+          .border({width:3,color:Color.Blue})
       }
     }
     .justifyContent(FlexAlign.Center)
