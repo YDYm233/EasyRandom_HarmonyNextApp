@@ -37,7 +37,7 @@ struct DisplayMarquee {
 
   private padTextForExternalEntrance(src: string): string {
     const scrollLength = this.isVertical ? this.deviceHeight : this.deviceWidth
-    const spacesNeeded = Math.ceil(scrollLength / this.fontSize)+2  // 容错
+    const spacesNeeded = Math.ceil(scrollLength / this.fontSize)+1  // 容错
     // const spacesNeeded = Math.ceil(scrollLength / (this.fontSize / 2)) + 4
     const leadingSpaces = ' '.repeat(spacesNeeded)
     // 如果原文本本身已经很长，就不需要填充了（但仍想实现从外进入，可强制保留前置空格）
@@ -230,19 +230,23 @@ struct DisplayMarquee {
         Column() {
           // 控制按钮区域
           Column() {
-            Row({ space: this.isVertical ? 40 : 28 }) {
+
+
+            Row() {
+
+
               // 播放/终止切换按钮 —— 使用SymbolGlyph + CROSS_FADE动画
               Button({type:ButtonType.Circle}) {
                 SymbolGlyph(this.isPaused ? $r('sys.symbol.play_fill') : $r('sys.symbol.pause_fill'))
-                  .fontSize(this.isVertical ? 28 : 24)
+                  .fontSize(28)
                   .fontColor([Color.White])
                   .symbolEffect(
                     new ReplaceSymbolEffect(EffectScope.WHOLE, ReplaceEffectType.CROSS_FADE),
                     this.playPauseTrigger
                   )
               }
-              .width(this.isVertical ? 72 : 64)
-              .height(this.isVertical ? 72 : 64)
+              .width(64)
+              .height(64)
               .backgroundColor(this.playButtonPressed 
                 ? (this.isPaused ? 'rgba(76, 175, 80, 1)' : 'rgba(255, 152, 0, 1)') 
                 : (this.isPaused ? 'rgba(76, 175, 80, 0.85)' : 'rgba(255, 152, 0, 0.85)'))
@@ -271,13 +275,13 @@ struct DisplayMarquee {
 
               // 返回按钮 —— 使用SymbolGlyph
               Button({buttonStyle:ButtonStyleMode.NORMAL,type:ButtonType.Circle}) {
-                SymbolGlyph($r('sys.symbol.xmark'))
-                  .fontSize(this.isVertical ? 28 : 24)
+                SymbolGlyph($r('sys.symbol.square_fill'))
+                  .fontSize(28)
                   .fontColor([Color.White])
                   .fontWeight(FontWeight.Bold)
               }
-              .width(this.isVertical ? 72 : 64)
-              .height(this.isVertical ? 72 : 64)
+              .width(64)
+              .height(64)
               .backgroundColor(this.backButtonPressed ? 'rgba(244, 67, 54, 0.9)' : 'rgba(244, 67, 54, 0.75)')
 
               .border({ width: 2, color: '#FFFFFF', style: BorderStyle.Solid })
@@ -296,10 +300,14 @@ struct DisplayMarquee {
                 this.triggerButtonAnimation()
                 this.goBack()
               })
-            }
+
+            }               .justifyContent(FlexAlign.SpaceAround).width('100%')
+
+
+
+
           }
-          // .width(this.isVertical ? 160 : 'auto')
-          // .height(this.isVertical ? '90%' : 130)
+
           .width(200)
           .aspectRatio(1)
           .justifyContent(FlexAlign.Center)
