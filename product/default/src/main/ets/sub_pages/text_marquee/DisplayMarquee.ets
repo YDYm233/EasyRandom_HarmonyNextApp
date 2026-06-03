@@ -38,8 +38,8 @@ struct DisplayMarquee {
 
   private padTextForExternalEntrance(src: string): string {
     const scrollLength = this.isVertical ? this.deviceHeight : this.deviceWidth
-    const spacesNeeded = Math.ceil(scrollLength / this.fontSize)+2  // 容错
-    // const spacesNeeded = Math.ceil(scrollLength / (this.fontSize / 2)) + 4
+    // const spacesNeeded = Math.ceil(scrollLength / this.fontSize)+4  // 容错
+    const spacesNeeded = Math.ceil(scrollLength / (this.fontSize / 2)) + 4
     const leadingSpaces = ' '.repeat(spacesNeeded)
     // 如果原文本本身已经很长，就不需要填充了（但仍想实现从外进入，可强制保留前置空格）
     // 这里选择总是添加前置空格，确保每次都是“空屏入场”
@@ -180,17 +180,18 @@ struct DisplayMarquee {
               .fontWeight(this.fontWeight)
               .fontColor(this.fontColor)
               .fontFamily(this.fontFamily)
-              .width(this.isVertical ? this.deviceHeight-180 : '100%') // 显式设置宽度，确保能滚动
-              // .width('90%')
-              .border({width:3,color:Color.Red})
+              // .width(this.isVertical ? this.deviceHeight : '100%') // 显式设置宽度，确保能滚动
+              .width(this.deviceWidth)
+              // .border({width:3,color:Color.Red})
           }
-          .width(this.deviceHeight-10)      // 宽度：设备宽度（保证Marquee能滚动）
-          .height(this.deviceWidth)    // 高度：设备高度（旋转后变成宽度，撑满屏幕）
-          .backgroundColor(0x88ff0000)
-          .alignItems(HorizontalAlign.Start)
+          .width(this.deviceHeight)      // 宽度：设备宽度（保证Marquee能滚动）
+          // .height(this.deviceWidth)    // 高度：设备高度（旋转后变成宽度，撑满屏幕）
+          // .backgroundColor(0x88ff0000)
+          .alignItems(HorizontalAlign.Center)
           .justifyContent(FlexAlign.Center)
+          // .zIndex(1)
           .rotate({ z: 1, angle: 90 })  // 旋转90度
-          .border({width:6,color:Color.Pink})
+          // .border({width:16,color:Color.Pink})
 
         } else {
           // 横向弹幕：文字从右往左（或从左往右）滚动
@@ -207,7 +208,7 @@ struct DisplayMarquee {
             .fontFamily(this.fontFamily)
             .width('100%')
 
-            .border({width:3,color:Color.Red})
+            // .border({width:3,color:Color.Red})
         }
       }
       .justifyContent(FlexAlign.Center)
@@ -219,7 +220,7 @@ struct DisplayMarquee {
       .onClick(() => {
         this.showControlPanelAndPause()  // 点击显示控制面板并暂停滚动
       })
-      .border({width:5,color:Color.Orange})
+      // .border({width:5,color:Color.Orange})
       // 控制面板浮层
       if (this.showControlPanel) {
         Column() {
@@ -246,7 +247,7 @@ struct DisplayMarquee {
                 ? (this.isPaused ? 'rgba(76, 175, 80, 1)' : 'rgba(255, 152, 0, 1)') 
                 : (this.isPaused ? 'rgba(76, 175, 80, 0.85)' : 'rgba(255, 152, 0, 0.85)'))
 
-              .border({ width: 2, color: '#FFFFFF', style: BorderStyle.Solid })
+              // .border({ width: 2, color: '#FFFFFF', style: BorderStyle.Solid })
               .scale({ x: this.buttonScale, y: this.buttonScale })
               .shadow({ radius: 10, color: 'rgba(0, 0, 0, 0.5)', offsetX: 0, offsetY: 5 })
               .animation({ duration: 150, curve: Curve.EaseOut })
@@ -279,7 +280,7 @@ struct DisplayMarquee {
               .height(64)
               .backgroundColor(this.backButtonPressed ? 'rgba(244, 67, 54, 0.9)' : 'rgba(244, 67, 54, 0.75)')
 
-              .border({ width: 2, color: '#FFFFFF', style: BorderStyle.Solid })
+              // .border({ width: 2, color: '#FFFFFF', style: BorderStyle.Solid })
               // .scale({ x: this.buttonScale, y: this.buttonScale })
               .shadow({ radius: 10, color: 'rgba(0, 0, 0, 0.5)', offsetX: 0, offsetY: 5 })
               .animation({ duration: 150, curve: Curve.EaseOut })
@@ -331,7 +332,7 @@ struct DisplayMarquee {
           this.hideControlPanelWithAnimation()
         })
 
-        .border({width:5,color:Color.Green})
+        // .border({width:5,color:Color.Green})
       }
     }
     .width('100%')
