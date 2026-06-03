@@ -67,9 +67,9 @@ struct DisplayMarquee {
       const defaultDisplay = display.getDefaultDisplaySync()
       this.deviceWidth = defaultDisplay.width
       this.deviceHeight = defaultDisplay.height
-      console.log(`Display size: ${this.deviceWidth}x${this.deviceHeight}`)
+      console.log(`获取屏幕尺寸: ${this.deviceWidth}x${this.deviceHeight}`)
     } catch (error) {
-      console.error('Failed to get display info:', error)
+      console.error('获取屏幕尺寸失败:', error)
       this.deviceWidth = 1000 // 默认值
       this.deviceHeight = 1000 // 默认值
     }
@@ -187,12 +187,12 @@ struct DisplayMarquee {
               .fontColor(this.fontColor)
               .fontFamily(this.fontFamily)
               // .width(this.isVertical ? this.deviceHeight-180 : '100%') // 显式设置宽度，确保能滚动
-              .width('100%')
+              .width('90%')
               .border({width:3,color:Color.Red})
           }
-          .width(this.deviceHeight)      // 宽度：设备宽度（保证Marquee能滚动）
+          .width(this.deviceHeight-10)      // 宽度：设备宽度（保证Marquee能滚动）
           .height(this.deviceWidth)    // 高度：设备高度（旋转后变成宽度，撑满屏幕）
-          .backgroundColor(0x88123456)
+          .backgroundColor(0x88ff0000)
           .alignItems(HorizontalAlign.Start)
           .justifyContent(FlexAlign.Center)
           .rotate({ z: 1, angle: 90 })  // 旋转90度
@@ -217,6 +217,7 @@ struct DisplayMarquee {
         }
       }
       .justifyContent(FlexAlign.Center)
+      .alignItems(HorizontalAlign.Center)
       .width('100%')
       .height('100%')
       .backgroundColor(this.bgColor)
