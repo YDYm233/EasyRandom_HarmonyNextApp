@@ -180,6 +180,7 @@ struct DisplayMarquee {
             Marquee({
               start: this.marqueeStart,
               step: this.speed === -1 ? 0 : this.speed,
+              loop: -1,  // 无限循环，滚动完立刻开始第二次
               fromStart: this.scrollFromLeft,
               src: this.padText(this.text)
             })
@@ -188,9 +189,6 @@ struct DisplayMarquee {
               .fontColor(this.fontColor)
               .fontFamily(this.fontFamily)
               .width(this.deviceWidth)  // 显式设置宽度，确保能滚动
-              .onFinish(() => {
-                this.handleMarqueeFinish()
-              })
           }
           .width(this.deviceHeight)      // 宽度：设备宽度（保证Marquee能滚动）
           .height(this.deviceWidth)    // 高度：设备高度（旋转后变成宽度，撑满屏幕）
@@ -199,15 +197,18 @@ struct DisplayMarquee {
 
         } else {
           // 横向弹幕：文字从右往左（或从左往右）滚动
-          Marquee({ start: this.marqueeStart, step: this.speed === -1 ? 0 : this.speed, fromStart: this.scrollFromLeft, src: this.padText(this.text) })
+          Marquee({ 
+            start: this.marqueeStart, 
+            step: this.speed === -1 ? 0 : this.speed, 
+            loop: -1,  // 无限循环，滚动完立刻开始第二次
+            fromStart: this.scrollFromLeft, 
+            src: this.padText(this.text) 
+          })
             .fontSize(this.fontSize)
             .fontWeight(this.fontWeight)
             .fontColor(this.fontColor)
             .fontFamily(this.fontFamily)
             .width('100%')
-            .onFinish(() => {
-              this.handleMarqueeFinish()
-            })
         }
       }
       .justifyContent(FlexAlign.Center)
