@@ -226,8 +226,8 @@ struct DisplayMarquee {
           Column() {
             Row({ space: this.isVertical ? 40 : 28 }) {
               // 播放/终止切换按钮 —— 使用SymbolGlyph + CROSS_FADE动画
-              Button() {
-                SymbolGlyph(this.isPaused ? $r('sys.symbol.play_fill') : $r('sys.symbol.square_fill'))
+              Button({type:ButtonType.Circle}) {
+                SymbolGlyph(this.isPaused ? $r('sys.symbol.play_fill') : $r('sys.symbol.pause_fill'))
                   .fontSize(this.isVertical ? 28 : 24)
                   .fontColor([Color.White])
                   .symbolEffect(
@@ -237,8 +237,10 @@ struct DisplayMarquee {
               }
               .width(this.isVertical ? 72 : 64)
               .height(this.isVertical ? 72 : 64)
-              .backgroundColor(this.playButtonPressed ? 'rgba(76, 175, 80, 0.9)' : 'rgba(76, 175, 80, 0.75)')
-              .borderRadius(this.isVertical ? 36 : 32)
+              .backgroundColor(this.playButtonPressed 
+                ? (this.isPaused ? 'rgba(76, 175, 80, 1)' : 'rgba(255, 152, 0, 1)') 
+                : (this.isPaused ? 'rgba(76, 175, 80, 0.85)' : 'rgba(255, 152, 0, 0.85)'))
+              .borderRadius((this.isVertical ? 72 : 64) / 2) // 圆形按钮
               .border({ width: 2, color: '#FFFFFF', style: BorderStyle.Solid })
               .scale({ x: this.buttonScale, y: this.buttonScale })
               .shadow({ radius: 10, color: 'rgba(0, 0, 0, 0.5)', offsetX: 0, offsetY: 5 })
@@ -262,8 +264,8 @@ struct DisplayMarquee {
               })
 
               // 返回按钮 —— 使用SymbolGlyph
-              Button() {
-                SymbolGlyph($r('sys.symbol.xmark'))
+              Button({buttonStyle:ButtonStyleMode.NORMAL,type:ButtonType.Circle}) {
+                SymbolGlyph($r('sys.symbol.square_fill'))
                   .fontSize(this.isVertical ? 28 : 24)
                   .fontColor([Color.White])
                   .fontWeight(FontWeight.Bold)
@@ -271,9 +273,9 @@ struct DisplayMarquee {
               .width(this.isVertical ? 72 : 64)
               .height(this.isVertical ? 72 : 64)
               .backgroundColor(this.backButtonPressed ? 'rgba(244, 67, 54, 0.9)' : 'rgba(244, 67, 54, 0.75)')
-              .borderRadius(this.isVertical ? 36 : 32)
+              .borderRadius((this.isVertical ? 72 : 64) / 2) // 圆形按钮
               .border({ width: 2, color: '#FFFFFF', style: BorderStyle.Solid })
-              .scale({ x: this.buttonScale, y: this.buttonScale })
+              // .scale({ x: this.buttonScale, y: this.buttonScale })
               .shadow({ radius: 10, color: 'rgba(0, 0, 0, 0.5)', offsetX: 0, offsetY: 5 })
               .animation({ duration: 150, curve: Curve.EaseOut })
               .stateEffect(true)
@@ -289,19 +291,21 @@ struct DisplayMarquee {
                 this.goBack()
               })
             }
-            .rotate(this.isVertical ? { z: 1, angle: 90 } : { z: 1, angle: 0 })
           }
-          .width(this.isVertical ? '90%' : 'auto')
-          .height(this.isVertical ? 160 : 130)
+          // .width(this.isVertical ? 160 : 'auto')
+          // .height(this.isVertical ? '90%' : 130)
+          .width(320)
+          .aspectRatio(1)
           .justifyContent(FlexAlign.Center)
           .alignItems(HorizontalAlign.Center)
-          .backgroundColor('rgba(0, 0, 0, 0.85)')
-          .borderRadius(28)
-          .border({ width: 1, color: 'rgba(255, 255, 255, 0.2)', style: BorderStyle.Solid })
-          .shadow({ radius: 20, color: 'rgba(0, 0, 0, 0.6)', offsetX: 0, offsetY: 10 })
-          .padding({ left: this.isVertical ? 20 : 36, right: this.isVertical ? 20 : 36, top: 12, bottom: 12 })
+          .backgroundColor('rgba(0, 0, 0, 0)')
+          // .borderRadius(28)
+          // .border({ width: 1, color: 'rgba(255, 255, 255, 0.2)', style: BorderStyle.Solid })
+          // .shadow({ radius: 20, color: 'rgba(0, 0, 0, 0.6)', offsetX: 0, offsetY: 10 })
+          .padding({ left: this.isVertical ? 12 : 36, right: this.isVertical ? 12 : 36, top: this.isVertical ? 20 : 12, bottom: this.isVertical ? 20 : 12 })
           .opacity(this.panelOpacity)
           .animation({ duration: 200, curve: Curve.EaseOut })
+          .rotate(this.isVertical ? { z: 1, angle: 90 } : { z: 1, angle: 0 })
           .onClick(() => {
             // 点击控制区域不隐藏面板，空函数阻止事件冒泡
           })
