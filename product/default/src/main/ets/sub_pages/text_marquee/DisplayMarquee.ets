@@ -281,13 +281,13 @@ struct DisplayMarquee {
             Row() {
 
 
-              // 播放/终止切换按钮 —— 使用SymbolGlyph + CROSS_FADE动画
+              // 播放/终止切换按钮 —— 使用SymbolGlyph替换动画
               Button({type:ButtonType.Circle}) {
                 SymbolGlyph(this.isPaused ? $r('sys.symbol.play_fill') : $r('sys.symbol.pause_fill'))
                   .fontSize(28)
                   .fontColor([Color.White])
                   .symbolEffect(
-                    new ReplaceSymbolEffect(EffectScope.WHOLE, ReplaceEffectType.CROSS_FADE),
+                    new ReplaceSymbolEffect(EffectScope.WHOLE),
                     this.playPauseTrigger
                   )
               }
@@ -297,7 +297,7 @@ struct DisplayMarquee {
                 ? (this.isPaused ? 'rgba(76, 175, 80, 1)' : 'rgba(255, 152, 0, 1)') 
                 : (this.isPaused ? 'rgba(76, 175, 80, 0.85)' : 'rgba(255, 152, 0, 0.85)'))
 
-              // .border({ width: 2, color: '#FFFFFF', style: BorderStyle.Solid })
+              .border({ width: 2, color: '#FFFFFF', style: BorderStyle.Solid })
               .scale({ x: this.buttonScale, y: this.buttonScale })
               .shadow({ radius: 10, color: 'rgba(0, 0, 0, 0.5)', offsetX: 0, offsetY: 5 })
               .animation({ duration: 150, curve: Curve.EaseOut })
@@ -330,9 +330,9 @@ struct DisplayMarquee {
               .height(64)
               .backgroundColor(this.backButtonPressed ? 'rgba(244, 67, 54, 0.9)' : 'rgba(244, 67, 54, 0.75)')
 
-              // .border({ width: 2, color: '#FFFFFF', style: BorderStyle.Solid })
+              .border({ width: 2, color: '#FFFFFF', style: BorderStyle.Solid })
               // .scale({ x: this.buttonScale, y: this.buttonScale })
-              .shadow({ radius: 10, color: 'rgba(0, 0, 0, 0.5)', offsetX: 0, offsetY: 5 })
+              // .shadow({ radius: 10, color: 'rgba(0, 0, 0, 0.5)', offsetX: 0, offsetY: 5 })
               .animation({ duration: 150, curve: Curve.EaseOut })
               .stateEffect(true)
               .onTouch((event: TouchEvent) => {
@@ -368,7 +368,7 @@ struct DisplayMarquee {
             event.stopPropagation()
           })
 
-          .border({width:5,color:Color.Blue})
+          // .border({width:5,color:Color.Blue})
         }
         .width('100%')
         .height('100%')

@@ -75,12 +75,12 @@ struct TextMarquee {
 
       Scroll() {
         GridRow({
-          columns: { sm: 4, md: 8, lg: 12 },
+          columns: { sm: 4, md: 6, lg: 8},
           gutter: 12
         }) {
           GridCol({
-            span: { sm: 4, md: 6, lg: 6 },
-            offset: { sm: 0, md: 1, lg: 3 }
+            span: { sm: 4, md: 4, lg: 6 },
+            offset: { sm: 0, md: 1, lg: 1 }
           }) {
             Row() {
               MarqueeEditor().width('100%')
@@ -499,26 +499,28 @@ struct MarqueeEditor {
 
 
       // ── 循环间隔 ──
-      Row() {
-        Text('循环间隔')
-          .fontSize(14)
-          .fontWeight(FontWeight.Medium)
-          .fontColor($r("app.color.FontIcon_Fore1"))
-        Blank()
-        Select(this.loopIntervalOptions)
-          .selected(this.getLoopIntervalIndex())
-          .value(this.loopIntervalOptions[this.getLoopIntervalIndex()].value)
-          .width(100)
-          .font({ size: 14 })
-          .fontColor($r("app.color.FontIcon_Fore1"))
-          .selectedOptionFont({ size: 14 })
-          .optionFont({ size: 14 })
-          .onSelect((index: number, _value: string) => {
-            this.loopInterval = this.loopIntervalValues[index]
-          })
-      }
-      .width('100%')
-      .height(48)
+      // Row() {
+      //   Text('循环间隔')
+      //     .fontSize(14)
+      //     .fontWeight(FontWeight.Medium)
+      //     .fontColor($r("app.color.FontIcon_Fore1"))
+      //   Blank()
+      //   Select(this.loopIntervalOptions)
+      //     .selected(this.getLoopIntervalIndex())
+      //     .value(this.loopIntervalOptions[this.getLoopIntervalIndex()].value)
+      //     .width(100)
+      //     .font({ size: 14 })
+      //     .fontColor($r("app.color.FontIcon_Fore1"))
+      //     .selectedOptionFont({ size: 14 })
+      //     .optionFont({ size: 14 })
+      //     .onSelect((index: number, _value: string) => {
+      //       this.loopInterval = this.loopIntervalValues[index]
+      //     })
+      // }
+      // .width('100%')
+      // .height(48)
+
+
       // ── 文字输入 ──
       Column({ space: 8 }) {
         Text('弹幕内容')
