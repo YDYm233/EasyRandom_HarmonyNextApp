@@ -23,6 +23,7 @@ struct DisplayMarquee {
   @State verticalOffset: number = 0 // 竖向滚动偏移量
   @State deviceWidth: number = 1080 // 设备屏幕宽度
   @State deviceHeight: number = 2340 // 设备屏幕高度
+  @State playPauseTrigger: number = 0 // 播放暂停图标切换触发器
   @State buttonScale: number = 1 // 按钮缩放动画状态
   @State playButtonPressed: boolean = false // 播放按钮按下状态
   @State backButtonPressed: boolean = false // 返回按钮按下状态
@@ -121,6 +122,7 @@ struct DisplayMarquee {
   private showControlPanelAndPause(): void {
     this.isPaused = true
     this.marqueeStart = false
+    this.playPauseTrigger++
     this.showControlPanelWithAnimation()
   }
 
@@ -222,20 +224,21 @@ struct DisplayMarquee {
         Column() {
           // 控制按钮区域
           Column() {
-            Row({ space: this.isVertical ? 30 : 25 }) {
-              // 播放/暂停切换按钮
+            Row({ space: this.isVertical ? 40 : 28 }) {
+              // 播放/终止切换按钮 —— 使用SymbolGlyph + CROSS_FADE动画
               Button() {
-                Text(this.isPaused ? '▶' : '⏸')
-                  .fontSize(this.isVertical ? 32 : 28)
-                  .fontColor('#FFFFFF')
-                  .fontWeight(FontWeight.Bold)
-                  .scale({ x: this.isPaused ? 1 : 0.9, y: this.isPaused ? 1 : 0.9 })
-                  .animation({ duration: 200, curve: Curve.EaseOut })
+                SymbolGlyph(this.isPaused ? $r('sys.symbol.play_fill') : $r('sys.symbol.square_fill'))
+                  .fontSize(this.isVertical ? 28 : 24)
+                  .fontColor([Color.White])
+                  .symbolEffect(
+                    new ReplaceSymbolEffect(EffectScope.WHOLE, ReplaceEffectType.CROSS_FADE),
+                    this.playPauseTrigger
+                  )
               }
-              .width(this.isVertical ? 100 : 90)
-              .height(this.isVertical ? 100 : 90)
-              .backgroundColor(this.playButtonPressed ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.8)')
-              .borderRadius(this.isVertical ? 50 : 45)
+              .width(this.isVertical ? 72 : 64)
+              .height(this.isVertical ? 72 : 64)
+              .backgroundColor(this.playButtonPressed ? 'rgba(76, 175, 80, 0.9)' : 'rgba(76, 175, 80, 0.75)')
+              .borderRadius(this.isVertical ? 36 : 32)
               .border({ width: 2, color: '#FFFFFF', style: BorderStyle.Solid })
               .scale({ x: this.buttonScale, y: this.buttonScale })
               .shadow({ radius: 10, color: 'rgba(0, 0, 0, 0.5)', offsetX: 0, offsetY: 5 })
@@ -250,6 +253,7 @@ struct DisplayMarquee {
               })
               .onClick(() => {
                 this.triggerButtonAnimation()
+                this.playPauseTrigger++
                 if (this.isPaused) {
                   this.resumeMarquee()
                 } else {
@@ -257,17 +261,17 @@ struct DisplayMarquee {
                 }
               })
 
-              // 返回按钮（终止图标）
+              // 返回按钮 —— 使用SymbolGlyph
               Button() {
-                Text('■')
-                  .fontSize(this.isVertical ? 32 : 28)
-                  .fontColor('#FFFFFF')
+                SymbolGlyph($r('sys.symbol.xmark'))
+                  .fontSize(this.isVertical ? 28 : 24)
+                  .fontColor([Color.White])
                   .fontWeight(FontWeight.Bold)
               }
-              .width(this.isVertical ? 100 : 90)
-              .height(this.isVertical ? 100 : 90)
-              .backgroundColor(this.backButtonPressed ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.8)')
-              .borderRadius(this.isVertical ? 50 : 45)
+              .width(this.isVertical ? 72 : 64)
+              .height(this.isVertical ? 72 : 64)
+              .backgroundColor(this.backButtonPressed ? 'rgba(244, 67, 54, 0.9)' : 'rgba(244, 67, 54, 0.75)')
+              .borderRadius(this.isVertical ? 36 : 32)
               .border({ width: 2, color: '#FFFFFF', style: BorderStyle.Solid })
               .scale({ x: this.buttonScale, y: this.buttonScale })
               .shadow({ radius: 10, color: 'rgba(0, 0, 0, 0.5)', offsetX: 0, offsetY: 5 })
@@ -285,17 +289,17 @@ struct DisplayMarquee {
                 this.goBack()
               })
             }
+            .rotate(this.isVertical ? { z: 1, angle: 90 } : { z: 1, angle: 0 })
           }
-          .width(this.isVertical ? '85%' : '70%')
-          .height(this.isVertical ? 140 : 120)
+          .width(this.isVertical ? '90%' : 'auto')
+          .height(this.isVertical ? 160 : 130)
           .justifyContent(FlexAlign.Center)
           .alignItems(HorizontalAlign.Center)
           .backgroundColor('rgba(0, 0, 0, 0.85)')
-          .borderRadius(25)
+          .borderRadius(28)
           .border({ width: 1, color: 'rgba(255, 255, 255, 0.2)', style: BorderStyle.Solid })
           .shadow({ radius: 20, color: 'rgba(0, 0, 0, 0.6)', offsetX: 0, offsetY: 10 })
-          .margin({ bottom: this.isVertical ? 20 : 100 })
-          .padding({ top: 10, bottom: 10 })
+          .padding({ left: this.isVertical ? 20 : 36, right: this.isVertical ? 20 : 36, top: 12, bottom: 12 })
           .opacity(this.panelOpacity)
           .animation({ duration: 200, curve: Curve.EaseOut })
           .onClick(() => {
