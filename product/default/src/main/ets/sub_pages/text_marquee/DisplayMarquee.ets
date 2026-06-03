@@ -317,7 +317,6 @@ struct DisplayMarquee {
           // .borderRadius(28)
           // .border({ width: 1, color: 'rgba(255, 255, 255, 0.2)', style: BorderStyle.Solid })
           // .shadow({ radius: 20, color: 'rgba(0, 0, 0, 0.6)', offsetX: 0, offsetY: 10 })
-          .padding({ left: this.isVertical ? 12 : 36, right: this.isVertical ? 12 : 36, top: this.isVertical ? 20 : 12, bottom: this.isVertical ? 20 : 12 })
           .rotate(this.isVertical ? { z: 1, angle: 90 } : { z: 1, angle: 0 })
           .onTouch((event: TouchEvent) => {
             // 阻止触摸事件冒泡，避免触发背景的点击事件
