@@ -33,27 +33,17 @@ struct DisplayMarquee {
   private scrollTimer: number = -1
   private mainWindow: window.Window | null = null // 保存窗口实例
 
-  private getMinChars(): number {
-    // 根据字体大小和屏幕宽度动态计算最小字符数
-    // 一个全角字符大约占用 fontSize 宽度
-    const effectiveWidth = this.isVertical ? this.deviceHeight : this.deviceWidth
-    return Math.ceil(effectiveWidth / this.fontSize) + 10 // 增加10个字符的余量
-  }
 
-  private padText(src: string): string {
-    // 确保文本足够长以触发滚动（至少需要超过屏幕宽度的文本）
-    const minChars = this.getMinChars()
-    if (src.length >= minChars) {
-      return src
-    }
-    // 计算需要添加的全角空格数量
-    const spacesNeeded = minChars - src.length
-    // 每个全角空格字符串包含4个全角空格，计算需要重复的次数
-    const repeatCount = Math.ceil(spacesNeeded / 4)
-    // 填充全角空格，确保文本足够长
-    return src + '　　　　'.repeat(repeatCount)
-  }
 
+  private padTextForExternalEntrance(src: string): string {
+    const scrollLength = this.isVertical ? this.deviceHeight : this.deviceWidth
+    const spacesNeeded = Math.ceil(scrollLength / this.fontSize)+2  // 容错
+    // const spacesNeeded = Math.ceil(scrollLength / (this.fontSize / 2)) + 4
+    const leadingSpaces = ' '.repeat(spacesNeeded)
+    // 如果原文本本身已经很长，就不需要填充了（但仍想实现从外进入，可强制保留前置空格）
+    // 这里选择总是添加前置空格，确保每次都是“空屏入场”
+    return leadingSpaces + src
+  }
   aboutToAppear(): void {
     const params = router.getParams() as Record<string, Object>
     this.text = (params['text'] as string) || '手持弹幕'
@@ -118,14 +108,7 @@ struct DisplayMarquee {
   }
   
 
-  private handleMarqueeFinish(): void {
-    // 停止当前滚动
-    this.marqueeStart = false
-    // 延迟后重新开始
-    setTimeout(() => {
-      this.marqueeStart = true
-    }, this.loopInterval)
-  }
+
   
   // 切换暂停/继续状态
   private togglePause(): void {
@@ -197,7 +180,7 @@ struct DisplayMarquee {
               step: this.speed === -1 ? 0 : this.speed,
               loop: -1,  // 无限循环，滚动完立刻开始第二次
               fromStart: this.scrollFromLeft,
-              src: this.padText(this.text)
+              src: this.padTextForExternalEntrance(this.text)
             })
               .fontSize(this.fontSize)
               .fontWeight(this.fontWeight)
@@ -213,7 +196,7 @@ struct DisplayMarquee {
           .alignItems(HorizontalAlign.Start)
           .justifyContent(FlexAlign.Center)
           .rotate({ z: 1, angle: 90 })  // 旋转90度
-          .border({width:3,color:Color.Pink})
+          .border({width:6,color:Color.Pink})
 
         } else {
           // 横向弹幕：文字从右往左（或从左往右）滚动
@@ -222,7 +205,7 @@ struct DisplayMarquee {
             step: this.speed === -1 ? 0 : this.speed, 
             loop: -1,  // 无限循环，滚动完立刻开始第二次
             fromStart: this.scrollFromLeft, 
-            src: this.padText(this.text) 
+            src: this.padTextForExternalEntrance(this.text)
           })
             .fontSize(this.fontSize)
             .fontWeight(this.fontWeight)
