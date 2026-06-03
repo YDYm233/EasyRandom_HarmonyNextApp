@@ -20,6 +20,7 @@ struct DisplayMarquee {
   @State loopInterval: number = 0
   @State marqueeStart: boolean = true
   @State isPaused: boolean = false // 是否暂停
+  private isWaitingForInterval: boolean = false // 是否在等待循环间隔
   @State showControlPanel: boolean = false // 是否显示控制面板
   @State verticalOffset: number = 0 // 竖向滚动偏移量
   @State deviceWidth: number = 0 // 设备屏幕宽度
@@ -33,6 +34,7 @@ struct DisplayMarquee {
   private scrollTimer: number = -1
   private mainWindow: window.Window | null = null // 保存窗口实例
   private savedFullScreenEnabled: boolean | null = null // 保存进入时的全局全屏设置
+  private intervalTimer: number = -1 // 循环间隔定时器
 
 
 
@@ -99,6 +101,9 @@ struct DisplayMarquee {
     if (this.scrollTimer !== -1) {
       clearInterval(this.scrollTimer)
     }
+    if (this.intervalTimer !== -1) {
+      clearTimeout(this.intervalTimer)
+    }
     // 仅当进入时用户未开启完全全屏时，才恢复系统栏
     if (this.mainWindow && this.savedFullScreenEnabled === false) {
       this.mainWindow.setWindowSystemBarEnable(['status', 'navigation']).catch((err: Error) => {
@@ -121,6 +126,7 @@ struct DisplayMarquee {
   // 继续滚动（不隐藏控制面板）
   private resumeMarquee(): void {
     this.isPaused = false
+    this.isWaitingForInterval = false // 清除间隔等待状态
     this.marqueeStart = true
   }
 
@@ -172,7 +178,7 @@ struct DisplayMarquee {
             Marquee({
               start: this.marqueeStart,
               step: this.speed === -1 ? 0 : this.speed,
-              loop: -1,  // 无限循环，滚动完立刻开始第二次
+              loop: -1,  // 无限循环
               fromStart: this.scrollFromLeft,
               src: this.padTextForExternalEntrance(this.text)
             })
@@ -180,9 +186,31 @@ struct DisplayMarquee {
               .fontWeight(this.fontWeight)
               .fontColor(this.fontColor)
               .fontFamily(this.fontFamily)
-              // .width(this.isVertical ? this.deviceHeight : '100%') // 显式设置宽度，确保能滚动
               .width(this.deviceWidth)
-              // .border({width:3,color:Color.Red})
+              .onBounce(() => {
+                // 每完成一次滚动触发
+                console.info(`[Marquee] onBounce, loopInterval=${this.loopInterval}, isWaiting=${this.isWaitingForInterval}, isPaused=${this.isPaused}`)
+                
+                if (this.loopInterval > 0 && !this.isWaitingForInterval && !this.isPaused) {
+                  // 清除之前的定时器
+                  if (this.intervalTimer !== -1) {
+                    clearTimeout(this.intervalTimer)
+                  }
+                  
+                  this.isWaitingForInterval = true
+                  this.marqueeStart = false // 暂停滚动
+                  console.info(`[Marquee] Paused, will resume in ${this.loopInterval}ms`)
+                  
+                  this.intervalTimer = setTimeout(() => {
+                    console.info(`[Marquee] Resuming, isPaused=${this.isPaused}`)
+                    if (!this.isPaused) {
+                      this.marqueeStart = true
+                    }
+                    this.isWaitingForInterval = false
+                    this.intervalTimer = -1
+                  }, this.loopInterval)
+                }
+              })
           }
           .width(this.deviceHeight)      // 宽度：设备宽度（保证Marquee能滚动）
           // .height(this.deviceWidth)    // 高度：设备高度（旋转后变成宽度，撑满屏幕）
@@ -198,7 +226,7 @@ struct DisplayMarquee {
           Marquee({ 
             start: this.marqueeStart, 
             step: this.speed === -1 ? 0 : this.speed, 
-            loop: -1,  // 无限循环，滚动完立刻开始第二次
+            loop: -1,  // 无限循环
             fromStart: this.scrollFromLeft, 
             src: this.padTextForExternalEntrance(this.text)
           })
@@ -207,8 +235,30 @@ struct DisplayMarquee {
             .fontColor(this.fontColor)
             .fontFamily(this.fontFamily)
             .width('100%')
-
-            // .border({width:3,color:Color.Red})
+            .onBounce(() => {
+              // 每完成一次滚动触发
+              console.info(`[Marquee] onBounce, loopInterval=${this.loopInterval}, isWaiting=${this.isWaitingForInterval}, isPaused=${this.isPaused}`)
+              
+              if (this.loopInterval > 0 && !this.isWaitingForInterval && !this.isPaused) {
+                // 清除之前的定时器
+                if (this.intervalTimer !== -1) {
+                  clearTimeout(this.intervalTimer)
+                }
+                
+                this.isWaitingForInterval = true
+                this.marqueeStart = false // 暂停滚动
+                console.info(`[Marquee] Paused, will resume in ${this.loopInterval}ms`)
+                
+                this.intervalTimer = setTimeout(() => {
+                  console.info(`[Marquee] Resuming, isPaused=${this.isPaused}`)
+                  if (!this.isPaused) {
+                    this.marqueeStart = true
+                  }
+                  this.isWaitingForInterval = false
+                  this.intervalTimer = -1
+                }, this.loopInterval)
+              }
+            })
         }
       }
       .justifyContent(FlexAlign.Center)
