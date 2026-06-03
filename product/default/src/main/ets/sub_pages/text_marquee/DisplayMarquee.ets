@@ -87,6 +87,7 @@ struct DisplayMarquee {
         //   console.error('Failed to set full screen:', err)
         // })
       })
+
     } catch (error) {
       console.error('Failed to get window info:', error)
     }
