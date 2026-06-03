@@ -3,6 +3,7 @@
 
 import router from '@ohos.router';
 import window from '@ohos.window';
+import display from '@ohos.display';
 
 @Entry
 @Component
@@ -21,8 +22,8 @@ struct DisplayMarquee {
   @State isPaused: boolean = false // 是否暂停
   @State showControlPanel: boolean = false // 是否显示控制面板
   @State verticalOffset: number = 0 // 竖向滚动偏移量
-  @State deviceWidth: number = 1080 // 设备屏幕宽度
-  @State deviceHeight: number = 2340 // 设备屏幕高度
+  @State deviceWidth: number = 0 // 设备屏幕宽度
+  @State deviceHeight: number = 0 // 设备屏幕高度
   @State playPauseTrigger: number = 0 // 播放暂停图标切换触发器
   @State buttonScale: number = 1 // 按钮缩放动画状态
   @State playButtonPressed: boolean = false // 播放按钮按下状态
@@ -32,15 +33,25 @@ struct DisplayMarquee {
   private scrollTimer: number = -1
   private mainWindow: window.Window | null = null // 保存窗口实例
 
+  private getMinChars(): number {
+    // 根据字体大小和屏幕宽度动态计算最小字符数
+    // 一个全角字符大约占用 fontSize 宽度
+    const effectiveWidth = this.isVertical ? this.deviceHeight : this.deviceWidth
+    return Math.ceil(effectiveWidth / this.fontSize) + 10 // 增加10个字符的余量
+  }
+
   private padText(src: string): string {
     // 确保文本足够长以触发滚动（至少需要超过屏幕宽度的文本）
-    // 每个全角字符宽度约等于fontSize，需要至少20个字符才能超过1080px（假设fontSize=64）
-    const minChars = 30 // 确保足够长
+    const minChars = this.getMinChars()
     if (src.length >= minChars) {
       return src
     }
+    // 计算需要添加的全角空格数量
+    const spacesNeeded = minChars - src.length
+    // 每个全角空格字符串包含4个全角空格，计算需要重复的次数
+    const repeatCount = Math.ceil(spacesNeeded / 4)
     // 填充全角空格，确保文本足够长
-    return src + '　　　　'.repeat(10) // 添加80个全角空格
+    return src + '　　　　'.repeat(repeatCount)
   }
 
   aboutToAppear(): void {
@@ -61,29 +72,33 @@ struct DisplayMarquee {
       this.marqueeStart = false
     }
     
+    // 使用 display 模块同步获取屏幕尺寸
+    try {
+      const defaultDisplay = display.getDefaultDisplaySync()
+      this.deviceWidth = defaultDisplay.width
+      this.deviceHeight = defaultDisplay.height
+      console.log(`Display size: ${this.deviceWidth}x${this.deviceHeight}`)
+    } catch (error) {
+      console.error('Failed to get display info:', error)
+      this.deviceWidth = 1000 // 默认值
+      this.deviceHeight = 1000 // 默认值
+    }
+
     // 获取窗口并设置全屏模式
     try {
       window.getLastWindow(getContext(this)).then((win: window.Window) => {
         this.mainWindow = win
-        // 获取窗口宽高
-        const windowProperties = win.getWindowProperties()
-        const windowRect = windowProperties.windowRect
-        this.deviceWidth = windowRect.width
-        this.deviceHeight = windowRect.height
-        
         // 隐藏状态栏和导航条
         win.setWindowSystemBarEnable([]).catch((err: Error) => {
           console.error('Failed to hide system bars:', err)
         })
-        // 设置全屏布局
+        // 设置全屏布局。应用已设置全局全屏，所以注释掉。
         // win.setWindowLayoutFullScreen(true).catch((err: Error) => {
         //   console.error('Failed to set full screen:', err)
         // })
       })
     } catch (error) {
       console.error('Failed to get window info:', error)
-      this.deviceWidth = 1080 // 默认值
-      this.deviceHeight = 2340 // 默认值
     }
   }
 
@@ -188,12 +203,17 @@ struct DisplayMarquee {
               .fontWeight(this.fontWeight)
               .fontColor(this.fontColor)
               .fontFamily(this.fontFamily)
-              .width(this.isVertical ? this.deviceHeight : '100%') // 显式设置宽度，确保能滚动
+              // .width(this.isVertical ? this.deviceHeight-180 : '100%') // 显式设置宽度，确保能滚动
+              .width('100%')
+              .border({width:3,color:Color.Red})
           }
           .width(this.deviceHeight)      // 宽度：设备宽度（保证Marquee能滚动）
           .height(this.deviceWidth)    // 高度：设备高度（旋转后变成宽度，撑满屏幕）
+          .backgroundColor(0x88123456)
+          .alignItems(HorizontalAlign.Start)
           .justifyContent(FlexAlign.Center)
           .rotate({ z: 1, angle: 90 })  // 旋转90度
+          .border({width:3,color:Color.Pink})
 
         } else {
           // 横向弹幕：文字从右往左（或从左往右）滚动
@@ -209,17 +229,19 @@ struct DisplayMarquee {
             .fontColor(this.fontColor)
             .fontFamily(this.fontFamily)
             .width('100%')
+
+            .border({width:3,color:Color.Red})
         }
       }
       .justifyContent(FlexAlign.Center)
       .width('100%')
       .height('100%')
       .backgroundColor(this.bgColor)
-      .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
+      // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
       .onClick(() => {
         this.showControlPanelAndPause()  // 点击显示控制面板并暂停滚动
       })
-      
+      .border({width:5,color:Color.Orange})
       // 控制面板浮层
       if (this.showControlPanel) {
         Column() {
@@ -241,7 +263,7 @@ struct DisplayMarquee {
               .backgroundColor(this.playButtonPressed 
                 ? (this.isPaused ? 'rgba(76, 175, 80, 1)' : 'rgba(255, 152, 0, 1)') 
                 : (this.isPaused ? 'rgba(76, 175, 80, 0.85)' : 'rgba(255, 152, 0, 0.85)'))
-              .borderRadius((this.isVertical ? 72 : 64) / 2) // 圆形按钮
+
               .border({ width: 2, color: '#FFFFFF', style: BorderStyle.Solid })
               .scale({ x: this.buttonScale, y: this.buttonScale })
               .shadow({ radius: 10, color: 'rgba(0, 0, 0, 0.5)', offsetX: 0, offsetY: 5 })
@@ -266,7 +288,7 @@ struct DisplayMarquee {
 
               // 返回按钮 —— 使用SymbolGlyph
               Button({buttonStyle:ButtonStyleMode.NORMAL,type:ButtonType.Circle}) {
-                SymbolGlyph($r('sys.symbol.square_fill'))
+                SymbolGlyph($r('sys.symbol.xmark'))
                   .fontSize(this.isVertical ? 28 : 24)
                   .fontColor([Color.White])
                   .fontWeight(FontWeight.Bold)
@@ -274,7 +296,7 @@ struct DisplayMarquee {
               .width(this.isVertical ? 72 : 64)
               .height(this.isVertical ? 72 : 64)
               .backgroundColor(this.backButtonPressed ? 'rgba(244, 67, 54, 0.9)' : 'rgba(244, 67, 54, 0.75)')
-              .borderRadius((this.isVertical ? 72 : 64) / 2) // 圆形按钮
+
               .border({ width: 2, color: '#FFFFFF', style: BorderStyle.Solid })
               // .scale({ x: this.buttonScale, y: this.buttonScale })
               .shadow({ radius: 10, color: 'rgba(0, 0, 0, 0.5)', offsetX: 0, offsetY: 5 })
@@ -295,7 +317,7 @@ struct DisplayMarquee {
           }
           // .width(this.isVertical ? 160 : 'auto')
           // .height(this.isVertical ? '90%' : 130)
-          .width(320)
+          .width(200)
           .aspectRatio(1)
           .justifyContent(FlexAlign.Center)
           .alignItems(HorizontalAlign.Center)
@@ -304,12 +326,13 @@ struct DisplayMarquee {
           // .border({ width: 1, color: 'rgba(255, 255, 255, 0.2)', style: BorderStyle.Solid })
           // .shadow({ radius: 20, color: 'rgba(0, 0, 0, 0.6)', offsetX: 0, offsetY: 10 })
           .padding({ left: this.isVertical ? 12 : 36, right: this.isVertical ? 12 : 36, top: this.isVertical ? 20 : 12, bottom: this.isVertical ? 20 : 12 })
-          .opacity(this.panelOpacity)
-          .animation({ duration: 200, curve: Curve.EaseOut })
           .rotate(this.isVertical ? { z: 1, angle: 90 } : { z: 1, angle: 0 })
-          .onClick(() => {
-            // 点击控制区域不隐藏面板，空函数阻止事件冒泡
+          .onTouch((event: TouchEvent) => {
+            // 阻止触摸事件冒泡，避免触发背景的点击事件
+            event.stopPropagation()
           })
+
+          .border({width:5,color:Color.Blue})
         }
         .width('100%')
         .height('100%')
@@ -322,6 +345,8 @@ struct DisplayMarquee {
           // 点击背景隐藏面板（带淡出动画）
           this.hideControlPanelWithAnimation()
         })
+
+        .border({width:5,color:Color.Green})
       }
     }
     .width('100%')
