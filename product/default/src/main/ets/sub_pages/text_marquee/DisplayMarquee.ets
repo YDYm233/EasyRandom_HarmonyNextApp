@@ -38,7 +38,7 @@ struct DisplayMarquee {
 
   private padTextForExternalEntrance(src: string): string {
     const scrollLength = this.isVertical ? this.deviceHeight : this.deviceWidth
-    const spacesNeeded = Math.ceil(scrollLength / this.fontSize)+1  // 容错
+    const spacesNeeded = Math.ceil(scrollLength / this.fontSize)+2  // 容错
     // const spacesNeeded = Math.ceil(scrollLength / (this.fontSize / 2)) + 4
     const leadingSpaces = ' '.repeat(spacesNeeded)
     // 如果原文本本身已经很长，就不需要填充了（但仍想实现从外进入，可强制保留前置空格）
@@ -109,12 +109,6 @@ struct DisplayMarquee {
   
 
 
-  
-  // 切换暂停/继续状态
-  private togglePause(): void {
-    this.isPaused = !this.isPaused
-    this.marqueeStart = !this.isPaused
-  }
 
   // 显示控制面板并暂停滚动
   private showControlPanelAndPause(): void {
@@ -186,8 +180,8 @@ struct DisplayMarquee {
               .fontWeight(this.fontWeight)
               .fontColor(this.fontColor)
               .fontFamily(this.fontFamily)
-              // .width(this.isVertical ? this.deviceHeight-180 : '100%') // 显式设置宽度，确保能滚动
-              .width('90%')
+              .width(this.isVertical ? this.deviceHeight-180 : '100%') // 显式设置宽度，确保能滚动
+              // .width('90%')
               .border({width:3,color:Color.Red})
           }
           .width(this.deviceHeight-10)      // 宽度：设备宽度（保证Marquee能滚动）
