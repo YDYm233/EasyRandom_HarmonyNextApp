@@ -188,7 +188,7 @@ struct DisplayMarquee {
               .fontWeight(this.fontWeight)
               .fontColor(this.fontColor)
               .fontFamily(this.fontFamily)
-              .width(this.deviceWidth)  // 显式设置宽度，确保能滚动
+              .width(this.isVertical ? this.deviceHeight : '100%') // 显式设置宽度，确保能滚动
           }
           .width(this.deviceHeight)      // 宽度：设备宽度（保证Marquee能滚动）
           .height(this.deviceWidth)    // 高度：设备高度（旋转后变成宽度，撑满屏幕）
