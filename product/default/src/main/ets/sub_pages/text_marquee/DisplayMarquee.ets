@@ -32,6 +32,7 @@ struct DisplayMarquee {
   
   private scrollTimer: number = -1
   private mainWindow: window.Window | null = null // 保存窗口实例
+  private savedFullScreenEnabled: boolean | null = null // 保存进入时的全局全屏设置
 
 
 
@@ -74,20 +75,21 @@ struct DisplayMarquee {
       this.deviceHeight = 1000 // 默认值
     }
 
-    // 获取窗口并设置全屏模式
+    // 获取窗口并根据全局设置决定是否隐藏系统栏
     try {
       window.getLastWindow(getContext(this)).then((win: window.Window) => {
         this.mainWindow = win
-        // 隐藏状态栏和导航条
-        win.setWindowSystemBarEnable([]).catch((err: Error) => {
-          console.error('Failed to hide system bars:', err)
-        })
-        // 设置全屏布局。应用已设置全局全屏，所以注释掉。
-        // win.setWindowLayoutFullScreen(true).catch((err: Error) => {
-        //   console.error('Failed to set full screen:', err)
-        // })
+        // 读取当前的全局全屏设置（从 AppStorage）
+        this.savedFullScreenEnabled = AppStorage.get<boolean>('isFullScreenEnabled') ?? false
+        console.log(`当前全局全屏设置: ${this.savedFullScreenEnabled}`)
+        
+        // 仅当用户未开启完全全屏时，才隐藏系统栏（否则已经是隐藏状态）
+        if (!this.savedFullScreenEnabled) {
+          win.setWindowSystemBarEnable([]).catch((err: Error) => {
+            console.error('Failed to hide system bars:', err)
+          })
+        }
       })
-
     } catch (error) {
       console.error('Failed to get window info:', error)
     }
@@ -97,14 +99,11 @@ struct DisplayMarquee {
     if (this.scrollTimer !== -1) {
       clearInterval(this.scrollTimer)
     }
-    // 恢复状态栏和导航条
-    if (this.mainWindow) {
+    // 仅当进入时用户未开启完全全屏时，才恢复系统栏
+    if (this.mainWindow && this.savedFullScreenEnabled === false) {
       this.mainWindow.setWindowSystemBarEnable(['status', 'navigation']).catch((err: Error) => {
         console.error('Failed to restore system bars:', err)
       })
-      // this.mainWindow.setWindowLayoutFullScreen(false).catch((err: Error) => {
-      //   console.error('Failed to exit full screen:', err)
-      // })
     }
   }
   
