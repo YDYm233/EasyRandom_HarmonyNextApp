@@ -23,6 +23,10 @@ struct DisplayMarquee {
   @State verticalOffset: number = 0 // 竖向滚动偏移量
   @State deviceWidth: number = 1080 // 设备屏幕宽度
   @State deviceHeight: number = 2340 // 设备屏幕高度
+  @State buttonScale: number = 1 // 按钮缩放动画状态
+  @State playButtonPressed: boolean = false // 播放按钮按下状态
+  @State backButtonPressed: boolean = false // 返回按钮按下状态
+  @State panelOpacity: number = 0 // 控制面板透明度动画状态
   
   private scrollTimer: number = -1
   private mainWindow: window.Window | null = null // 保存窗口实例
@@ -117,7 +121,7 @@ struct DisplayMarquee {
   private showControlPanelAndPause(): void {
     this.isPaused = true
     this.marqueeStart = false
-    this.showControlPanel = true
+    this.showControlPanelWithAnimation()
   }
 
   // 继续滚动（不隐藏控制面板）
@@ -135,6 +139,33 @@ struct DisplayMarquee {
   // 返回上一页
   private goBack(): void {
     router.back()
+  }
+
+  // 触发按钮动画
+  private triggerButtonAnimation(): void {
+    // 缩放动画效果
+    this.buttonScale = 0.8
+    setTimeout(() => {
+      this.buttonScale = 1
+    }, 150)
+  }
+
+  // 显示控制面板并启动淡入动画
+  private showControlPanelWithAnimation(): void {
+    this.showControlPanel = true
+    this.panelOpacity = 0
+    // 启动淡入动画
+    setTimeout(() => {
+      this.panelOpacity = 1
+    }, 10)
+  }
+
+  // 隐藏控制面板并启动淡出动画
+  private hideControlPanelWithAnimation(): void {
+    this.panelOpacity = 0
+    setTimeout(() => {
+      this.showControlPanel = false
+    }, 200)
   }
 
   build() {
@@ -191,18 +222,34 @@ struct DisplayMarquee {
         Column() {
           // 控制按钮区域
           Column() {
-            Row({ space: 20 }) {
+            Row({ space: this.isVertical ? 30 : 25 }) {
               // 播放/暂停切换按钮
               Button() {
                 Text(this.isPaused ? '▶' : '⏸')
-                  .fontSize(24)
+                  .fontSize(this.isVertical ? 32 : 28)
                   .fontColor('#FFFFFF')
+                  .fontWeight(FontWeight.Bold)
+                  .scale({ x: this.isPaused ? 1 : 0.9, y: this.isPaused ? 1 : 0.9 })
+                  .animation({ duration: 200, curve: Curve.EaseOut })
               }
-              .width(80)
-              .height(80)
-              .backgroundColor('rgba(0, 0, 0, 0.7)')
-              .borderRadius(40)
+              .width(this.isVertical ? 100 : 90)
+              .height(this.isVertical ? 100 : 90)
+              .backgroundColor(this.playButtonPressed ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.8)')
+              .borderRadius(this.isVertical ? 50 : 45)
+              .border({ width: 2, color: '#FFFFFF', style: BorderStyle.Solid })
+              .scale({ x: this.buttonScale, y: this.buttonScale })
+              .shadow({ radius: 10, color: 'rgba(0, 0, 0, 0.5)', offsetX: 0, offsetY: 5 })
+              .animation({ duration: 150, curve: Curve.EaseOut })
+              .stateEffect(true)
+              .onTouch((event: TouchEvent) => {
+                if (event.type === TouchType.Down) {
+                  this.playButtonPressed = true
+                } else if (event.type === TouchType.Up || event.type === TouchType.Cancel) {
+                  this.playButtonPressed = false
+                }
+              })
               .onClick(() => {
+                this.triggerButtonAnimation()
                 if (this.isPaused) {
                   this.resumeMarquee()
                 } else {
@@ -213,37 +260,58 @@ struct DisplayMarquee {
               // 返回按钮（终止图标）
               Button() {
                 Text('■')
-                  .fontSize(24)
+                  .fontSize(this.isVertical ? 32 : 28)
                   .fontColor('#FFFFFF')
+                  .fontWeight(FontWeight.Bold)
               }
-              .width(80)
-              .height(80)
-              .backgroundColor('rgba(0, 0, 0, 0.7)')
-              .borderRadius(40)
+              .width(this.isVertical ? 100 : 90)
+              .height(this.isVertical ? 100 : 90)
+              .backgroundColor(this.backButtonPressed ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.8)')
+              .borderRadius(this.isVertical ? 50 : 45)
+              .border({ width: 2, color: '#FFFFFF', style: BorderStyle.Solid })
+              .scale({ x: this.buttonScale, y: this.buttonScale })
+              .shadow({ radius: 10, color: 'rgba(0, 0, 0, 0.5)', offsetX: 0, offsetY: 5 })
+              .animation({ duration: 150, curve: Curve.EaseOut })
+              .stateEffect(true)
+              .onTouch((event: TouchEvent) => {
+                if (event.type === TouchType.Down) {
+                  this.backButtonPressed = true
+                } else if (event.type === TouchType.Up || event.type === TouchType.Cancel) {
+                  this.backButtonPressed = false
+                }
+              })
               .onClick(() => {
+                this.triggerButtonAnimation()
                 this.goBack()
               })
             }
           }
-          .width('100%')
-          .height(120)
+          .width(this.isVertical ? '85%' : '70%')
+          .height(this.isVertical ? 140 : 120)
           .justifyContent(FlexAlign.Center)
           .alignItems(HorizontalAlign.Center)
-          .backgroundColor('rgba(0, 0, 0, 0.7)')
-          .borderRadius(20)
-          .margin({ bottom: 100 })
+          .backgroundColor('rgba(0, 0, 0, 0.85)')
+          .borderRadius(25)
+          .border({ width: 1, color: 'rgba(255, 255, 255, 0.2)', style: BorderStyle.Solid })
+          .shadow({ radius: 20, color: 'rgba(0, 0, 0, 0.6)', offsetX: 0, offsetY: 10 })
+          .margin({ bottom: this.isVertical ? 20 : 100 })
+          .padding({ top: 10, bottom: 10 })
+          .opacity(this.panelOpacity)
+          .animation({ duration: 200, curve: Curve.EaseOut })
           .onClick(() => {
             // 点击控制区域不隐藏面板，空函数阻止事件冒泡
           })
         }
         .width('100%')
         .height('100%')
-        .justifyContent(FlexAlign.End)
+        .justifyContent(FlexAlign.Center)
         .alignItems(HorizontalAlign.Center)
         .backgroundColor('rgba(0, 0, 0, 0.5)')
+        .opacity(this.panelOpacity)
+        .animation({ duration: 200, curve: Curve.EaseOut })
         .onClick(() => {
-          // 点击背景隐藏面板
-          this.showControlPanel = false
+          // 点击背景隐藏面板（带淡出动画）
+          this.hideControlPanelWithAnimation()
         })
       }
     }
