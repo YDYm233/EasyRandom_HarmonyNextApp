@@ -192,9 +192,9 @@ struct DisplayMarquee {
       if (this.showControlPanel) {
         Column() {
           Row({ space: 20 }) {
-            // 继续按钮
+            // 播放/暂停切换按钮
             Button() {
-              Text('▶')
+              Text(this.isPaused ? '▶' : '⏸')
                 .fontSize(24)
                 .fontColor('#FFFFFF')
             }
@@ -203,26 +203,16 @@ struct DisplayMarquee {
             .backgroundColor('rgba(0, 0, 0, 0.7)')
             .borderRadius(40)
             .onClick(() => {
-              this.resumeMarquee()
+              if (this.isPaused) {
+                this.resumeMarquee()
+              } else {
+                this.pauseMarquee()
+              }
             })
 
-            // 暂停按钮
+            // 返回按钮（终止图标）
             Button() {
-              Text('⏸')
-                .fontSize(24)
-                .fontColor('#FFFFFF')
-            }
-            .width(80)
-            .height(80)
-            .backgroundColor('rgba(0, 0, 0, 0.7)')
-            .borderRadius(40)
-            .onClick(() => {
-              this.pauseMarquee()
-            })
-
-            // 返回按钮
-            Button() {
-              Text('←')
+              Text('■')
                 .fontSize(24)
                 .fontColor('#FFFFFF')
             }
