@@ -120,18 +120,16 @@ struct DisplayMarquee {
     this.showControlPanel = true
   }
 
-  // 继续滚动并隐藏控制面板
+  // 继续滚动（不隐藏控制面板）
   private resumeMarquee(): void {
     this.isPaused = false
     this.marqueeStart = true
-    this.showControlPanel = false
   }
 
-  // 暂停滚动并隐藏控制面板
+  // 暂停滚动（不隐藏控制面板）
   private pauseMarquee(): void {
     this.isPaused = true
     this.marqueeStart = false
-    this.showControlPanel = false
   }
 
   // 返回上一页
@@ -191,43 +189,56 @@ struct DisplayMarquee {
       // 控制面板浮层
       if (this.showControlPanel) {
         Column() {
-          Row({ space: 20 }) {
-            // 播放/暂停切换按钮
-            Button() {
-              Text(this.isPaused ? '▶' : '⏸')
-                .fontSize(24)
-                .fontColor('#FFFFFF')
-            }
-            .width(80)
-            .height(80)
-            .backgroundColor('rgba(0, 0, 0, 0.7)')
-            .borderRadius(40)
-            .onClick(() => {
-              if (this.isPaused) {
-                this.resumeMarquee()
-              } else {
-                this.pauseMarquee()
+          // 控制按钮区域
+          Column() {
+            Row({ space: 20 }) {
+              // 播放/暂停切换按钮
+              Button() {
+                Text(this.isPaused ? '▶' : '⏸')
+                  .fontSize(24)
+                  .fontColor('#FFFFFF')
               }
-            })
+              .width(80)
+              .height(80)
+              .backgroundColor('rgba(0, 0, 0, 0.7)')
+              .borderRadius(40)
+              .onClick(() => {
+                if (this.isPaused) {
+                  this.resumeMarquee()
+                } else {
+                  this.pauseMarquee()
+                }
+              })
 
-            // 返回按钮（终止图标）
-            Button() {
-              Text('■')
-                .fontSize(24)
-                .fontColor('#FFFFFF')
+              // 返回按钮（终止图标）
+              Button() {
+                Text('■')
+                  .fontSize(24)
+                  .fontColor('#FFFFFF')
+              }
+              .width(80)
+              .height(80)
+              .backgroundColor('rgba(0, 0, 0, 0.7)')
+              .borderRadius(40)
+              .onClick(() => {
+                this.goBack()
+              })
             }
-            .width(80)
-            .height(80)
-            .backgroundColor('rgba(0, 0, 0, 0.7)')
-            .borderRadius(40)
-            .onClick(() => {
-              this.goBack()
-            })
           }
+          .width('100%')
+          .height(120)
+          .justifyContent(FlexAlign.Center)
+          .alignItems(HorizontalAlign.Center)
+          .backgroundColor('rgba(0, 0, 0, 0.7)')
+          .borderRadius(20)
+          .margin({ bottom: 100 })
+          .onClick(() => {
+            // 点击控制区域不隐藏面板，空函数阻止事件冒泡
+          })
         }
         .width('100%')
         .height('100%')
-        .justifyContent(FlexAlign.Center)
+        .justifyContent(FlexAlign.End)
         .alignItems(HorizontalAlign.Center)
         .backgroundColor('rgba(0, 0, 0, 0.5)')
         .onClick(() => {
