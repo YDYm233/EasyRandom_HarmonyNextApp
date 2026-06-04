@@ -138,9 +138,10 @@ struct MarqueeEditor {
     { label: '特粗', value: 800 },
     { label: '黑体', value: 900 },
   ]
-  private readonly fontSizePresets: number[] = [24, 32, 40, 48, 56, 64, 72, 80, 96, 112, 128, 144, 160, 176, 192, 200]
+  private readonly fontSizePresets: number[] = [24, 32, 40, 48, 56, 64, 72, 80, 96, 112, 128, 144, 160, 176, 192, 200, 224, 256, 288, 320, 352, 384, 400]
   private readonly displayDirectionOptions: SelectOpt[] = [
     { value: '横向滚动' },
+
     { value: '竖向滚动' }
   ]
   private readonly scrollDirectionOptions: SelectOpt[] = [
@@ -192,124 +193,146 @@ struct MarqueeEditor {
 
   @Builder
   FontSheetBuilder() {
-    Column({ space: 24 }) {
-      // ── 标题 ──
-      Row() {
-        Text('字体设置')
-          .fontSize(18)
-          .fontWeight(FontWeight.Bold)
-          .fontColor($r("app.color.FontIcon_Fore1"))
-        Blank()
-        // Image($r("app.media.func_cancle"))
-        //   .width(24)
-        //   .height(24)
-        //   .fillColor($r("app.color.FontIcon_Fore2"))
-        //   .onClick(() => { this.showFontSheet = false })
-      }
-      .width('100%')
+    Column() {
+      Column() {
+        Column({ space: 24 }) {
+          // ── 标题 ──
+          Row() {
+            Text('字体设置')
+              .fontSize(18)
+              .fontWeight(FontWeight.Bold)
+              .fontColor($r("app.color.FontIcon_Fore1"))
+            Blank()
+            Image($r("app.media.func_cancle"))
+              .width(24)
+              .height(24)
+              .fillColor($r("app.color.FontIcon_Fore2"))
+              .onClick(() => { this.showFontSheet = false })
+          }
+          .width('100%')
 
-      // ── 字体 & 字重 ──
-      Row() {
-        Text('字体')
-          .fontSize(14)
-          .fontWeight(FontWeight.Medium)
-          .fontColor($r("app.color.FontIcon_Fore1"))
-        Select(this.fontFamilies.map((f: string): SelectOpt => ({ value: f })))
-          .selected(this.fontFamilyIndex)
-          .value(this.fontFamily)
-          .width(140)
-          .font({ size: 13 })
-          .fontColor($r("app.color.FontIcon_Fore1"))
-          .selectedOptionFont({ size: 13 })
-          .optionFont({ size: 13 })
-          .onSelect((index: number, _value: string) => {
-            this.fontFamilyIndex = index
-            this.fontFamily = this.fontFamilies[index]
-          })
-        Blank()
-        Text('字重')
-          .fontSize(14)
-          .fontWeight(FontWeight.Medium)
-          .fontColor($r("app.color.FontIcon_Fore1"))
-        Select(this.fontWeightOptions.map((opt: FontWeightOption): SelectOpt => ({ value: opt.label })))
-          .selected(this.fontWeightIndex)
-          .value(this.fontWeightOptions[this.fontWeightIndex].label)
-          .width(80)
-          .font({ size: 13 })
-          .fontColor($r("app.color.FontIcon_Fore1"))
-          .selectedOptionFont({ size: 13 })
-          .optionFont({ size: 13 })
-          .onSelect((index: number, _value: string) => {
-            this.fontWeightIndex = index
-            this.fontWeight = this.fontWeightOptions[index].value
-          })
-      }
-      .width('100%')
-      .height(48)
+          // ── 字体 & 字重 ──
+          Row() {
+            Text('字体')
+              .fontSize(14)
+              .fontWeight(FontWeight.Medium)
+              .fontColor($r("app.color.FontIcon_Fore1"))
+            Select(this.fontFamilies.map((f: string): SelectOpt => ({ value: f })))
+              .selected(this.fontFamilyIndex)
+              .value(this.fontFamily)
+              .width(140)
+              .font({ size: 13 })
+              .fontColor($r("app.color.FontIcon_Fore1"))
+              .selectedOptionFont({ size: 13 })
+              .optionFont({ size: 13 })
+              .onSelect((index: number, _value: string) => {
+                this.fontFamilyIndex = index
+                this.fontFamily = this.fontFamilies[index]
+              })
+            Blank()
+            Text('字重')
+              .fontSize(14)
+              .fontWeight(FontWeight.Medium)
+              .fontColor($r("app.color.FontIcon_Fore1"))
+            Select(this.fontWeightOptions.map((opt: FontWeightOption): SelectOpt => ({ value: opt.label })))
+              .selected(this.fontWeightIndex)
+              .value(this.fontWeightOptions[this.fontWeightIndex].label)
+              .width(80)
+              .font({ size: 13 })
+              .fontColor($r("app.color.FontIcon_Fore1"))
+              .selectedOptionFont({ size: 13 })
+              .optionFont({ size: 13 })
+              .onSelect((index: number, _value: string) => {
+                this.fontWeightIndex = index
+                this.fontWeight = this.fontWeightOptions[index].value
+              })
+          }
+          .width('100%')
+          .height(48)
 
-      // ── 字号 ──
-      Column({ space: 8 }) {
-        Row() {
-          Text('字号')
-            .fontSize(14)
-            .fontWeight(FontWeight.Medium)
-            .fontColor($r("app.color.FontIcon_Fore1"))
-          Blank()
-          Text(this.fontSize.toString())
-            .fontSize(14)
-            .fontWeight(FontWeight.Bold)
-            .fontColor($r("app.color.Brand"))
+          // ── 字号 ──
+          Column({ space: 8 }) {
+            Row() {
+              Text('字号')
+                .fontSize(14)
+                .fontWeight(FontWeight.Medium)
+                .fontColor($r("app.color.FontIcon_Fore1"))
+              Blank()
+              Text(this.fontSize.toString())
+                .fontSize(14)
+                .fontWeight(FontWeight.Bold)
+                .fontColor($r("app.color.Brand"))
+            }
+            .width('100%')
+            Slider({
+              value: this.fontSize,
+              min: this.fontSizePresets[0],
+              max: this.fontSizePresets[this.fontSizePresets.length - 1],
+              step: 8,
+              style: SliderStyle.OutSet
+            })
+            .blockColor($r("app.color.Brand"))
+            .trackColor($r("app.color.Comp_Bg3"))
+            .selectedColor($r("app.color.Brand"))
+            .showSteps(true)
+            .trackThickness(6)
+            .blockSize({ width: 20, height: 20 })
+            .onChange((value: number) => {
+              this.fontSize = this.snapFontSize(value)
+            })
+          }
+          .width('100%')
+
+          // ── 字体样式预览 ──
+          Column({ space: 8 }) {
+            Row() {
+              Text('字体样式预览')
+                .fontSize(14)
+                .fontWeight(FontWeight.Medium)
+                .fontColor($r("app.color.FontIcon_Fore1"))
+              Blank()
+              Text(this.fontSize.toString() + 'vp')
+                .fontSize(12)
+                .fontColor($r("app.color.Brand"))
+            }
+            .width('100%')
+            
+            // 预览区域
+            Column() {
+              Text('字Aaα')
+                .fontSize(Math.min(this.fontSize,400))
+                .fontColor($r("app.color.FontIcon_Fore1"))
+                .fontFamily(this.fontFamily)
+                .fontWeight(this.fontWeight)
+                .maxLines(1)
+                .textOverflow({ overflow: TextOverflow.MARQUEE})
+            }
+            .width('100%')
+            // .height(64)
+            .aspectRatio(1)
+            .justifyContent(FlexAlign.Center)
+            .padding({ left: 16, right: 16 })
+            .backgroundColor($r("app.color.Comp_Bg3"))
+            .borderRadius(12)
+            .border({ width: 1, color: $r("app.color.Comp_Bg2") })
+            .shadow({ radius: 8, color: 'rgba(0, 0, 0, 0.1)', offsetX: 0, offsetY: 2 })
+          }
+          .width('100%')
         }
         .width('100%')
-        Slider({
-          value: this.fontSize,
-          min: this.fontSizePresets[0],
-          max: this.fontSizePresets[this.fontSizePresets.length - 1],
-          step: 1,
-          style: SliderStyle.OutSet
-        })
-        .onChange((value: number) => {
-          this.fontSize = this.snapFontSize(value)
-        })
+        .padding({ left: 24, right: 24, top: 20, bottom: 32 })
       }
       .width('100%')
-
-      // ── 字体样式预览 ──
-      Column({ space: 8 }) {
-        Row() {
-          Text('字体样式预览')
-            .fontSize(14)
-            .fontWeight(FontWeight.Medium)
-            .fontColor($r("app.color.FontIcon_Fore1"))
-          Blank()
-          Text(this.fontSize.toString() + 'vp')
-            .fontSize(12)
-            .fontColor($r("app.color.Brand"))
-        }
-        .width('100%')
-        
-        // 预览区域
-        Column() {
-          Text('字Aaα')
-            .fontSize(Math.min(this.fontSize,200))
-            .fontColor(this.fontColor)
-            .fontFamily(this.fontFamily)
-            .fontWeight(this.fontWeight)
-            .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.MARQUEE})
-        }
-        .width('100%')
-        // .height(64)
-        .aspectRatio(1)
-        .justifyContent(FlexAlign.Center)
-        .padding({ left: 16, right: 16 })
-        .backgroundColor(this.bgColor)
-        .borderRadius(12)
-      }
-      .width('100%')
+      .constraintSize({ maxWidth: 460 })
+      .borderRadius(20)
+      .backgroundColor($r("app.color.Comp_Bg1"))
+      .shadow({ radius: 20, color: 'rgba(0, 0, 0, 0.2)', offsetX: 0, offsetY: 8 })
     }
     .width('100%')
-    .padding({ left: 24, right: 24, top: 20, bottom: 32 })
+    .height('100%')
+    .justifyContent(FlexAlign.Center)
+    .alignItems(HorizontalAlign.Center)
+    .onClick(() => { this.showFontSheet = false })
   }
 
   build() {
@@ -355,6 +378,8 @@ struct MarqueeEditor {
         .padding(12)
         .backgroundColor(this.bgColor)
         .borderRadius(8)
+        .border({ width: 2, color: $r("app.color.Comp_Bg2") })
+        .shadow({ radius: 12, color: 'rgba(0, 0, 0, 0.15)', offsetX: 0, offsetY: 4 })
         .layoutWeight(0.7) // 占70%宽度
 
         // 功能按钮区（竖向排列）
@@ -492,7 +517,9 @@ struct MarqueeEditor {
         .blockColor($r("app.color.Brand"))
         .trackColor($r("app.color.Comp_Bg3"))
         .selectedColor($r("app.color.Brand"))
-        .showSteps(true)
+        .showSteps(false)
+        .trackThickness(6)
+        .blockSize({ width: 20, height: 20 })
         .onChange((value: number) => { this.speed = Math.round(value) })
       }
       .width('100%')
@@ -573,7 +600,11 @@ struct MarqueeEditor {
     .padding(24)
     .borderRadius(20)
     .backgroundColor($r("app.color.Comp_Bg1"))
-    .bindSheet($$this.showFontSheet, this.FontSheetBuilder(), { height: 420 })
+    .bindContentCover($$this.showFontSheet, this.FontSheetBuilder(), {
+      modalTransition: ModalTransition.DEFAULT,
+      backgroundColor: $r("app.color.Comp_Bg3"),
+      onDisappear: () => { this.showFontSheet = false }
+    })
   }
 }
 
