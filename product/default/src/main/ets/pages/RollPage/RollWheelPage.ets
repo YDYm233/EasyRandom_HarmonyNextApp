@@ -336,10 +336,11 @@ struct RollWheelsShow {
       }
     })
     .bindSheet($$this.isCardAddSheetShow, this.cardAddSheetContent(), {
-      height: 480,
+      height: 660,
       dragBar: false,
       showClose: false,
       backgroundColor: Color.Transparent,
+      blurStyle: BlurStyle.COMPONENT_ULTRA_THICK,
       onDisappear: () => {
         hilog.info(0x0000, 'testTag', '[Pin按钮] 卡片添加弹出层关闭')
       }

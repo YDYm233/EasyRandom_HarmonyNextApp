@@ -73,20 +73,31 @@ export struct RollWheelCardAddSheet {
       .justifyContent(FlexAlign.Center)
       .margin({ top: 12, bottom: 16 })
       
-      // 标题区域
-      Column() {
-        Text('添加转盘卡片')
-          .fontSize(22)
-          .fontWeight(FontWeight.Bold)
-          .fontColor($r("app.color.FontIcon_Fore1"))
+      // 标题区域：应用图标 + 名称
+      Row() {
+        Image($r("app.media.app_icon"))
+          .width(32)
+          .height(32)
+          .borderRadius(8)
         
-        Text('长按下方按钮将卡片添加到桌面')
-          .fontSize(14)
-          .fontColor($r("app.color.FontIcon_Fore2"))
-          .margin({ top: 6 })
+        Text($r("app.string.app_name"))
+          .fontSize(18)
+          .fontWeight(FontWeight.Medium)
+          .fontColor($r("app.color.FontIcon_Fore1"))
+          .margin({ left: 10 })
       }
-      .width('100%')
+      .width('90%')
       .margin({ bottom: 20 })
+      
+      // 卡片标题（从卡片内移出）
+      Text(this.currentRoll.rollName)
+        .fontSize(20)
+        .fontWeight(FontWeight.Bold)
+        .fontColor($r("app.color.FontIcon_Fore1"))
+        .maxLines(1)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+        .width('90%')
+        .margin({ bottom: 16 })
       
       // 卡片预览区域
       Column() {
@@ -94,47 +105,42 @@ export struct RollWheelCardAddSheet {
         Column() {
           Row() {
             RollWheelPreview({ data: this.currentRoll, rotateAngle: this.previewRotateAngle })
-              .width('75%')
+              .width('80%')
               .aspectRatio(1)
             
             Image($r("app.media.pointer_m"))
               .zIndex(8)
-              .width('22%')
+              .width('24%')
               .aspectRatio(1)
               .fillColor($r("app.color.FontIcon_Back1"))
-              .position({ top: '39%', left: '39%' })
+              .position({ top: '38%', left: '38%' })
           }
           .width('100%')
-          .height('75%')
+          .height('100%')
           .justifyContent(FlexAlign.Center)
           .alignItems(VerticalAlign.Center)
-          
-          // 转盘名称
-          Text(this.currentRoll.rollName)
-            .fontColor($r("app.color.FontIcon_Fore1"))
-            .fontSize(14)
-            .fontWeight(FontWeight.Medium)
-            .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .width('90%')
-            .textAlign(TextAlign.Center)
-            .margin({ top: 8 })
         }
         .width('85%')
         .aspectRatio(1)
-        .padding(12)
-        .backgroundColor($r("app.color.Comp_Bg1"))
-        .borderRadius(16)
+        .padding(16)
+        .backgroundColor($r("app.color.Comp_Bg2"))
+        .borderRadius(20)
         .shadow({
-          radius: 20,
-          color: 'rgba(0, 0, 0, 0.1)',
+          radius: 24,
+          color: 'rgba(0, 0, 0, 0.12)',
           offsetX: 0,
-          offsetY: 4
+          offsetY: 6
         })
       }
       .width('100%')
       .justifyContent(FlexAlign.Center)
-      .margin({ bottom: 24 })
+      .margin({ bottom: 28 })
+      
+      // 提示文字
+      Text('长按下方按钮将卡片添加到桌面')
+        .fontSize(14)
+        .fontColor($r("app.color.FontIcon_Fore2"))
+        .margin({ bottom: 16 })
       
       // 操作按钮区域
       Column({ space: 12 }) {
@@ -166,7 +172,7 @@ export struct RollWheelCardAddSheet {
           })
       }
       .width('100%')
-      .padding({ bottom: 32 })
+      .padding({ bottom: 36 })
     }
     .width('100%')
     .backgroundColor($r("app.color.Comp_Bg1"))
