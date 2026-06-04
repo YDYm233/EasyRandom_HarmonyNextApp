@@ -111,7 +111,7 @@ export struct RollWheelCardAddSheet {
         .width('50%')
         .aspectRatio(1)
         .padding(16)
-        .backgroundColor($r("app.color.Comp_Bg2"))
+        .backgroundColor($r("app.color.Comp_Bg1"))
         .borderRadius(20)
         .shadow({
           radius: 24,
