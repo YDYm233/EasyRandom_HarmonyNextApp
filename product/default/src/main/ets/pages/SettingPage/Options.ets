@@ -259,10 +259,10 @@ struct Container{
         }
         .width('100%')
 
-        ListItem() {
-          VibrationToggle()
-        }
-        .width('100%')
+        // ListItem() {
+        //   VibrationToggle()
+        // }
+        // .width('100%')
 
         ListItem() {
 
