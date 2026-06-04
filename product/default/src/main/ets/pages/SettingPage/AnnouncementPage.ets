@@ -41,10 +41,10 @@ struct AnnouncementPageComponent {
           // 开发进度
           this.SectionHeader('🚀 开发进度')
           Column() {
-            this.ProgressItem('主页面 UI 重构', true)
-            this.ProgressItem('液态玻璃效果适配', true)
+            this.ProgressItem('主页面 UI 重构(api23+)', true)
+            this.ProgressItem('液态玻璃效果适配(api23+)', true)
             this.ProgressItem('震动反馈', true)
-            this.ProgressItem('手表端 (wearable) 完整适配', false)
+            this.ProgressItem('手表端(预计下版本推出V1.0.0)', false)
             this.ProgressItem('折叠屏深度适配', false)
             this.ProgressItem('PC 端 (2in1) 大屏适配', false)
           }
