@@ -8,6 +8,9 @@ import { Want } from '@kit.AbilityKit'
 import { preferences } from '@kit.ArkData'
 import { hilog } from '@kit.PerformanceAnalysisKit'
 import { BusinessError } from '@kit.BasicServicesKit'
+import { ApiVersionUtil } from '../../utils/ApiVersionUtil'
+import { promptAction } from '@kit.ArkUI'
+import { RollWheelCardAddSheet } from './RollWheelCardAddSheet'
 
 @Component
 struct RollPage {
@@ -54,6 +57,7 @@ struct RollWheelsShow {
   @State showPoint: boolean = true
   @State isSheetShow: boolean = false
   @State dataVersion: number = 0
+  @State isCardAddSheetShow: boolean = false // 卡片添加弹出层显示状态
   private swiperController: SwiperController = new SwiperController()
 
   aboutToAppear() {
@@ -77,6 +81,16 @@ struct RollWheelsShow {
   @Builder
   sheetContent() {
     RollEditSheet()
+  }
+
+  @Builder
+  cardAddSheetContent() {
+    RollWheelCardAddSheet({
+      currentRoll: this.dataList[this.swiperIndex],
+      onClose: () => {
+        this.isCardAddSheetShow = false
+      }
+    })
   }
 
   build() {
@@ -217,18 +231,28 @@ struct RollWheelsShow {
                 '[Pin按钮] 已保存转盘数据: %{public}s, 选项数: %{public}d',
                 currentRoll.rollName, currentRoll.rollItems.length)
 
-              // 打开卡片管理器，让用户选择添加 RollWheelCard 到桌面
-              const want: Want = {
-                bundleName: 'ydy.App.EasyRandom',
-                abilityName: 'DefaultFormAbility',
-                parameters: {
-                  'ohos.extra.param.key.form_dimension': 2,
-                  'ohos.extra.param.key.form_name': 'RollWheelCard',
-                  'ohos.extra.param.key.module_name': 'default'
+              // 检查API版本，决定使用哪种方式添加卡片到桌面
+              const currentApiVersion = ApiVersionUtil.getCurrentApiVersion()
+              hilog.info(0x0000, 'testTag', '[Pin按钮] 当前API版本: %{public}d', currentApiVersion)
+
+              if (currentApiVersion >= 18) {
+                // API 18及以上：使用 formProvider.openFormManager 打开卡片管理器
+                const want: Want = {
+                  bundleName: 'ydy.App.EasyRandom',
+                  abilityName: 'DefaultFormAbility',
+                  parameters: {
+                    'ohos.extra.param.key.form_dimension': 2,
+                    'ohos.extra.param.key.form_name': 'RollWheelCard',
+                    'ohos.extra.param.key.module_name': 'default'
+                  }
                 }
+                formProvider.openFormManager(want)
+                hilog.info(0x0000, 'testTag', '[Pin按钮] formProvider.openFormManager 成功打开')
+              } else {
+                // API 18以下：显示卡片添加弹出层
+                this.isCardAddSheetShow = true
+                hilog.info(0x0000, 'testTag', '[Pin按钮] API版本低于18，显示卡片添加弹出层')
               }
-              formProvider.openFormManager(want)
-              hilog.info(0x0000, 'testTag', '[Pin按钮] formProvider.openFormManager 成功打开')
             } catch (e) {
               hilog.error(0x0000, 'testTag', '[Pin按钮] 异常: %{public}s', JSON.stringify(e))
             }
@@ -309,6 +333,15 @@ struct RollWheelsShow {
         if (this.swiperIndex < this.dataList.length) {
           this.title = this.dataList[this.swiperIndex].rollName
         }
+      }
+    })
+    .bindSheet($$this.isCardAddSheetShow, this.cardAddSheetContent(), {
+      height: 480,
+      dragBar: false,
+      showClose: false,
+      backgroundColor: Color.Transparent,
+      onDisappear: () => {
+        hilog.info(0x0000, 'testTag', '[Pin按钮] 卡片添加弹出层关闭')
       }
     })
 
