@@ -151,9 +151,10 @@ struct AnnouncementPageComponent {
       .scrollBarColor($r("app.color.FontIcon_Fore4"))
       .scrollBarWidth(4)
       .edgeEffect(EdgeEffect.Spring)
+      .backgroundColor($r("app.color.Comp_Bg2"))
     }
     .title('公告与功能')
-    .backgroundColor($r("app.color.Comp_Bg3"))
+    .backgroundColor($r("app.color.Comp_Bg1"))
     .onBackPressed(() => {
       this.pageInfos.pop()
       return true

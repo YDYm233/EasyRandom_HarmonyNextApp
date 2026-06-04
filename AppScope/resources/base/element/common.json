@@ -10,7 +10,7 @@
     },
     {
       "name": "app_version",
-      "value": "1.0.17",
+      "value": "1.0.18",
       "comment": "应用版本号，技术常量，不可翻译",
       "attr": {
         "translatable": false
