@@ -47,10 +47,12 @@ struct Index {
 
       Row() {
         Text('点此查看详细信息').onClick(() => {
-          router.pushUrl({
-            url: 'pages/SettingPage/SettingPage',
-            params: new Params('privatepolicy')
-          }).then(() => {
+          // router.pushUrl({
+          //   url: 'pages/SettingPage/SettingPage',
+          //   params: new Params('privatepolicy')
+          // })
+          router.pushUrl({ url: 'pages/SettingPage/SettingPage', params: { type: 'privatepolicy' } })
+            .then(() => {
             console.info("success.")
           }).catch((err: BusinessError) => {
             console.error(`err, code is ${err.code}, message is ${err.message}.`)

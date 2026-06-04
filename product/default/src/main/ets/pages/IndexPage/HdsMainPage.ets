@@ -309,7 +309,7 @@ export struct HdsMainPage {
         .onClick(() => {
           router.pushUrl({
             url: 'pages/SettingPage/SettingPage',
-            params: new Params('aboutus')
+            // params: new Params('announcement')
           }).then(() => {
             console.info("success.")
           }).catch((err: BusinessError) => {
