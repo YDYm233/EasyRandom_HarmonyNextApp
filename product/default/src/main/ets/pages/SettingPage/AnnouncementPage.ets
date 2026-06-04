@@ -55,6 +55,25 @@ struct AnnouncementPageComponent {
           .borderRadius(12)
           .margin({ bottom: 12 })
 
+          // 服务卡片开发进度
+          this.SectionHeader('🧩 服务卡片开发进度')
+          Column() {
+            this.FeatureItem('🎲 骰子卡片', '2×2尺寸 | 点击投掷骰子')
+            this.FeatureItem('🪙 硬币卡片', '2×2尺寸 | 点击抛硬币')
+            this.FeatureItem('🎡 转盘卡片', '2×2 / 4×4 | 迷你幸运转盘')
+            this.FeatureItem('☯️ 八卦卡片', '2×2 / 4×4 | 八卦占卜结果')
+            this.FeatureItem('🎨 颜色卡片', '2×2尺寸 | 随机颜色展示')
+            this.FeatureItem('🔤 ABCD 卡片', '2×2尺寸 | 四选一抽选')
+            this.FeatureItem('🐟 木鱼卡片', '2×2尺寸 | 敲木鱼快捷入口')
+            this.ProgressItem('🐾 电子宠物卡片 (2×2 / 4×4 | 桌面养成互动)', false)
+          }
+          .alignItems(HorizontalAlign.Start)
+          .width('100%')
+          .padding(16)
+          .backgroundColor($r("app.color.Comp_Bg1"))
+          .borderRadius(12)
+          .margin({ bottom: 12 })
+
           // 已实现的功能
           this.SectionHeader('✅ 已实现功能')
           Column() {
