@@ -1,17 +1,20 @@
 ﻿import { BreakpointState, BreakpointSystem } from '@ohos/common';
 import router from '@ohos.router';
+import { ApiVersionUtil } from '../utils/ApiVersionUtil';
 
 class ToolItem {
   emoji: string
   name: Resource
   url: string
   category: string
+  minApiVersion?: number  // 最低API版本要求（可选，默认为最低支持版本）
 
-  constructor(emoji: string, name: Resource, url: string, category: string) {
+  constructor(emoji: string, name: Resource, url: string, category: string, minApiVersion?: number) {
     this.emoji = emoji;
     this.name = name;
     this.url = url;
     this.category = category;
+    this.minApiVersion = minApiVersion;
   }
 }
 
@@ -25,12 +28,12 @@ const TOOLS_HOT: Array<ToolItem> = [
 /** 小工具分类 */
 const TOOLS_SMALL: Array<ToolItem> = [
   new ToolItem('🎲', $r("app.string.page_roll_dices"), 'sub_pages/flip_dices/RollDices', '小工具'),
-  new ToolItem('🪙', $r("app.string.page_flip_coin"), 'sub_pages/flip_coin/FlipCoin', '小工具'),
+  new ToolItem('🪙', $r("app.string.page_flip_coin"), 'sub_pages/flip_coin/FlipCoin', '小工具', 18), // 抛硬币需要API 18+
   new ToolItem('🔢', $r("app.string.page_random_numbers"), 'sub_pages/random_numbers/RandomNumbers', '小工具'),
   new ToolItem('🔤', $r("app.string.page_abcd"), 'sub_pages/random_abcd/RandomABCD', '小工具'),
   new ToolItem('🎯', $r("app.string.page_random_places"), 'sub_pages/random_places/RandomPlaces', '小工具'),
   new ToolItem('📱', $r("app.string.page_qrcode"), 'sub_pages/trans_qr/TransQR', '小工具'),
-  new ToolItem('💬', $r("app.string.page_text_marquee"), 'sub_pages/text_marquee/TextMarquee', '小工具'),
+  new ToolItem('💬', $r("app.string.page_text_marquee"), 'sub_pages/text_marquee/TextMarquee', '小工具', 14), // 手持弹幕需要API 14+
   new ToolItem('🎨', $r("app.string.page_random_colors"), 'sub_pages/random_colors/RandomColors', '小工具'),
 ];
 
@@ -54,10 +57,18 @@ class Params {
 @Component
 struct ToolsPage {
   @State currentBreakpoint: BreakpointState<string> = BreakpointState.of({ sm: "sm", md: "md", lg: "lg" })
+  @State supportedToolsHot: Array<ToolItem> = []
+  @State supportedToolsSmall: Array<ToolItem> = []
+  @State supportedToolsFun: Array<ToolItem> = []
 
   aboutToAppear() {
     BreakpointSystem.getInstance().attach(this.currentBreakpoint)
     BreakpointSystem.getInstance().start()
+    
+    // 过滤出当前设备支持的工具
+    this.supportedToolsHot = ApiVersionUtil.filterSupportedTools(TOOLS_HOT)
+    this.supportedToolsSmall = ApiVersionUtil.filterSupportedTools(TOOLS_SMALL)
+    this.supportedToolsFun = ApiVersionUtil.filterSupportedTools(TOOLS_FUN)
   }
 
   aboutToDisappear() {
@@ -155,15 +166,15 @@ struct ToolsPage {
 
           // 热门推荐
           this.SectionHeader('🔥', '热门推荐')
-          this.CapsuleSection(TOOLS_HOT, true)
+          this.CapsuleSection(this.supportedToolsHot, true)
 
           // 小工具
           this.SectionHeader('🛠️', '小工具')
-          this.CapsuleSection(TOOLS_SMALL, false)
+          this.CapsuleSection(this.supportedToolsSmall, false)
 
           // 趣味玩法
           this.SectionHeader('🎮', '趣味玩法')
-          this.CapsuleSection(TOOLS_FUN, false)
+          this.CapsuleSection(this.supportedToolsFun, false)
 
           Blank().height(24)
           // Row() {
