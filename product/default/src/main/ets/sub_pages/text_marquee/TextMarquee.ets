@@ -4,6 +4,8 @@
 
 import { ColorPickerButton } from '@ohos/common';
 import router from '@ohos.router';
+import { text } from '@kit.ArkGraphics2D';
+import { BusinessError } from '@kit.BasicServicesKit';
 
 class Params {
   type: string
@@ -125,8 +127,7 @@ struct MarqueeEditor {
   @State isVertical: boolean = true
   @State scrollFromLeft: boolean = true
   @State loopInterval: number = 0 // 循环间隔（毫秒）
-
-  private readonly fontFamilies: string[] = ['HarmonyOS Sans', 'HarmonyOS Sans SC', 'HarmonyOS Sans TC']
+  @State fontFamilies: string[] = ['HarmonyOS Sans', 'HarmonyOS Sans SC', 'HarmonyOS Sans TC'] // 系统字体列表
   private readonly fontWeightOptions: FontWeightOption[] = [
     { label: '极细', value: 100 },
     { label: '细体', value: 200 },
@@ -156,6 +157,33 @@ struct MarqueeEditor {
     { value: '3 秒' }
   ]
   private readonly loopIntervalValues: number[] = [0, 500, 1000, 2000, 3000]
+
+  // 组件即将出现时获取系统字体列表
+  aboutToAppear(): void {
+    this.loadSystemFonts()
+  }
+
+  // 加载系统支持的字体列表
+  private loadSystemFonts(): void {
+    let fontType: text.SystemFontType = text.SystemFontType.GENERIC
+    let promise = text.getSystemFontFullNamesByType(fontType)
+    promise.then((data: string[]) => {
+      if (data && data.length > 0) {
+        this.fontFamilies = data
+        // 确保当前选中的字体在列表中
+        const index = this.fontFamilies.indexOf(this.fontFamily)
+        if (index >= 0) {
+          this.fontFamilyIndex = index
+        } else {
+          // 如果当前字体不在列表中，默认选择第一个
+          this.fontFamilyIndex = 0
+          this.fontFamily = this.fontFamilies[0]
+        }
+      }
+    }).catch((error: BusinessError) => {
+      console.error(`Failed to get font fullNames by type, error: ${JSON.stringify(error)}`)
+    })
+  }
 
   private padText(src: string): string {
     if (src.length >= 20) {
