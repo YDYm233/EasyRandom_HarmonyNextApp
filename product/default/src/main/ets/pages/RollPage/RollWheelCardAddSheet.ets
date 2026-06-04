@@ -61,18 +61,6 @@ export struct RollWheelCardAddSheet {
 
   build() {
     Column() {
-      // 顶部拖拽指示条
-      Row() {
-        Row()
-          .width(40)
-          .height(4)
-          .backgroundColor($r("app.color.Comp_Bg3"))
-          .borderRadius(2)
-      }
-      .width('100%')
-      .justifyContent(FlexAlign.Center)
-      .margin({ top: 12, bottom: 16 })
-      
       // 标题区域：应用图标 + 名称
       Row() {
         Image($r("app.media.app_icon"))
@@ -87,7 +75,7 @@ export struct RollWheelCardAddSheet {
           .margin({ left: 10 })
       }
       .width('90%')
-      .margin({ bottom: 20 })
+      .margin({ top: 16, bottom: 20 })
       
       // 卡片标题（从卡片内移出）
       Text(this.currentRoll.rollName)
@@ -105,7 +93,7 @@ export struct RollWheelCardAddSheet {
         Column() {
           Row() {
             RollWheelPreview({ data: this.currentRoll, rotateAngle: this.previewRotateAngle })
-              .width('80%')
+              .width('100%')
               .aspectRatio(1)
             
             Image($r("app.media.pointer_m"))
@@ -120,7 +108,7 @@ export struct RollWheelCardAddSheet {
           .justifyContent(FlexAlign.Center)
           .alignItems(VerticalAlign.Center)
         }
-        .width('85%')
+        .width('50%')
         .aspectRatio(1)
         .padding(16)
         .backgroundColor($r("app.color.Comp_Bg2"))
@@ -145,7 +133,7 @@ export struct RollWheelCardAddSheet {
       // 操作按钮区域
       Column({ space: 12 }) {
         // 添加到桌面按钮
-        Button('添加到桌面')
+        Button('添加到桌面[长按]')
           .id(this.addDesktopBtnId)
           .width('85%')
           .height(50)
@@ -175,7 +163,9 @@ export struct RollWheelCardAddSheet {
       .padding({ bottom: 36 })
     }
     .width('100%')
-    .backgroundColor($r("app.color.Comp_Bg1"))
+    .height('100%')
+    .justifyContent(FlexAlign.SpaceBetween)
+    // .backgroundColor($r("app.color.Comp_Bg1"))
     .borderRadius({ topLeft: 28, topRight: 28 })
   }
 }

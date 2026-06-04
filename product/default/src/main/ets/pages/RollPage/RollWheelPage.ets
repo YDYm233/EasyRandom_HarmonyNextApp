@@ -338,7 +338,7 @@ struct RollWheelsShow {
     .bindSheet($$this.isCardAddSheetShow, this.cardAddSheetContent(), {
       height: 660,
       dragBar: false,
-      showClose: false,
+      showClose: true,
       backgroundColor: Color.Transparent,
       blurStyle: BlurStyle.COMPONENT_ULTRA_THICK,
       onDisappear: () => {
