@@ -5,6 +5,7 @@ import { Options } from './Options';
 import { PrivacyPolicy } from './PrivacyPolicy';
 import { Illustrate } from './MoreOpt';
 import { CopyRight } from './CopyRight';
+import { AnnouncementPage } from './AnnouncementPage';
 import { promptAction } from '@kit.ArkUI';
 import { BreakpointState, BreakpointSystem } from '@ohos/common';
 import { resourceManager } from '@kit.LocalizationKit';
@@ -31,6 +32,7 @@ let copyRight = new Item('版权声明', $r("app.media.addoil_thumb"), 0xfebb00)
 let illustrate = new Item('更多信息', $r("app.media.illustrate"), 0xbeff00)
 let addOil = new Item('赞赏我们', $r("app.media.addoil_flower"), 0xffbe00)
 let moreOpt = new Item ('更多操作',$r("app.media.func_more"),0xFFBBEE)
+let announcement = new Item('公告与功能', $r("app.media.illustrate"), 0x00BEFF)
 class Params {
   type:string
   constructor(tuple:string) {
@@ -197,6 +199,9 @@ onPageShow(): void {
           }
 
           ListItemGroup({ header: this.itemHead('关于'), space: 8 }) {
+            ListItem() {
+              this.SettingItem(announcement)
+            }
             ListItem() {
               this.SettingItem(aboutUs)
             }

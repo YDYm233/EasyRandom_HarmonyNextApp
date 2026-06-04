@@ -29,6 +29,11 @@
       "name": "开发者团队",
       "pageSourceFile": "src/main/ets/pages/SettingPage/AboutUs.ets",
       "buildFunction": "AboutUs"
+    },
+    {
+      "name": "公告与功能",
+      "pageSourceFile": "src/main/ets/pages/SettingPage/AnnouncementPage.ets",
+      "buildFunction": "AnnouncementPage"
     }
   ]
 }
