@@ -1,6 +1,6 @@
 {
   "module": {
-    "name": "VibratorUtil",
+    "name": "HarmonySystemUtils",
     "type": "har",
     "deviceTypes": [
       "default",

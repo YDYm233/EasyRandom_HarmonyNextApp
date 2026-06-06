@@ -65,8 +65,8 @@
     //   ]
     // }
     {
-      "name": "VibratorUtil",
-      "srcPath": "./common/VibratorUtil",
+      "name": "HarmonySystemUtils",
+      "srcPath": "./common/HarmonySystemUtils"
     }
   ]
 }

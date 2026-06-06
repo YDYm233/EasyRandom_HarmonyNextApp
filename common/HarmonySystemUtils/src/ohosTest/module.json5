@@ -1,6 +1,6 @@
 {
   "module": {
-    "name": "VibratorUtil_test",
+    "name": "HarmonySystemUtils_test",
     "type": "feature",
     "deviceTypes": [
       "default",

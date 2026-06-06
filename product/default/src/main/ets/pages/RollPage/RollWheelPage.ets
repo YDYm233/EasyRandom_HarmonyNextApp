@@ -53,11 +53,10 @@ struct RollWheelsShow {
   @State isRoll: boolean = false
   @State duration: number = 0
   @State swiperIndex: number = 0
-  @State loveIndex: number = -1
   @State showPoint: boolean = true
   @State isSheetShow: boolean = false
   @State dataVersion: number = 0
-  @State isCardAddSheetShow: boolean = false // 卡片添加弹出层显示状态
+  @State sheetType: 'edit' | 'cardAdd' = 'edit' // 弹出层类型
   private swiperController: SwiperController = new SwiperController()
 
   aboutToAppear() {
@@ -80,17 +79,16 @@ struct RollWheelsShow {
 
   @Builder
   sheetContent() {
-    RollEditSheet()
-  }
-
-  @Builder
-  cardAddSheetContent() {
-    RollWheelCardAddSheet({
-      currentRoll: this.dataList[this.swiperIndex],
-      onClose: () => {
-        this.isCardAddSheetShow = false
-      }
-    })
+    if (this.sheetType === 'edit') {
+      RollEditSheet()
+    } else {
+      RollWheelCardAddSheet({
+        currentRoll: this.dataList[this.swiperIndex],
+        onClose: () => {
+          this.isSheetShow = false
+        }
+      })
+    }
   }
 
   build() {
@@ -206,12 +204,11 @@ struct RollWheelsShow {
         Row() {
           Button({ type: ButtonType.Capsule, stateEffect: true }) {
             Image($r("app.media.func_pin"))
-              .fillColor(this.swiperIndex != this.loveIndex ? $r("app.color.Brand") : "#ffffff")
+              .fillColor($r("app.color.Brand"))
               .width('75%')
           }
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
-          .backgroundColor(this.swiperIndex != this.loveIndex ? $r("app.color.Comp_Bg3") :
-          $r("app.color.control_bgc_1"))
+          .backgroundColor($r("app.color.Comp_Bg3"))
           .height('100%')
           .aspectRatio(1)
           .onClick(() => {
@@ -230,6 +227,12 @@ struct RollWheelsShow {
               hilog.info(0x0000, 'testTag',
                 '[Pin按钮] 已保存转盘数据: %{public}s, 选项数: %{public}d',
                 currentRoll.rollName, currentRoll.rollItems.length)
+
+              // 显示保存成功提示
+              promptAction.showToast({
+                message: `已保存"${currentRoll.rollName}"到桌面卡片`,
+                duration: 2000
+              })
 
               // 检查API版本，决定使用哪种方式添加卡片到桌面
               const currentApiVersion = ApiVersionUtil.getCurrentApiVersion()
@@ -250,11 +253,16 @@ struct RollWheelsShow {
                 hilog.info(0x0000, 'testTag', '[Pin按钮] formProvider.openFormManager 成功打开')
               } else {
                 // API 18以下：显示卡片添加弹出层
-                this.isCardAddSheetShow = true
+                this.sheetType = 'cardAdd'
+                this.isSheetShow = true
                 hilog.info(0x0000, 'testTag', '[Pin按钮] API版本低于18，显示卡片添加弹出层')
               }
             } catch (e) {
               hilog.error(0x0000, 'testTag', '[Pin按钮] 异常: %{public}s', JSON.stringify(e))
+              promptAction.showToast({
+                message: '保存失败，请重试',
+                duration: 2000
+              })
             }
           })
         }
@@ -301,6 +309,7 @@ struct RollWheelsShow {
           .height('100%')
           .aspectRatio(1)
           .onClick(() => {
+            this.sheetType = 'edit'
             this.isSheetShow = true
           })
         }
@@ -324,25 +333,21 @@ struct RollWheelsShow {
     .backgroundColor($r("app.color.Comp_Bg1"))
     .constraintSize(this.breakpoint.value === 'sm' ? { maxWidth: 520, maxHeight: 668 } : { maxWidth: 400, maxHeight: 520 })
     .bindSheet($$this.isSheetShow, this.sheetContent(), {
-      height: SheetSize.FIT_CONTENT,
-      dragBar: true,
-      showClose: false,
+      height: this.sheetType === 'edit' ? SheetSize.FIT_CONTENT : 660,
+      dragBar: this.sheetType === 'edit',
+      showClose: this.sheetType === 'cardAdd',
+      backgroundColor: this.sheetType === 'cardAdd' ? Color.Transparent : $r("app.color.Comp_Bg2"),
+      blurStyle: this.sheetType === 'cardAdd' ? BlurStyle.COMPONENT_ULTRA_THICK : BlurStyle.COMPONENT_THICK,
       onDisappear: () => {
-        // 重新从 Preferences 加载数据到 AppStorage，使主页面转盘同步编辑变更
-        initRollsData(getContext(this).getApplicationContext())
-        if (this.swiperIndex < this.dataList.length) {
-          this.title = this.dataList[this.swiperIndex].rollName
+        if (this.sheetType === 'edit') {
+          // 重新从 Preferences 加载数据到 AppStorage，使主页面转盘同步编辑变更
+          initRollsData(getContext(this).getApplicationContext())
+          if (this.swiperIndex < this.dataList.length) {
+            this.title = this.dataList[this.swiperIndex].rollName
+          }
+        } else {
+          hilog.info(0x0000, 'testTag', '[Pin按钮] 卡片添加弹出层关闭')
         }
-      }
-    })
-    .bindSheet($$this.isCardAddSheetShow, this.cardAddSheetContent(), {
-      height: 660,
-      dragBar: false,
-      showClose: true,
-      backgroundColor: Color.Transparent,
-      blurStyle: BlurStyle.COMPONENT_ULTRA_THICK,
-      onDisappear: () => {
-        hilog.info(0x0000, 'testTag', '[Pin按钮] 卡片添加弹出层关闭')
       }
     })
 
