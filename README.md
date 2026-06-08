@@ -204,7 +204,17 @@ app_EasyRandom/
 │           ├── Contexts/                  # 上下文管理
 │           └── pages/                     # 手表页面
 │
-├── ApiUpdate/                             # API 升级追踪文档
+├── docs/                                  # 项目文档
+│   ├── PROJECT.md                         # 开发手册（命名规范、组件、路由等）
+│   ├── tutorial_build_version.md          # 构建版本号教程
+│   ├── wearable-plan.md                   # 手表端实现方案
+│   ├── api-update/                         # API 升级追踪文档
+│   │   ├── 12to13.md                       # API 12→13 变更分析
+│   │   └── 12to18.md                       # API 12→18 变更分析
+│   └── feature-design/                    # 功能设计文档
+│       ├── VibratorManager.md              # 振动接入方案
+│       └── ...                             # 其他功能设计文档
+│
 ├── preview/                               # 应用预览截图
 ├── build/                                 # 构建产物 (.hap / .app)
 └── hvigor/                                # hvigor 构建脚本配置
