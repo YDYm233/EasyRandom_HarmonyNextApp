@@ -11,9 +11,8 @@
 </p>
 <p align="center">
   <img src="https://img.shields.io/badge/HarmonyOS-NEXT%205.0+-blue" alt="HarmonyOS"/>
-  <img src="https://img.shields.io/badge/API-13+-brightgreen" alt="API 13~~23"/>
-      <img src="https://img.shields.io/badge/API-23-brightgreen" alt="API 13~~23"/>
-  <img src="https://img.shields.io/badge/Version-1.0.16-orange" alt="Version"/>
+  <img src="https://img.shields.io/badge/API-13%2B-brightgreen" alt="API 13+"/>
+  <img src="https://img.shields.io/badge/Version-1.0.19-orange" alt="Version"/>
   <img src="https://img.shields.io/badge/License-Apache%202.0-lightgrey" alt="License"/>
 </p>
 
@@ -82,7 +81,7 @@
 
 - **语言**：ArkTS（TypeScript 超集）
 - **UI 框架**：ArkUI（声明式 UI）
-- **SDK 版本**：HarmonyOS 5.0.0 (API 12)
+- **SDK 版本**：HarmonyOS NEXT (API 13+)
 - **构建工具**：hvigor
 - **模块化方案**：HAP + HAR 多模块架构
 
@@ -109,43 +108,106 @@ product/wearable  ──→  @ohos/common (basic)
 ## 📁 项目结构
 
 ```
-├── AppScope/                          # 应用全局配置
-│   ├── app.json5                      # 应用包名、版本信息
-│   └── resources/                     # 全局资源（多语言字符串、颜色等）
-│       ├── base/                      # 默认语言 (zh-CN)
-│       ├── en/                        # 英文资源
-│       ├── ja/                        # 日文资源
-│       └── dark/                      # 暗夜模式颜色
+app_EasyRandom/
+├── AppScope/                              # 应用全局配置
+│   ├── app.json5                          # 应用包名、版本信息
+│   └── resources/                         # 全局资源
+│       ├── base/                          # 默认资源 (zh-CN)
+│       │   ├── element/                   # 颜色、字符串等 token
+│       │   └── media/                     # 全局媒体资源
+│       ├── dark/                          # 暗夜模式颜色覆盖
+│       ├── en/                            # 英文资源
+│       ├── ja/                            # 日文资源
+│       └── ldpi/ mdpi/ sdpi/ xldpi/ xxldpi/ xxxldpi/  # 分辨率适配资源
 │
-├── build-profile.json5                # 顶层构建配置（签名、产品、模块注册）
+├── build-profile.json5                    # 顶层构建配置（签名、产品、模块注册）
 │
-├── common/                            # 共享库目录
-│   ├── basic/                         # 公共基础库 (HAR)
+├── common/                                # 共享库目录
+│   ├── basic/                             # 公共基础库 (HAR) — @ohos/common
 │   │   └── src/main/ets/
-│   │       ├── components/            # 公共组件（MainPage、ColorPickerDialog）
-│   │       └── utils/                 # 工具函数（断点系统、日志、数学工具、全局上下文）
-│   └── VitalUI/                       # 图表组件库 (HAR)
+│   │       ├── components/                # 公共 UI 组件
+│   │       │   ├── MainPage.ets           # 通用主页面框架
+│   │       │   └── ColorPickerComponent/  # 颜色选择器组件
+│   │       └── utils/                     # 工具函数
+│   │           ├── BreakPointSystem.ets   # 断点系统（响应式布局）
+│   │           ├── CommonConstants.ets    # 全局常量
+│   │           ├── GlobalContext.ets      # 全局上下文管理
+│   │           ├── Logger.ets             # 日志工具
+│   │           └── Math.ets              # 数学工具函数
+│   └── VitalUI/                           # 自研图表组件库 (HAR) — @ohos/vitalui
+│       └── src/main/ets/
+│           ├── chart/                     # 图表组件（饼图、玫瑰图、雷达图）
+│           ├── Demo/                      # 组件演示页面
+│           └── utils/                     # 图表工具函数
 │
-├── product/                           # 产品模块目录
-│   ├── default/                       # 主入口模块
+├── product/                               # 产品模块目录
+│   ├── default/                           # 主入口模块 (HAP) — 手机/平板/2in1/车机
 │   │   └── src/main/
 │   │       ├── ets/
-│   │       │   ├── entryability/      # 主 Ability
-│   │       │   ├── defaultformability/# 服务卡片 Ability
-│   │       │   ├── pages/             # 主页面
-│   │       │   ├── sub_pages/         # 子功能页面
-│   │       │   ├── form_cards/        # 服务卡片组件
-│   │       │   └── static_datas/      # 静态数据（答案库、食物库等）
-│   │       └── resources/             # 模块资源
+│   │       │   ├── entryability/          # 主 Ability（应用生命周期）
+│   │       │   ├── entrybackupability/    # 备份恢复 Ability
+│   │       │   ├── defaultformability/    # 服务卡片 Ability
+│   │       │   ├── pages/                 # 主页面（Tab 根页面）
+│   │       │   │   ├── IndexPage/         # 应用壳页（导航入口）
+│   │       │   │   ├── RollPage/          # 幸运转盘主页
+│   │       │   │   ├── SettingPage/       # 设置页面
+│   │       │   │   ├── AnswerPage.ets     # 答案之书
+│   │       │   │   ├── CardsPage.ets      # 服务卡片展示页
+│   │       │   │   ├── MorePage.ets       # 更多功能页
+│   │       │   │   ├── RandomPage.ets     # 随机工具主页
+│   │       │   │   └── ToolsPage.ets      # 工具箱入口页
+│   │       │   ├── sub_pages/             # 子功能页面
+│   │       │   │   ├── a_standard/        # 规范示例/测试标准页
+│   │       │   │   ├── answer_book/       # 答案之书
+│   │       │   │   ├── blessing_muyu/     # 祝福木鱼
+│   │       │   │   ├── devine_bagua/      # 八卦占卜
+│   │       │   │   ├── flip_coin/         # 丢硬币
+│   │       │   │   ├── flip_dices/        # 掷骰子
+│   │       │   │   ├── honest_or_challenge/ # 真心话大冒险
+│   │       │   │   ├── random_abcd/       # ABCD 选择器
+│   │       │   │   ├── random_colors/     # 颜色搭配
+│   │       │   │   ├── random_foods/      # 吃什么
+│   │       │   │   ├── random_names/      # 抽签
+│   │       │   │   ├── random_numbers/    # 随机数
+│   │       │   │   ├── random_places/     # 随机景点
+│   │       │   │   ├── roll_wheel/        # 幸运转盘（子页）
+│   │       │   │   ├── text_marquee/      # 手持弹幕
+│   │       │   │   └── trans_qr/          # 二维码转换
+│   │       │   ├── form_cards/            # 服务卡片 UI 组件
+│   │       │   │   ├── ABCDCard.ets
+│   │       │   │   ├── BaGuaCard.ets
+│   │       │   │   ├── BlessingMuyuCard.ets
+│   │       │   │   ├── FlipCoinCard.ets
+│   │       │   │   ├── RandomColorsCard.ets
+│   │       │   │   ├── RollDiceCard.ets
+│   │       │   │   └── RollWheelCard.ets
+│   │       │   ├── form_display/          # 卡片在应用内预览展示
+│   │       │   ├── design_privew/         # UI 设计预览/测试页
+│   │       │   ├── static_datas/          # 静态数据文件
+│   │       │   │   ├── answers.ets        # 答案之书数据
+│   │       │   │   ├── challenges.ets     # 真心话大冒险题目
+│   │       │   │   ├── foods.ets          # 吃什么食物数据
+│   │       │   │   ├── names.ets          # 抽签名单数据
+│   │       │   │   └── places.ets         # 随机景点数据
+│   │       │   └── utils/
+│   │       │       └── ApiVersionUtil.ets # API 版本兼容工具
+│   │       └── resources/                 # 模块资源
 │   │           └── base/profile/
-│   │               ├── main_pages.json # 页面路由注册
-│   │               ├── route_map.json  # 路由映射
-│   │               └── form.json       # 服务卡片配置
+│   │               ├── main_pages.json    # 页面路由注册
+│   │               ├── route_map.json     # 路由映射
+│   │               └── form.json          # 服务卡片配置
 │   │
-│   └── wearable/                      # 手表模块（开发中）
+│   └── wearable/                          # 手表模块 (HAP) — 开发中
+│       └── src/main/ets/
+│           ├── wearableability/           # 手表 Ability
+│           ├── wearablebackupability/     # 手表备份 Ability
+│           ├── Contexts/                  # 上下文管理
+│           └── pages/                     # 手表页面
 │
-├── preview/                           # 应用预览截图
-└── hvigor/                            # hvigor 构建配置
+├── ApiUpdate/                             # API 升级追踪文档
+├── preview/                               # 应用预览截图
+├── build/                                 # 构建产物 (.hap / .app)
+└── hvigor/                                # hvigor 构建脚本配置
 ```
 
 ---
@@ -220,7 +282,7 @@ product/wearable  ──→  @ohos/common (basic)
 ### 环境要求
 
 - **DevEco Studio**：5.0.0 及以上版本
-- **HarmonyOS SDK**：API 12 (5.0.0)
+- **HarmonyOS SDK**：API 13+ (HarmonyOS NEXT)
 - **设备系统**：HarmonyOS NEXT 5.0.0+
 
 ### 项目配置
@@ -304,5 +366,5 @@ hvigorw assembleHap
 ---
 
 <p align="center">
-  <sub>Built with ❤️ using HarmonyOS ArkTS | © 2024-2025 闫东阳</sub>
+  <sub>Built with ❤️ using HarmonyOS ArkTS | © 2024-2026 闫东阳</sub>
 </p>
