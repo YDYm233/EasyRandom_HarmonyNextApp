@@ -87,4 +87,8 @@ coverage/
 .codegenie
 .codex
 .claude
+.workbuddy
 /push_all.bat
+
+# -------------------- 本地规划文档 --------------------
+/wearable-plan.md
