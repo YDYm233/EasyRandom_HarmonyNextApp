@@ -1,50 +1,94 @@
 import { Random } from '@ohos/common';
 import WearScreenUtil from '../utils/WearScreenUtil';
 import { Roll, RollItem, defaultRolls } from '../utils/WearRollDataManager';
+import { ArcSwiper, ArcSwiperController } from '@kit.ArkUI';
 
 /**
  * 手表端 — 幸运转盘
- * Canvas 绘制扇形转盘 + Swiper 切换多个转盘
+ * Canvas 绘制扇形转盘 + 纵向 Swiper/ArcSwiper 切换多个转盘
+ *
+ * 圆/方适配：
+ *   圆形屏 → ArcSwiper(vertical: true)，弧形排列 + 表冠支持
+ *   方形屏 → Swiper(.vertical(true))，标准纵向轮播
  */
 @Component
 export struct WearRollWheel {
   @State rotateAngle: number = 0;
   private dataList: Roll[] = defaultRolls;
 
+  // 圆形屏使用 ArcSwiperController
+  private arcController: ArcSwiperController = new ArcSwiperController();
+
   build() {
+    if (WearScreenUtil.isRoundScreen()) {
+      this.buildRoundLayout();
+    } else {
+      this.buildSquareLayout();
+    }
+  }
+
+  // ═══════════════════════════════════════════
+  //  圆形屏：ArcSwiper 纵向
+  // ═══════════════════════════════════════════
+  @Builder
+  buildRoundLayout() {
+    ArcSwiper(this.arcController) {
+      ForEach(this.dataList, (roll: Roll, idx: number) => {
+        this.buildWheelItem(roll)
+      }, (roll: Roll) => roll.index)
+    }
+    .vertical(true)
+    .indicator(false)           // 内部纵向切换，不加指示器更清爽
+    .digitalCrownSensitivity(CrownSensitivity.MEDIUM)
+  }
+
+  // ═══════════════════════════════════════════
+  //  方形屏：标准 Swiper 纵向
+  // ═══════════════════════════════════════════
+  @Builder
+  buildSquareLayout() {
     Swiper() {
       ForEach(this.dataList, (roll: Roll, idx: number) => {
-        Column() {
-          Stack() {
-            RollBoxCanvas({ data: roll, rotateAngle: this.rotateAngle })
-              .width(WearScreenUtil.scaledSize(260))
-              .aspectRatio(1)
-
-            // 中心指针
-            Image($r("app.media.pointer_m"))
-              .zIndex(8)
-              .width(WearScreenUtil.scaledSize(80))
-              .aspectRatio(1)
-              .fillColor($r("app.color.FontIcon_Back1"))
-          }
-
-          Text(roll.rollName)
-            .fontSize(WearScreenUtil.subFontSize)
-            .fontColor($r("app.color.FontIcon_Fore1"))
-            .margin({ top: 8 })
-        }
-        .width('100%')
-        .height('100%')
-        .justifyContent(FlexAlign.Center)
-        .alignItems(HorizontalAlign.Center)
-        .padding(WearScreenUtil.safePadding)
-        .onClick(() => {
-          this.rotateAngle = this.rotateAngle + Random(0, 360, true) + 360 * 8;
-        })
+        this.buildWheelItem(roll)
       }, (roll: Roll) => roll.index)
     }
     .loop(true)
+    .vertical(true)
     .indicator(true)
+  }
+
+  // ═══════════════════════════════════════════
+  //  单个转盘的 UI（圆/方共用）
+  // ═══════════════════════════════════════════
+  @Builder
+  buildWheelItem(roll: Roll) {
+    Column() {
+      Stack() {
+        RollBoxCanvas({ data: roll, rotateAngle: this.rotateAngle })
+          .width(WearScreenUtil.scaledSize(260))
+          .aspectRatio(1)
+
+        // 中心指针
+        Image($r("app.media.pointer_m"))
+          .zIndex(8)
+          .width(WearScreenUtil.scaledSize(80))
+          .aspectRatio(1)
+          .fillColor($r("app.color.FontIcon_Back1"))
+      }
+
+      Text(roll.rollName)
+        .fontSize(WearScreenUtil.subFontSize)
+        .fontColor($r("app.color.FontIcon_Fore1"))
+        .margin({ top: 8 })
+    }
+    .width('100%')
+    .height('100%')
+    .justifyContent(FlexAlign.Center)
+    .alignItems(HorizontalAlign.Center)
+    .padding(WearScreenUtil.safePadding)
+    .onClick(() => {
+      this.rotateAngle = this.rotateAngle + Random(0, 360, true) + 360 * 8;
+    })
   }
 }
 
