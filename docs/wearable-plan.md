@@ -1,6 +1,8 @@
 # ⌚ 随易 EasyRandom — 手表端（Wearable）实现方案
 
-> 文档版本：v3.5 | 日期：2026-06-08 | 基于项目 v1.0.19 开发中状态
+> 文档版本：v3.7 | 日期：2026-06-08 | 基于项目 v1.0.19 开发中状态
+> **v3.7 补充**：全面补充约束维度 — §2.1 补充应用包大小限制(10MB)和内存澄清；§2.2 补充不支持的组件黑名单(Web/Video/TextArea等)；新增 §2.7 手表端运行约束(后台任务/网络/性能指标/数据持久化)；新增 §2.8 暗黑模式适配；§2.4 补充触控尺寸 vp/px 换算标注；§6 问题1 修正为经实测验证的方案(不加 targets)；§6 问题4 更新为实测结论；§7 Step1 更新操作描述；删除重复的尺寸分级表
+> **v3.6 修正**：修正方案文档中的关键缺陷 — §2.2 修正 PanGesture 支持描述、§6 问题4 修正 minAPIVersion 架构错误（compatibleSdkVersion 是 app 级配置）、§6 问题6 修正 disableSwipe(true) UX 极差方案、§3.5 修正"子组件零分支"原则为"尽量减少分支"、新增 §2.6 功耗优化策略、统一 ArcButton 导入路径为 @kit.ArkUI
 > **v3.5 修正**：SDK 实测验证 ArcSwiper/ArcDotIndicator 实际 API — import 统一使用 `@kit.ArkUI`（kit 入口 re-export，更规范）；ArcDotIndicator 方法名为 `.itemColor()` / `.selectedItemColor()`（非 `.color()` / `.selectedColor()`），无 `.itemShadow()` 方法；ArcSwiper 构造函数仅接受 `controller` 参数，indicator 通过 `.indicator()` 链式设置；`ArcSwiperAttribute` 由 `@kit.ArkUI` 自动 re-export 无需手动导入
 > **v3.4 修正**：SDK 实测验证所有 Arc 组件 import 路径 — ArcSwiper→`@ohos.arkui.ArcSwiper`、ArcButton→`@ohos.arkui.advanced.ArcButton`（非 `@kit.ArkUI`）；确认 display→`@ohos.display`；CrownSensitivity 为全局枚举无需 import
 > **v3.3 修复**：架构评审 7 项修复 — §4.2 统一 Token 引用、§8 编号修正、display 导入待确认、Token large 分支显式化、ArcButton 示例补充、getter 去冗余、scaledSize 偏向注释
@@ -66,9 +68,11 @@
 | **典型分辨率** | 466×466 px（华为 Watch GT / Watch 4） | 320×320 px 或 368×448 px（华为 Watch D 等） | Canvas/图片按分辨率分级加载 |
 | **屏幕形状** | 圆形（主流） | 方形/类方形 | **核心差异**：圆屏四角被裁切，方屏可利用全屏 |
 | **输入方式** | 触摸 + 滑动 + 物理表冠 | 同左 | 无键盘输入、无右键、无长按菜单 |
-| **内存** | 2GB ~ 4GB | 同左 | 避免同时加载大图/复杂 Canvas |
+| **内存（设备总）** | 2GB ~ 4GB | 同左 | 应用内存限制 < 100MB（推荐），避免同时加载大图/复杂 Canvas |
 | **电池** | 300~600mAh | 同左 | 动画完成后必须停止，避免持续重绘 |
 | **震动马达** | 线性马达 | 同左 | 需 `ohos.permission.VIBRATE` 权限 |
+| **存储可用空间** | 4~16 GB | 同左 | 应用包大小应控制在 **10MB 以内**（含资源），超出可能无法安装或影响系统性能 |
+| **应用内存限制** | < 100MB（推荐） | 同左 | 2~4GB 为设备总内存，应用实际可用远小于此值；避免同时加载大图/复杂 Canvas |
 
 ### 2.2 ArkUI 约束（圆/方屏差异核心）
 
@@ -78,9 +82,30 @@
 |--------|------|------|
 | 部分组件不可用 | 手表端 ArkUI 组件子集 < 手机端（如部分弹窗、输入组件） | 开发前先在模拟器验证每个组件是否可用 |
 | 无软键盘 | 手表无文本输入弹窗 | 所有功能零文本输入，用预设列表/选择器代替 |
-| 无拖拽手势 | 手表端不支持 PanGesture 等复杂手势 | 仅用 onClick + Swiper 滑动 |
+| 无复杂输入 | 手表无文本输入弹窗 | 所有功能零文本输入，用预设列表/选择器代替 |
+| 手势支持 | PanGesture 从 API 7 开始支持 | 优先使用 onClick + Swiper 滑动，复杂手势需实测验证 |
 | Navigation 限制 | 手表端推荐用原生 Navigation | 单页面 + Swiper，不使用 router 多页面导航 |
 | Swiper 性能 | 手表端 Swiper 页面数不宜超过 10 个 | 横向 Swiper 7 个功能页 |
+
+#### 手表端不支持的组件黑名单
+
+根据官方文档和社区实践，手表端明确不支持或强烈不推荐以下组件：
+
+| 组件 | 支持程度 | 原因 | EasyRandom 影响 |
+|------|:--------:|------|:--------------:|
+| `Web` | ❌ 不支持 | 手表端无 WebView 能力 | 无影响（本项目无网页） |
+| `Video` | ❌ 不支持 | 手表端无视频播放能力 | 无影响 |
+| `TextArea` | ❌ 不支持 | 手表无软键盘，输入组件无意义 | 无影响（本项目零输入） |
+| `TextInput` | ⚠️ 受限 | 同上，不推荐使用 | 无影响 |
+| `RichText` | ⚠️ 受限 | 复杂富文本渲染可能卡顿，不建议大段使用 | 无影响 |
+| `Search` | ⚠️ 受限 | 手表屏幕太小，不适合搜索场景 | 无影响 |
+| `TextAreaDialog` | ❌ 不支持 | 无输入能力 | 无影响 |
+| `DatePickerDialog` | ⚠️ 受限 | 弹窗类组件需实测可用性 | 无影响 |
+| `TimePickerDialog` | ⚠️ 受限 | 弹窗类组件需实测可用性 | 无影响 |
+| `Marquee` | ⚠️ 受限 | 官方文档未明确标注 wearable 支持 | 无影响 |
+| `MultiSelect` | ⚠️ 受限 | 交互太复杂，不适合手表 | 无影响 |
+
+> ✅ **EasyRandom 影响评估**：本项目所有功能均为"点击触发随机"的纯展示 + 简单交互模式，**不受以上组件黑名单影响**。但新功能开发时需注意此列表。
 
 #### 圆形屏专用组件（API 18+）
 
@@ -88,7 +113,7 @@
 |------|---------|------|:----------:|
 | **ArcSwiper** | `import { ArcSwiper, ArcSwiperController, ArcDotIndicator, ArcDirection } from '@kit.ArkUI'` | 弧形轮播容器，子组件沿圆弧排列，支持表冠交互、弧形指示器、自定义切换动画 | ⚠️ API 22+ 支持非 Wearable，但方形屏体验差 |
 | **ArcList** | `import { ArcListAttribute } from '@ohos.arkui.ArcList'` | 弧形滚动列表，列表项接近边缘时自动缩放 | ❌ 不建议 |
-| **ArcButton** | `import { ArcButtonPosition } from '@ohos.arkui.advanced.ArcButton'` | 贴合圆形屏边缘的弧形按钮（TOP_EDGE / BOTTOM_EDGE） | ❌ 不适用 |
+| **ArcButton** | `import { ArcButtonPosition } from '@kit.ArkUI'` | 贴合圆形屏边缘的弧形按钮（TOP_EDGE / BOTTOM_EDGE） | ❌ 不适用 |
 | **ArcScrollBar** | `import { ArcScrollBarAttribute } from '@ohos.arkui.ArcScrollBar'` | 弧形滚动条，配合 ArcList 使用 | ❌ 不适用 |
 | **ArcAlphabetIndexer** | `import ... from '@ohos.arkui.ArcAlphabetIndexer'` | 弧形索引条 | ❌ 不适用 |
 
@@ -193,6 +218,8 @@ const isRound: boolean = (screenShape === display.ScreenShape.ROUND);
 |------|------|-----|------|
 | `ScreenShape.RECTANGLE` | enum | 0 | 矩形屏（默认值） |
 | `ScreenShape.ROUND` | enum | 1 | 圆形屏 |
+
+> ⚠️ **待官方文档确认**：`ScreenShape` API 的最低 API 版本标注为 API 18+，但尚未找到官方文档直接确认。实际使用时需在代码中做 try-catch 兼容处理（见 WearScreenUtil 代码示例）。
 
 **封装为全局工具**：
 
@@ -388,7 +415,7 @@ export class WearScreenUtil {
 
 | 约束项 | 圆形屏 | 方形屏 | 规范 |
 |--------|--------|--------|------|
-| 最小触摸区域 | 48×48 vp | 48×48 vp | 手指精度低，按钮必须够大 |
+| 最小触摸区域 | 48×48 vp | 48×48 vp | 手指精度低，按钮必须够大（48vp @2x = 96px） |
 | 单屏单任务 | ✅ 严格执行 | ✅ 严格执行 | 一个屏幕只做一件事 |
 | 返回操作 | 系统侧滑返回 | 系统侧滑返回 | 不放置 UI 返回键 |
 | 动画时长 | ≤ 500ms | ≤ 500ms | 手表要求快速反馈 |
@@ -427,6 +454,132 @@ export class WearScreenUtil {
 | `small` | < 340 | Watch D (320×320) | 方形小屏，元素需缩小但触摸区不缩 |
 | `standard` | 340 ~ 460 | Watch GT 4 (466×466), Watch Fit (368×448) | 主流手表 |
 | `large` | > 460 | 未来大屏手表 | 目前无此设备，预留 |
+
+### 2.6 功耗优化策略（P1 补充）
+
+手表端 300-600mAh 的电池约束比手机严格 10 倍以上。以下优化策略**必须**在开发中落实：
+
+| 优化方向 | 实施要点 | 代码示例 |
+|---------|---------|---------|
+| **动画帧率控制** | 动画完成后立即停止渲染 | `animateTo({ duration: 300 })` + 动画结束后停止 |
+| **传感器释放** | 使用完传感器立即调用 `off()` / `release()` | `sensor.off(sensor.SensorId.ACCELEROMETER)` |
+| **页面不可见时暂停** | `aboutToDisappear` 中停止所有动画/定时器 | `clearInterval(this.timer)` |
+| **帧率降级** | 非活跃页面降低帧率 | `preferredFrameRate: 30` |
+| **Canvas 离屏渲染** | 静态内容使用 `OffscreenCanvas` | 减少主线程绘制开销 |
+| **图片资源优化** | 按屏幕尺寸分级加载 | `scaledSize()` 按比例缩放 |
+
+**关键代码模式**：
+
+```typescript
+// ✅ 正确：页面销毁时释放资源
+aboutToDisappear() {
+  // 停止定时器
+  if (this.timer !== undefined) {
+    clearInterval(this.timer);
+    this.timer = undefined;
+  }
+  
+  // 停止动画
+  this.animating = false;
+  
+  // 释放传感器
+  try {
+    sensor.off(sensor.SensorId.ACCELEROMETER);
+  } catch (e) {
+    Logger.warn('Sensor release failed', e);
+  }
+}
+
+// ✅ 正确：动画结束后停止持续渲染
+animateTo({
+  duration: 300,
+  onFinish: () => {
+    this.animating = false;  // 通知框架停止重绘
+  }
+}, () => {
+  this.angle = this.targetAngle;
+});
+```
+
+### 2.7 手表端运行约束（P0+P1 补充）
+
+#### 2.7.1 后台任务约束
+
+HarmonyOS 后台任务管理对手表端有严格限制。手表应用在进入后台后**极短时间内就会被系统挂起/冻结**，不能假设后台持续运行。
+
+| 任务类型 | 时间限制 | 每日配额 | 手表端影响 |
+|---------|---------|---------|-----------|
+| 短时任务（Short Task） | 单次最多 3 分钟（低电量 1 分钟） | 每日约 10 分钟 | 手表电池小，低电量更频繁触发限制 |
+| 长时任务（Continuous Task） | 需申请 `ContinuousTaskExtensionAbility` | 系统审批 | 手表端审批更严格，一般不授予 |
+| 代理提醒（Reminder Agent） | 需申请 | 系统审批 | 可用于闹钟/倒计时等场景 |
+
+> **对 EasyRandom 的影响**：本项目无后台任务需求（纯前台交互），但需确保 `aboutToDisappear` 中释放所有资源（定时器、动画、传感器），避免被系统冻结前未正确清理。
+
+#### 2.7.2 网络能力限制
+
+手表端网络能力与手机差异显著：
+
+| 约束项 | 说明 | EasyRandom 对应 |
+|--------|------|:--------------:|
+| 蜂窝数据 | 少数手表支持 eSIM，不普遍 | — |
+| Wi-Fi | 多数手表无独立 Wi-Fi | — |
+| 网络中转 | 依赖蓝牙 → 手机中转，延迟 >300ms | — |
+| BLE 带宽 | 低功耗蓝牙带宽有限 | — |
+| **离线优先** | **手表应用应完全离线工作**，网络为增强功能 | ✅ 已满足（本项目纯本地随机） |
+
+> **对 EasyRandom 的影响**：本项目所有功能均为纯本地随机运算，不依赖网络，完全符合手表端"离线优先"原则。
+
+#### 2.7.3 性能指标要求
+
+官方对穿戴应用有明确的性能要求：
+
+| 指标 | 要求 | EasyRandom 对应 | 备注 |
+|------|------|:--------------:|------|
+| 冷启动时间 | < 1 秒 | ✅ 轻量单页面 | 避免在启动时做重计算 |
+| 内存占用 | < 100MB | ✅ 无大内存操作 | Canvas 转盘需注意释放 |
+| 帧率 | 稳定 60fps | ⚠️ Canvas 动画需优化 | 转盘旋转/硬币翻转需关注 |
+| 安装包 | < 10MB | ⚠️ 需控制图片资源量 | 图片按需压缩/分级加载 |
+| 页面数量 | 尽量少 | ✅ 单页面 | ArcSwiper 内 7 个子组件 |
+
+#### 2.7.4 数据持久化策略
+
+手表端数据存储有特殊约束，需选择合适的存储方案：
+
+| 约束 | 说明 | EasyRandom 对应 |
+|------|------|:--------------:|
+| 使用 `Preferences`（轻量 KV 存储） | 手表端不用 `RelationalStore`（过重） | ✅ 木鱼计数 + 转盘自定义数据 |
+| 无需分布式同步 | EasyRandom 是纯本地随机，不需要跨设备同步 | ✅ 无需同步 |
+| 数据量极小 | 仅木鱼计数和转盘自定义数据，几 KB 级别 | ✅ Preferences 足够 |
+| 无加密需求 | 非敏感数据 | ✅ 无需加密 |
+
+> **推荐**：手表端直接使用 `@ohos.data.preferences`（Preferences），与手机端保持一致。如果未来需要跨设备同步木鱼计数，可考虑 `@ohos.data.distributedKVStore`。
+
+### 2.8 暗黑模式适配（P1 补充）
+
+手表端默认通常为**深色背景**（省电、AMOLED 屏特性），但文档完全没有讨论暗黑模式：
+
+| 需求 | 说明 | 实施要点 |
+|------|------|---------|
+| 手表默认深色 | 系统默认为深色主题，节省 AMOLED 电量 | 手表端 UI 应以深色为默认基调设计 |
+| 颜色 Token 分离 | `resources/base/element/color.json` 需同时定义 light 和 dark 资源 | 在 `resources/dark/element/color.json` 中定义深色色值 |
+| 避免硬编码颜色 | 当前代码中部分颜色直接硬编码（如 `'#FF5EA1FF'`） | 改用 `$r('app.color.xxx')` 引用资源色 |
+| 系统字体令牌 | 优先使用系统字体令牌实现自动缩放 | 使用 `$r('sys.font.xxx')` 引用系统字体 |
+| prefersDarkMode | 可通过 `AppStorage` 监听系统暗黑模式变化 | `AppStorage.watch('colorMode', callback)` |
+
+**实施原则**：
+
+```typescript
+// ❌ 避免：硬编码颜色（暗黑模式下不协调）
+Text('Hello').fontColor('#333333')
+
+// ✅ 推荐：使用资源颜色（自动适配 light/dark）
+Text('Hello').fontColor($r('app.color.font_primary'))
+
+// ✅ 推荐：使用系统颜色（自动跟随系统主题）
+Text('Hello').fontColor($r('sys.color.ohos_id_color_text_primary'))
+```
+
+> **对 EasyRandom 的影响**：当前 `ArcDotIndicator` 等颜色使用硬编码（如 `'#FF5EA1FF'`），需迁移为资源颜色。建议手表端 UI 直接按深色主题设计，light 模式作为次要适配。
 
 ---
 
@@ -666,7 +819,7 @@ export struct WearRollWheel {
 
 ```typescript
 // 以 WearBlessingMuyu 为例（圆形屏用 ArcButton 贴合边缘）
-import { ArcButtonOptions, ArcButtonPosition } from '@ohos.arkui.advanced.ArcButton';
+import { ArcButtonPosition } from '@kit.ArkUI';
 // ArcButton 组件名在 import 后自动注册
 
 @Component
@@ -751,22 +904,27 @@ safePadding 是 24vp 还是 12vp？ → 看 isRound()（形状）
 
 一个 Token 的取值路径：`isRound() ? roundValue : squareValue`，再按 `screenSize` 微调。代码逻辑本身完全一样，只是取到的数值不同。
 
-**原则二：子组件零分支**
+**原则二：子组件尽量减少分支**
 
 ```typescript
-// ✅ 正确：组件内部没有 if(isRound)
+// ✅ 推荐：组件内部尽量通过 Token 消除分支
 .width(WearScreenUtil.mainImageWidth)   // 圆形=55%，方形=70%
 .fontSize(WearScreenUtil.resultFontSize) // small=40，standard=48
 
-// ❌ 错误：组件内部判断形状
-if (WearScreenUtil.isRoundScreen()) {
-  .width('55%')   // 分支爆炸，每个组件都要写
-} else {
-  .width('70%')
+// ⚠️ 允许有限分支：当组件类型本身存在圆形/方形本质差异时
+// 例：圆形屏用 ArcButton，方形屏用 Button
+@Builder
+buildRoundButton() {
+  ArcButton({ position: ArcButtonPosition.BOTTOM_EDGE }) { ... }
+}
+
+@Builder
+buildSquareButton() {
+  Button('敲') { ... }
 }
 ```
 
-所有差异通过 Token 的**数值**差异来表达，而非**代码逻辑**分支。这保证了 7 个 Wear 组件可以在两个屏幕上零修改运行。
+**修正说明**：当组件差异大到 `ArcButton` vs `Button` 这种程度时，"零分支"是不现实的。**容器层**已经做了分叉（ArcSwiper vs Swiper），但按钮这种局部差异强行压入"零分支"会导致代码扭曲。修正后的原则：子组件尽量避免形状分支，但当组件类型本身存在圆形/方形差异时（ArcButton vs Button），允许在组件内部做有限分支，分支逻辑集中在 `@Builder` 方法中。
 
 **原则三：新增设备只需补 Token**
 
@@ -884,35 +1042,48 @@ product/wearable/src/main/ets/
 
 | # | 问题 | 影响范围 | 推荐方案 |
 |---|------|---------|---------|
-| 1 | **`module.json5` + `build-profile.json5` 被注释** | 整个模块 | 取消注释 + 添加 VIBRATE 权限 |
+| 1 | **`build-profile.json5` 缺少 wearable 模块注册** | 整个模块 | **正确解决方案**：在顶层 `build-profile.json5` 的 `modules` 数组中添加 `{ "name": "wearable", "srcPath": "./product/wearable" }`（**不加 `targets` 字段**，与 `basic`、`VitalUI` 等公共模块一致，所有 product 构建都会自动包含）。注意：不要使用 `targets` 字段做 product 绑定，hvigor 在构建时会对 `targets` 做严格校验，容易报错（`Unknown target` 或 `target不能为空`） |
 | 2 | **RollDataManager 在 `product/default` 里，手表端无法直接 import** | 转盘功能 | 在 `wearable/utils/` 下新建 `WearRollDataManager.ets`，参考手机端逻辑独立实现 |
 | 3 | **图片资源需在 wearable resources 中补一份** | 全部有图片的组件 | 复制必要图片到 `product/wearable/src/main/resources/base/media/` |
-| 4 | **ArcSwiper / ArcList / ArcButton / ScreenShape 需要 API 18+** | 圆形屏全部 Arc 组件 + 屏幕形状检测 | 当前项目 API 13+，手表端 `minAPIVersion` 设为 18；低版本手表回退到标准 Swiper + 方形屏 |
+| 4 | **ArcSwiper / ArcList / ArcButton / ScreenShape 需要 API 18+** | 圆形屏全部 Arc 组件 + 屏幕形状检测 | **架构修正**：`compatibleSdkVersion` 是 app 级配置（products[].compatibleSdkVersion），不能为不同模块设置不同最低 API 版本。经实测验证，最简方案为 wearable 模块**不加 `targets`**（以通用模块模式参与构建），在 `WearScreenUtil` 里做运行时 try-catch 检测（低于 API 18 走标准 Swiper 方案），无需改动 `compatibleSdkVersion` |
 | 5 | ~~ArcSwiperAttribute 需手动导入~~ → **v3.5 已解决** | — | `@kit.ArkUI` 自动 re-export，无需手动导入 |
-| 6 | **横向 ArcSwiper 与系统侧滑返回的手势冲突** | 主页交互 | 实测验证；为防冲突可设 `.disableSwipe(true)` 仅用表冠翻页，或限制触控区域 |
+| 6 | **横向 ArcSwiper 与系统侧滑返回的手势冲突** | 主页交互 | **UX 修正**：避免直接使用 `.disableSwipe(true)`（会完全禁用触摸滑动，体验极差）。推荐方案：① 缩小 ArcSwiper 触控热区（只在屏幕中部区域响应横滑，边缘留给系统侧滑返回）；② 提高手势识别阈值（通过 `gesture` 包裹，设置更大 `distance` 参数）；③ 接受侧滑返回（部分产品选择"放弃横向滑动，改用表冠+点击切换"） |
 | 7 | **`display` 模块 import 来源已确认** | 全部屏幕检测代码 | ✅ v3.4 确认：实际路径为 `@ohos.display`（手机端 DisplayMarquee.ets 已验证），非 `@kit.ArkUI` |
 
 ---
 
 ## 7. 实施步骤
 
-### Step 1: 启用模块
+### Step 1: 注册 wearable 模块
 
-取消注释，让 wearable 模块回到编译体系。
+在顶层 `build-profile.json5` 的 `modules` 数组中添加 wearable 模块注册。
 
 ```
 操作清单：
 ├── build-profile.json5 (顶层)
-│   └── 取消 wearable 模块注册注释
+│   └── 在 modules 数组中添加 { "name": "wearable", "srcPath": "./product/wearable" }
+│       ⚠️ 不加 targets 字段！与 basic/VitalUI 等公共模块一致
 ├── product/wearable/src/main/module.json5
-│   └── 取消注释 + 添加 ohos.permission.VIBRATE
-└── 验证项目可编译
+│   └── 确认 deviceTypes 包含 "wearable"，确认 VIBRATE 权限已添加
+├── product/wearable/oh-package.json5
+│   └── 确认 @ohos/common 依赖已声明
+└── DevEco Studio 中构建，验证可编译
 ```
 
-**module.json5 需额外修改**：
-- 添加 `ohos.permission.VIBRATE` 权限（震动反馈）
-- 确认 `deviceTypes: ["wearable"]`
-- 确认 `minAPIVersion` ≥ 18（ArcList/ArcButton/ScreenShape 依赖）
+**配置示例（build-profile.json5 modules 数组）**：
+
+```json5
+// 在 modules 数组中添加（与 basic、VitalUI 同级）
+{
+  "name": "wearable",
+  "srcPath": "./product/wearable"
+  // ← 注意：不要加 targets 字段！
+  // targets 会导致 hvigor 构建时严格校验 product 绑定，
+  // 容易报错 "Unknown target" 或 "target不能为空"
+}
+```
+
+> **重要说明**：经实测验证，hvigor 构建系统对 `targets` 字段有严格校验——`targets[].name` 必须匹配模块自身 `build-profile.json5` 里定义的 target 名称（仅有 `"default"` 和 `"ohosTest"`），而 `applyToProducts` 不包含当前 product 时会报 `target不能为空`。最简方案是**不加 `targets`**，让模块以"通用模块"模式参与所有 product 构建。
 
 ### Step 2: 新建屏幕适配工具类
 
@@ -995,7 +1166,7 @@ product/wearable/src/main/ets/
 
 | 文件路径 | 变更内容 |
 |---------|---------|
-| `build-profile.json5` | 取消 wearable 模块注释 |
+| `build-profile.json5` | 在 modules 数组中添加 wearable 模块注册（不加 targets） |
 | `product/wearable/src/main/module.json5` | 取消注释 + 添加 VIBRATE 权限 |
 | `product/wearable/src/main/ets/pages/Index.ets` | 重写为横向 Swiper 主页 |
 | `product/wearable/src/main/resources/base/profile/main_pages.json` | 只保留 Index |
@@ -1047,7 +1218,7 @@ string.json               # 字符串资源
 | HarmonyOS wearable API 支持不完整 | 部分 ArkUI 组件在手表端可能不可用 | 先在模拟器验证 ArcSwiper、Canvas 等核心组件 |
 | ArcSwiper 弧形裁切 | 超出弧形可视区域的子组件内容不可见 | 子组件内容放在安全区（见 §2.5 Design Token） |
 | 手表端内存有限 | Canvas 绘制转盘可能卡顿 | 降低 Canvas 分辨率或简化绘制 |
-| 横向 ArcSwiper 与侧滑返回手势冲突 | 左右滑动可能触发系统返回 | 设 `.disableSwipe(true)` 仅用表冠翻页，或限制触控区域 |
+| 横向 ArcSwiper 与侧滑返回手势冲突 | 左右滑动可能触发系统返回 | 缩小触控热区、提高手势阈值、或接受侧滑返回（见 §6 问题6），避免使用 `.disableSwipe(true)` |
 | 手机端迭代后手表端不同步 | 两端代码独立演进，功能差异可能增大 | 在 CHANGELOG 中标注手表端功能对齐状态 |
 | `@ohos/hypium` 是测试框架依赖 | ABCDCardDisplay / BaGuaCardDisplay 中 import 了 `@ohos/hypium` | 手表端新建组件中**不要引入**此依赖，属于冗余 import |
 
