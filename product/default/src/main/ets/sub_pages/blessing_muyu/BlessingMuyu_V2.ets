@@ -116,12 +116,19 @@ struct RollBlessings_V2 {
             span: { sm: 4, md: 4, lg: 6 },
             offset: { sm: 0, md: 2, lg: 3 }
           }) {
-            Row() {
+            Column() {
               RollBlessingsBox_V2({ clickCount: $clickCount }).width('100%')
+
+              // 功德总数显示
+              Text(`功德 ${this.clickCount}`)
+                .fontSize(22)
+                .fontWeight(FontWeight.Medium)
+                .fontColor($r('app.color.FontIcon_Fore3'))
+                .margin({ top: 16 })
             }
             .width('100%')
             .justifyContent(FlexAlign.Center)
-            .alignItems(VerticalAlign.Center)
+            .alignItems(HorizontalAlign.Center)
           }
         }
         .margin(24)
@@ -289,11 +296,6 @@ struct RollBlessingsBox_V2 {
       .width('100%')
       .alignItems(VerticalAlign.Center)
       .justifyContent(FlexAlign.Center)
-
-      Text(`功德 +${this.clickCount}`)
-        .fontSize(14)
-        .fontWeight(FontWeight.Medium)
-        .fontColor('#B8860B')
     }
     .width('100%')
     .aspectRatio(1)

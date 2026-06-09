@@ -81,6 +81,7 @@ struct IllustrateComponent {
     BreakpointSystem.getInstance().stop()
   }
   @State customDialogId:number = 0;
+  @State showDonateCode: boolean = false;
   @Builder
   CustomDialog() {
     Column() {
@@ -93,16 +94,62 @@ struct IllustrateComponent {
       .alignItems(VerticalAlign.Center).justifyContent(FlexAlign.SpaceBetween)
       .width('100%').height(20)
       .margin({bottom:24})
-      Text('本App暂无支付功能')
-        .width('100%').textAlign(TextAlign.Start)
-        .fontSize(18)
-        .margin({bottom:12})
-      Text('您可以为我的B站账户充电、在应用市场给我评价、在我的帖子回消息、反馈Bug、或向我提出任何改进意见来鼓励我')
-        .width('100%').textAlign(TextAlign.Start)
-        .fontSize(18)
-        .margin({bottom:12})
 
+      // 文本或赞赏码图片切换显示
+      if (!this.showDonateCode) {
+        Column() {
+          Text('本App暂无支付功能')
+            .width('100%').textAlign(TextAlign.Start)
+            .fontSize(18)
+            .margin({bottom:12})
+          Text('您可以为我的B站账户充电、在应用市场给我评价、在我的帖子回消息、反馈Bug、或向我提出任何改进意见来鼓励我')
+            .width('100%').textAlign(TextAlign.Start)
+            .fontSize(18)
+        }
+      } else {
+        Column() {
+          Image($r('app.media.donate_code'))
+            .width(200)
+            .aspectRatio(1)
+            .borderRadius(12)
+          Text('微信扫码支持开发者')
+            .fontSize(14)
+            .fontColor($r('app.color.FontIcon_Fore3'))
+            .margin({ top: 8 })
+        }
+        .width('100%')
+        .alignItems(HorizontalAlign.Center)
+      }
 
+      // 按钮区域
+      Row() {
+        Button('去B站主页')
+          .fontSize(16)
+          .fontColor(Color.White)
+          .backgroundColor(0xFF7299)
+          .borderRadius(8)
+          .height(40)
+          .layoutWeight(1)
+          .onClick(() => {
+            promptAction.closeCustomDialog(this.customDialogId)
+            startBrowsableAbility(context, 'https://space.bilibili.com/582268894?spm_id_from=333.1007.0.0')
+          })
+
+        Blank().width(16)
+
+        Button('显示赞赏码')
+          .fontSize(16)
+          .fontColor(Color.White)
+          .backgroundColor(0xff3366)
+          .borderRadius(8)
+          .height(40)
+          .layoutWeight(1)
+          .onClick(() => {
+            this.showDonateCode = !this.showDonateCode
+          })
+      }
+      .width('100%')
+      .margin({ top: 24 })
     }.padding(24)
   }
   @Builder

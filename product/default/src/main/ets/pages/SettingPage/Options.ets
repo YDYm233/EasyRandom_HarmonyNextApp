@@ -31,11 +31,11 @@ struct Level{
   @State space: number = 8
   @State arrowPosition: ArrowPosition = ArrowPosition.END
   @State symbolModifier1: SymbolGlyphModifier =
-    new SymbolGlyphModifier($r('sys.symbol.ohos_star')).fontColor([Color.Green]);
+    new SymbolGlyphModifier($r('sys.symbol.gearshape')).fontColor([$r('app.color.FontIcon_Fore2')]);
   @State symbolModifier2: SymbolGlyphModifier =
-    new SymbolGlyphModifier($r('sys.symbol.ohos_star')).fontColor([Color.Yellow]);
+    new SymbolGlyphModifier($r('sys.symbol.sun_max')).fontColor([$r('app.color.FontIcon_Fore2')]);
   @State symbolModifier3: SymbolGlyphModifier =
-    new SymbolGlyphModifier($r('sys.symbol.heart')).fontColor([Color.Red]);
+    new SymbolGlyphModifier($r('sys.symbol.moon')).fontColor([$r('app.color.FontIcon_Fore2')]);
 
   aboutToAppear(): void {
     this.loadColorMode()

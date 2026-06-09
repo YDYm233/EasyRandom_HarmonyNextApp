@@ -67,10 +67,8 @@
 ### 服务卡片
 
 <p align="center">
-  <img src="./preview/卡片%20(1).png" width="22%" alt="硬币卡片"/>
-  <img src="./preview/卡片%20(2).png" width="22%" alt="木鱼卡片"/>
-  <img src="./preview/卡片%20(3).png" width="22%" alt="颜色卡片"/>
-  <img src="./preview/卡片%20(4).png" width="22%" alt="转盘卡片"/>
+  <img src="./preview/img.png" width="82%" alt="硬币卡片"/>
+
 </p>
 
 ---

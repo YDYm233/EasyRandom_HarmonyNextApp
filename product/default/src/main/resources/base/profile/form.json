@@ -1,6 +1,55 @@
 {
   "forms": [
     {
+      "name": "RollWheelCard",
+      "displayName": "$string:RollWheelCard_display_name",
+      "description": "$string:RollWheelCard_desc",
+      "src": "./ets/form_cards/RollWheelCard.ets",
+      "uiSyntax": "arkts",
+      "window": {
+        "designWidth": 720,
+        "autoDesignWidth": true
+      },
+      "colorMode": "auto",
+      "isDynamic": true,
+      "isDefault": false,
+      "updateEnabled": false,
+      "scheduledUpdateTime": "10:30",
+      "updateDuration": 1,
+      "defaultDimension": "2*2",
+      "supportDimensions": [
+        "2*2",
+        "4*4"
+      ], "formConfigAbility": "ability://defaultformability",
+      "dataProxyEnabled": false,
+      "transparencyEnabled": false,
+      "metadata": []
+    }
+  , {
+      "name": "BlessingMuyuCard",
+      "displayName": "$string:BlessingMuyuCard_display_name",
+      "description": "$string:BlessingMuyuCard_desc",
+      "src": "./ets/form_cards/BlessingMuyuCard.ets",
+      "uiSyntax": "arkts",
+      "window": {
+        "designWidth": 720,
+        "autoDesignWidth": true
+      },
+      "colorMode": "auto",
+      "isDynamic": true,
+      "isDefault": false,
+      "updateEnabled": false,
+      "scheduledUpdateTime": "10:30",
+      "updateDuration": 1,
+      "defaultDimension": "2*2",
+      "supportDimensions": [
+        "2*2"
+      ],"formConfigAbility": "ability://defaultformability",
+      "dataProxyEnabled": false,
+      "transparencyEnabled": false,
+      "metadata": []
+    },
+    {
       "name": "RollDiceCard",
       "displayName": "$string:RollDiceCard_display_name",
       "description": "$string:RollDiceCard_desc",
@@ -47,32 +96,7 @@
       "transparencyEnabled": false,
       "metadata": []
     },
-    {
-      "name": "RollWheelCard",
-      "displayName": "$string:RollWheelCard_display_name",
-      "description": "$string:RollWheelCard_desc",
-      "src": "./ets/form_cards/RollWheelCard.ets",
-      "uiSyntax": "arkts",
-      "window": {
-        "designWidth": 720,
-        "autoDesignWidth": true
-      },
-      "colorMode": "auto",
-      "isDynamic": true,
-      "isDefault": false,
-      "updateEnabled": false,
-      "scheduledUpdateTime": "10:30",
-      "updateDuration": 1,
-      "defaultDimension": "2*2",
-      "supportDimensions": [
-        "2*2",
-        "4*4"
-      ], "formConfigAbility": "ability://defaultformability",
-      "dataProxyEnabled": false,
-      "transparencyEnabled": false,
-      "metadata": []
-    }
-  ,
+
     {
       "name": "BaGuaCard",
       "displayName": "$string:BaGuaCard_display_name",
@@ -146,30 +170,7 @@
       "dataProxyEnabled": false,
       "transparencyEnabled": false,
       "metadata": []
-    },
-    {
-      "name": "BlessingMuyuCard",
-      "displayName": "$string:BlessingMuyuCard_display_name",
-      "description": "$string:BlessingMuyuCard_desc",
-      "src": "./ets/form_cards/BlessingMuyuCard.ets",
-      "uiSyntax": "arkts",
-      "window": {
-        "designWidth": 720,
-        "autoDesignWidth": true
-      },
-      "colorMode": "auto",
-      "isDynamic": true,
-      "isDefault": false,
-      "updateEnabled": false,
-      "scheduledUpdateTime": "10:30",
-      "updateDuration": 1,
-      "defaultDimension": "2*2",
-      "supportDimensions": [
-        "2*2"
-      ],"formConfigAbility": "ability://defaultformability",
-      "dataProxyEnabled": false,
-      "transparencyEnabled": false,
-      "metadata": []
     }
+
   ]
 }
