@@ -1,6 +1,7 @@
 # ⌚ 随易 EasyRandom — 手表端（Wearable）实现方案
 
-> 文档版本：v3.7 | 日期：2026-06-08 | 基于项目 v1.0.19 开发中状态
+> 文档版本：v3.8 | 日期：2026-06-09 | 基于项目 v1.0.19 开发中状态
+> **v3.8 补充**：新增 §2.9 横阔屏适配（超新星 X1，480×408 横阔 AMOLED）；§2.3 WearScreenUtil 新增 `isWideScreen()` 方法；§2.1 方屏典型分辨率补充 480×408 px；§2.3 尺寸分级表补充超新星 X1 到 standard 典型设备
 > **v3.7 补充**：全面补充约束维度 — §2.1 补充应用包大小限制(10MB)和内存澄清；§2.2 补充不支持的组件黑名单(Web/Video/TextArea等)；新增 §2.7 手表端运行约束(后台任务/网络/性能指标/数据持久化)；新增 §2.8 暗黑模式适配；§2.4 补充触控尺寸 vp/px 换算标注；§6 问题1 修正为经实测验证的方案(不加 targets)；§6 问题4 更新为实测结论；§7 Step1 更新操作描述；删除重复的尺寸分级表
 > **v3.6 修正**：修正方案文档中的关键缺陷 — §2.2 修正 PanGesture 支持描述、§6 问题4 修正 minAPIVersion 架构错误（compatibleSdkVersion 是 app 级配置）、§6 问题6 修正 disableSwipe(true) UX 极差方案、§3.5 修正"子组件零分支"原则为"尽量减少分支"、新增 §2.6 功耗优化策略、统一 ArcButton 导入路径为 @kit.ArkUI
 > **v3.5 修正**：SDK 实测验证 ArcSwiper/ArcDotIndicator 实际 API — import 统一使用 `@kit.ArkUI`（kit 入口 re-export，更规范）；ArcDotIndicator 方法名为 `.itemColor()` / `.selectedItemColor()`（非 `.color()` / `.selectedColor()`），无 `.itemShadow()` 方法；ArcSwiper 构造函数仅接受 `controller` 参数，indicator 通过 `.indicator()` 链式设置；`ArcSwiperAttribute` 由 `@kit.ArkUI` 自动 re-export 无需手动导入
@@ -65,7 +66,7 @@
 | 约束项 | 圆形手表 | 方形手表 | 影响 |
 |--------|---------|---------|------|
 | **屏幕尺寸** | 1.4 ~ 1.5 英寸 | 1.4 ~ 1.6 英寸 | 单屏信息量极有限，每次只展示一个核心内容 |
-| **典型分辨率** | 466×466 px（华为 Watch GT / Watch 4） | 320×320 px 或 368×448 px（华为 Watch D 等） | Canvas/图片按分辨率分级加载 |
+| **典型分辨率** | 466×466 px（华为 Watch GT / Watch 4） | 320×320 px、368×448 px（华为 Watch D）或 480×408 px（华为超新星 X1 横阔屏 1.82" AMOLED） | Canvas/图片按分辨率分级加载 |
 | **屏幕形状** | 圆形（主流） | 方形/类方形 | **核心差异**：圆屏四角被裁切，方屏可利用全屏 |
 | **输入方式** | 触摸 + 滑动 + 物理表冠 | 同左 | 无键盘输入、无右键、无长按菜单 |
 | **内存（设备总）** | 2GB ~ 4GB | 同左 | 应用内存限制 < 100MB（推荐），避免同时加载大图/复杂 Canvas |
@@ -253,6 +254,14 @@ export class WearScreenUtil {
 
   static isSquareScreen(): boolean {
     return !this.isRoundScreen();
+  }
+
+  /**
+   * 是否横阔屏（宽 > 高，如超新星 X1 的 480×408）
+   * 横阔屏是方屏的一种特殊形态，内容区域更宽、高度更窄
+   */
+  static isWideScreen(): boolean {
+    return this.screenWidth > this.screenHeight;
   }
 
   // ========== 屏幕尺寸 ==========
@@ -452,7 +461,7 @@ export class WearScreenUtil {
 | 级别 | 短边 (vp) | 典型设备 | 说明 |
 |------|----------|---------|------|
 | `small` | < 340 | Watch D (320×320) | 方形小屏，元素需缩小但触摸区不缩 |
-| `standard` | 340 ~ 460 | Watch GT 4 (466×466), Watch Fit (368×448) | 主流手表 |
+| `standard` | 340 ~ 460 | Watch GT 4 (466×466), Watch Fit (368×448), 超新星 X1 (480×408 横阔屏) | 主流手表 |
 | `large` | > 460 | 未来大屏手表 | 目前无此设备，预留 |
 
 ### 2.6 功耗优化策略（P1 补充）
@@ -580,6 +589,96 @@ Text('Hello').fontColor($r('sys.color.ohos_id_color_text_primary'))
 ```
 
 > **对 EasyRandom 的影响**：当前 `ArcDotIndicator` 等颜色使用硬编码（如 `'#FF5EA1FF'`），需迁移为资源颜色。建议手表端 UI 直接按深色主题设计，light 模式作为次要适配。
+
+### 2.9 横阔屏适配（超新星 X1）
+
+部分儿童手表采用**横阔屏**设计（屏幕宽度 > 高度），典型代表为**华为超新星 X1**（1.82" AMOLED，480×408 px，可 360° 旋转表体）。
+
+#### 横阔屏与方屏的核心差异
+
+| 维度 | 普通方屏（近似正方形） | 横阔屏（如超新星 X1） | 影响 |
+|------|----------------------|----------------------|------|
+| 宽高比 | ~1:1 | **>1.1:1**（X1 约 1.18:1） | 内容被横向拉伸，纵向空间更紧张 |
+| 按钮区域 | 上下均可放置操作按钮 | 更宽，适合横向排列按钮 | 布局方向需调整 |
+| 屏幕旋转 | 固定佩戴方向 | 表体可 360° 旋转 + 上下翻转 | 需确保布局在任何方向都可用 |
+| Swiper 方向 | 横向为主 | 横阔屏横向 space 更大，也可考虑纵向 | 手势区域宽度更大，更易操作 |
+
+#### 适配策略
+
+**Step 1：在 WearScreenUtil 中新增 `isWideScreen()` 判断**
+
+```typescript
+// ✅ 已在 §2.3 WearScreenUtil 中新增
+static isWideScreen(): boolean {
+  return this.screenWidth > this.screenHeight;
+}
+```
+
+**Step 2：横阔屏专属布局调整**
+
+```typescript
+// product/wearable/src/main/ets/pages/Index.ets
+aboutToAppear() {
+  this.isRound = WearScreenUtil.isRoundScreen();
+  this.isWide = WearScreenUtil.isWideScreen();  // 新增
+}
+
+build() {
+  if (this.isRound) {
+    // 圆屏：ArcSwiper 弧形排列
+    this.buildRoundLayout();
+  } else if (this.isWide) {
+    // 横阔屏：横向空间充足，按钮可横排
+    this.buildWideLayout();
+  } else {
+    // 普通方屏：标准 Swiper
+    this.buildSquareLayout();
+  }
+}
+
+@Builder
+buildWideLayout() {
+  Swiper({ controller: this.swiperController }) {
+    // 横阔屏：主内容区可以更宽
+    Column() {
+      Image($r('app.media.dice1'))
+        .width('65%')   // 比普通方屏（55%）更宽
+      Text('随机结果')
+        .fontSize(52)   // 横阔屏字号可稍大
+    }
+    .width('100%')
+    .height('100%')
+    .justifyContent(FlexAlign.Center)
+  }
+}
+```
+
+**Step 3：避免硬编码宽高**
+
+```typescript
+// ❌ 避免：硬编码宽高，横阔屏上表现差
+Component() {
+  Image($r('app.media.xxx'))
+    .width(180)   // 180vp 在横阔屏上显得很小
+}
+
+// ✅ 推荐：使用百分比 + 条件渲染
+Component() {
+  Image($r('app.media.xxx'))
+    .width(this.isWide ? '65%' : '55%')
+}
+```
+
+#### 超新星 X1 专项注意
+
+| 注意点 | 说明 | 应对措施 |
+|--------|------|---------|
+| **表体可旋转** | 用户可能横戴、竖戴、倒戴 | 所有布局用百分比/自适应，不用硬编码方向 |
+| **480×408 短边 408vp** | 归为 `standard` 尺寸，但纵向空间更紧张 | 纵向内容控制在 5 行以内，超出则滚动 |
+| **横阔屏手势区域更大** | 横向滑动手势更容易触发 | Swiper 的 `indicator` 区域注意不遮挡内容 |
+| **儿童手表** | 目标用户为儿童，交互需更简单 | 按钮尺寸不低于 `minTouchSize`（48vp） |
+
+> ⚠️ **待验证**：在 DevEco 模拟器中添加 480×408 自定义设备，运行现有 prototype 验证布局表现，再根据实测结果调整 Token 值。
 
 ---
 
