@@ -13,12 +13,27 @@ export struct RollDetailEditor {
   @StorageLink('allRolls') allRolls: Roll[] = []
   @Consume('navPathStack') navPathStack: NavPathStack
   @State rollNameInput: string = ''
+  @State originalRollName: string = '' // 保存原始转盘名称
   @State editorVersion: number = 0
+  // 保存每个 item 的原始值
+  private originalItemTexts: Map<string, string> = new Map()
+  private originalItemWeights: Map<string, number> = new Map()
+  // 保存每个 item 的输入值（用于 TextInput 双向绑定）
+  @State itemTextInputValues: Map<string, string> = new Map()
+  @State itemWeightInputValues: Map<string, string> = new Map()
 
   aboutToAppear(): void {
     const roll = this.resolveRoll()
     if (roll) {
       this.rollNameInput = roll.rollName
+      this.originalRollName = roll.rollName // 保存原始名称
+      // 初始化所有 item 的原始值和输入值
+      roll.rollItems.forEach((item: RollItem) => {
+        this.originalItemTexts.set(item.id, item.text)
+        this.originalItemWeights.set(item.id, item.weight)
+        this.itemTextInputValues.set(item.id, item.text)
+        this.itemWeightInputValues.set(item.id, item.weight.toString())
+      })
     }
   }
 
@@ -72,12 +87,14 @@ export struct RollDetailEditor {
                 .borderRadius(8).height(40)
                 .padding({ left: 12, right: 12 })
                 .onChange((newValue: string) => {
+                  // 实时更新输入框显示
                   this.rollNameInput = newValue
-                  const roll = this.resolveRoll()
-                  if (roll) {
-                    roll.rollName = newValue
-                    this.notifyEdit()
-                  }
+                })
+                .onSubmit(() => {
+                  this.validateRollName()
+                })
+                .onBlur(() => {
+                  this.validateRollName()
                 })
               SymbolGlyph($r('sys.symbol.trash'))
                 .fontSize(20)
@@ -173,21 +190,29 @@ export struct RollDetailEditor {
         })
 
         // 选项名称
-        TextInput({ text: item.text })
+        TextInput({ text: this.itemTextInputValues.get(item.id) ?? '' })
           .fontSize(14)
           .layoutWeight(1)
           .backgroundColor($r('app.color.Comp_Bg2'))
           .borderRadius(6).height(38)
           .padding({ left: 10, right: 10 })
           .onChange((v: string) => {
-            item.text = v
-            this.notifyEdit()
+            // 创建新 Map 触发 @State 更新
+            const newMap = new Map(this.itemTextInputValues)
+            newMap.set(item.id, v)
+            this.itemTextInputValues = newMap
+          })
+          .onSubmit(() => {
+            this.validateItemText(item)
+          })
+          .onBlur(() => {
+            this.validateItemText(item)
           })
 
         // 占比
         Text('占比')
           .fontSize(12).fontColor('#FF999999')
-        TextInput({ text: item.weight.toString() })
+        TextInput({ text: this.itemWeightInputValues.get(item.id) ?? '' })
           .fontSize(13)
           .type(InputType.Number)
           .width(44).height(38)
@@ -195,11 +220,16 @@ export struct RollDetailEditor {
           .borderRadius(6)
           .textAlign(TextAlign.Center)
           .onChange((value: string) => {
-            const parsedValue = parseInt(value)
-            if (!isNaN(parsedValue) && parsedValue > 0) {
-              item.weight = parsedValue
-              this.notifyEdit()
-            }
+            // 创建新 Map 触发 @State 更新
+            const newMap = new Map(this.itemWeightInputValues)
+            newMap.set(item.id, value)
+            this.itemWeightInputValues = newMap
+          })
+          .onSubmit(() => {
+            this.validateItemWeight(item)
+          })
+          .onBlur(() => {
+            this.validateItemWeight(item)
           })
       }
       .width('100%').alignItems(VerticalAlign.Center)
@@ -248,12 +278,79 @@ export struct RollDetailEditor {
 
   // ════════════════ 操作方法 ════════════════
 
+  /** 验证转盘名称：空数据恢复原值 */
+  private validateRollName(): void {
+    if (this.rollNameInput.trim() === '') {
+      this.rollNameInput = this.originalRollName
+      promptAction.showToast({ message: '名称不能为空，已恢复原名称' })
+      return
+    }
+    // 保存新名称
+    const roll = this.resolveRoll()
+    if (roll) {
+      roll.rollName = this.rollNameInput
+      this.originalRollName = this.rollNameInput // 更新原始值
+      this.notifyEdit()
+    }
+  }
+
+  /** 验证选项名称：空数据恢复原值 */
+  private validateItemText(item: RollItem): void {
+    const inputText = this.itemTextInputValues.get(item.id) || ''
+    if (inputText.trim() === '') {
+      const originalText = this.originalItemTexts.get(item.id) || '选项'
+      item.text = originalText
+      // 创建新 Map 触发 @State 更新
+      const newMap = new Map(this.itemTextInputValues)
+      newMap.set(item.id, originalText)
+      this.itemTextInputValues = newMap
+      this.notifyEdit()
+      promptAction.showToast({ message: '名称不能为空，已恢复原名称' })
+      return
+    }
+    // 保存新名称
+    item.text = inputText
+    this.originalItemTexts.set(item.id, inputText)
+    this.notifyEdit()
+  }
+
+  /** 验证占比：无效值恢复原值 */
+  private validateItemWeight(item: RollItem): void {
+    const inputWeight = this.itemWeightInputValues.get(item.id) || ''
+    const parsedWeight = parseInt(inputWeight)
+    if (inputWeight.trim() === '' || isNaN(parsedWeight) || parsedWeight <= 0) {
+      const originalWeight = this.originalItemWeights.get(item.id) || 1
+      item.weight = originalWeight
+      // 创建新 Map 触发 @State 更新
+      const newMap = new Map(this.itemWeightInputValues)
+      newMap.set(item.id, originalWeight.toString())
+      this.itemWeightInputValues = newMap
+      this.notifyEdit()
+      promptAction.showToast({ message: '占比必须为正整数，已恢复原值' })
+      return
+    }
+    // 保存新占比
+    item.weight = parsedWeight
+    this.originalItemWeights.set(item.id, parsedWeight)
+    this.notifyEdit()
+  }
+
   private addItem(): void {
     const roll = this.resolveRoll()
     if (!roll) {
       return
     }
-    addRollItem(roll)
+    const newItem = addRollItem(roll)
+    // 初始化新 item 的原始值和输入值
+    this.originalItemTexts.set(newItem.id, newItem.text)
+    this.originalItemWeights.set(newItem.id, newItem.weight)
+    // 创建新 Map 触发 @State 更新
+    const newTextMap = new Map(this.itemTextInputValues)
+    newTextMap.set(newItem.id, newItem.text)
+    this.itemTextInputValues = newTextMap
+    const newWeightMap = new Map(this.itemWeightInputValues)
+    newWeightMap.set(newItem.id, newItem.weight.toString())
+    this.itemWeightInputValues = newWeightMap
     this.notifyStructureChange()
   }
 

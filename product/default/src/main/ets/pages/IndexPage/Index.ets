@@ -10,6 +10,7 @@ import { CommonConstants, GlobalContext, Logger } from '@ohos/common'
 import { webview } from '@kit.ArkWeb'
 import { preferences } from '@kit.ArkData'
 import deviceInfo from '@ohos.deviceInfo'
+import { common } from '@kit.AbilityKit'
 import { LegacyMainPage } from './LegacyMainPage'
 import { HdsMainPage } from './HdsMainPage'
 class Params {
@@ -43,7 +44,7 @@ struct Index {
     Column() {
       Row() {
         Web({ src: $rawfile("privacypolicy.html"), controller: this.controller }).width("100%")
-      }.width('100%').height('80%').borderRadius(12).clip(true)
+      }.width('100%').height('70%').borderRadius(12).clip(true)
 
       Row() {
         Text('点此查看详细信息').onClick(() => {
@@ -62,19 +63,21 @@ struct Index {
       }.width('100%').height('8%')
       .justifyContent(FlexAlign.Center)
 
-      Row() {
-        Button('拒绝')
-          .height('80%')
-          .aspectRatio(2)
+      Column({ space: 8 }) {
+        Button('拒绝并退出应用')
+          .width('80%')
+          .height(36)
           .backgroundColor($r("app.color.warning"))
           .fontColor(Color.White)
           .onClick(() => {
             promptAction.closeCustomDialog(this.customDialogId)
-            promptAction.showToast({ message: '您可前往 设置>隐私政策 查看详情' })
+            // 退出应用
+            const context = getContext(this) as common.UIAbilityContext
+            context.terminateSelf()
           })
         Button('同意')
-          .height('80%')
-          .aspectRatio(2)
+          .width('80%')
+          .height(36)
           .backgroundColor($r("app.color.Brand"))
           .fontColor(Color.White)
           .onClick(() => {
@@ -84,11 +87,9 @@ struct Index {
           })
       }
       .width('100%')
-      .height('12%')
-      .alignItems(VerticalAlign.Center)
-      .justifyContent(FlexAlign.SpaceBetween)
-      .padding({ left: '10%', right: '10%' })
-    }.padding(12)
+      .height('22%')
+      .justifyContent(FlexAlign.Center)
+    }.padding(10)
   }
 
   getDataPreferences(common: Object) {
@@ -124,12 +125,26 @@ struct Index {
                   this.PrivacyPolicyDialog()
                 },
                 showInSubWindow: false,
+                isModal: true,
                 offset: { dx: 0, dy: 5 },
                 backgroundColor: 0xd9ffffff,
                 cornerRadius: 24,
                 backgroundBlurStyle: BlurStyle.Regular,
                 width: 320,
-                height: 500,
+                height: 550,
+                onWillDismiss: (dismissDialogAction: DismissDialogAction) => {
+                  // 拦截点击空白区域关闭弹窗
+                  if (dismissDialogAction.reason === DismissReason.TOUCH_OUTSIDE) {
+                    // 不执行关闭操作，阻止弹窗关闭
+                    return
+                  }
+                  // 其他关闭方式（如返回键）也阻止
+                  if (dismissDialogAction.reason === DismissReason.PRESS_BACK) {
+                    return
+                  }
+                  // 允许通过按钮关闭
+                  dismissDialogAction.dismiss()
+                }
               }).then((dialogId: number) => {
                 this.customDialogId = dialogId
               })
