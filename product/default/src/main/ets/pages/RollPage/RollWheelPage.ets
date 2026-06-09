@@ -334,8 +334,8 @@ struct RollWheelsShow {
     .constraintSize(this.breakpoint.value === 'sm' ? { maxWidth: 520, maxHeight: 668 } : { maxWidth: 400, maxHeight: 520 })
     .bindSheet($$this.isSheetShow, this.sheetContent(), {
       height: this.sheetType === 'edit' ? SheetSize.FIT_CONTENT : 660,
-      dragBar: this.sheetType === 'edit',
-      showClose: this.sheetType === 'cardAdd',
+      dragBar: this.sheetType === 'edit' && this.breakpoint.value === 'sm', // 编辑模式且手机端显示拖拽条
+      showClose: this.sheetType === 'cardAdd' || this.breakpoint.value !== 'sm', // PC模式显示关闭按钮
       backgroundColor: this.sheetType === 'cardAdd' ? Color.Transparent : $r("app.color.Comp_Bg2"),
       blurStyle: this.sheetType === 'cardAdd' ? BlurStyle.COMPONENT_ULTRA_THICK : BlurStyle.COMPONENT_THICK,
       onDisappear: () => {
