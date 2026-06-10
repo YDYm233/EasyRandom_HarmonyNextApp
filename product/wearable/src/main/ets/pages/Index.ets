@@ -1,11 +1,37 @@
 // product/wearable/src/main/ets/pages/Index.ets
-import { ArcSwiper, ArcDotIndicator, ArcSwiperController } from '@kit.ArkUI';
-import WearScreenUtil from '../utils/WearScreenUtil';
+import {
+  ArcSwiper,
+  ArcSwiperController,
+  ArcDotIndicator,
+  ArcDirection
+} from '@kit.ArkUI'
+import WearScreenUtil from '../utils/WearScreenUtil'
+import { WearNavPanel } from '../sub_pages/WearNavPanel'
+import { WearRollWheel } from '../sub_pages/WearRollWheel'
+import { WearBlessingMuyu } from '../sub_pages/WearBlessingMuyu'
+import { WearTruthOrDare } from '../sub_pages/WearTruthOrDare'
+import { WearRollDices } from '../sub_pages/WearRollDices'
+import { WearFlipCoin } from '../sub_pages/WearFlipCoin'
+import { WearRandomABCD } from '../sub_pages/WearRandomABCD'
+import { WearDevineBaGua } from '../sub_pages/WearDevineBaGua'
+import { WearRandomColors } from '../sub_pages/WearRandomColors'
 
 // ═══════════════════════════════════════════════════
 //  页面索引常量（供负一屏导航 + buildAllPages 引用）
 // ═══════════════════════════════════════════════════
-const PAGE_INDEX = {
+interface PageIndexMap {
+  NAV: number
+  ROLL_WHEEL: number
+  MUYU: number
+  TRUTH_DARE: number
+  ROLL_DICES: number
+  FLIP_COIN: number
+  RANDOM_ABCD: number
+  DEVINE_BAGUA: number
+  RANDOM_COLORS: number
+}
+
+const PAGE_INDEX: PageIndexMap = {
   NAV: 0,
   ROLL_WHEEL: 1,
   MUYU: 2,
@@ -15,20 +41,7 @@ const PAGE_INDEX = {
   RANDOM_ABCD: 6,
   DEVINE_BAGUA: 7,
   RANDOM_COLORS: 8,
-} as const;
-
-// ═══════════════════════════════════════════════════
-//  子组件 import
-// ═══════════════════════════════════════════════════
-import { WearNavPanel } from '../sub_pages/WearNavPanel';
-import { WearRollWheel } from '../sub_pages/WearRollWheel';
-import { WearBlessingMuyu } from '../sub_pages/WearBlessingMuyu';
-import { WearTruthOrDare } from '../sub_pages/WearTruthOrDare';
-import { WearRollDices } from '../sub_pages/WearRollDices';
-import { WearFlipCoin } from '../sub_pages/WearFlipCoin';
-import { WearRandomABCD } from '../sub_pages/WearRandomABCD';
-import { WearDevineBaGua } from '../sub_pages/WearDevineBaGua';
-import { WearRandomColors } from '../sub_pages/WearRandomColors';
+}
 
 /**
  * 手表端主页 — 圆/方屏双适配 + 负一屏导航
@@ -43,41 +56,53 @@ import { WearRandomColors } from '../sub_pages/WearRandomColors';
 @Entry
 @Component
 struct Index {
-  @State isRound: boolean = false;
+  @State isRound: boolean = false
+  @State currentIndex: number = PAGE_INDEX.ROLL_WHEEL
 
   // ArcSwiper 控制器（仅圆形屏使用）
-  private arcController: ArcSwiperController = new ArcSwiperController();
+  private arcController: ArcSwiperController = new ArcSwiperController()
   // Swiper 控制器（仅方形屏使用，用于负一屏导航跳转）
-  private swiperController: SwiperController = new SwiperController();
+  private swiperController: SwiperController = new SwiperController()
 
   // ═══════════ 圆形屏 ArcDotIndicator ═══════════
   private arcIndicator: ArcDotIndicator = new ArcDotIndicator()
-    .itemColor(0x66FFFFFF)                // 未激活：半透白
-    .selectedItemColor(0xFFD4A017);       // 激活：金色
+    .arcDirection(ArcDirection.SIX_CLOCK_DIRECTION)
+    .itemColor(0x66FFFFFF)
+    .selectedItemColor(0xFFD4A017)
 
   aboutToAppear(): void {
-    this.isRound = WearScreenUtil.isRoundScreen();
+    this.isRound = WearScreenUtil.isRoundScreen()
   }
 
   build() {
     if (this.isRound) {
-      this.buildRoundLayout();
+      this.buildRoundLayout()
     } else {
-      this.buildSquareLayout();
+      this.buildSquareLayout()
     }
   }
 
   // ═══════════════════════════════════════════════
   //  导航回调（传给 WearNavPanel，供其跳转页面）
-  //  用箭头函数确保 this 指向 Index 组件实例
+  //  ArcSwiperController 无 changeIndex，用 showNext/showPrevious 模拟
   // ═══════════════════════════════════════════════
   private onNavigate = (targetIndex: number): void => {
     if (this.isRound) {
-      this.arcController.changeIndex(targetIndex);
+      const diff = targetIndex - this.currentIndex
+      if (diff > 0) {
+        for (let i = 0; i < diff; i++) {
+          this.arcController.showNext()
+        }
+      } else if (diff < 0) {
+        for (let i = 0; i < -diff; i++) {
+          this.arcController.showPrevious()
+        }
+      }
+      this.currentIndex = targetIndex
     } else {
-      this.swiperController.changeIndex(targetIndex);
+      this.swiperController.changeIndex(targetIndex)
     }
-  };
+  }
 
   // ═══════════════════════════════════════════════
   //  圆形屏布局（ArcSwiper）
@@ -85,17 +110,20 @@ struct Index {
   @Builder
   buildRoundLayout() {
     ArcSwiper(this.arcController) {
-      this.buildAllPages();
+      this.buildAllPages()
     }
     .width('100%')
     .height('100%')
-    .index(PAGE_INDEX.ROLL_WHEEL)          // 默认显示幸运转盘
+    .index(PAGE_INDEX.ROLL_WHEEL)
     .indicator(this.arcIndicator)
     .vertical(false)
     .duration(300)
     .digitalCrownSensitivity(CrownSensitivity.MEDIUM)
     .effectMode(EdgeEffect.Spring)
     .disableSwipe(false)
+    .onChange((index: number) => {
+      this.currentIndex = index
+    })
   }
 
   // ═══════════════════════════════════════════════
@@ -104,10 +132,10 @@ struct Index {
   @Builder
   buildSquareLayout() {
     Swiper(this.swiperController) {
-      this.buildAllPages();
+      this.buildAllPages()
     }
-    .loop(false)                             // ⚠️ 不循环（负一屏不应循环到最右侧）
-    .index(PAGE_INDEX.ROLL_WHEEL)            // 默认显示幸运转盘
+    .loop(false)
+    .index(PAGE_INDEX.ROLL_WHEEL)
     .indicator(
       new DotIndicator()
         .color(0x33FFFFFF)
@@ -115,6 +143,9 @@ struct Index {
     )
     .itemSpace(0)
     .duration(300)
+    .onChange((index: number) => {
+      this.currentIndex = index
+    })
   }
 
   // ═══════════════════════════════════════════════
@@ -122,14 +153,14 @@ struct Index {
   // ═══════════════════════════════════════════════
   @Builder
   buildAllPages() {
-    WearNavPanel({ onNavigate: this.onNavigate })   // [0] 负一屏
-    WearRollWheel()        // [1] P0: 幸运转盘 ★ 默认
-    WearBlessingMuyu()     // [2] P0: 祝福木鱼
-    WearTruthOrDare()      // [3] P0: 真心话大冒险
-    WearRollDices()        // [4] P1: 掷骰子
-    WearFlipCoin()         // [5] P1: 丢硬币
-    WearRandomABCD()       // [6] P1: ABCD 选择
-    WearDevineBaGua()      // [7] P2: 八卦占卜
-    WearRandomColors()     // [8] P2: 随机颜色
+    WearNavPanel({ onNavigate: this.onNavigate })
+    WearRollWheel()
+    WearBlessingMuyu()
+    WearTruthOrDare()
+    WearRollDices()
+    WearFlipCoin()
+    WearRandomABCD()
+    WearDevineBaGua()
+    WearRandomColors()
   }
 }

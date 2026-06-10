@@ -421,9 +421,311 @@ struct Index {
 
 ---
 
-## 3. 幸运转盘（WearRollWheel）
+## 3. 负一屏导航（WearNavPanel）
 
 ### 3.1 概览
+
+| 维度 | 说明 |
+|------|------|
+| **文件路径** | `product/wearable/src/main/ets/sub_pages/WearNavPanel.ets` |
+| **装饰器** | `@Component`（非 @Entry，作为 Swiper 子页面） |
+| **核心职责** | 展示全部功能页的快捷入口网格 + 未来扩展入口占位（公告/设置/拉取数据） |
+| **交互模式** | 接收 `onNavigate` 回调 → 用户点击任意入口 → 回调传入目标页面索引 → Index.ets 执行 `controller.changeIndex()` |
+| **特殊地位** | Swiper 唯一一个不直接执行随机逻辑的页面，而是作为「交通枢纽」存在 |
+
+### 3.2 页面结构
+
+```
+┌──────────────────────────────────┐
+│          负一屏 (WearNavPanel)     │
+│                                  │
+│  ┌──────────────────────────┐   │
+│  │    功能导航区（网格）      │   │
+│  │  ┌────────┐ ┌────────┐   │   │
+│  │  │ 🎡     │ │ 🪵     │   │   │
+│  │  │幸运转盘│ │祝福木鱼│   │   │
+│  │  └────────┘ └────────┘   │   │
+│  │  ┌────────┐ ┌────────┐   │   │
+│  │  │ 💬     │ │ 🎲     │   │   │
+│  │  │真心话  │ │掷骰子   │   │   │
+│  │  └────────┘ └────────┘   │   │
+│  │  ┌────────┐ ┌────────┐   │   │
+│  │  │ 🪙     │ │ 🔤     │   │   │
+│  │  │丢硬币  │ │ ABCD   │   │   │
+│  │  └────────┘ └────────┘   │   │
+│  │  ┌────────┐ ┌────────┐   │   │
+│  │  │ ☯      │ │ 🎨     │   │   │
+│  │  │ 八卦   │ │随机颜色│   │   │
+│  │  └────────┘ └────────┘   │   │
+│  └──────────────────────────┘   │
+│                                  │
+│  ┌──────────────────────────┐   │
+│  │   未来扩展区（灰色占位）    │   │
+│  │  ┌────────┐ ┌────────┐   │   │
+│  │  │ 📢     │ │ ⚙️     │   │   │
+│  │  │ 公告   │ │ 设置   │   │   │
+│  │  └────────┘ └────────┘   │   │
+│  │  ┌────────┐              │   │
+│  │  │ 🔄     │              │   │
+│  │  │拉取数据│              │   │
+│  │  └────────┘              │   │
+│  └──────────────────────────┘   │
+└──────────────────────────────────┘
+```
+
+> **为什么需要负一屏？** 8 个功能在横向 Swiper 上无法一览。负一屏提供类似手机桌面的图标网格，一屏概览所有功能，点击直接跳转。未来公告/设置/拉取数据也是独立页面，负一屏自然承载。
+
+### 3.3 状态管理
+
+```typescript
+@Component
+export struct WearNavPanel {
+  // === 外部回调（由 Index.ets 传入）===
+  // 不要用 @Prop（函数类型 ArkUI 受限），直接用普通属性
+  onNavigate: (index: number) => void = () => {};
+
+  // === 内部状态：无 ===
+  // 负一屏自身不需要 @State（没有动画、没有持久化、没有可变数据）
+
+  // === 导航项配置（静态数据）===
+  // 未来扩展区项目单独管理，方便迭代
+}
+```
+
+### 3.4 导航项数据结构
+
+```typescript
+// 导航项配置（定义在 WearNavPanel.ets 内部）
+interface NavItem {
+  label: string;          // 显示名称
+  icon: string;           // Emoji 图标（手表端小屏，纯文字/emoji 比图片清晰）
+  targetIndex: number;    // 对应的 Swiper 页面索引（引用 Index.ets 的 PAGE_INDEX）
+  enabled: boolean;       // 是否可点击（未来扩展区暂用 false 占位）
+  section: 'function' | 'extension';  // 分组：功能导航 vs 未来扩展
+}
+
+// ⚠️ targetIndex 必须与 Index.ets 中的 PAGE_INDEX 常量保持一致
+private readonly NAV_ITEMS: NavItem[] = [
+  // ── 功能导航区 ──
+  { label: '幸运转盘', icon: '🎡', targetIndex: 1, enabled: true, section: 'function' },
+  { label: '祝福木鱼', icon: '🪵', targetIndex: 2, enabled: true, section: 'function' },
+  { label: '真心话',   icon: '💬', targetIndex: 3, enabled: true, section: 'function' },
+  { label: '掷骰子',   icon: '🎲', targetIndex: 4, enabled: true, section: 'function' },
+  { label: '丢硬币',   icon: '🪙', targetIndex: 5, enabled: true, section: 'function' },
+  { label: 'ABCD',     icon: '🔤', targetIndex: 6, enabled: true, section: 'function' },
+  { label: '八卦',     icon: '☯',  targetIndex: 7, enabled: true, section: 'function' },
+  { label: '随机颜色', icon: '🎨', targetIndex: 8, enabled: true, section: 'function' },
+
+  // ── 未来扩展区（灰色占位，不可点击）──
+  { label: '公告',     icon: '📢', targetIndex: -1, enabled: false, section: 'extension' },
+  { label: '设置',     icon: '⚙️', targetIndex: -1, enabled: false, section: 'extension' },
+  { label: '拉取数据', icon: '🔄', targetIndex: -1, enabled: false, section: 'extension' },
+];
+```
+
+### 3.5 交互流程
+
+```
+用户左滑 → 进入负一屏 [index 0]
+  │
+  └─→ 看到全部功能网格 + 灰色扩展区占位
+
+用户点击「祝福木鱼」
+  │
+  ├─→ if (!navItem.enabled) → 无反应（未来扩展区占位不响应点击）
+  │
+  ├─→ this.onNavigate(navItem.targetIndex)   // → Index.ets.onNavigate(2)
+  │
+  └─→ Index.ets 中 controller.changeIndex(2)  // → Swiper 切换到祝福木鱼
+
+用户从功能页左滑
+  │
+  └─→ 回到负一屏（正常 Swiper 滑动手势，不走 onNavigate）
+```
+
+### 3.6 圆/方屏适配
+
+负一屏不涉及 ArcButton/ArcSwiper，适配仅靠 WearScreenUtil Token：
+
+| 维度 | 圆形屏 | 方形屏 | 说明 |
+|------|--------|--------|------|
+| **网格列数** | 2 列 | 2 列 | 手表屏太窄，3 列放不下文字 |
+| **卡片尺寸** | `WearScreenUtil.scaledSize(90)` × `scaledSize(64)` | 同左 | 正方形卡片，宽高比例适配 |
+| **卡片圆角** | `scaledSize(8)` | `scaledSize(8)` | |
+| **图标字号** | `WearScreenUtil.buttonFontSize`（~16fp） | 同左 | Emoji 用字体而非图片，省资源 |
+| **标签字号** | `WearScreenUtil.subFontSize`（~14fp） | 同左 | |
+| **内边距** | `WearScreenUtil.safePadding`（24vp） | `WearScreenUtil.safePadding`（12vp） | |
+| **滚动** | `Scroll()` 包裹（圆形屏 9+3=12 项可能溢出） | 同左 | 方形屏空间更大，但也加 Scroll 统一处理 |
+
+### 3.7 组件实现骨架
+
+```typescript
+// product/wearable/src/main/ets/sub_pages/WearNavPanel.ets
+import WearScreenUtil from '../utils/WearScreenUtil';
+
+interface NavItem {
+  label: string;
+  icon: string;
+  targetIndex: number;
+  enabled: boolean;
+  section: 'function' | 'extension';
+}
+
+@Component
+export struct WearNavPanel {
+  // Index.ets 通过 Builder 传入导航回调
+  onNavigate: (index: number) => void = () => {};
+
+  private readonly NAV_ITEMS: NavItem[] = [
+    // ── 功能导航区 ──
+    { label: '幸运转盘', icon: '🎡', targetIndex: 1, enabled: true, section: 'function' },
+    { label: '祝福木鱼', icon: '🪵', targetIndex: 2, enabled: true, section: 'function' },
+    { label: '真心话',   icon: '💬', targetIndex: 3, enabled: true, section: 'function' },
+    { label: '掷骰子',   icon: '🎲', targetIndex: 4, enabled: true, section: 'function' },
+    { label: '丢硬币',   icon: '🪙', targetIndex: 5, enabled: true, section: 'function' },
+    { label: 'ABCD',     icon: '🔤', targetIndex: 6, enabled: true, section: 'function' },
+    { label: '八卦',     icon: '☯',  targetIndex: 7, enabled: true, section: 'function' },
+    { label: '随机颜色', icon: '🎨', targetIndex: 8, enabled: true, section: 'function' },
+
+    // ── 未来扩展区 ──
+    { label: '公告',     icon: '📢', targetIndex: -1, enabled: false, section: 'extension' },
+    { label: '设置',     icon: '⚙️', targetIndex: -1, enabled: false, section: 'extension' },
+    { label: '拉取数据', icon: '🔄', targetIndex: -1, enabled: false, section: 'extension' },
+  ];
+
+  build() {
+    Scroll() {
+      Column() {
+        // ── 功能导航区标题 ──
+        Text('快捷导航')
+          .fontSize(WearScreenUtil.buttonFontSize)
+          .fontColor(0xFFD4A017)
+          .fontWeight(FontWeight.Bold)
+          .width('100%')
+          .padding({ left: WearScreenUtil.safePadding, bottom: 8 })
+
+        // ── 功能网格 ──
+        Grid() {
+          ForEach(
+            this.NAV_ITEMS.filter(item => item.section === 'function'),
+            (item: NavItem) => {
+              GridItem() {
+                this.buildNavCard(item)
+              }
+            },
+            (item: NavItem) => item.targetIndex.toString()
+          )
+        }
+        .columnsTemplate('1fr 1fr')
+        .columnsGap(WearScreenUtil.safePadding)
+        .rowsGap(WearScreenUtil.safePadding)
+        .padding(WearScreenUtil.safePadding)
+
+        // ── 分隔线 ──
+        Divider()
+          .color(0x33FFFFFF)
+          .width('90%')
+          .margin({ top: 16, bottom: 8 })
+
+        // ── 未来扩展区标题 ──
+        Text('更多')
+          .fontSize(WearScreenUtil.subFontSize)
+          .fontColor(0x66FFFFFF)
+          .width('100%')
+          .padding({ left: WearScreenUtil.safePadding, bottom: 8 })
+
+        // ── 未来扩展网格（灰色不可点）──
+        Grid() {
+          ForEach(
+            this.NAV_ITEMS.filter(item => item.section === 'extension'),
+            (item: NavItem) => {
+              GridItem() {
+                this.buildExtensionCard(item)
+              }
+            },
+            (item: NavItem) => item.label
+          )
+        }
+        .columnsTemplate('1fr 1fr')
+        .columnsGap(WearScreenUtil.safePadding)
+        .rowsGap(WearScreenUtil.safePadding)
+        .padding(WearScreenUtil.safePadding)
+      }
+      .width('100%')
+      .padding({ top: WearScreenUtil.safePadding, bottom: 24 })
+    }
+    .width('100%')
+    .height('100%')
+    .scrollBar(BarState.Off)  // 手表屏不显示滚动条
+  }
+
+  @Builder
+  buildNavCard(item: NavItem) {
+    Column() {
+      Text(item.icon)
+        .fontSize(WearScreenUtil.buttonFontSize)
+      Text(item.label)
+        .fontSize(WearScreenUtil.subFontSize)
+        .fontColor(0xFFCCCCCC)
+        .margin({ top: 4 })
+    }
+    .width('100%')
+    .height(WearScreenUtil.scaledSize(64))
+    .justifyContent(FlexAlign.Center)
+    .backgroundColor(0x22FFFFFF)
+    .borderRadius(WearScreenUtil.scaledSize(8))
+    .onClick(() => {
+      if (item.enabled) {
+        this.onNavigate(item.targetIndex);
+      }
+    })
+  }
+
+  @Builder
+  buildExtensionCard(item: NavItem) {
+    Column() {
+      Text(item.icon)
+        .fontSize(WearScreenUtil.buttonFontSize)
+        .opacity(0.3)
+      Text(item.label)
+        .fontSize(WearScreenUtil.subFontSize)
+        .fontColor(0x44FFFFFF)
+        .margin({ top: 4 })
+    }
+    .width('100%')
+    .height(WearScreenUtil.scaledSize(64))
+    .justifyContent(FlexAlign.Center)
+    .backgroundColor(0x11FFFFFF)
+    .borderRadius(WearScreenUtil.scaledSize(8))
+    .border({ width: 1, color: 0x22FFFFFF, style: BorderStyle.Dashed })
+    // ⚠️ 无 onClick — 未来扩展区不响应点击
+  }
+}
+```
+
+### 3.8 边界处理
+
+| # | 场景 | 处理方式 |
+|---|------|---------|
+| 1 | 导航项 `enabled: false` 被点击 | 不绑定 `onClick`，自然无响应 |
+| 2 | `onNavigate` 回调未传入 | 默认空函数 `() => {}`，点击无效果但不崩溃 |
+| 3 | `targetIndex` 超出 Swiper 范围 | Index.ets 的 `controller.changeIndex()` 内部会 clamp 到有效范围 |
+| 3 | 滚动内容超出圆形屏可视区域 | `Scroll()` 包裹 + `.scrollBar(BarState.Off)` 隐藏滚动条 |
+| 5 | 未来扩展区新增 Swiper 页 | 1) Index.ets 中 `buildAllPages` 加子组件 2) 本组件 `NAV_ITEMS` 中改 `enabled: true` + `targetIndex` |
+
+### 3.9 未来扩展路线
+
+| 阶段 | 扩展入口 | 实现 |
+|:----:|---------|------|
+| v1.1 | 公告 | 新增 Swiper 子页面 `WearAnnouncement.ets`（index 9），`NAV_ITEMS[8].enabled = true`，`targetIndex = 9` |
+| v1.2 | 设置 | 新增 `WearSettings.ets`（index 10），连接 `@ohos.data.preferences` 操作 |
+| v1.3 | 拉取数据 | 新增 `WearDataSync.ets`（index 11），触发 `SyncManager.pull()` → 分布式 KV Store 同步 |
+
+---
+
+## 4. 幸运转盘（WearRollWheel）
+
+### 4.1 概览
 
 | 维度 | 说明 |
 |------|------|
@@ -432,7 +734,7 @@ struct Index {
 | **核心交互** | 点击触发 Canvas 转盘旋转 → 指针指示结果；纵向 Swiper 切换不同转盘 |
 | **独特价值** | 唯一支持多数据切换的 P0 功能（纵向 Swiper 内多个转盘） |
 
-### 3.2 页面结构
+### 4.2 页面结构
 
 ```
 ┌──────────────────────────────────┐
@@ -459,7 +761,7 @@ struct Index {
 └──────────────────────────────────┘
 ```
 
-### 3.3 状态管理
+### 4.3 状态管理
 
 ```typescript
 @Component
@@ -478,7 +780,7 @@ export struct WearRollWheel {
 }
 ```
 
-### 3.4 交互流程
+### 4.4 交互流程
 
 ```
 用户点击 Canvas 转盘
@@ -501,7 +803,7 @@ export struct WearRollWheel {
   └─→ ForEach 重建当前页的 Canvas
 ```
 
-### 3.5 Canvas 绘制（RollBox 子组件）
+### 4.5 Canvas 绘制（RollBox 子组件）
 
 参考手机端 `RollBox` 结构，手表端适配要点：
 
@@ -531,7 +833,7 @@ struct RollBox {
 }
 ```
 
-### 3.6 圆/方屏适配
+### 4.6 圆/方屏适配
 
 | 维度 | 圆形屏 | 方形屏 |
 |------|--------|--------|
@@ -589,7 +891,7 @@ buildSingleWheel(roll: Roll) {
 }
 ```
 
-### 3.7 边界处理
+### 4.7 边界处理
 
 | 边界场景 | 处理方式 |
 |---------|---------|
@@ -600,7 +902,7 @@ buildSingleWheel(roll: Roll) {
 | Canvas 未就绪点击 | `onClick` 中检测 `canvasContext.width > 0`，未就绪跳过（无操作） |
 | 资源释放 | `aboutToDisappear` 中将 `canvasContext` 置 null |
 
-### 3.8 结果判定
+### 4.8 结果判定
 
 旋转结束后，指针固定指向 12 点方向。命中扇区的判定方式（Canvas 绘制阶段即记录扇区映射，无需运行时计算）：
 
@@ -612,9 +914,9 @@ buildSingleWheel(roll: Roll) {
 
 ---
 
-## 4. 祝福木鱼（WearBlessingMuyu）
+## 5. 祝福木鱼（WearBlessingMuyu）
 
-### 4.1 概览
+### 5.1 概览
 
 | 维度 | 说明 |
 |------|------|
@@ -623,7 +925,7 @@ buildSingleWheel(roll: Roll) {
 | **独特价值** | 唯一有 Preferences 持久化计数的 P0 功能 |
 | **震动反馈** | VIBRATE 权限已配置，需对接 `VibratorManager` |
 
-### 4.2 页面结构
+### 5.2 页面结构
 
 ```
 ┌──────────────────────────────────┐
@@ -651,7 +953,7 @@ buildSingleWheel(roll: Roll) {
 └──────────────────────────────────┘
 ```
 
-### 4.3 状态管理
+### 5.3 状态管理
 
 ```typescript
 @Component
@@ -688,7 +990,7 @@ export struct WearBlessingMuyu {
 }
 ```
 
-### 4.4 交互流程
+### 5.4 交互流程
 
 ```
 aboutToAppear()
@@ -729,7 +1031,7 @@ aboutToDisappear()
   └─→ pref = null  // 释放 Preferences 句柄
 ```
 
-### 4.5 圆/方屏适配
+### 5.5 圆/方屏适配
 
 | 维度 | 圆形屏 | 方形屏 |
 |------|--------|--------|
@@ -759,7 +1061,7 @@ buildMuyuButton() {
 }
 ```
 
-### 4.6 边界处理
+### 5.6 边界处理
 
 | 边界场景 | 处理方式 |
 |---------|---------|
@@ -770,7 +1072,7 @@ buildMuyuButton() {
 | 首次使用（无 Preferences 数据） | `getSync(key, 0)` 默认值 0 |
 | 资源释放 | `aboutToDisappear` 中将 `pref` 置 null |
 
-### 4.7 与手机端差异
+### 5.7 与手机端差异
 
 | 维度 | 手机端 | 手表端 |
 |------|--------|--------|
@@ -782,9 +1084,9 @@ buildMuyuButton() {
 
 ---
 
-## 5. 真心话大冒险（WearTruthOrDare）
+## 6. 真心话大冒险（WearTruthOrDare）
 
-### 5.1 概览
+### 6.1 概览
 
 | 维度 | 说明 |
 |------|------|
@@ -794,7 +1096,7 @@ buildMuyuButton() {
 | **独特价值** | 唯一基于文本题库的 P0 功能；社交聚会杀手场景 |
 | **与手机端最大差异** | 无旋转指针、无弹窗、无路由、无 header（纯极致简化） |
 
-### 5.2 页面结构
+### 6.2 页面结构
 
 ```
 ┌──────────────────────────────┐   ┌──────────────────────────────┐
@@ -819,7 +1121,7 @@ buildMuyuButton() {
 
 > 交互规则：点击某区域 → 该区域显示结果 + 变暗表明已出题。可再次点击出下一题（不与上一题重复）。另一个区域不受影响，独立操作。
 
-### 5.3 状态管理
+### 6.3 状态管理
 
 ```typescript
 @Component
@@ -842,7 +1144,7 @@ export struct WearTruthOrDare {
 }
 ```
 
-### 5.4 交互流程
+### 6.4 交互流程
 
 ```
 页面加载
@@ -875,7 +1177,7 @@ export struct WearTruthOrDare {
         challengeActive = true（背景变暗蓝 #1A8AB8）
 ```
 
-### 5.5 圆/方屏适配
+### 6.5 圆/方屏适配
 
 真心话大冒险不涉及 ArcButton/ArcSwiper，适配仅靠 WearScreenUtil Token：
 
@@ -889,7 +1191,7 @@ export struct WearTruthOrDare {
 
 > 注意：手表端不区分圆形/方形屏的布局差异（上下分屏在两种屏幕都适用）。但如果未来有其他形状需求（如椭圆屏），可通过 `WearScreenUtil.screenWidth/screenHeight` 比例判断是否改为左右分屏。
 
-### 5.6 数据源
+### 6.6 数据源
 
 ```typescript
 // product/wearable/src/main/ets/utils/WearTruthOrDareData.ets
@@ -921,7 +1223,7 @@ export const challenges: string[] = [
 ];
 ```
 
-### 5.7 组件实现骨架
+### 6.7 组件实现骨架
 
 ```typescript
 // product/wearable/src/main/ets/sub_pages/WearTruthOrDare.ets
@@ -1012,7 +1314,7 @@ export struct WearTruthOrDare {
 }
 ```
 
-### 5.8 边界处理
+### 6.8 边界处理
 
 | 边界场景 | 处理方式 |
 |---------|---------|
@@ -1024,7 +1326,7 @@ export struct WearTruthOrDare {
 
 ---
 
-## 6. 后续扩展占位
+## 7. 后续扩展占位
 
 以下 P1/P2 功能组件规格将在后续补充：
 
@@ -1038,13 +1340,14 @@ export struct WearTruthOrDare {
 
 ---
 
-## 7. 索引：需新建/修改的文件
+## 8. 索引：需新建/修改的文件
 
 | 文件 | 操作 | 说明 |
 |------|:----:|------|
 | `docs/wearable-page-impl.md` | 🆕 新建 | 本文档 |
+| `product/wearable/src/main/ets/pages/Index.ets` | 🔧 重写 | 新增负一屏子页 [0]、`PAGE_INDEX` 常量、`onNavigate` 回调、`.index(1)` 默认起始、方形屏 `.loop(false)` |
+| `product/wearable/src/main/ets/sub_pages/WearNavPanel.ets` | 🆕 新建 | 负一屏导航组件 |
 | `product/wearable/src/main/ets/sub_pages/WearRollWheel.ets` | 🆕 新建 | 幸运转盘组件 |
 | `product/wearable/src/main/ets/sub_pages/WearBlessingMuyu.ets` | 🆕 新建 | 祝福木鱼组件 |
 | `product/wearable/src/main/ets/sub_pages/WearTruthOrDare.ets` | 🆕 新建 | 真心话大冒险组件 |
 | `product/wearable/src/main/ets/utils/WearTruthOrDareData.ets` | 🆕 新建 | 题库数据（10条精简版） |
-| `product/wearable/src/main/ets/pages/Index.ets` | 🔧 修改 | `buildAllPages()` 中引入三个新组件 |

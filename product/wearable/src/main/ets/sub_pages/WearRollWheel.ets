@@ -174,7 +174,7 @@ struct RollBox {
       ctx.rotate(startAngle + sectorAngleRad / 2);
       ctx.fillStyle = '#FFFFFF';
       ctx.font = `${WearScreenUtil.subFontSize}px sans-serif`;
-      ctx.textAlign = TextAlign.Center;
+      ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       const textRadius: number = radius * 0.6;
       ctx.fillText(items[i].text, textRadius, 0);
@@ -193,6 +193,12 @@ struct RollBox {
     ctx.arc(cx, cy, 3, 0, Math.PI * 2);
     ctx.fillStyle = '#FFD700';
     ctx.fill();
+  }
+
+  build() {
+    Canvas(this.canvasContext)
+      .width(this.canvasSize)
+      .height(this.canvasSize)
   }
 
   aboutToDisappear(): void {

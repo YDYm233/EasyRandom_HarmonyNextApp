@@ -1,275 +1,311 @@
 # ⌚ 随易 EasyRandom — Lite Wearable（轻量级手表）实现方案
 
-> 文档版本：v1.1 | 日期：2026-06-10 | 基于 wearable-plan.md v4.0 适配
-> **v1.0 初始**：FA 模式 + JS API 方案（❌ 已废弃——HarmonyOS NEXT 不支持 FA 模式）
-> **v1.1 修正**：Stage 模式 + ArkTS 方案，liteWearable 设备使用受限 API 子集。
+> 文档版本：**v1.3** | 日期：2026-06-10
+> **v1.0**：FA 模式 + JS API 方案（❌ 已废弃——HarmonyOS NEXT IDE 不再提供 FA 模板）
+> **v1.1**：Stage 模式 + ArkTS 方案（❌ 已废弃——GT 5 Pro 是 Lite Wearable，只支持 JS，不是 ArkTS）
+> **v1.2**：独立 JS FA 工程方案。假设同一 bundleName 可在 AGC 共享（❌ 不成立——Stage(.app) vs FA(.hap) 包格式不同）
+> **v1.3**：两个独立 AGC 应用方案（✅ 当前）——工程 A（Stage） + 工程 B（FA），不同 bundleName，两个 AGC App
 
 ---
 
-## 1. 为什么需要单独的 Lite Wearable 模块
+## 1. 核心结论（v1.3）
 
-### 1.1 设备差异
+### 1.1 三个关键约束
 
-| 维度 | wearable (ArkTS 全功能) | lite wearable (ArkTS 受限) |
-|------|:---:|:---:|
-| 典型设备 | Huawei Watch 4 / Ultimate | **Huawei Watch GT 5 Pro** |
-| 运行时 | ArkTS + ArkUI（完整） | ArkTS + ArkUI（API 子集） |
-| apiType | `stageMode` | `stageMode`（相同） |
-| deviceTypes | `["wearable"]` | `["liteWearable"]` |
-| `ArcSwiper` / `ArcButton` | ✅ 支持 | ❌ 不支持 |
-| `CanvasRenderingContext2D` | ✅ 支持 | ❌ 不支持 |
-| `CrownSensitivity` 表冠 | ✅ 支持 | ❌ 不支持 |
-| `Swiper` 基础组件 | ✅ | ✅（功能子集） |
-| `Column` / `Text` / `Button` / `Stack` | ✅ | ✅ |
-| `@State` / `@Prop` / `@Watch` | ✅ | ✅ |
-| `@Builder` / `@Component` | ✅ | ✅ |
-| `ForEach` 循环渲染 | ✅ | ✅ |
-| CSS `animation` / `transition` | ✅ | ✅ |
-| 震动 `@ohos.vibrator` | ✅ | ⚠️ 可能不支持（待验证） |
+| # | 约束 | 来源 |
+|---|------|------|
+| A | **FA 模型 (JS) 与 Stage 模型 (ArkTS) 不能在同一工程中混合** | 华为官方文档明确声明 |
+| B | **GT 5 Pro 是 Lite Wearable，仅支持 JS API**（HML/CSS/JS + config.json） | 华为官方文档 + 用户实测 |
+| C | **Stage 模型的 .app 包和 FA 模型的 .hap 包格式不同，不能在同一 AGC AppID 下共存** | 调研结论（包格式、签名 profile 不兼容） |
 
-### 1.2 核心结论
-
-**HarmonyOS NEXT（SDK 5.0.1/API 13+）已完全移除 FA 模式（JS API）。** liteWearable 和 wearable 使用相同的 `stageMode` + ArkTS 开发，区别仅在于：
-
-- `module.json5` 中 `deviceTypes` 不同（`"liteWearable"` vs `"wearable"`）
-- Lite wearable 可用的 ArkUI API 是子集——不能使用 ArcSwiper、Canvas 2D、表冠等高级 API
-- 基础布局组件（Column/Text/Button/Swiper/Stack）均可正常使用
-
-### 1.3 模块关系
+### 1.2 结论：两个独立 AGC 应用
 
 ```
-EasyRandom 工程
-├── product/default/        ← 手机端 (ArkTS, stageMode, phone/tablet)
-├── product/wearable/       ← 标准手表 (ArkTS, stageMode, wearable)
-│      使用 ArcSwiper + Canvas 2D + 表冠交互
-│      适用于: Watch 4 / Ultimate
-│
-└── product/wear_lite/      ← 轻量手表 (ArkTS, stageMode, liteWearable)
-       使用 基础 Swiper + CSS 动画 + 简化组件
-       适用于: Watch GT 5 Pro / 轻鸿蒙手表
+AGC 应用 A                            AGC 应用 B（新建）
+bundleName: ydy.App.EasyRandom       bundleName: ydy.App.EasyRandom.Watch
+包格式: .app (App Pack)               包格式: .hap (FA 单包)
+设备: 手机 + 标准手表 (Watch 3/4)      设备: 轻量手表 (GT 5 Pro / GT Runner 等)
+运行时: Stage + ArkTS                 运行时: FA + JS (HML/CSS/JS)
+目标: Watch 4 / Ultimate 等           目标: GT 5 Pro / GT 系列 / Fit 系列
+AppGallery 名称: "随易"               AppGallery 名称: "随易 手表版"
 ```
-
-### 1.4 bundleName 一致性
-
-两个穿戴模块使用相同的 `bundleName`（继承自 `AppScope/app.json5`），AppGallery 会根据 `deviceTypes` 自动向不同设备推送对应的 HAP：
-- `deviceTypes: ["wearable"]` → 标准手表收到 wearable.hap
-- `deviceTypes: ["liteWearable"]` → GT 5 Pro 收到 wear_lite.hap
 
 ---
 
-## 2. Lite Wearable 模块架构
+## 3. JS FA 工程完整结构
 
-### 2.1 最终目录结构
+> 注：DevEco Studio 5.0.1+ 已移除 `[Lite] Empty Ability` 模板，需手动创建。
+
+### 3.1 目录结构
 
 ```
-product/wear_lite/
+EasyRandom-Lite/                   ← 独立工程根目录
 ├── .gitignore
-├── build-profile.json5           ← apiType: "stageMode"
-├── oh-package.json5
-├── hvigorfile.ts
-├── build/                        ← 构建产物（gitignore）
-└── src/main/
-    ├── module.json5              ← deviceTypes: ["liteWearable"], abilities 结构
-    ├── ets/                      ← ArkTS 源码（与 wearable 相同语言）
-    │   ├── entryability/
-    │   │   └── EntryAbility.ets  ← 应用入口 Ability
-    │   ├── pages/
-    │   │   └── Index.ets         ← 主入口（基础 Swiper）
-    │   ├── sub_pages/            ← 各功能页面（后续实现）
-    │   │   ├── WearLiteNavPanel.ets
-    │   │   ├── WearLiteRollWheel.ets
-    │   │   ├── WearLiteMuyu.ets
-    │   │   └── ...
-    │   └── utils/
-    │       └── WearLiteDataManager.ets  ← 共享数据
-    └── resources/
-        └── base/
-            ├── element/
-            │   ├── string.json
-            │   └── color.json
-            ├── media/            ← 图片资源（复用 wearable）
-            └── profile/
-                └── main_pages.json
+├── build-profile.json5            ← 构建配置（需适配 FA 模型）
+├── entry/                         ← 入口模块
+│   └── src/main/
+│       ├── config.json            ← FA 模型配置文件（核心！）
+│       ├── app.js                 ← 应用生命周期
+│       ├── i18n/                  ← 国际化
+│       │   └── zh-CN.json
+│       └── js/
+│           └── MainAbility/       ← Ability 目录（与 config.json 中 srcPath 对应）
+│               ├── app.js         ← Ability 级生命周期（可选）
+│               └── pages/
+│                   └── index/     ← 页面目录
+│                       ├── index.hml      ← UI 布局
+│                       ├── index.css      ← 样式
+│                       └── index.js       ← 逻辑
 ```
 
-### 2.2 与 wearable 模块的 API 对比
+### 3.2 config.json（FA 模型核心配置）
 
-| 特性 | wearable (全功能) | wear_lite (受限) |
-|------|:---:|:---:|
-| 容器组件 | ArcSwiper（圆屏）\| Swiper（方屏） | **仅 Swiper**（圆/方统一） |
-| Canvas 转盘 | CanvasRenderingContext2D 绘制扇形 | **CSS 动画 + div 旋转模拟** |
-| 页面切换 | Swiper 横向滑动（单页内） | 同（Swiper 横向滑动） |
-| 转盘切换 | ArcSwiper 纵向（圆）\| Swiper 纵向（方） | **仅 Swiper 纵向** |
-| 表冠交互 | CrownSensitivity.MEDIUM | **不支持** |
-| 震动反馈 | `@ohos.vibratorutil.VibratorManager` | 待验证，fallback 可跳过 |
-| 数据持久化 | `@kit.ArkData` (preferences) | 同 API |
-| 圆/方屏适配 | `WearScreenUtil.isRoundScreen()` | 同，用 display 模块 |
-
-### 2.3 共享策略
-
-两个模块都是 ArkTS，**数据模型可以直接共享**（通过 common 模块的编译产物）：
-
-| 资源 | 共享方式 |
-|------|---------|
-| 图片资源 (dice/coin/muyu/BaGua) | 复制 `wearable/src/main/resources/base/media/` |
-| 转盘数据 (defaultRolls) | 可依赖 `@ohos/common`（同为 ArkTS 编译产物） |
-| 随机工具 (Random) | 直接 import from `@ohos/common` |
-| 颜色常量 (ExColor) | 直接 import from `@ohos/common` |
-| 屏幕适配 | 各自维护，因 token 系统可能不同 |
-| 字符串 | 各自维护 `element/string.json` |
-
----
-
-## 3. P0 功能在 Lite Wearable 中的实现方案
-
-### 3.1 幸运转盘（WearLiteRollWheel）
-
-**核心挑战**：lite wearable **无 Canvas 2D**，不能像 wearable 模块那样用 `CanvasRenderingContext2D` 绘制扇区。
-
-**替代方案：CSS Conic Gradient + div 旋转**
-
-```
-架构：
-Column
-├── Text (转盘名称)
-├── Stack
-│   ├── div 圆盘 — CSS conic-gradient() 绘制扇形
-│   │     animation: rotate(x deg) 1s ease-out
-│   └── Text '▼' (12点指针)
-├── Text (结果)
-└── Text (点击提示)
-
-关键：用 CSS animation 驱动旋转，而非 Canvas 重绘
-```
-
-**实现要点**：
-- 扇区颜色用 `conic-gradient(red 0° 60°, blue 60° 120°, ...)` 模拟
-- 旋转用 `.animation({ duration: 1000, curve: Curve.Ease })` 驱动 `rotate` 属性
-- 结果判定同 wearable：`360° / itemCount` 扇区除法
-- 纵向 Swiper 切换不同转盘（与 wearable 一致）
-
-### 3.2 祝福木鱼（WearLiteMuyu）
-
-实现最简单——纯 Column + onclick + 计数器。
-
-```
-Column
-├── Image (木鱼图片)
-├── Text (计数)
-├── Text (祝福语)
-└── 点击缩放动画: `.scale({ x: 0.9, y: 0.9 })` + 回弹
-```
-
-### 3.3 真心话大冒险（WearLiteTruthDare）
-
-同 wearable 方案，使用标准 ArkUI 布局：
-
-```
-Column
-├── Row
-│   ├── Column (真心话区)
-│   └── Column (大冒险区)
-└── Text (结果/提示)
-```
-
-### 3.4 负一屏导航（WearLiteNavPanel）
-
-在 Index.ets 的 Swiper index=0 位置直接实现，无需独立页面：
-
-```
-Grid (2列) + Scroll
-├── GridItem (🎡 幸运转盘) → swiperController.changeIndex(1)
-├── GridItem (🪵 祝福木鱼) → swiperController.changeIndex(2)
-├── ...
-└── 预留: 公告/设置/拉取数据（disabled 占位）
-```
-
----
-
-## 4. 屏幕适配（圆/方）
-
-lite wearable 仍然可以通过 `@kit.ArkUI` 获取屏幕信息：
-
-```typescript
-import { display } from '@kit.ArkUI';
-
-function isRoundScreen(): boolean {
-  try {
-    const displayClass = display.getDefaultDisplaySync();
-    // 手表屏幕宽高相等 → 圆形屏
-    return Math.abs(displayClass.width - displayClass.height) < 10;
-  } catch (e) {
-    return false;
+```json
+{
+  "app": {
+    "bundleName": "ydy.App.EasyRandom.Watch",
+    "vendor": "goods",
+    "version": {
+      "code": 1000001,
+      "name": "1.0.0"
+    }
+  },
+  "deviceConfig": {},
+  "module": {
+    "package": "ydy.App.EasyRandom.Watch",
+    "name": ".MainAbility",
+    "mainAbility": ".MainAbility",
+    "deviceType": [
+      "liteWearable"
+    ],
+    "distro": {
+      "deliveryWithInstall": true,
+      "moduleName": "entry",
+      "moduleType": "entry"
+    },
+    "abilities": [
+      {
+        "name": ".MainAbility",
+        "srcLanguage": "js",
+        "srcPath": "MainAbility",
+        "icon": "$media:icon",
+        "description": "$string:MainAbility_desc",
+        "label": "$string:MainAbility_label",
+        "type": "page",
+        "launchType": "standard"
+      }
+    ],
+    "js": [
+      {
+        "pages": [
+          "pages/index/index"
+        ],
+        "name": ".MainAbility"
+      }
+    ],
+    "distroFilter": {
+      "screenShape": {
+        "policy": "include",
+        "value": ["circle", "rect"]
+      }
+    }
   }
 }
 ```
 
-圆屏适配通过父容器 `borderRadius: '50%'` 裁切。
+### 3.3 app.js（应用生命周期）
+
+```javascript
+// entry/src/main/app.js
+export default {
+    onCreate() {
+        console.info('[EasyRandom-Lite] Application onCreate');
+    },
+    onDestroy() {
+        console.info('[EasyRandom-Lite] Application onDestroy');
+    }
+};
+```
+
+### 3.4 页面代码骨架
+
+**index.hml**（布局）：
+```html
+<div class="container" onswipe="onSwipe">
+    <text class="title">随易</text>
+    <text class="subtitle">{{ message }}</text>
+</div>
+```
+
+**index.css**（样式）：
+```css
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: #1a1a2e;
+}
+.title {
+    font-size: 48px;
+    color: #e94560;
+    margin-bottom: 20px;
+}
+.subtitle {
+    font-size: 24px;
+    color: #ffffff;
+}
+```
+
+**index.js**（逻辑）：
+```javascript
+import app from '@system.app';
+
+export default {
+    data: {
+        message: '你好，GT 5 Pro!'
+    },
+    onInit() {
+        console.info('[EasyRandom-Lite] Page onInit');
+    },
+    onSwipe(e) {
+        if (e.direction === 'right') {
+            app.terminate(); // 右滑退出
+        }
+    }
+};
+```
 
 ---
 
-## 5. 实施计划
+## 4. 工程 A 需要清理的内容
 
-### 5.1 总体顺序
+当前工程中的 `product/wear_lite/` 模块是 v1.1 时期错误创建的 Stage 模型模块，**对 GT 5 Pro 无效**。
 
+```bash
+# 删除 wear_lite 模块（或移到别处以备后用）
+rm -rf product/wear_lite/
 ```
-Phase 1: 模块骨架 ✅ 已完成
-  ├── DevEco Studio 创建 wear_lite 模块
-  ├── 配置 build-profile.json5（stageMode）
-  ├── 配置 module.json5（deviceTypes: liteWearable）
-  ├── 创建 EntryAbility + Index 主入口
-  └── 编译验证
-
-Phase 2: P0 功能实现（待开始）
-  ├── Step 1: Index 主框架 + 负一屏导航
-  ├── Step 2: WearLiteMuyu 祝福木鱼（最简单）
-  ├── Step 3: WearLiteTruthDare 真心话大冒险
-  └── Step 4: WearLiteRollWheel 幸运转盘（CSS 转盘）
-
-Phase 3: P1/P2 补充（待开始）
-  ├── WearLiteDices（骰子）
-  ├── WearLiteFlipCoin（硬币）
-  ├── WearLiteABCD（ABCD选择）
-  ├── WearLiteBaGua（八卦占卜）
-  └── WearLiteColors（随机颜色）
-
-Phase 4: 真机调试（待开始）
-  ├── GT 5 Pro 连接 DevEco Studio
-  ├── 构建 wear_lite debug 包
-  └── 全功能走查 + 修复
-```
-
-### 5.2 预计文件数
-
-| 类型 | 数量 |
-|------|:---:|
-| 配置文件 | 4（已创建） |
-| 入口 Ability | 1（已创建） |
-| 主入口 Index | 1（已创建，占位） |
-| P0 子页面 | 3 |
-| P1 子页面 | 3 |
-| P2 子页面 | 2 |
-| 工具类 | 1 |
-| 资源文件 | 4+ |
-| **合计** | **~18 个文件** |
 
 ---
 
-## 6. 附录：Lite Wearable API 限制清单
+## 5. 工程 B 创建方式
 
-以下是在 lite wearable 中**不可用或受限**的 ArkUI API：
+### 方式一：使用旧版 DevEco Studio（推荐）
 
-| API | 状态 | 替代方案 |
-|-----|:---:|---------|
-| `ArcSwiper` / `ArcButton` | ❌ | 使用 `Swiper` / `Button` |
-| `ArcSwiperController` | ❌ | 使用 `SwiperController` |
-| `ArcDotIndicator` | ❌ | 使用 `DotIndicator` 或自定义 |
-| `CanvasRenderingContext2D` | ❌ | CSS conic-gradient 或图片序列帧 |
-| `CrownSensitivity` | ❌ | 不支持表冠，改用触摸滑动 |
-| `@ohos.vibratorutil` | ⚠️ 待验证 | 如不可用则跳过震动 |
-| `@ohos/common`依赖 | ✅ | ArkTS 编译产物可共享 |
-| `@Component` / `@State` | ✅ | 正常使用 |
-| `Swiper` 基础版 | ✅ | 功能子集（可能无 `.vertical()` 等） |
-| `Column` / `Text` / `Button` / `Stack` | ✅ | 正常使用 |
-| `ForEach` / `@Builder` | ✅ | 正常使用 |
-| `.animation()` / `.rotate()` | ✅ | 正常使用 |
+安装 DevEco Studio 3.x 或 4.x（与 5.0.1 可共存），用 `[Lite] Empty Ability` 模板创建 JS FA 工程，然后修改 bundleName。
+
+**优点**：自动生成完整的工程骨架、hvigor 构建配置  
+**缺点**：需要额外安装一个 IDE 版本
+
+### 方式二：纯手动创建（备选）
+
+如果不想安装旧版 IDE：
+
+1. 手动创建 3.1 节的目录结构
+2. 从网上获取一个 Lite Wearable JS FA 工程模板的完整 build-profile.json5 和 hvigor 配置
+3. 在 DevEco Studio 5.0.1 中"导入项目"
+
+**优点**：不需要额外 IDE  
+**缺点**：构建配置可能不完全兼容，需要调试
+
+### 方式三：Canvas Kit 方案（备选方案，侧载）
+
+如果华为提供了 Canvas Kit 侧载途径（类似第三方运行时），可以在 GT 5 Pro 上运行 ArkTS HAP。  
+**⚠️ 此方案暂未确认可行性，作为长期备选。**
+
+---
+
+## 6. AGC 操作指南
+
+### 6.1 操作路径（AGC 控制台）
+
+```
+1. 登录 AppGallery Connect → https://developer.huawei.com/consumer/cn/service/josp/agc/index.html
+2. 进入「我的项目」→ 选择现有项目（如 "EasyRandom"）
+3. 点击「添加应用」
+4. 平台选择: HarmonyOS
+5. 应用类型: 应用（App）
+6. 填写:
+   ├── 应用名称: "随易 手表版"（或 "随易 Lite"）
+   ├── 包名 (bundleName): ydy.App.EasyRandom.Watch
+   └── 应用分类: 工具
+7. 创建完成后 →「开发」→「证书管理」→ 生成签名证书
+   ├── 可复用现有 EasyRandom.p12 密钥库
+   └── 但 CSR → 证书 .p7b 对应当前 AppID（需重新生成）
+8. 「开发」→「Profile管理」→ 添加调试/发布 Profile
+   ├── 设备类型: 穿戴设备 (Lite Wearable)
+   └── API 级别: 8 或 9（不是 13）
+```
+
+### 6.2 与工程 A 的关系
+
+| 项目 | 工程 A (EasyRandom) | 工程 B (EasyRandom-Lite) |
+|------|:---:|:---:|
+| AGC 项目 | 同一个项目（或独立项目均可） | 同 |
+| AGC 应用 | 已有 App: ydy.App.EasyRandom | **新建** App: ydy.App.EasyRandom.Watch |
+| .p12 密钥 | EasyRandom.p12 | **可复用**同一份 |
+| .p7b 证书 | 对应 AppID A | **需重新生成**（对应 AppID B） |
+| Profile | API 13 profile | **需重新生成**（API 8~9） |
+| bundleName | ydy.App.EasyRandom | ydy.App.EasyRandom.Watch |
+
+---
+
+## 7. 构建与调试流程
+
+### 6.1 构建
+
+```bash
+# 在工程 B 根目录
+hvigor assembleHap
+# 输出: entry/build/outputs/hap/entry-lite-signed.hap
+```
+
+### 6.2 安装到 GT 5 Pro
+
+由于 GT 5 Pro 不能直接 USB/WiFi 连接 DevEco Studio，需通过手机中转：
+
+1. **签名**：必须使用手动签名（不支持 DevEco 自动化签名）
+2. **拷贝 HAP**：将 `.hap` 文件拷贝到手机 `/sdcard/haps/` 目录
+3. **手机端工具**：安装最新版**运动健康** + **应用调测助手**
+4. **蓝牙配对**：将 GT 5 Pro 与手机配对
+5. **安装**：在"应用调测助手"中选择 HAP 包安装到手表
+
+### 6.3 签名要点
+
+工程 A 和工程 B 必须使用**同一套签名文件**（同一个 `.p12` + `.p7b`），保证两个 HAP 在 AGC 上被识别为同一应用。
+
+---
+
+## 8. 功能适配矩阵
+
+| 功能 | 工程 A (wearable ArkTS) | 工程 B (lite JS) |
+|------|:---:|:---:|
+| 幸运转盘 | Canvas 2D 扇形绘制 | CSS conic-gradient / 图片帧 |
+| 祝福木鱼 | Column + onclick + 缩放动画 | div + onclick + CSS animation |
+| 随机骰子 | ArkUI 动画 | CSS 动画 |
+| 抛硬币 | ArkUI 3D 翻转 | CSS 翻转动画 |
+| ABCD选择 | ArkUI 布局 | HML 布局 |
+| 八卦占卜 | ArkUI 布局 | HML 布局 |
+| 随机颜色 | ArkUI 布局 | HML 布局 |
+| 右滑退出 | @Builder + transition | onswipe + app.terminate() |
+| 页面导航 | ArcSwiper（圆）/ Swiper（方） | Swiper 列表 |
+| 震动反馈 | @ohos.vibrator | ⚠️ 待验证 |
+| 数据持久化 | @kit.ArkData preferences | @ohos.data.preferences（JS API 版本） |
+
+---
+
+## 9. 下一步行动清单
+
+| # | 行动 | 优先级 |
+|---|------|:---:|
+| 1 | 确认使用哪个创建方式（旧版 IDE / 手动） | P0 |
+| 2 | 创建 EasyRandom-Lite 独立工程 | P0 |
+| 3 | 实现首页框架（Index + Swiper 导航） | P0 |
+| 4 | 实现 P0 核心：幸运转盘（CSS版） | P0 |
+| 5 | 实现 P0 核心：祝福木鱼 | P0 |
+| 6 | 真机 GT 5 Pro 调试 | P0 |
+| 7 | 清理工程 A 中无效的 `wear_lite` 模块 | P1 |
+| 8 | AGC 双 HAP 发布配置 | P1 |
