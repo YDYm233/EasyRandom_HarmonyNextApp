@@ -13,12 +13,25 @@
           "profile": "C:/Users/GOODS-Laptop/Documents/随易APPRelease.p7b",
           "certpath": "C:/Users/GOODS-Laptop/Documents/EasyRandom.cer"
         }
+      },
+      {
+        "name": "debug",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "C:\\Users\\GOODS-Laptop\\.ohos\\config\\debug_app_EasyRandom_IgdIDsAoYvXv-PTt_ZF_xgbhmg4-tJOqIYgXo3ga4As=.cer",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001B6A0829B5828D775E533C04A42FEDDBD8AEC31D1435395B74E7A2A19F5E2AB51306AFB9CF379BAC",
+          "profile": "C:\\Users\\GOODS-Laptop\\.ohos\\config\\debug_app_EasyRandom_IgdIDsAoYvXv-PTt_ZF_xgbhmg4-tJOqIYgXo3ga4As=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "C:\\Users\\GOODS-Laptop\\.ohos\\config\\debug_app_EasyRandom_IgdIDsAoYvXv-PTt_ZF_xgbhmg4-tJOqIYgXo3ga4As=.p12",
+          "storePassword": "0000001BDF0471A566F3267C6CE7352DA4B9B2AC7C0648AD48DD813BA649D6F89A8BA7EFD79C4C0359102D"
+        }
       }
     ],
     "products": [
       {
         "name": "default",
-        "signingConfig": "default",
+        "signingConfig": "debug",
         "compatibleSdkVersion": "5.0.1(13)",
         "runtimeOS": "HarmonyOS",
         "targetSdkVersion": "6.1.0(23)"
