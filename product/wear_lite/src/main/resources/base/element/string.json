@@ -5,6 +5,18 @@
       "value": "手表端(轻量)"
     },
     {
+      "name": "app_name",
+      "value": "随易"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "随易手表端入口"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "随易"
+    },
+    {
       "name": "vibrate_reason",
       "value": "用于随机结果时的震动反馈"
     }
