@@ -54,10 +54,10 @@
       "name": "VitalUI",
       "srcPath": "./common/VitalUI"
     },
-//    {
-//      "name": "wearable",
-//      "srcPath": "./product/wearable"
-//    },
+    {
+      "name": "wearable",
+      "srcPath": "./product/wearable"
+    },
     {
       "name": "HarmonySystemUtils",
       "srcPath": "./common/HarmonySystemUtils"

@@ -2,8 +2,8 @@
   "app": {
     "bundleName": "ydy.App.EasyRandom",
     "vendor": "$string:app_author",
-    "versionCode": 1000072,
-    "versionName": "1.0.18",
+    "versionCode": 1000073,
+    "versionName": "1.0.19",
     "icon": "$media:app_icon_layer",
     "label": "$string:app_name"
   }

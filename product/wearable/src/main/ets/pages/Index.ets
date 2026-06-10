@@ -1,12 +1,5 @@
 import { ArcSwiper, ArcDotIndicator, ArcSwiperController } from '@kit.ArkUI';
 import WearScreenUtil from '../utils/WearScreenUtil';
-import { WearRollDices } from '../sub_pages/WearRollDices';
-import { WearFlipCoin } from '../sub_pages/WearFlipCoin';
-import { WearRandomABCD } from '../sub_pages/WearRandomABCD';
-import { WearDevineBaGua } from '../sub_pages/WearDevineBaGua';
-import { WearRollWheel } from '../sub_pages/WearRollWheel';
-import { WearRandomColors } from '../sub_pages/WearRandomColors';
-import { WearBlessingMuyu } from '../sub_pages/WearBlessingMuyu';
 
 /**
  * 手表端主页 — 圆/方屏双适配
@@ -81,25 +74,6 @@ struct Index {
   // ═══════════════════════════════════════════
   @Builder
   buildAllPages() {
-    // 1. 掷骰子
-    WearRollDices();
 
-    // 2. 丢硬币
-    WearFlipCoin();
-
-    // 3. ABCD 选择器
-    WearRandomABCD();
-
-    // 4. 八卦占卜
-    WearDevineBaGua();
-
-    // 5. 幸运转盘
-    WearRollWheel();
-
-    // 6. 随机颜色
-    WearRandomColors();
-
-    // 7. 祝福木鱼
-    WearBlessingMuyu();
   }
 }

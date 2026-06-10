@@ -1,6 +1,8 @@
 # ⌚ 随易 EasyRandom — 手表端（Wearable）实现方案
 
-> 文档版本：v3.8 | 日期：2026-06-09 | 基于项目 v1.0.19 开发中状态
+> 文档版本：v4.0 | 日期：2026-06-10 | 基于项目 v1.0.19 开发中状态
+> **v4.0 重构**：§2.7.4 数据持久化策略全面重写为两阶段方案（本地 Preferences → 分布式 KV Store），引入 `docs/wearable-sync-plan.md` 作为跨设备同步的正式规划文档；§1.1 已有基础表新增同步规划引用
+> **v3.9 新增**：新增 §4.5 P0 功能优先级规划（幸运转盘 / 祝福木鱼 / 真心话大冒险）；新增 §4.6 真心话大冒险手表端适配方案（参考手机端 `HonestOrChallenge`）；§4.2 功能组件表新增优先级列（P0/P1/P2）；§5 文件架构新增 `WearTruthOrDare.ets`；§7 Step3 新增真心话大冒险实施项；§8.2 新增对应文件清单
 > **v3.8 补充**：新增 §2.9 横阔屏适配（超新星 X1，480×408 横阔 AMOLED）；§2.3 WearScreenUtil 新增 `isWideScreen()` 方法；§2.1 方屏典型分辨率补充 480×408 px；§2.3 尺寸分级表补充超新星 X1 到 standard 典型设备
 > **v3.7 补充**：全面补充约束维度 — §2.1 补充应用包大小限制(10MB)和内存澄清；§2.2 补充不支持的组件黑名单(Web/Video/TextArea等)；新增 §2.7 手表端运行约束(后台任务/网络/性能指标/数据持久化)；新增 §2.8 暗黑模式适配；§2.4 补充触控尺寸 vp/px 换算标注；§6 问题1 修正为经实测验证的方案(不加 targets)；§6 问题4 更新为实测结论；§7 Step1 更新操作描述；删除重复的尺寸分级表
 > **v3.6 修正**：修正方案文档中的关键缺陷 — §2.2 修正 PanGesture 支持描述、§6 问题4 修正 minAPIVersion 架构错误（compatibleSdkVersion 是 app 级配置）、§6 问题6 修正 disableSwipe(true) UX 极差方案、§3.5 修正"子组件零分支"原则为"尽量减少分支"、新增 §2.6 功耗优化策略、统一 ArcButton 导入路径为 @kit.ArkUI
@@ -27,9 +29,9 @@
 | `oh-package.json5` | ✅ 可用 | 已依赖 `@ohos/common` |
 | 已构建 .hap | ✅ 存在 | `wearable-default-signed.hap` |
 
-### 1.2 手机端 CardDisplay 组件（参考用）
+### 1.2 部分功能参考手机端default模块内的实现
 
-手表端**不直接复用**手机端 `form_display/` 下的 CardDisplay 组件，而是**参考它们的交互逻辑，在 wearable 模块内单独建立适配手表屏的组件文件**。以下是各 CardDisplay 的核心逻辑摘要，供开发时参照：
+手表端**不直接复用**手机端，ABCD和幸运转盘可以参考 `form_display/` 下的 CardDisplay 组件，不直接导入CardDisplay而是**参考它们的交互逻辑，在 wearable 模块内单独建立适配手表屏的组件文件**。以下是各 CardDisplay 的核心逻辑摘要，供开发时参照：
 
 | 组件 | 文件 | 核心交互 | 关键状态 | 参考要点 |
 |------|------|---------|---------|---------|
@@ -46,12 +48,15 @@
 ```
 手表端新建组件
 ├── @ohos/common (Random, ExColor 等)        ← 已有依赖，直接可用
-├── RollWheel (手表端转盘)
+├── WearRollWheel (手表端转盘)
 │   └── RollDataManager (Roll, RollItem, defaultRolls, initRollsData)
 │       └── @kit.ArkData (preferences)       ← 需在手表端同步引入
-├── BlessingMuyu (手表端木鱼)
+├── WearBlessingMuyu (手表端木鱼)
 │   └── @kit.ArkData (preferences)
 │   └── @kit.PerformanceAnalysisKit (hilog)
+├── WearTruthOrDare (手表端真心话大冒险)          ← 🆕 P0 新增，手机端已有 HonestOrChallenge
+│   └── static_datas/challenges.ets (数据源) ← 共用手机端数据文件或独立复制
+│   └── @ohos/vibratorutil (震动)           ← 结果反馈震动
 └── 图片资源 ($r("app.media.xxx"))
     ├── dice1~6, coin1~2, needle, BaGua, MuYu, pointer_m 等
     └── 颜色资源 ($r("app.color.xxx"))
@@ -86,7 +91,7 @@
 | 无复杂输入 | 手表无文本输入弹窗 | 所有功能零文本输入，用预设列表/选择器代替 |
 | 手势支持 | PanGesture 从 API 7 开始支持 | 优先使用 onClick + Swiper 滑动，复杂手势需实测验证 |
 | Navigation 限制 | 手表端推荐用原生 Navigation | 单页面 + Swiper，不使用 router 多页面导航 |
-| Swiper 性能 | 手表端 Swiper 页面数不宜超过 10 个 | 横向 Swiper 7 个功能页 |
+| Swiper 性能 | 手表端 Swiper 页面数不宜超过 10 个 | 横向 Swiper 8 个功能页 |
 
 #### 手表端不支持的组件黑名单
 
@@ -548,20 +553,138 @@ HarmonyOS 后台任务管理对手表端有严格限制。手表应用在进入�
 | 内存占用 | < 100MB | ✅ 无大内存操作 | Canvas 转盘需注意释放 |
 | 帧率 | 稳定 60fps | ⚠️ Canvas 动画需优化 | 转盘旋转/硬币翻转需关注 |
 | 安装包 | < 10MB | ⚠️ 需控制图片资源量 | 图片按需压缩/分级加载 |
-| 页面数量 | 尽量少 | ✅ 单页面 | ArcSwiper 内 7 个子组件 |
+| 页面数量 | 尽量少 | ✅ 单页面 | ArcSwiper 内 8 个子组件 |
 
-#### 2.7.4 数据持久化策略
+#### 2.7.4 数据持久化策略（两阶段演进）
 
-手表端数据存储有特殊约束，需选择合适的存储方案：
+> 📄 **关联文档**：跨设备同步的完整方案见 [`docs/wearable-sync-plan.md`](./wearable-sync-plan.md)，本小节仅简述策略演进的路线图。
 
-| 约束 | 说明 | EasyRandom 对应 |
+##### 阶段概览
+
+```
+Phase 1（当前）                     Phase 2（规划）
+ ┌──────────────────┐              ┌──────────────────────────────────┐
+ │  Preferences（本地）│    ──→     │  Distributed KV Store（跨设备）    │
+ │  • 木鱼计数        │              │  • 转盘数据 手机→手表 自动同步     │
+ │  • 转盘自定义数据   │              │  • 木鱼计数 双向同步 + 冲突合并   │
+ │  • 零网络依赖       │              │  • 离线队列 + 联网自动重放       │
+ └──────────────────┘              └──────────────────────────────────┘
+```
+
+##### Phase 1：本地持久化（当前实现）
+
+手表端直接使用轻量 KV 存储，与手机端 API 一致：
+
+| 维度 | 约束 | EasyRandom 实现 |
 |------|------|:--------------:|
-| 使用 `Preferences`（轻量 KV 存储） | 手表端不用 `RelationalStore`（过重） | ✅ 木鱼计数 + 转盘自定义数据 |
-| 无需分布式同步 | EasyRandom 是纯本地随机，不需要跨设备同步 | ✅ 无需同步 |
-| 数据量极小 | 仅木鱼计数和转盘自定义数据，几 KB 级别 | ✅ Preferences 足够 |
-| 无加密需求 | 非敏感数据 | ✅ 无需加密 |
+| **存储引擎** | `@ohos.data.preferences`，不用 `RelationalStore`（过重） | ✅ 木鱼计数 + 转盘自定义数据 |
+| **数据量** | 仅木鱼计数和转盘自定义数据，< 10 KB | ✅ Preferences 足够 |
+| **加密** | 非敏感数据 | ✅ 无需加密 |
+| **网络** | 零依赖 | ✅ 完全离线可用 |
 
-> **推荐**：手表端直接使用 `@ohos.data.preferences`（Preferences），与手机端保持一致。如果未来需要跨设备同步木鱼计数，可考虑 `@ohos.data.distributedKVStore`。
+**实现位置**：
+
+| 数据 | 存储 Key | 读写组件 | 说明 |
+|------|---------|---------|------|
+| 木鱼敲击计数 | `muyu_tap_count` | `WearBlessingMuyu.ets` | `aboutToAppear` 加载，每次敲击写入 |
+| 转盘自定义数据 | `turntable_custom_data` | `WearRollDataManager.ets` | JSON 序列化存储，包含选项列表 |
+
+```typescript
+// 木鱼计数持久化示例（WearBlessingMuyu.ets 中）
+import preferences from '@ohos.data.preferences';
+
+private async loadTapCount(): Promise<void> {
+  const prefs = preferences.getPreferencesSync(getContext(this), { name: 'muyu_prefs' });
+  this.tapCount = prefs.getSync('tap_count', 0) as number;
+}
+
+private async saveTapCount(): Promise<void> {
+  const prefs = preferences.getPreferencesSync(getContext(this), { name: 'muyu_prefs' });
+  prefs.putSync('tap_count', this.tapCount);
+  prefs.flush();
+}
+```
+
+##### Phase 2：手机端数据导入（规划，P1）
+
+用户在手机端编辑转盘数据后，需要手表端能同步使用。详见 [`docs/wearable-sync-plan.md`](./wearable-sync-plan.md)。
+
+**核心方案**：`@ohos.data.distributedKVStore`（Distributed KV Store）
+
+| 目标 | 说明 | 优先级 |
+|------|------|:------:|
+| 转盘数据同步 | 手机编辑 → 手表自动同步 | P0 |
+| 木鱼计数同步 | 多设备敲击计数合并 | P1 |
+| 离线支持 | 离线时本地缓存，联网后自动重放 | P2 |
+| 冲突处理 | 多设备同时编辑时的数据一致性 | P1 |
+
+**数据流**：
+
+```
+手机端                             手表端
+  │                                  │
+  ├─ 编辑转盘/敲木鱼                  │
+  │                                  │
+  ▼                                  │
+┌─────────────────┐                  │
+│   Preferences    │                  │
+│     (本地)       │                  │
+└────────┬────────┘                  │
+         │                            │
+         ▼                            ▼
+┌─────────────────────────────────────────┐
+│      Distributed KV Store              │
+│      "EasyRandom_Sync"                │
+│    • autoSync: true                   │
+│    • 同华为账号自动发现 & 同步          │
+└─────────────────────────────────────────┘
+         │                            │
+         ▼                            ▼
+    手机端监听                    手表端监听
+    dataChange                   dataChange
+         │                            │
+         ▼                            ▼
+    更新 UI                     更新 UI
+```
+
+**同步的 KV 键值设计**：
+
+| Key | 类型 | 方向 | 说明 |
+|-----|------|:----:|------|
+| `turntable_data` | JSON string | 手机 → 手表 | 转盘列表 + 选中状态 |
+| `muyu_data` | JSON string | 双向 | 各设备敲击计数（按 deviceId 拆分） |
+
+**Phase 2 需要的前置条件**：
+
+| 条件 | 状态 | 说明 |
+|------|:----:|------|
+| `common/SyncManager` 模块 | ⏳ 待创建 | 单例管理器，封装 KV Store 初始化/读写/监听 |
+| 权限 `DISTRIBUTED_DATASYNC` | ⏳ 待配置 | 手机端 + 手表端 `module.json5` 均需添加 |
+| 权限 `ACCESS_SERVICE_DM` | ⏳ 待配置 | 设备发现所需 |
+| 数据模型对齐 | ⚠️ 需确认 | 手机端 `Roll`/`RollItem` → 同步格式 `SyncRoll` 的序列化逻辑 |
+| 手机端写入接入 | ⏳ 待开发 | 在 `RollPage` 保存转盘时同步写入 KV Store |
+
+**演进路线**：
+
+```
+v1.0.19（当前）
+  └── Phase 1：Preferences 本地存储 ✅
+        └── 木鱼计数可离线使用，转盘数据手表端独立
+
+v1.1.x（下一版本）
+  └── Phase 2.1：SyncManager 基础设施
+        └── common/ 下创建模块，手机+手表双端接入
+
+v1.2.x
+  └── Phase 2.2：转盘数据 P0 同步
+        └── 手机编辑 → 手表端自动刷新
+
+v1.3.x
+  └── Phase 2.3：木鱼计数 P1 + 离线 P2
+        └── 双向同步 + 冲突合并 + 离线队列
+```
+
+> ⚠️ **重要约束**：Distributed KV Store 必须同华为账号 + 同 Wi-Fi 网络，首次同步需要网络。手表端始终保留 Preferences 作为本地缓存，即使离线也能使用缓存数据。
 
 ### 2.8 暗黑模式适配（P1 补充）
 
@@ -717,7 +840,7 @@ Component() {
                     ▼
     第 3 层：内容层（完全共用，零分支）
     ┌──────────────────────────────────────┐
-    │   共用的 Wear 功能组件（7 个）         │
+    │   共用的 Wear 功能组件（8 个）         │
     │                                      │
     │   WearRollDices    WearFlipCoin      │
     │   WearRandomABCD   WearDevineBaGua   │
@@ -767,6 +890,7 @@ import { WearDevineBaGua } from '../sub_pages/WearDevineBaGua';
 import { WearRollWheel } from '../sub_pages/WearRollWheel';
 import { WearRandomColors } from '../sub_pages/WearRandomColors';
 import { WearBlessingMuyu } from '../sub_pages/WearBlessingMuyu';
+import { WearTruthOrDare } from '../sub_pages/WearTruthOrDare';
 
 @Entry
 @Component
@@ -794,6 +918,7 @@ struct Index {
         WearRollWheel()
         WearRandomColors()
         WearBlessingMuyu()
+        WearTruthOrDare()
       }
       .width('100%')
       .height('100%')
@@ -816,6 +941,7 @@ struct Index {
           WearRollWheel()
           WearRandomColors()
           WearBlessingMuyu()
+          WearTruthOrDare()
         }
         .indicator(true)
         .loop(true)
@@ -1031,7 +1157,7 @@ buildSquareButton() {
 
 1. `WearScreenUtil.screenSize` 增加分级条件
 2. 所有 Token 的 getter 增加相应分支的数值
-3. 完成后，现有的 7 个 Wear 组件、Index.ets 全部自动适配，不需要改动任何业务代码
+3. 完成后，现有的 8 个 Wear 组件、Index.ets 全部自动适配，不需要改动任何业务代码
 
 ```
 工作量对比：
@@ -1077,15 +1203,16 @@ buildSquareButton() {
 
 ### 4.2 功能组件映射
 
-| 横向页签 | 手表端组件（新建） | 参考来源 | 纵向数据 | 圆形屏适配要点 | 方形屏适配要点 |
-|---------|-------------------|---------|---------|---------------|---------------|
-| 掷骰子 | `WearRollDices` | `RollDiceCardDisplay` | 单页 | `mainImageWidth`(55%) + `safePadding`(24vp) | `mainImageWidth`(70%) + `safePadding`(12vp) |
-| 丢硬币 | `WearFlipCoin` | `FlipCoinCardDisplay` | 单页 | `mainImageWidth`(55%)，旋转动画保持 | `mainImageWidth`(70%) |
-| ABCD | `WearRandomABCD` | `ABCDCardDisplay` | 单页 | 去掉指针，四格直铺点击，`resultFontSize`(48fp) | 四格直铺，`resultFontSize`(48fp) |
-| 八卦 | `WearDevineBaGua` | `BaGuaCardDisplay` | 单页 | `mainImageWidth`(55%) | `mainImageWidth`(70%) |
-| 幸运转盘 | `WearRollWheel` | `RollWheelCardDisplay` | 多个转盘 | Canvas `scaledSize(260)`，纵向 Swiper 切转盘 | Canvas `scaledSize(260)` |
-| 随机颜色 | `WearRandomColors` | `RandomColorsCardDisplay` | 单页 | 全屏着色 + `safePadding` 安全区内文字 | 全屏着色 |
-| 祝福木鱼 | `WearBlessingMuyu` | `BlessingMuyuCardDisplay` | 单页 | `mainImageWidth`(55%) + `ArcButton` | `mainImageWidth`(70%) + `Button` |
+| 优先级 | 横向页签 | 手表端组件（新建） | 参考来源 | 纵向数据 | 圆形屏适配要点 | 方形屏适配要点 |
+|:-----:|---------|-------------------|---------|---------|---------------|---------------|
+| **P0** | 幸运转盘 | `WearRollWheel` | `RollWheelCardDisplay` | 多个转盘 | Canvas `scaledSize(260)`，纵向 Swiper 切转盘 | Canvas `scaledSize(260)` |
+| **P0** | 祝福木鱼 | `WearBlessingMuyu` | `BlessingMuyuCardDisplay` | 单页 | `mainImageWidth`(55%) + `ArcButton` | `mainImageWidth`(70%) + `Button` |
+| **P0** | 真心话大冒险 | `WearTruthOrDare` 🆕 | `HonestOrChallenge` | 单页（两模式内切换） | 上下分屏（真心话上/大冒险下），点击选用透明背景包裹文字区域 | 同左，标准 Button |
+| P1 | 掷骰子 | `WearRollDices` | `RollDiceCardDisplay` | 单页 | `mainImageWidth`(55%) + `safePadding`(24vp) | `mainImageWidth`(70%) + `safePadding`(12vp) |
+| P1 | 丢硬币 | `WearFlipCoin` | `FlipCoinCardDisplay` | 单页 | `mainImageWidth`(55%)，旋转动画保持 | `mainImageWidth`(70%) |
+| P1 | ABCD | `WearRandomABCD` | `ABCDCardDisplay` | 单页 | 去掉指针，四格直铺点击，`resultFontSize`(48fp) | 四格直铺，`resultFontSize`(48fp) |
+| P2 | 八卦 | `WearDevineBaGua` | `BaGuaCardDisplay` | 单页 | `mainImageWidth`(55%) | `mainImageWidth`(70%) |
+| P2 | 随机颜色 | `WearRandomColors` | `RandomColorsCardDisplay` | 单页 | 全屏着色 + `safePadding` 安全区内文字 | 全屏着色 |
 
 > ⚠️ 上表中括号内的数值为 **standard 尺寸**下的参考值（small 尺寸会自动缩小，见 §2.5 Token 查速表）。开发时直接引用 Token 名，不要硬编码数值。
 
@@ -1110,6 +1237,242 @@ buildSquareButton() {
 4. **解耦维护** — 手机端改 CardDisplay 不影响手表端，手表端适配不污染手机端
 5. **圆/方屏双适配** — 容器层分叉 + 内容层共用，一套功能组件代码覆盖两种屏幕
 
+### 4.5 P0 功能优先级规划
+
+**决策时间**：2026-06-10
+
+#### 优先级定义
+
+| 级别 | 含义 | 判定标准 |
+|:----:|------|---------|
+| **P0** | 核心必做 | 有独立交互模型、不可被其他功能替代、用户高频使用 |
+| P1 | 重要增强 | 与已有功能交互模式相近、实现成本低 |
+| P2 | 选择优化 | 锦上添花、或与 P0/P1 功能模式重复度高 |
+
+#### P0 功能一览
+
+| 功能 | 组件 | 当前状态 | 核心交互 | 手机端参考 |
+|------|------|:------:|---------|----------|
+| **幸运转盘** | `WearRollWheel` | ✅ 已实现 | 点击旋转 Canvas 转盘，纵向 Swiper 切换多个转盘 | `RollWheelCardDisplay` |
+| **祝福木鱼** | `WearBlessingMuyu` | ✅ 已实现 | 点击敲木鱼 + 计数持久化 + 祝福语气泡动画 | `BlessingMuyuCardDisplay` |
+| **真心话大冒险** | `WearTruthOrDare` 🆕 | 📋 规划中 | 上下分屏双模式，点击直接出结果 | `HonestOrChallenge` |
+
+#### 为什么这三个是 P0？
+
+```
+幸运转盘 ─── 唯一支持多数据切换的功能（纵向 Swiper）
+              手机端累计使用数据最高
+
+祝福木鱼 ─── 唯一有持久化计数的功能（Preferences）
+              适合碎片化、重复性操作场景
+
+真心话大冒险 ─ 唯一基于文本题库的功能（纯文字展示）
+               社交聚会场景的杀手功能
+```
+
+三个功能分别覆盖了手表随机工具的三个差异化维度：**多数据**（转盘）、**持久化**（木鱼）、**纯文本**（真心话大冒险）。
+
+#### P0 已实现优化项
+
+| 优化项 | 涉及文件 | 状态 | 说明 |
+|--------|---------|:----:|------|
+| RollWheel 内部 Swiper 纵向化 | `WearRollWheel.ets` | ✅ v3.8 | 圆形屏 ArcSwiper(vertical) + 方形屏 Swiper(.vertical(true)) |
+| 圆/方屏双适配 | `Index.ets` + 全部子组件 | ✅ v3.5 | 容器层分叉，内容层共用 Token |
+| 功耗优化 | 各组件 `aboutToDisappear` | ⚠️ 部分 | 需在全部组件中补充 `aboutToDisappear` 资源释放 |
+
+#### P0 待实现
+
+| 任务 | 优先级 | 说明 |
+|------|:------:|------|
+| 🆕 **WearTruthOrDare 组件开发** | P0 | 见 §4.6 详细方案 |
+| 🔧 RollWheel Canvas 旋转动画性能优化 | P0 | 当前动画可能掉帧，需 `OffscreenCanvas` + 帧率控制 |
+| 🔧 Muyu 震动反馈对接 | P0 | VIBRATE 权限已配置，需接入 `VibratorManager` |
+| ⚠️ 全部 P0 组件补充 `aboutToDisappear` 资源释放 | P0 | 遵循 §2.6 功耗优化策略 |
+| ⚠️ Index.ets 侧滑手势冲突验证 | P0 | 遵循 §6 问题6 方案验证 |
+
+### 4.6 真心话大冒险手表端适配方案 🆕
+
+#### 4.6.1 手机端现状（参考）
+
+| 维度 | 手机端 `HonestOrChallenge` | 手表端需改动 |
+|------|--------------------------|------------|
+| 数据源 | `static_datas/challenges.ets` — `honests[]` (真心话) + `challenges[]` (大冒险) | **共用同一数据文件**（从 `@ohos/common` 或独立复制） |
+| 选择方式 | 旋转指针 + 双按钮（真心话/大冒险） | 简化为 **单手点击**（手表旋转指针不实用） |
+| 结果展示 | `promptAction.openCustomDialog` 弹窗 | **直接展示**在屏幕中央（手表无弹窗） |
+| 页面结构 | 独立路由页面 + header + 返回键 | **嵌入 Swiper**，与其它功能页同级 |
+| 震动反馈 | `VibratorManager.vibrateResult()` | 同左（权限已预留） |
+
+#### 4.6.2 手表端交互设计
+
+```
+┌──────────────────────────┐   ┌──────────────────────────┐
+│     圆形屏 (ArcSwiper)    │   │     方形屏 (Swiper)       │
+│                          │   │                          │
+│   ╭──────────────────╮   │   │   ┌──────────────────┐   │
+│   │    ┌─────────┐   │   │   │   │    真心话        │   │
+│   │    │ 真心话   │   │   │   │   │  (点击出题)      │   │
+│   │    └─────────┘   │   │   │   │                  │   │
+│   │         x         │   │   │   │──────────────   │   │
+│   │    ┌─────────┐   │   │   │   │                  │   │
+│   │    │ 大冒险   │   │   │   │   │    大冒险        │   │
+│   │    └─────────┘   │   │   │   │  (点击出题)      │   │
+│   ╰──────────────────╯   │   │   └──────────────────┘   │
+│                          │   │                          │
+│  [结果文字直接展示在中央]  │   │  [结果文字直接展示在中央]  │
+└──────────────────────────┘   └──────────────────────────┘
+```
+
+**核心交互流程**：
+
+1. 页面加载 → 上半屏"真心话"区域、下半屏"大冒险"区域（或左右分屏，视屏幕形状而定）
+2. 点击"真心话"区域 → 从 `honests[]` 随机取一条 → **直接替换**该区域显示结果文字 → 震动反馈
+3. 点击"大冒险"区域 → 从 `challenges[]` 随机取一条 → **直接替换**该区域显示结果文字 → 震动反馈
+4. 再次点击同一区域 → 重新随机（避免连续重复同一结果）
+
+**手表端简化原则**：
+
+| 简化项 | 说明 |
+|--------|------|
+| **无旋转指针** | 手机端转盘指针在手表上操作精度不够，改为直接分屏点击 |
+| **无弹窗** | `promptAction.openCustomDialog` 在手表端不可用/不推荐，结果直接替换显示 |
+| **无路由** | 作为 Swiper 的一个子页面，不需要 `router.pushUrl` |
+| **无 header** | 手表屏太小，不浪费空间放标题栏 |
+| **文本自适应** | 结果文字过长时自动缩小字号或滚动（`maxLines` + `textOverflow`），手表屏幕文字区域极小 |
+| **防止重复** | 连续两次不出同一结果（简单去重逻辑） |
+
+#### 4.6.3 数据源策略
+
+```
+方案 A：腕表端独立复制 challenges.ets
+  优点：解耦，手表端可独立控制题库
+  缺点：数据重复维护
+
+方案 B：从 @ohos/common 共享导出（推荐）
+  优点：单一数据源，手机手表同步更新
+  缺点：需在 @ohos/common 中新建数据文件或扩展导出
+```
+
+**当前建议**：先使用方案 A（独立复制），快速实现。后续手机端题库更新时，手动同步到手表端。
+
+#### 4.6.4 数据结构
+
+```typescript
+// product/wearable/src/main/ets/utils/WearTruthOrDareData.ets (手表端独立数据文件)
+export const honests: string[] = [
+  "你最近一次撒谎是什么时候？说的是什么？",
+  "你最害怕失去什么？",
+  "你做过最尴尬的事情是什么？",
+  "你暗恋过谁？",
+  "你最想改掉的坏习惯是什么？",
+  "你在公共场合做过最丢脸的事是什么？",
+  "你做过最冒险的事情是什么？",
+  "如果可以回到过去，你最想改变什么？",
+  "你最不想让别人知道的秘密是什么？",
+  "你上一次哭是什么时候？为什么？",
+];
+
+export const challenges: string[] = [
+  "用新闻联播的腔调进行一分钟即兴演讲",
+  "给未在场的朋友的朋友圈点赞，从第一条开始，一直点到最新的一条",
+  "用方言给 1 个人打电话聊一分钟",
+  "做一个大家都觉得很丑的鬼脸，并保持 10 秒钟",
+  "蒙眼涂口红",
+  "单脚站立 3 分钟",
+  "给朋友打电话，唱《青藏高原》的高音部分",
+  "一口气喝完一瓶矿泉水",
+  "和在场的一位异性对视 10 秒",
+  "模仿一位在场的人，让大家猜是谁",
+];
+```
+
+#### 4.6.5 伪代码骨架
+
+```typescript
+// product/wearable/src/main/ets/sub_pages/WearTruthOrDare.ets
+import { Random } from '@ohos/common';
+import WearScreenUtil from '../utils/WearScreenUtil';
+import { honests, challenges } from '../utils/WearTruthOrDareData';
+import { VibratorManager } from '@ohos/vibratorutil';
+
+@Component
+export struct WearTruthOrDare {
+  @State honestText: string = '真心话';
+  @State challengeText: string = '大冒险';
+  @State lastHonestIndex: number = -1;
+  @State lastChallengeIndex: number = -1;
+
+  private getRandomText(source: string[], lastIndex: number): { text: string, index: number } {
+    let idx = Random(0, source.length - 1, true);
+    if (idx === lastIndex && source.length > 1) {
+      idx = (idx + 1) % source.length; // 避免重复
+    }
+    return { text: source[idx], index: idx };
+  }
+
+  build() {
+    Column() {
+      // 上半区 — 真心话
+      Column() {
+        Text(this.honestText)
+          .fontSize(this.honestText === '真心话'
+            ? WearScreenUtil.buttonFontSize
+            : WearScreenUtil.subFontSize)
+          .fontColor(Color.White)
+          .textAlign(TextAlign.Center)
+          .maxLines(4)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+      }
+      .width('100%')
+      .height('50%')
+      .backgroundColor(this.honestText === '真心话' ? '#FF7299' : '#CC5A7A')
+      .justifyContent(FlexAlign.Center)
+      .padding(WearScreenUtil.safePadding)
+      .onClick(() => {
+        const result = this.getRandomText(honests, this.lastHonestIndex);
+        this.honestText = result.text;
+        this.lastHonestIndex = result.index;
+        VibratorManager.vibrateResult();
+      })
+
+      // 下半区 — 大冒险
+      Column() {
+        Text(this.challengeText)
+          .fontSize(this.challengeText === '大冒险'
+            ? WearScreenUtil.buttonFontSize
+            : WearScreenUtil.subFontSize)
+          .fontColor(Color.White)
+          .textAlign(TextAlign.Center)
+          .maxLines(4)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+      }
+      .width('100%')
+      .height('50%')
+      .backgroundColor(this.challengeText === '大冒险' ? '#23ADE5' : '#1A8AB8')
+      .justifyContent(FlexAlign.Center)
+      .padding(WearScreenUtil.safePadding)
+      .onClick(() => {
+        const result = this.getRandomText(challenges, this.lastChallengeIndex);
+        this.challengeText = result.text;
+        this.lastChallengeIndex = result.index;
+        VibratorManager.vibrateResult();
+      })
+    }
+    .width('100%')
+    .height('100%')
+  }
+}
+```
+
+#### 4.6.6 待确认问题
+
+| # | 问题 | 建议 |
+|---|------|------|
+| 1 | 数据源使用方案 A（独立复制）还是方案 B（common 共享）？ | 先用 A，快速落地 |
+| 2 | 初始题库需要多少条？ | 真心话和大冒险各 10 条起步，后续可扩展 |
+| 3 | 连续随机是否允许重复？ | 简单去重：与上次不同即可 |
+| 4 | 是否需要"再来一次"按钮，还是直接再次点击区域？ | 直接再次点击区域（零额外 UI 元素） |
+| 5 | `VibratorManager` 是否在手表端可用？ | VIBRATE 权限已配置，需实测验证 |
+
 ---
 
 ## 5. 手表端文件架构
@@ -1127,12 +1490,14 @@ product/wearable/src/main/ets/
 │   ├── WearFlipCoin.ets             # 丢硬币（参考 FlipCoinCardDisplay）
 │   ├── WearRandomABCD.ets           # ABCD选择（参考 ABCDCardDisplay，去掉指针）
 │   ├── WearDevineBaGua.ets          # 八卦占卜（参考 BaGuaCardDisplay）
-│   ├── WearRollWheel.ets            # 幸运转盘（参考 RollWheelCardDisplay，含纵向Swiper+Canvas）
-│   ├── WearRandomColors.ets         # 随机颜色（参考 RandomColorsCardDisplay）
-│   └── WearBlessingMuyu.ets         # 祝福木鱼（参考 BlessingMuyuCardDisplay）
+│   ├── WearRollWheel.ets            # 🅿️ 幸运转盘（参考 RollWheelCardDisplay，含纵向Swiper+Canvas）
+│   ├── WearBlessingMuyu.ets         # 🅿️ 祝福木鱼（参考 BlessingMuyuCardDisplay）
+│   ├── WearTruthOrDare.ets          # 🆕 🅿️ 真心话大冒险（参考 HonestOrChallenge，简化分屏模式）
+│   └── WearRandomColors.ets         # 随机颜色（参考 RandomColorsCardDisplay）
 └── utils/
     ├── WearScreenUtil.ets           # 🆕 屏幕形状检测 + 适配工具类
-    └── WearRollDataManager.ets      # 转盘数据管理（参考 RollDataManager，精简版）
+    ├── WearRollDataManager.ets      # 转盘数据管理（参考 RollDataManager，精简版）
+    └── WearTruthOrDareData.ets      # 🆕 真心话大冒险题库数据（独立复制手机端 challenges.ets）
 ```
 
 ---
@@ -1203,18 +1568,20 @@ product/wearable/src/main/ets/
 
 ### Step 3: 新建手表端功能组件
 
-在 `product/wearable/src/main/ets/sub_pages/` 下逐个创建 7 个 Wear 组件：
+在 `product/wearable/src/main/ets/sub_pages/` 下逐个创建功能组件（按 P0→P1→P2 优先级）：
 
 ```
-新建文件清单：
+新建文件清单（按优先级）：
+├── sub_pages/WearRollWheel.ets          # 🅿️ 参考 RollWheelCardDisplay（含纵向Swiper+Canvas）
+├── sub_pages/WearBlessingMuyu.ets       # 🅿️ 参考 BlessingMuyuCardDisplay
+├── sub_pages/WearTruthOrDare.ets        # 🆕 🅿️ 参考 HonestOrChallenge（简化分屏，见 §4.6）
 ├── sub_pages/WearRollDices.ets          # 参考 RollDiceCardDisplay
 ├── sub_pages/WearFlipCoin.ets           # 参考 FlipCoinCardDisplay
 ├── sub_pages/WearRandomABCD.ets         # 参考 ABCDCardDisplay（去掉指针，四格直铺）
 ├── sub_pages/WearDevineBaGua.ets        # 参考 BaGuaCardDisplay
-├── sub_pages/WearRollWheel.ets          # 参考 RollWheelCardDisplay（含纵向Swiper+Canvas）
 ├── sub_pages/WearRandomColors.ets       # 参考 RandomColorsCardDisplay
-├── sub_pages/WearBlessingMuyu.ets       # 参考 BlessingMuyuCardDisplay
-└── utils/WearRollDataManager.ets        # 参考 RollDataManager（精简版）
+├── utils/WearRollDataManager.ets        # 参考 RollDataManager（精简版）
+└── utils/WearTruthOrDareData.ets        # 🆕 真心话大冒险题库（独立复制手机端 challenges.ets）
 ```
 
 每个组件内部使用 `WearScreenUtil` 适配尺寸，圆形/方形屏自适应。
@@ -1273,17 +1640,19 @@ product/wearable/src/main/ets/
 
 ### 8.2 新建的文件
 
-| 文件路径 | 说明 | 参考来源 |
-|---------|------|---------|
-| `product/wearable/src/main/ets/sub_pages/WearRollDices.ets` | 掷骰子 | `form_display/RollDiceCardDisplay.ets` |
-| `product/wearable/src/main/ets/sub_pages/WearFlipCoin.ets` | 丢硬币 | `form_display/FlipCoinCardDisplay.ets` |
-| `product/wearable/src/main/ets/sub_pages/WearRandomABCD.ets` | ABCD选择 | `form_display/ABCDCardDisplay.ets` |
-| `product/wearable/src/main/ets/sub_pages/WearDevineBaGua.ets` | 八卦占卜 | `form_display/BaGuaCardDisplay.ets` |
-| `product/wearable/src/main/ets/sub_pages/WearRollWheel.ets` | 幸运转盘 | `form_display/RollWheelCardDisplay.ets` |
-| `product/wearable/src/main/ets/sub_pages/WearRandomColors.ets` | 随机颜色 | `form_display/RandomColorsCardDisplay.ets` |
-| `product/wearable/src/main/ets/sub_pages/WearBlessingMuyu.ets` | 祝福木鱼 | `form_display/BlessingMuyuCardDisplay.ets` |
-| `product/wearable/src/main/ets/utils/WearRollDataManager.ets` | 转盘数据管理 | `pages/RollPage/RollDataManager.ets` |
-| `product/wearable/src/main/ets/utils/WearScreenUtil.ets` | 🆕 屏幕形状检测 + 设计 Token 适配 | `@ohos.display` API 18+ |
+| 文件路径 | 优先级 | 说明 | 参考来源 |
+|---------|:-----:|------|---------|
+| `product/wearable/src/main/ets/sub_pages/WearRollWheel.ets` | P0 | 幸运转盘 | `form_display/RollWheelCardDisplay.ets` |
+| `product/wearable/src/main/ets/sub_pages/WearBlessingMuyu.ets` | P0 | 祝福木鱼 | `form_display/BlessingMuyuCardDisplay.ets` |
+| `product/wearable/src/main/ets/sub_pages/WearTruthOrDare.ets` | 🆕 P0 | 真心话大冒险 | `sub_pages/honest_or_challenge/HonestOrChallenge.ets` |
+| `product/wearable/src/main/ets/utils/WearTruthOrDareData.ets` | 🆕 P0 | 真心话大冒险题库 | `static_datas/challenges.ets` |
+| `product/wearable/src/main/ets/sub_pages/WearRollDices.ets` | P1 | 掷骰子 | `form_display/RollDiceCardDisplay.ets` |
+| `product/wearable/src/main/ets/sub_pages/WearFlipCoin.ets` | P1 | 丢硬币 | `form_display/FlipCoinCardDisplay.ets` |
+| `product/wearable/src/main/ets/sub_pages/WearRandomABCD.ets` | P1 | ABCD选择 | `form_display/ABCDCardDisplay.ets` |
+| `product/wearable/src/main/ets/sub_pages/WearDevineBaGua.ets` | P2 | 八卦占卜 | `form_display/BaGuaCardDisplay.ets` |
+| `product/wearable/src/main/ets/sub_pages/WearRandomColors.ets` | P2 | 随机颜色 | `form_display/RandomColorsCardDisplay.ets` |
+| `product/wearable/src/main/ets/utils/WearRollDataManager.ets` | P0 | 转盘数据管理 | `pages/RollPage/RollDataManager.ets` |
+| `product/wearable/src/main/ets/utils/WearScreenUtil.ets` | P0 | 🆕 屏幕形状检测 + 设计 Token 适配 | `@ohos.display` API 18+ |
 
 ### 8.3 需要复制的资源文件
 
