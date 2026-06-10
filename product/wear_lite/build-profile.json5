@@ -1,0 +1,15 @@
+{
+  "apiType": "faMode",
+  "buildOption": {
+    "resOptions": {
+      "copyCodeResource": {
+        "enable": false
+      }
+    }
+  },
+  "targets": [
+    {
+      "name": "default"
+    }
+  ]
+}

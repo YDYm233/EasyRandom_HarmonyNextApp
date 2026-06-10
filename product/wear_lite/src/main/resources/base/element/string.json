@@ -1,0 +1,12 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "手表端(轻量)"
+    },
+    {
+      "name": "vibrate_reason",
+      "value": "用于随机结果时的震动反馈"
+    }
+  ]
+}

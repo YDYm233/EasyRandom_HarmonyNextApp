@@ -1,0 +1,33 @@
+{
+  "module": {
+    "name": "wear_lite",
+    "type": "feature",
+    "description": "$string:module_desc",
+    "deviceTypes": [
+      "liteWearable"
+    ],
+    "deliveryWithInstall": true,
+    "installationFree": false,
+    "js": [
+      {
+        "name": "default",
+        "pages": [
+          "pages/index/index"
+        ],
+        "window": {
+          "designWidth": 466,
+          "autoDesignWidth": true
+        }
+      }
+    ],
+    "reqPermissions": [
+      {
+        "name": "ohos.permission.VIBRATE",
+        "reason": "$string:vibrate_reason",
+        "usedScene": {
+          "when": "inuse"
+        }
+      }
+    ]
+  }
+}
