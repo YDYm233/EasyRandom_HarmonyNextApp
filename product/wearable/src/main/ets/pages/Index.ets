@@ -3,9 +3,7 @@ import {
   ArcSwiper,
   ArcSwiperController,
   ArcDotIndicator,
-  ArcDirection,
-  SwiperController,
-  Curve
+  ArcDirection
 } from '@kit.ArkUI'
 import WearScreenUtil from '../utils/WearScreenUtil'
 import { WearNavPanel } from '../sub_pages/WearNavPanel'
@@ -165,10 +163,9 @@ struct Index {
       .digitalCrownSensitivity(CrownSensitivity.MEDIUM)
       .effectMode(EdgeEffect.Spring)
       .disableSwipe(false)
-      .indicator(this.showIndicator ? this.arcIndicator : undefined)
+      .indicator(this.arcIndicator)
       .onChange((index: number) => {
         this.currentIndex = index
-        this.scheduleHide(2000)
       })
     }
   }
@@ -214,7 +211,7 @@ struct Index {
       }
       .opacity(this.showIndicator ? 1 : 0)
       .animation({ duration: 400, curve: Curve.EaseOut })
-      .alignSelf(Alignment.End)
+      .alignSelf(ItemAlign.End)
       .width('100%')
       .justifyContent(FlexAlign.Center)
       .margin({ bottom: 12 })
