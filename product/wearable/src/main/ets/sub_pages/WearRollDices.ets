@@ -9,7 +9,7 @@ import WearScreenUtil from '../utils/WearScreenUtil';
 export struct WearRollDices {
   private readonly FACES: string[] = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
   @State face: string = '⚄';
-  @State scale: number = 1;
+  @State diceScale: number = 1;
 
   build() {
     Column() {
@@ -18,7 +18,7 @@ export struct WearRollDices {
         Text(this.face)
           .fontSize(WearScreenUtil.scaledSize(80))
           .fontColor(0xFFFFFFFF)
-          .scale({ x: this.scale, y: this.scale })
+          .scale({ x: this.diceScale, y: this.diceScale })
           .animation({ duration: 200, curve: Curve.Ease })
       }
       .width(WearScreenUtil.scaledSize(120))
@@ -45,11 +45,11 @@ export struct WearRollDices {
         curve: Curve.EaseOut,
         onFinish: () => {
           animateTo({ duration: 150, curve: Curve.EaseIn }, () => {
-            this.scale = 1;
+            this.diceScale = 1;
           });
         }
       }, () => {
-        this.scale = 1.3;
+        this.diceScale = 1.3;
       });
     })
   }
