@@ -159,6 +159,7 @@ export struct WearTruthOrDare {
       }
       .width('100%')
       .height('100%')
+      .rotate({ angle: -30 })
 
       // === 中间层：指针（可旋转）===
       Column() {
@@ -238,6 +239,5 @@ export struct WearTruthOrDare {
     }
     .width('100%')
     .height('100%')
-    .rotate({ angle: -30 })
   }
 }
