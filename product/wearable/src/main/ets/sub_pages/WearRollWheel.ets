@@ -1,4 +1,10 @@
-// product/wearable/src/main/ets/sub_pages/WearRollWheel.ets
+// ═══════════════════════════════════════════════════
+//  WearRollWheel — 幸运转盘（手表端）
+//
+//  参考: product/default/.../form_display/RollWheelCardDisplay.ets
+//  差异: 纵向 Swiper 切换转盘 | 圆/方屏双容器 | 指针固定12点方向
+// ═══════════════════════════════════════════════════
+
 import { ArcSwiper, ArcSwiperController } from '@kit.ArkUI';
 import { Random } from '@ohos/common';
 import WearScreenUtil from '../utils/WearScreenUtil';
@@ -6,15 +12,21 @@ import { Roll, RollItem, defaultRolls } from '../utils/WearRollDataManager';
 
 @Component
 export struct WearRollWheel {
-  @State dataList: Roll[] = defaultRolls;
-  @State dataVersion: number = 0;
-  @State rotateAngle: number = 0;
+  @State rotateAngles: number[] = Array(defaultRolls.length).fill(0);
   @State isSpinning: boolean = false;
-  @State currentRollIndex: number = 0;
-  @State resultText: string = '';
+  @State currentIndex: number = 0;
+  @State showResult: string = '';
 
   private arcController: ArcSwiperController = new ArcSwiperController();
   private swiperController: SwiperController = new SwiperController();
+
+  private get wheelSize(): number {
+    return WearScreenUtil.scaledSize(260);
+  }
+
+  private get pointerSize(): number {
+    return WearScreenUtil.buttonFontSize * 1.2;
+  }
 
   build() {
     if (WearScreenUtil.isRoundScreen()) {
@@ -24,94 +36,182 @@ export struct WearRollWheel {
     }
   }
 
+  // ══════════ 圆形屏：ArcSwiper 纵向 ══════════
   @Builder
   buildRoundLayout() {
     ArcSwiper(this.arcController) {
-      ForEach(this.dataList, (roll: Roll, index: number) => {
+      ForEach(defaultRolls, (roll: Roll, index: number) => {
         this.buildSingleWheel(roll, index);
-      }, (roll: Roll): string => `${roll.index}_v${this.dataVersion}`)
+      }, (roll: Roll): string => roll.index)
     }
     .vertical(true)
     .indicator(false)
     .digitalCrownSensitivity(CrownSensitivity.MEDIUM)
-    .onChange((index: number) => {
-      this.currentRollIndex = index;
+    .onChange((idx: number) => {
+      this.currentIndex = idx;
     })
+    .width('100%')
+    .height('100%')
   }
 
+  // ══════════ 方形屏：普通 Swiper 纵向 ══════════
   @Builder
   buildSquareLayout() {
     Swiper(this.swiperController) {
-      ForEach(this.dataList, (roll: Roll, index: number) => {
+      ForEach(defaultRolls, (roll: Roll, index: number) => {
         this.buildSingleWheel(roll, index);
-      }, (roll: Roll): string => `${roll.index}_v${this.dataVersion}`)
+      }, (roll: Roll): string => roll.index)
     }
     .vertical(true)
-    .indicator(true)
-    .onChange((index: number) => {
-      this.currentRollIndex = index;
+    .indicator(false)
+    .onChange((idx: number) => {
+      this.currentIndex = idx;
     })
+    .width('100%')
+    .height('100%')
   }
 
+  // ══════════ 单个转盘页 ══════════
   @Builder
   buildSingleWheel(roll: Roll, index: number) {
     Column() {
+      // 转盘名称
       Text(roll.rollName)
         .fontSize(WearScreenUtil.buttonFontSize)
         .fontColor(0xFFD4A017)
         .fontWeight(FontWeight.Bold)
-        .margin({ top: WearScreenUtil.safePadding, bottom: 8 })
+        .margin({ top: WearScreenUtil.safePadding, bottom: 4 })
 
+      // 转盘 + 指针叠加
       Stack() {
-        RollBox({
-          roll: roll,
-          rotateAngle: this.rotateAngle,
-          canvasSize: WearScreenUtil.scaledSize(260)
-        })
-          .width(WearScreenUtil.scaledSize(260))
-          .height(WearScreenUtil.scaledSize(260))
+        // 转盘主体（Row 负责旋转动效）
+        Row() {
+          RollBox({ roll: roll })
+            .width(this.wheelSize)
+            .aspectRatio(1)
+        }
+        .width(this.wheelSize)
+        .height(this.wheelSize)
+        .justifyContent(FlexAlign.Center)
+        .rotate({ angle: this.rotateAngles[index] })
 
-        Text('▼')
-          .fontSize(WearScreenUtil.buttonFontSize * 1.5)
+        // 12 点钟指针（固定在顶部）
+        Text('▲')
+          .fontSize(this.pointerSize)
           .fontColor(0xFFFFD700)
           .position({ x: '50%', y: 0 })
           .translate({ x: '-50%', y: -4 })
-          .rotate({ angle: 180 })
-      }
-      .width(WearScreenUtil.scaledSize(260))
-      .height(WearScreenUtil.scaledSize(260))
+          .shadow({ radius: 4, color: 0x66000000 })
 
-      if (this.resultText.length > 0 && this.currentRollIndex === index) {
-        Text(this.resultText)
-          .fontSize(WearScreenUtil.subFontSize)
-          .fontColor(0xFF00FF00)
-          .margin({ top: 8 })
-      }
+    }
+    .width(this.wheelSize)
+      .height(this.wheelSize)
+      .margin({ top: 4 })
 
-      Text('点击转盘开始')
-        .fontSize(WearScreenUtil.subFontSize - 2)
-        .fontColor(0x66FFFFFF)
-        .margin({ top: 4 })
+      // 结果/提示文字（淡入动效）
+      Column() {
+        if (this.showResult.length > 0 && this.currentIndex === index) {
+          Text(this.showResult)
+            .fontSize(WearScreenUtil.subFontSize)
+            .fontColor(0xFF00FF00)
+        } else {
+          Text('点击转盘开始')
+            .fontSize(WearScreenUtil.subFontSize - 2)
+            .fontColor(0x66FFFFFF)
+        }
+      }
+      .height(28)
+      .justifyContent(FlexAlign.Center)
+      .margin({ top: 4 })
     }
     .width('100%')
     .height('100%')
     .justifyContent(FlexAlign.Center)
     .alignItems(HorizontalAlign.Center)
     .onClick(() => {
-      if (this.isSpinning) return;
-      this.isSpinning = true;
-      this.resultText = '';
-      const targetAngle: number = this.rotateAngle + 360 * 8 + Random(0, 360, true);
-      this.rotateAngle = targetAngle;
-      setTimeout(() => {
-        const normalizedAngle: number = targetAngle % 360;
-        const pointerAngle: number = (360 - normalizedAngle) % 360;
-        const sectorAngle: number = 360 / roll.rollItems.length;
-        const hitIndex: number = Math.floor(pointerAngle / sectorAngle) % roll.rollItems.length;
-        this.resultText = `🎉 ${roll.rollItems[hitIndex].text}`;
-        this.isSpinning = false;
-      }, 1100);
+      this.spinWheel(roll, index);
     })
+  }
+
+  // ══════════ 旋转逻辑 ══════════
+  private spinWheel(roll: Roll, index: number): void {
+    if (this.isSpinning) {
+      return;
+    }
+    this.isSpinning = true;
+    this.showResult = '';
+
+    const oldAngle = this.rotateAngles[index];
+    const randomOffset = Random(0, 360, true);
+    const fullSpins = 360 * 8;
+    const newAngle = oldAngle + fullSpins + randomOffset;
+
+    animateTo({
+      duration: 1000,
+      curve: Curve.Ease,
+      onFinish: () => {
+        this.calculateResult(roll, newAngle);
+      }
+    }, () => {
+      const updated = [...this.rotateAngles];
+      updated[index] = newAngle;
+      this.rotateAngles = updated;
+    })
+  }
+
+  // ══════════ 结果判定（权重感知 + 同 default 模块绘制逻辑） ══════════
+  private calculateResult(roll: Roll, finalAngle: number): void {
+    const items = roll.rollItems;
+    if (!items || items.length === 0) {
+      this.isSpinning = false;
+      return;
+    }
+
+    const totalWeight = items.reduce((s: number, item: RollItem) => s + item.weight, 0);
+    if (totalWeight <= 0) {
+      this.isSpinning = false;
+      return;
+    }
+
+    // 指针在 12 点钟方向，canvas 中对应 -90°（或 270°）
+    // 转盘旋转 finalAngle 度，指针等效于反向移动
+    let pointerDeg = (-90 - finalAngle) % 360;
+    if (pointerDeg < 0) {
+      pointerDeg += 360;
+    }
+
+    // 扇区边界（与 RollBox.drawWheel 绘制逻辑保持一致）
+    // 第一个扇区起始角 = -w0/totalW * 180 + 90
+    let sectorStartDeg = -(items[0].weight / totalWeight) * 180 + 90;
+    let hitIndex = 0;
+
+    for (let i = 0; i < items.length; i++) {
+      const sectorSizeDeg = (items[i].weight / totalWeight) * 360;
+      const sectorEndDeg = sectorStartDeg + sectorSizeDeg;
+
+      // 归一化到 [0, 360)
+      const startNorm = ((sectorStartDeg % 360) + 360) % 360;
+      const endNorm = ((sectorEndDeg % 360) + 360) % 360;
+
+      if (startNorm <= endNorm) {
+        // 扇区不跨越 0°
+        if (pointerDeg >= startNorm && pointerDeg < endNorm) {
+          hitIndex = i;
+          break;
+        }
+      } else {
+        // 扇区跨越 360°/0°
+        if (pointerDeg >= startNorm || pointerDeg < endNorm) {
+          hitIndex = i;
+          break;
+        }
+      }
+
+      sectorStartDeg = sectorEndDeg;
+    }
+
+    this.showResult = `${items[hitIndex].text}`;
+    this.isSpinning = false;
   }
 
   aboutToDisappear(): void {
@@ -120,85 +220,112 @@ export struct WearRollWheel {
   }
 }
 
+// ═══════════════════════════════════════════════════
+//  RollBox — Canvas 转盘绘制（参考 default 模块）
+//  遵循 default RollWheelCardDisplay 的绘制逻辑：
+//    - 权重感知扇区
+//    - 逐字符竖排文字
+//    - onReady 触发首绘
+// ═══════════════════════════════════════════════════
 @Component
 struct RollBox {
   @Prop roll: Roll;
-  @Prop @Watch('onAngleChange') rotateAngle: number = 0;
-  @Prop canvasSize: number = 260;
 
   private settings: RenderingContextSettings = new RenderingContextSettings(true);
   private canvasContext: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings);
 
-  aboutToAppear(): void {
-    this.drawWheel();
-  }
-
-  onAngleChange(): void {
-    this.drawWheel();
+  build() {
+    Canvas(this.canvasContext)
+      .onReady(() => {
+        this.drawWheel();
+      })
+      .width('100%')
+      .aspectRatio(1)
   }
 
   private drawWheel(): void {
-    const ctx: CanvasRenderingContext2D = this.canvasContext;
-    const size: number = this.canvasSize;
-    const cx: number = size / 2;
-    const cy: number = size / 2;
-    const radius: number = size / 2 - 4;
+    const ctx = this.canvasContext;
+    const canvasWidth = ctx.width;
+    if (canvasWidth <= 0) {
+      return;
+    }
 
-    ctx.clearRect(0, 0, size, size);
+    ctx.clearRect(0, 0, canvasWidth, canvasWidth);
 
-    const items: RollItem[] = this.roll.rollItems;
-    if (!items || items.length === 0) return;
+    const radius = canvasWidth / 2;
+    const items = this.roll.rollItems;
+    if (!items || items.length === 0) {
+      return;
+    }
 
-    const itemCount: number = items.length;
-    const sectorAngleDeg: number = 360 / itemCount;
-    const sectorAngleRad: number = (sectorAngleDeg * Math.PI) / 180;
-    const offsetRad: number = (this.rotateAngle * Math.PI) / 180;
+    const totalWeight = items.reduce<number>(
+      (sum: number, item: RollItem) => sum + item.weight, 0
+    );
+    if (totalWeight <= 0) {
+      return;
+    }
 
-    for (let i: number = 0; i < itemCount; i++) {
-      const startAngle: number = i * sectorAngleRad - Math.PI / 2 + offsetRad;
-      const endAngle: number = startAngle + sectorAngleRad;
+    // 扇区起始角（与 default 模块一致）
+    // startAngle: -w0/totalW * 180 + 90（度）→ 12点位置
+    let startAngleDeg = -(items[0].weight / totalWeight) * 180 + 90;
 
+    items.forEach((item: RollItem, idx: number) => {
+      const sectorSizeDeg = (item.weight / totalWeight) * 360;
+      const endAngleDeg = startAngleDeg + sectorSizeDeg;
+      const centerAngleDeg = (startAngleDeg + endAngleDeg) / 2;
+
+      // 绘制扇区
       ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      ctx.arc(cx, cy, radius, startAngle, endAngle);
+      ctx.moveTo(radius, radius);
+      ctx.arc(
+        radius, radius, radius,
+        (startAngleDeg * Math.PI) / 180,
+        (endAngleDeg * Math.PI) / 180,
+        false
+      );
       ctx.closePath();
-      ctx.fillStyle = items[i].color;
+      ctx.fillStyle = item.color;
       ctx.fill();
 
-      ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+      // 扇区边框
+      ctx.strokeStyle = 'rgba(255,255,255,0.15)';
       ctx.lineWidth = 1;
       ctx.stroke();
 
-      ctx.save();
-      ctx.translate(cx, cy);
-      ctx.rotate(startAngle + sectorAngleRad / 2);
+      // 逐字符竖排文字（参考 default 模块）
+      const chars = item.text.split('');
       ctx.fillStyle = '#FFFFFF';
-      ctx.font = `${WearScreenUtil.subFontSize}px sans-serif`;
       ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      const textRadius: number = radius * 0.6;
-      ctx.fillText(items[i].text, textRadius, 0);
-      ctx.restore();
-    }
+      ctx.save();
+      ctx.translate(radius, radius);
+      ctx.rotate(((centerAngleDeg + 90) * Math.PI) / 180);
 
+      // 计算文字区域
+      const textRadiusStart = radius * 0.1;
+      const availableRadius = radius - textRadiusStart;
+      const lineHeight = availableRadius / (chars.length + 1);
+      const fontSizePx = Math.min(lineHeight, 16);
+
+      ctx.font = `${fontSizePx}vp sans-serif`;
+      for (let i = 0; i < chars.length; i++) {
+        const y = -radius + lineHeight * (i + 1) + textRadiusStart;
+        ctx.fillText(chars[i], 0, y);
+      }
+      ctx.restore();
+
+      startAngleDeg = endAngleDeg;
+    });
+
+    // 中心装饰圆（参考 default 模块）
     ctx.beginPath();
-    ctx.arc(cx, cy, radius * 0.15, 0, Math.PI * 2);
-    ctx.fillStyle = '#1a1a1a';
+    ctx.moveTo(radius, radius);
+    ctx.arc(radius, radius, radius * 0.08, 0, Math.PI * 2);
+    ctx.closePath();
+    ctx.fillStyle = 0xEE1A1A1A;
     ctx.fill();
-    ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+    ctx.strokeStyle = 'rgba(255,255,255,0.4)';
     ctx.lineWidth = 2;
     ctx.stroke();
-
-    ctx.beginPath();
-    ctx.arc(cx, cy, 3, 0, Math.PI * 2);
-    ctx.fillStyle = '#FFD700';
-    ctx.fill();
-  }
-
-  build() {
-    Canvas(this.canvasContext)
-      .width(this.canvasSize)
-      .height(this.canvasSize)
   }
 
   aboutToDisappear(): void {
