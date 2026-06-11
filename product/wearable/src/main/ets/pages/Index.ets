@@ -3,7 +3,9 @@ import {
   ArcSwiper,
   ArcSwiperController,
   ArcDotIndicator,
-  ArcDirection
+  ArcDirection,
+  SwiperController,
+  DotIndicator
 } from '@kit.ArkUI'
 import WearScreenUtil from '../utils/WearScreenUtil'
 import { WearNavPanel } from '../sub_pages/WearNavPanel'
@@ -16,9 +18,9 @@ import { WearRandomABCD } from '../sub_pages/WearRandomABCD'
 import { WearDevineBaGua } from '../sub_pages/WearDevineBaGua'
 import { WearRandomColors } from '../sub_pages/WearRandomColors'
 
-// ═══════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 //  页面索引常量（供负一屏导航 + buildAllPages 引用）
-// ═══════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 interface PageIndexMap {
   NAV: number
   ROLL_WHEEL: number
@@ -58,13 +60,19 @@ const PAGE_INDEX: PageIndexMap = {
 struct Index {
   @State isRound: boolean = false
   @State currentIndex: number = PAGE_INDEX.ROLL_WHEEL
+  @State showIndicator: boolean = true
+  private hideTimer: number = 0
 
-  // ArcSwiper 控制器（仅圆形屏使用）
+  // 控制器（两种屏各一个）
   private arcController: ArcSwiperController = new ArcSwiperController()
-  // Swiper 控制器（仅方形屏使用，用于负一屏导航跳转）
   private swiperController: SwiperController = new SwiperController()
 
-  // ═══════════ 圆形屏 ArcDotIndicator ═══════════
+  // ══════════ 方形屏 DotIndicator ══════════
+  private dotIndicator: DotIndicator = new DotIndicator()
+    .color(0x33FFFFFF)
+    .selectedColor(0xFFD4A017)
+
+  // ══════════ 圆形屏 ArcDotIndicator ══════════
   private arcIndicator: ArcDotIndicator = new ArcDotIndicator()
     .arcDirection(ArcDirection.SIX_CLOCK_DIRECTION)
     .itemColor(0x66FFFFFF)
@@ -72,6 +80,27 @@ struct Index {
 
   aboutToAppear(): void {
     this.isRound = WearScreenUtil.isRoundScreen()
+    // 首次加载显示 3 秒后自动隐藏
+    this.scheduleHide(3000)
+  }
+
+  aboutToDisappear(): void {
+    if (this.hideTimer) {
+      clearTimeout(this.hideTimer)
+    }
+  }
+
+  /**
+   * 启动隐藏定时器
+   * @param delay 延迟毫秒数，默认 1500（滑动结束后 1.5 秒隐藏）
+   */
+  private scheduleHide(delay: number = 1500): void {
+    if (this.hideTimer) {
+      clearTimeout(this.hideTimer)
+    }
+    this.hideTimer = setTimeout(() => {
+      this.showIndicator = false
+    }, delay) as number
   }
 
   build() {
@@ -82,10 +111,10 @@ struct Index {
     }
   }
 
-  // ═══════════════════════════════════════════════
+  // ═════════════════════════════════════════════
   //  导航回调（传给 WearNavPanel，供其跳转页面）
   //  ArcSwiperController 无 changeIndex，用 showNext/showPrevious 模拟
-  // ═══════════════════════════════════════════════
+  // ═════════════════════════════════════════════
   private onNavigate = (targetIndex: number): void => {
     if (this.isRound) {
       const diff = targetIndex - this.currentIndex
@@ -104,9 +133,10 @@ struct Index {
     }
   }
 
-  // ═══════════════════════════════════════════════
+  // ═════════════════════════════════════════════
   //  圆形屏布局（ArcSwiper）
-  // ═══════════════════════════════════════════════
+  //  指示器：滑动时显示，停止后 1.5 秒自动隐藏
+  // ═════════════════════════════════════════════
   @Builder
   buildRoundLayout() {
     ArcSwiper(this.arcController) {
@@ -115,20 +145,30 @@ struct Index {
     .width('100%')
     .height('100%')
     .index(PAGE_INDEX.ROLL_WHEEL)
-    .indicator(this.arcIndicator)
+    .indicator(this.showIndicator ? this.arcIndicator : undefined)
     .vertical(false)
     .duration(300)
     .digitalCrownSensitivity(CrownSensitivity.MEDIUM)
     .effectMode(EdgeEffect.Spring)
     .disableSwipe(false)
+    .onAnimationStart(() => {
+      // 滑动开始：立即显示，清除待隐藏定时器
+      if (this.hideTimer) clearTimeout(this.hideTimer)
+      this.showIndicator = true
+    })
+    .onAnimationEnd(() => {
+      // 滑动结束：1.5 秒后隐藏
+      this.scheduleHide(1500)
+    })
     .onChange((index: number) => {
       this.currentIndex = index
     })
   }
 
-  // ═══════════════════════════════════════════════
+  // ═════════════════════════════════════════════
   //  方形屏布局（标准 Swiper）
-  // ═══════════════════════════════════════════════
+  //  指示器：滑动时显示，停止后 1.5 秒自动隐藏
+  // ═════════════════════════════════════════════
   @Builder
   buildSquareLayout() {
     Swiper(this.swiperController) {
@@ -136,21 +176,24 @@ struct Index {
     }
     .loop(false)
     .index(PAGE_INDEX.ROLL_WHEEL)
-    .indicator(
-      new DotIndicator()
-        .color(0x33FFFFFF)
-        .selectedColor(0xFFD4A017)
-    )
+    .indicator(this.showIndicator ? this.dotIndicator : undefined)
     .itemSpace(0)
     .duration(300)
+    .onAnimationStart(() => {
+      if (this.hideTimer) clearTimeout(this.hideTimer)
+      this.showIndicator = true
+    })
+    .onAnimationEnd(() => {
+      this.scheduleHide(1500)
+    })
     .onChange((index: number) => {
       this.currentIndex = index
     })
   }
 
-  // ═══════════════════════════════════════════════
+  // ═════════════════════════════════════════════
   //  共用的 9 个页面（按 Swiper 从左到右排列）
-  // ═══════════════════════════════════════════════
+  // ═════════════════════════════════════════════
   @Builder
   buildAllPages() {
     WearNavPanel({ onNavigate: this.onNavigate })
