@@ -75,6 +75,9 @@ struct Index {
     .arcDirection(ArcDirection.SIX_CLOCK_DIRECTION)
     .itemColor(INDICATOR_NORMAL)
     .selectedItemColor(INDICATOR_SELECTED)
+    .maskColor({
+      colors: [['#00000000', 0], ['#00000000', 1]]
+    })
 
   aboutToAppear(): void {
     this.isRound = WearScreenUtil.isRoundScreen()
@@ -166,10 +169,13 @@ struct Index {
       .effectMode(EdgeEffect.Spring)
       .disableSwipe(false)
       .indicator(this.arcIndicator)
+      .clip(false)
       .onChange((index: number) => {
         this.currentIndex = index
       })
     }
+    .clip(false)
+    .backgroundColor(0x00000000)
   }
 
   // ══════════════════════════════════════════
@@ -206,6 +212,7 @@ struct Index {
               .width(i === this.currentIndex ? 7 : 5)
               .height(i === this.currentIndex ? 7 : 5)
               .fill(i === this.currentIndex ? INDICATOR_SELECTED : INDICATOR_NORMAL)
+              .shadow({ radius: 0 })
               .scale({
                 x: i === this.currentIndex ? this.dotScale : 1.0,
                 y: i === this.currentIndex ? this.dotScale : 1.0,

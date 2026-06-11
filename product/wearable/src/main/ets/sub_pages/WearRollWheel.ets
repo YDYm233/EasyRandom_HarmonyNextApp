@@ -16,12 +16,17 @@ export struct WearRollWheel {
   @State isSpinning: boolean = false;
   @State currentIndex: number = 0;
   @State showResult: string = '';
+  @State pointerSize: number = 75; // 指针尺寸，默认值
 
   private arcController: ArcSwiperController = new ArcSwiperController();
   private swiperController: SwiperController = new SwiperController();
 
   private get wheelSize(): number {
-    return WearScreenUtil.scaledSize(260);
+    return WearScreenUtil.scaledSize(247);
+  }
+
+  aboutToAppear(): void {
+    this.pointerSize = WearScreenUtil.scaledSize(75);
   }
 
   build() {
@@ -59,6 +64,7 @@ export struct WearRollWheel {
       }, (roll: Roll): string => roll.index)
     }
     .vertical(true)
+    .loop(true)
     .indicator(false)
     .onChange((idx: number) => {
       this.currentIndex = idx;
@@ -71,37 +77,22 @@ export struct WearRollWheel {
   @Builder
   buildSingleWheel(roll: Roll, index: number) {
     Column() {
-      // 转盘 + 指针叠加
-      Stack() {
-        // 转盘主体（Row 负责旋转动效）
-        Row() {
-          RollBox({ roll: roll })
-            .width(this.wheelSize)
-            .aspectRatio(1)
-        }
-        .width(this.wheelSize)
-        .height(this.wheelSize)
-        .justifyContent(FlexAlign.Center)
-        .rotate({ angle: this.rotateAngles[index] })
-        .border({
-          width: 8,
-          color: $r("app.color.Comp_Bg4"),
-          radius: '50%',
-          style: BorderStyle.Solid
-        })
-
-        // 12 点钟指针（固定在顶部，参考手机端 Image 实现）
-        Image($r("app.media.pointer_m"))
-          .width(this.wheelSize * 0.3)
+      // 转盘 + 指针：Stack 叠加
+      Stack({ alignContent: Alignment.Center }) {
+        // 底层：转盘（仅它旋转）
+        RollBox({ roll: roll })
+          .width(this.wheelSize)
           .aspectRatio(1)
-          .fillColor(0xFFD4A017)
-          .position({ x: '50%', y: 0 })
-          .translate({ x: '-50%', y: -4 })
-          .zIndex(8)
-    }
-    .width(this.wheelSize)
-    .height(this.wheelSize)
-    .margin({ top: 4 })
+          .rotate({ angle: this.rotateAngles[index] })
+
+        // 顶层：指针 SVG（居中叠加，固定不动）
+        Image($r("app.media.pointer_m"))
+          .width(this.pointerSize)
+          .height(this.pointerSize)
+      }
+      .width(this.wheelSize)
+      .height(this.wheelSize)
+      .margin({ top: 4 })
 
       // 结果/提示文字（淡入动效）
       Column() {
