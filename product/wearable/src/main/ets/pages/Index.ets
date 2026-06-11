@@ -157,21 +157,12 @@ struct Index {
         this.scheduleHide(2000)
       })
 
-      // 自定义指示器：底部居中，margin 推高避开表圈
-      Row({ space: 4 }) {
-        ForEach([0, 1, 2, 3, 4, 5, 6, 7, 8], (i: number) => {
-          Circle()
-            .width(6)
-            .height(6)
-            .fill(i === this.currentIndex ? 0xFFD4A017 : 0x33FFFFFF)
-        })
+      // 自定义指示器：6 点钟方向附近（避开表圈）
+      Stack() {
+        this.buildCustomIndicator()
       }
-      .opacity(this.showIndicator ? 1 : 0)
-      .animation({ duration: 400, curve: Curve.EaseOut })
-      .align(Alignment.Bottom)
-      .width('100%')
-      .justifyContent(FlexAlign.Center)
-      .margin({ bottom: 40 })
+      .position({ x: '50%', y: '75%' })
+      .translate({ x: '-50%', y: 0 })
     }
   }
 
