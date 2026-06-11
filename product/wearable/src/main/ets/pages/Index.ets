@@ -169,7 +169,7 @@ struct Index {
       .effectMode(EdgeEffect.Spring)
       .disableSwipe(false)
       .indicator(this.arcIndicator)
-      .borderRadius(WearScreenUtil.screenSize / 2)
+      .borderRadius(WearScreenUtil.screenWidth / 2)
       .clip(true)
       .onChange((index: number) => {
         this.currentIndex = index
@@ -177,7 +177,7 @@ struct Index {
     }
     .width('100%')
     .height('100%')
-    .borderRadius(WearScreenUtil.screenSize / 2)
+    .borderRadius(WearScreenUtil.screenWidth / 2)
     .clip(true)
     .backgroundColor(0x00000000)
   }
