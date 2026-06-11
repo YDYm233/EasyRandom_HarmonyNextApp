@@ -151,17 +151,27 @@ struct Index {
       .digitalCrownSensitivity(CrownSensitivity.MEDIUM)
       .effectMode(EdgeEffect.Spring)
       .disableSwipe(false)
+      .indicator(false)
       .onChange((index: number) => {
         this.currentIndex = index
         this.scheduleHide(2000)
       })
 
-      // 自定义指示器：6 点钟方向
-      Stack() {
-        this.buildCustomIndicator()
+      // 自定义指示器：底部居中，margin 推高避开表圈
+      Row({ space: 4 }) {
+        ForEach([0, 1, 2, 3, 4, 5, 6, 7, 8], (i: number) => {
+          Circle()
+            .width(6)
+            .height(6)
+            .fill(i === this.currentIndex ? 0xFFD4A017 : 0x33FFFFFF)
+        })
       }
-      .position({ x: '50%', y: '89%' })
-      .translate({ x: '-50%', y: 0 })
+      .opacity(this.showIndicator ? 1 : 0)
+      .animation({ duration: 400, curve: Curve.EaseOut })
+      .align(Alignment.Bottom)
+      .width('100%')
+      .justifyContent(FlexAlign.Center)
+      .margin({ bottom: 40 })
     }
   }
 
@@ -178,6 +188,7 @@ struct Index {
       .index(PAGE_INDEX.ROLL_WHEEL)
       .itemSpace(0)
       .duration(300)
+      .indicator(false)
       .onAnimationStart(() => {
         // 滑动开始：立即显示
         this.showIndicator = true
