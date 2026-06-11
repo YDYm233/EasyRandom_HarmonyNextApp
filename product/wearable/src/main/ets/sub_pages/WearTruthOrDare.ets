@@ -39,11 +39,11 @@ export struct WearTruthOrDare {
   @State lastHonestIndex: number = -1;
   @State lastChallengeIndex: number = -1;
 
-  // === 配色方案 ===
-  private readonly HONEST_BG: string = '#FFB6C1';         // 粉色 - 真心话区域
-  private readonly HONEST_RESULT_BG: string = '#FF69B4';   // 深粉 - 弹窗背景
-  private readonly CHALLENGE_BG: string = '#87CEEB';       // 蓝色 - 大冒险区域
-  private readonly CHALLENGE_RESULT_BG: string = '#1E90FF'; // 深蓝 - 弹窗背景
+  // === 配色方案（参考 default 真心话大冒险页面）===
+  private readonly HONEST_BG: number = 0xFF7299;         // 粉色 - 真心话区域（同 default）
+  private readonly HONEST_RESULT_BG: number = 0xCC5A7A;   // 深粉 - 弹窗背景
+  private readonly CHALLENGE_BG: number = 0x23ADE5;       // 蓝色 - 大冒险区域（同 default）
+  private readonly CHALLENGE_RESULT_BG: number = 0x1A8AB8; // 深蓝 - 弹窗背景
 
   /**
    * 从题库随机获取一条（防止连续重复）
