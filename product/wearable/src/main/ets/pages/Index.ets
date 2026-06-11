@@ -97,22 +97,24 @@ struct Index {
     }, delay) as number
   }
 
-  // 方形屏指示器：触发 spring 动效（先跳到峰值，再 animateTo 回弹）
+  // 方形屏指示器：触发 spring 动效（先跳到峰值渲染一帧，再回弹）
   private triggerSpring(): void {
     if (this.isRound || this.springLock) {
       return
     }
     this.springLock = true
-    // 立即跳到峰值（无动画）
-    this.dotScale = 1.8
-    // 下一帧开始 spring 回弹到 1.0
-    animateTo({
-      duration: 500,
-      curve: Curve.Spring,
-    }, () => {
-      this.dotScale = 1.0
-      this.springLock = false
-    })
+    // 立即跳到峰值（同帧渲染）
+    this.dotScale = 1.5
+    // 等一帧让 1.5x 先渲染出来，再 animateTo 回弹
+    setTimeout(() => {
+      animateTo({
+        duration: 300,
+        curve: Curve.EaseOut,
+      }, () => {
+        this.dotScale = 1.0
+        this.springLock = false
+      })
+    }, 16)
   }
 
   build() {
@@ -196,25 +198,26 @@ struct Index {
         this.triggerSpring()
       })
 
-      // 自定义指示器：颜色/动效对齐圆形屏系统指示器
-      Row({ space: 5 }) {
-        ForEach([0, 1, 2, 3, 4, 5, 6, 7, 8], (i: number) => {
-          Circle()
-            .width(i === this.currentIndex ? 7 : 5)
-            .height(i === this.currentIndex ? 7 : 5)
-            .fill(i === this.currentIndex ? INDICATOR_SELECTED : INDICATOR_NORMAL)
-            .scale({
-              x: i === this.currentIndex ? this.dotScale : 1.0,
-              y: i === this.currentIndex ? this.dotScale : 1.0,
-            })
-        }, (i: number) => i.toString())
+      // 自定义指示器：贴底居中
+      Stack() {
+        Row({ space: 5 }) {
+          ForEach([0, 1, 2, 3, 4, 5, 6, 7, 8], (i: number) => {
+            Circle()
+              .width(i === this.currentIndex ? 7 : 5)
+              .height(i === this.currentIndex ? 7 : 5)
+              .fill(i === this.currentIndex ? INDICATOR_SELECTED : INDICATOR_NORMAL)
+              .scale({
+                x: i === this.currentIndex ? this.dotScale : 1.0,
+                y: i === this.currentIndex ? this.dotScale : 1.0,
+              })
+          }, (i: number) => i.toString())
+        }
+        .justifyContent(FlexAlign.Center)
       }
       .opacity(this.showIndicator ? 1 : 0)
       .animation({ duration: 400, curve: Curve.EaseOut })
-      .alignSelf(ItemAlign.End)
-      .width('100%')
-      .justifyContent(FlexAlign.Center)
-      .margin({ bottom: 12 })
+      .position({ x: '50%', y: '96%' })
+      .translate({ x: '-50%', y: 0 })
     }
   }
 
