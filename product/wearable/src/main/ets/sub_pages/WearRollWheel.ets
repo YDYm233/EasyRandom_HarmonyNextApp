@@ -1,9 +1,9 @@
-// ═══════════════════════════════════════════════════
+// ═════════════════════════════════════════════════
 //  WearRollWheel — 幸运转盘（手表端）
 //
 //  参考: product/default/.../form_display/RollWheelCardDisplay.ets
 //  差异: 纵向 Swiper 切换转盘 | 圆/方屏双容器 | 指针固定12点方向
-// ═══════════════════════════════════════════════════
+// ═════════════════════════════════════════════════
 
 import { ArcSwiper, ArcSwiperController } from '@kit.ArkUI';
 import { Random } from '@ohos/common';
@@ -24,10 +24,6 @@ export struct WearRollWheel {
     return WearScreenUtil.scaledSize(260);
   }
 
-  private get pointerSize(): number {
-    return WearScreenUtil.buttonFontSize * 1.2;
-  }
-
   build() {
     if (WearScreenUtil.isRoundScreen()) {
       this.buildRoundLayout();
@@ -36,7 +32,7 @@ export struct WearRollWheel {
     }
   }
 
-  // ══════════ 圆形屏：ArcSwiper 纵向 ══════════
+  // ════════ 圆形屏：ArcSwiper 纵向 ════════
   @Builder
   buildRoundLayout() {
     ArcSwiper(this.arcController) {
@@ -54,7 +50,7 @@ export struct WearRollWheel {
     .height('100%')
   }
 
-  // ══════════ 方形屏：普通 Swiper 纵向 ══════════
+  // ════════ 方形屏：普通 Swiper 纵向 ════════
   @Builder
   buildSquareLayout() {
     Swiper(this.swiperController) {
@@ -71,17 +67,10 @@ export struct WearRollWheel {
     .height('100%')
   }
 
-  // ══════════ 单个转盘页 ══════════
+  // ════════ 单个转盘页 ════════
   @Builder
   buildSingleWheel(roll: Roll, index: number) {
     Column() {
-      // 转盘名称
-      Text(roll.rollName)
-        .fontSize(WearScreenUtil.buttonFontSize)
-        .fontColor(0xFFD4A017)
-        .fontWeight(FontWeight.Bold)
-        .margin({ top: WearScreenUtil.safePadding, bottom: 4 })
-
       // 转盘 + 指针叠加
       Stack() {
         // 转盘主体（Row 负责旋转动效）
@@ -94,19 +83,25 @@ export struct WearRollWheel {
         .height(this.wheelSize)
         .justifyContent(FlexAlign.Center)
         .rotate({ angle: this.rotateAngles[index] })
+        .border({
+          width: 8,
+          color: $r("app.color.Comp_Bg4"),
+          radius: '50%',
+          style: BorderStyle.Solid
+        })
 
-        // 12 点钟指针（固定在顶部）
-        Text('▲')
-          .fontSize(this.pointerSize)
-          .fontColor(0xFFFFD700)
+        // 12 点钟指针（固定在顶部，参考手机端 Image 实现）
+        Image($r("app.media.pointer_m"))
+          .width(this.wheelSize * 0.3)
+          .aspectRatio(1)
+          .fillColor(0xFFD4A017)
           .position({ x: '50%', y: 0 })
           .translate({ x: '-50%', y: -4 })
-          .shadow({ radius: 4, color: 0x66000000 })
-
+          .zIndex(8)
     }
     .width(this.wheelSize)
-      .height(this.wheelSize)
-      .margin({ top: 4 })
+    .height(this.wheelSize)
+    .margin({ top: 4 })
 
       // 结果/提示文字（淡入动效）
       Column() {
@@ -133,7 +128,7 @@ export struct WearRollWheel {
     })
   }
 
-  // ══════════ 旋转逻辑 ══════════
+  // ════════ 旋转逻辑 ════════
   private spinWheel(roll: Roll, index: number): void {
     if (this.isSpinning) {
       return;
@@ -159,7 +154,7 @@ export struct WearRollWheel {
     })
   }
 
-  // ══════════ 结果判定（权重感知 + 同 default 模块绘制逻辑） ══════════
+  // ════════ 结果判定（权重感知 + 同 default 模块绘制逻辑） ════════
   private calculateResult(roll: Roll, finalAngle: number): void {
     const items = roll.rollItems;
     if (!items || items.length === 0) {
@@ -220,13 +215,13 @@ export struct WearRollWheel {
   }
 }
 
-// ═══════════════════════════════════════════════════
+// ═════════════════════════════════════════════════
 //  RollBox — Canvas 转盘绘制（参考 default 模块）
 //  遵循 default RollWheelCardDisplay 的绘制逻辑：
 //    - 权重感知扇区
 //    - 逐字符竖排文字
 //    - onReady 触发首绘
-// ═══════════════════════════════════════════════════
+// ═════════════════════════════════════════════════
 @Component
 struct RollBox {
   @Prop roll: Roll;
@@ -235,12 +230,22 @@ struct RollBox {
   private canvasContext: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings);
 
   build() {
-    Canvas(this.canvasContext)
-      .onReady(() => {
-        this.drawWheel();
-      })
-      .width('100%')
-      .aspectRatio(1)
+    Flex({ direction: FlexDirection.Column, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Center }) {
+      Canvas(this.canvasContext)
+        .onReady(() => {
+          this.drawWheel();
+        })
+        .width('100%')
+        .aspectRatio(1)
+    }
+    .width('100%')
+    .aspectRatio(1)
+    .border({
+      width: 8,
+      color: $r("app.color.Comp_Bg4"),
+      radius: '50%',
+      style: BorderStyle.Solid
+    })
   }
 
   private drawWheel(): void {
