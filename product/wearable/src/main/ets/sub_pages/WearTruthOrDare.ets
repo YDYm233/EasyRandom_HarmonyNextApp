@@ -99,10 +99,10 @@ export struct WearTruthOrDare {
       normalizedAngle += 360;
     }
 
-    // 判定逻辑：
-    //   0~179 度  → 指针指向左侧（真心话区域）
-    //   180~359 度 → 指针指向右侧（大冒险区域）
-    const isHonest: boolean = normalizedAngle < 180;
+    // 判定逻辑（pointer_m.svg 默认指向右侧，即 0° = 右/大冒险）：
+    //   180~359 度 → 指针指向左侧（真心话区域）
+    //   0~179 度   → 指针指向右侧（大冒险区域）
+    const isHonest: boolean = normalizedAngle >= 180;
     const source: string[] = isHonest ? honests : challenges;
     const lastIdx: number = isHonest ? this.lastHonestIndex : this.lastChallengeIndex;
     const result: IRandomTextResult = this.getRandomText(source, lastIdx);
@@ -160,8 +160,8 @@ export struct WearTruthOrDare {
       // === 中间层：指针（可旋转）===
       Column() {
         Image($r("app.media.pointer_m"))
-          .width(WearScreenUtil.scaledSize(40))
-          .height(WearScreenUtil.scaledSize(40))
+          .width(WearScreenUtil.scaledSize(80))
+          .height(WearScreenUtil.scaledSize(80))
           .fillColor(Color.White)
           .aspectRatio(1)
       }
