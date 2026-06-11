@@ -37,9 +37,17 @@ export const challenges: string[] = [
 ];
 
 /**
+ * 题目数量接口
+ */
+export interface ITruthOrDareCount {
+  honest: number;
+  challenge: number;
+}
+
+/**
  * 获取题目总数
  */
-export function getTotalCount(): { honest: number; challenge: number } {
+export function getTotalCount(): ITruthOrDareCount {
   return {
     honest: honests.length,
     challenge: challenges.length,

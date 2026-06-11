@@ -1,55 +1,61 @@
 // 真心话大冒险页面 - P0 功能
-// 上下分屏双模式，上半屏「真心话」下半屏「大冒险」
+// 指针旋转方案：屏幕左右分屏，中间指针旋转，停止后弹窗显示结果
 // 参照: docs/wearable-page-impl.md §6
 
 import { Random } from '@ohos/common';
 import WearScreenUtil from '../utils/WearScreenUtil';
 import { honests, challenges } from '../utils/WearTruthOrDareData';
+import { VibratorManager } from '@ohos/vibratorutil';
 
 /**
- * 真心话大冒险组件
- * 
+ * 随机文本结果接口
+ */
+interface IRandomTextResult {
+  text: string;
+  index: number;
+}
+
+/**
+ * 真心话大冒险组件（指针旋转版）
+ *
  * 交互规则：
- * - 点击某区域 → 该区域显示结果 + 变暗表明已出题
- * - 可再次点击出下一题（不与上一题重复）
- * - 两个区域独立操作
+ * - 屏幕左右分屏：左半屏粉色（真心话），右半屏蓝色（大冒险）
+ * - 中间固定显示指针图标
+ * - 点击指针区域 → 指针旋转（5-8圈 + 随机偏移）
+ * - 旋转结束后根据指针最终角度判定结果，弹窗显示题目
+ * - 弹窗显示期间可点击关闭，或 2 秒后自动关闭
  */
 @Component
 export struct WearTruthOrDare {
-  // === 真心话状态 ===
-  @State honestText: string = '真心话';
-  @State honestActive: boolean = false;
-  @State lastHonestIndex: number = -1;
+  // === 指针旋转状态 ===
+  @State rotateAngle: number = 0;
+  @State isSpinning: boolean = false;
 
-  // === 大冒险状态 ===
-  @State challengeText: string = '大冒险';
-  @State challengeActive: boolean = false;
+  // === 结果弹窗状态 ===
+  @State showResult: boolean = false;
+  @State resultText: string = '';
+  @State resultType: 'honest' | 'challenge' = 'honest';
+
+  // === 防重复状态 ===
+  @State lastHonestIndex: number = -1;
   @State lastChallengeIndex: number = -1;
 
   // === 配色方案 ===
-  private readonly HONEST_COLOR_ACTIVE: string = '#FF7299';
-  private readonly HONEST_COLOR_RESULT: string = '#CC5A7A';
-  private readonly CHALLENGE_COLOR_ACTIVE: string = '#23ADE5';
-  private readonly CHALLENGE_COLOR_RESULT: string = '#1A8AB8';
+  private readonly HONEST_BG: string = '#FFB6C1';         // 粉色 - 真心话区域
+  private readonly HONEST_RESULT_BG: string = '#FF69B4';   // 深粉 - 弹窗背景
+  private readonly CHALLENGE_BG: string = '#87CEEB';       // 蓝色 - 大冒险区域
+  private readonly CHALLENGE_RESULT_BG: string = '#1E90FF'; // 深蓝 - 弹窗背景
 
   /**
    * 从题库随机获取一条（防止连续重复）
-   * @param source 题库数组
-   * @param lastIndex 上次题号
-   * @returns { text, index }
    */
-  private getRandomText(source: string[], lastIndex: number): { text: string; index: number } {
-    // 边界处理：题库为空
+  private getRandomText(source: string[], lastIndex: number): IRandomTextResult {
     if (source.length === 0) {
       return { text: '暂无题目', index: -1 };
     }
-
-    // 题库只有 1 条，直接返回
     if (source.length === 1) {
       return { text: source[0], index: 0 };
     }
-
-    // 随机选取（防止连续重复）
     let idx = Random(0, source.length - 1, true);
     if (idx === lastIndex) {
       idx = (idx + 1) % source.length;
@@ -57,100 +63,187 @@ export struct WearTruthOrDare {
     return { text: source[idx], index: idx };
   }
 
+  /**
+   * 开始旋转指针
+   */
+  private startSpin(): void {
+    if (this.isSpinning) {
+      return; // 防止动画期间重复点击
+    }
+    this.isSpinning = true;
+    this.showResult = false;
+
+    // 随机旋转 5~8 圈 + 随机偏移角度
+    const extraTurns: number = Random(5, 8, true);
+    const randomOffset: number = Random(0, 359, true);
+    const targetAngle: number = this.rotateAngle + extraTurns * 360 + randomOffset;
+
+    // 震动反馈：开始旋转
+    try {
+      VibratorManager.vibrateResult();
+    } catch (e) {
+      // 静默失败
+    }
+
+    // 使用 animateTo 控制旋转动画
+    animateTo({
+      duration: 1000,
+      curve: Curve.Ease,
+      onFinish: () => {
+        this.onSpinFinish(targetAngle);
+      }
+    }, () => {
+      this.rotateAngle = targetAngle;
+    });
+  }
+
+  /**
+   * 旋转结束，判定结果
+   */
+  private onSpinFinish(finalAngle: number): void {
+    // 取模 360，得到最终指向角度（0~359），用 round 避免浮点误差
+    let normalizedAngle: number = Math.round(finalAngle % 360);
+    if (normalizedAngle < 0) {
+      normalizedAngle += 360;
+    }
+
+    // 判定逻辑：
+    //   0~179 度  → 指针指向左侧（真心话区域）
+    //   180~359 度 → 指针指向右侧（大冒险区域）
+    const isHonest: boolean = normalizedAngle < 180;
+    const source: string[] = isHonest ? honests : challenges;
+    const lastIdx: number = isHonest ? this.lastHonestIndex : this.lastChallengeIndex;
+    const result: IRandomTextResult = this.getRandomText(source, lastIdx);
+
+    if (isHonest) {
+      this.lastHonestIndex = result.index;
+    } else {
+      this.lastChallengeIndex = result.index;
+    }
+
+    this.resultText = result.text;
+    this.resultType = isHonest ? 'honest' : 'challenge';
+    this.showResult = true;
+    this.isSpinning = false;
+
+    // 震动反馈
+    try {
+      VibratorManager.vibrateResult();
+    } catch (e) {
+      // 静默失败
+    }
+  }
+
+  /**
+   * 关闭结果弹窗
+   */
+  private closeResult(): void {
+    this.showResult = false;
+  }
+
   build() {
-    Column() {
-      // === 上半区：真心话 ===
-      Column() {
-        // 图标 + 标题
-        if (!this.honestActive) {
-          Column() {
-            Text('💗')
-              .fontSize(WearScreenUtil.buttonFontSize * 1.5)
-              .margin({ bottom: 8 })
-            Text('真心话')
-              .fontSize(WearScreenUtil.buttonFontSize)
-              .fontColor(Color.White)
-              .fontWeight(FontWeight.Bold)
-          }
-        } else {
-          // 题目展示
-          Text(this.honestText)
-            .fontSize(WearScreenUtil.subFontSize)
+    Stack() {
+      // === 底层：左右分屏背景 ===
+      Row() {
+        // 左半屏：真心话（粉色）
+        Column() {
+          Text('真心话')
+            .fontSize(WearScreenUtil.buttonFontSize)
             .fontColor(Color.White)
-            .textAlign(TextAlign.Center)
-            .maxLines(4)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .width('90%')
+            .fontWeight(FontWeight.Bold)
         }
+        .width('50%')
+        .height('100%')
+        .backgroundColor(this.HONEST_BG)
+        .justifyContent(FlexAlign.Center)
+
+        // 右半屏：大冒险（蓝色）
+        Column() {
+          Text('大冒险')
+            .fontSize(WearScreenUtil.buttonFontSize)
+            .fontColor(Color.White)
+            .fontWeight(FontWeight.Bold)
+        }
+        .width('50%')
+        .height('100%')
+        .backgroundColor(this.CHALLENGE_BG)
+        .justifyContent(FlexAlign.Center)
       }
       .width('100%')
-      .layoutWeight(1)
-      .backgroundColor(
-        this.honestActive ? this.HONEST_COLOR_RESULT : this.HONEST_COLOR_ACTIVE
-      )
-      .justifyContent(FlexAlign.Center)
-      .padding(WearScreenUtil.safePadding)
+      .height('100%')
+
+      // === 中间层：指针（可旋转）===
+      Column() {
+        Text('▼')
+          .fontSize(WearScreenUtil.buttonFontSize + 8)
+          .fontColor(Color.White)
+          .fontWeight(FontWeight.Bold)
+          .shadow({
+            radius: 4,
+            color: 0x66000000,
+            offsetX: 0,
+            offsetY: 2
+          })
+      }
+      .rotate({ angle: this.rotateAngle })
       .onClick(() => {
-        const result = this.getRandomText(honests, this.lastHonestIndex);
-        this.honestText = result.text;
-        this.lastHonestIndex = result.index;
-        this.honestActive = true;
-        // 震动反馈（try-catch 防止不可用时报错）
-        try {
-          // VibratorManager.vibrateResult(); // 需确认 wearable API
-        } catch (e) {
-          // 静默失败
-        }
+        this.startSpin();
       })
 
-      // === 分隔线 ===
-      Divider()
-        .color(0x33FFFFFF)
-        .height(1)
+      // === 弹窗层：结果显示 ===
+      if (this.showResult) {
+        Stack() {
+          // 半透明遮罩（全屏）
+          Column()
+            .width('100%')
+            .height('100%')
+            .backgroundColor(0x88000000)
+            .onClick(() => {
+              this.closeResult();
+            })
 
-      // === 下半区：大冒险 ===
-      Column() {
-        // 图标 + 标题
-        if (!this.challengeActive) {
+          // 结果卡片（居中悬浮，onClick 空函数阻止事件冒泡）
           Column() {
-            Text('🔥')
-              .fontSize(WearScreenUtil.buttonFontSize * 1.5)
-              .margin({ bottom: 8 })
-            Text('大冒险')
-              .fontSize(WearScreenUtil.buttonFontSize)
+            Text(this.resultType === 'honest' ? '💗 真心话' : '🔥 大冒险')
+              .fontSize(WearScreenUtil.subFontSize)
               .fontColor(Color.White)
               .fontWeight(FontWeight.Bold)
+              .margin({ bottom: 12 })
+
+            Text(this.resultText)
+              .fontSize(WearScreenUtil.subFontSize - 2)
+              .fontColor(Color.White)
+              .textAlign(TextAlign.Center)
+              .maxLines(4)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
+              .width('85%')
+
+            // 关闭按钮
+            Button('知道了')
+              .width(WearScreenUtil.scaledSize(80))
+              .height(WearScreenUtil.scaledSize(28))
+              .fontSize(WearScreenUtil.subFontSize - 2)
+              .backgroundColor(0x66FFFFFF)
+              .margin({ top: 16 })
+              .onClick(() => {
+                this.closeResult();
+              })
           }
-        } else {
-          // 题目展示
-          Text(this.challengeText)
-            .fontSize(WearScreenUtil.subFontSize)
-            .fontColor(Color.White)
-            .textAlign(TextAlign.Center)
-            .maxLines(4)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .width('90%')
+          .onClick(() => {})
+          .width('80%')
+          .backgroundColor(
+            this.resultType === 'honest'
+              ? this.HONEST_RESULT_BG
+              : this.CHALLENGE_RESULT_BG
+          )
+          .borderRadius(WearScreenUtil.scaledSize(12))
+          .padding(WearScreenUtil.scaledSize(16))
         }
+        .width('100%')
+        .height('100%')
+        .alignContent(Alignment.Center)
+        .position({ x: 0, y: 0 })
       }
-      .width('100%')
-      .layoutWeight(1)
-      .backgroundColor(
-        this.challengeActive ? this.CHALLENGE_COLOR_RESULT : this.CHALLENGE_COLOR_ACTIVE
-      )
-      .justifyContent(FlexAlign.Center)
-      .padding(WearScreenUtil.safePadding)
-      .onClick(() => {
-        const result = this.getRandomText(challenges, this.lastChallengeIndex);
-        this.challengeText = result.text;
-        this.lastChallengeIndex = result.index;
-        this.challengeActive = true;
-        // 震动反馈（try-catch 防止不可用时报错）
-        try {
-          // VibratorManager.vibrateResult(); // 需确认 wearable API
-        } catch (e) {
-          // 静默失败
-        }
-      })
     }
     .width('100%')
     .height('100%')
