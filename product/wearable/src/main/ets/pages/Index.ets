@@ -1,7 +1,11 @@
 // product/wearable/src/main/ets/pages/Index.ets
 import {
   ArcSwiper,
-  ArcSwiperController
+  ArcSwiperController,
+  ArcDotIndicator,
+  ArcDirection,
+  SwiperController,
+  Curve
 } from '@kit.ArkUI'
 import WearScreenUtil from '../utils/WearScreenUtil'
 import { WearNavPanel } from '../sub_pages/WearNavPanel'
@@ -14,9 +18,9 @@ import { WearRandomABCD } from '../sub_pages/WearRandomABCD'
 import { WearDevineBaGua } from '../sub_pages/WearDevineBaGua'
 import { WearRandomColors } from '../sub_pages/WearRandomColors'
 
-// ══════════════════════════════════════════════════
+// ══════════════════════════════════════════
 //  页面索引常量
-// ══════════════════════════════════════════════════
+// ══════════════════════════════════════════
 interface PageIndexMap {
   NAV: number
   ROLL_WHEEL: number
@@ -41,16 +45,17 @@ const PAGE_INDEX: PageIndexMap = {
   RANDOM_COLORS: 8,
 }
 
-const TOTAL_PAGES: number = 9
+// 指示器颜色（与圆形屏系统 ArcDotIndicator 保持一致）
+const INDICATOR_SELECTED: number = 0xFFD4A017
+const INDICATOR_NORMAL: number   = 0x66FFFFFF
 
 /**
  * 手表端主页 — 圆/方屏双适配 + 自动隐藏导航点
  *
- * 指示器用自定义圆点实现（非内置 ArcDotIndicator / DotIndicator），
- * 通过 opacity 动画控制显隐，响应 @State showIndicator 变化。
- *
+ * - 圆形屏：使用系统 ArcDotIndicator，6 点钟方向
+ * - 方形屏：自定义圆点指示器，颜色/动效对齐系统
  * - 首次加载：显示 3 秒后淡出
- * - 滑动/表冠转动：立即淡入，停止后 2 秒淡出
+ * - 滑动/表冠：立即淡入，停止后 2 秒淡出
  */
 @Entry
 @Component
@@ -60,8 +65,18 @@ struct Index {
   @State showIndicator: boolean = true
   private hideTimer: number = 0
 
+  // 方形屏指示器 spring 动效
+  @State private dotScale: number = 1.0
+  private springLock: boolean = false
+
   private arcController: ArcSwiperController = new ArcSwiperController()
   private swiperController: SwiperController = new SwiperController()
+
+  // 圆形屏系统指示器
+  private arcIndicator: ArcDotIndicator = new ArcDotIndicator()
+    .arcDirection(ArcDirection.SIX_CLOCK_DIRECTION)
+    .itemColor(INDICATOR_NORMAL)
+    .selectedItemColor(INDICATOR_SELECTED)
 
   aboutToAppear(): void {
     this.isRound = WearScreenUtil.isRoundScreen()
@@ -84,6 +99,24 @@ struct Index {
     }, delay) as number
   }
 
+  // 方形屏指示器：触发 spring 动效（先跳到峰值，再 animateTo 回弹）
+  private triggerSpring(): void {
+    if (this.isRound || this.springLock) {
+      return
+    }
+    this.springLock = true
+    // 立即跳到峰值（无动画）
+    this.dotScale = 1.8
+    // 下一帧开始 spring 回弹到 1.0
+    animateTo({
+      duration: 500,
+      curve: Curve.Spring,
+    }, () => {
+      this.dotScale = 1.0
+      this.springLock = false
+    })
+  }
+
   build() {
     if (this.isRound) {
       this.buildRoundLayout()
@@ -92,9 +125,9 @@ struct Index {
     }
   }
 
-  // ═══════════════════════════════════════════
+  // ══════════════════════════════════════════
   //  导航回调
-  // ═══════════════════════════════════════════
+  // ══════════════════════════════════════════
   private onNavigate = (targetIndex: number): void => {
     this.scheduleHide(2000)
     if (this.isRound) {
@@ -111,32 +144,13 @@ struct Index {
       this.currentIndex = targetIndex
     } else {
       this.swiperController.changeIndex(targetIndex, true)
+      // changeIndex 会触发 onChange → triggerSpring()
     }
   }
 
-  // ═══════════════════════════════════════════
-  //  自定义指示器（9 个圆点）
-  //  opacity 绑定 @State showIndicator，带动画
-  // ═══════════════════════════════════════════
-  @Builder
-  buildCustomIndicator() {
-    Row({ space: 4 }) {
-      ForEach([0, 1, 2, 3, 4, 5, 6, 7, 8], (i: number) => {
-        Circle()
-          .width(6)
-          .height(6)
-          .fill(i === this.currentIndex ? 0xFFD4A017 : 0x33FFFFFF)
-      })
-    }
-    .width('100%')
-    .justifyContent(FlexAlign.Center)
-    .opacity(this.showIndicator ? 1 : 0)
-    .animation({ duration: 400, curve: Curve.EaseOut })
-  }
-
-  // ═══════════════════════════════════════════
-  //  圆形屏布局：ArcSwiper + 自定义指示器
-  // ═══════════════════════════════════════════
+  // ══════════════════════════════════════════
+  //  圆形屏布局：ArcSwiper + 系统 ArcDotIndicator
+  // ══════════════════════════════════════════
   @Builder
   buildRoundLayout() {
     Stack() {
@@ -151,24 +165,17 @@ struct Index {
       .digitalCrownSensitivity(CrownSensitivity.MEDIUM)
       .effectMode(EdgeEffect.Spring)
       .disableSwipe(false)
-      .indicator(false)
+      .indicator(this.showIndicator ? this.arcIndicator : undefined)
       .onChange((index: number) => {
         this.currentIndex = index
         this.scheduleHide(2000)
       })
-
-      // 自定义指示器：6 点钟方向附近（避开表圈）
-      Stack() {
-        this.buildCustomIndicator()
-      }
-      .position({ x: '50%', y: '75%' })
-      .translate({ x: '-50%', y: 0 })
     }
   }
 
-  // ═══════════════════════════════════════════
-  //  方形屏布局：Swiper + 自定义指示器
-  // ═══════════════════════════════════════════
+  // ══════════════════════════════════════════
+  //  方形屏布局：Swiper + 自定义指示器（spring 动效）
+  // ══════════════════════════════════════════
   @Builder
   buildSquareLayout() {
     Stack() {
@@ -181,30 +188,42 @@ struct Index {
       .duration(300)
       .indicator(false)
       .onAnimationStart(() => {
-        // 滑动开始：立即显示
         this.showIndicator = true
         if (this.hideTimer) clearTimeout(this.hideTimer)
       })
       .onAnimationEnd(() => {
-        // 滑动结束：2 秒后隐藏
         this.scheduleHide(2000)
       })
       .onChange((index: number) => {
         this.currentIndex = index
+        this.triggerSpring()
       })
 
-      // 自定义指示器：底部
-      Stack() {
-        this.buildCustomIndicator()
+      // 自定义指示器：颜色/动效对齐圆形屏系统指示器
+      Row({ space: 5 }) {
+        ForEach([0, 1, 2, 3, 4, 5, 6, 7, 8], (i: number) => {
+          Circle()
+            .width(i === this.currentIndex ? 7 : 5)
+            .height(i === this.currentIndex ? 7 : 5)
+            .fill(i === this.currentIndex ? INDICATOR_SELECTED : INDICATOR_NORMAL)
+            .scale({
+              x: i === this.currentIndex ? this.dotScale : 1.0,
+              y: i === this.currentIndex ? this.dotScale : 1.0,
+            })
+        }, (i: number) => i.toString())
       }
-      .position({ x: '50%', y: '92%' })
-      .translate({ x: '-50%', y: 0 })
+      .opacity(this.showIndicator ? 1 : 0)
+      .animation({ duration: 400, curve: Curve.EaseOut })
+      .alignSelf(Alignment.End)
+      .width('100%')
+      .justifyContent(FlexAlign.Center)
+      .margin({ bottom: 12 })
     }
   }
 
-  // ═══════════════════════════════════════════
+  // ══════════════════════════════════════════
   //  共用的 9 个页面
-  // ═══════════════════════════════════════════
+  // ══════════════════════════════════════════
   @Builder
   buildAllPages() {
     WearNavPanel({ onNavigate: this.onNavigate })
