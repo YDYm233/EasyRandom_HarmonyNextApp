@@ -5,7 +5,6 @@
 import { Random } from '@ohos/common';
 import WearScreenUtil from '../utils/WearScreenUtil';
 import { honests, challenges } from '../utils/WearTruthOrDareData';
-import { VibratorManager } from '@ohos/vibratorutil';
 
 /**
  * 随机文本结果接口
@@ -78,13 +77,6 @@ export struct WearTruthOrDare {
     const randomOffset: number = Random(0, 359, true);
     const targetAngle: number = this.rotateAngle + extraTurns * 360 + randomOffset;
 
-    // 震动反馈：开始旋转
-    try {
-      VibratorManager.vibrateResult();
-    } catch (e) {
-      // 静默失败
-    }
-
     // 使用 animateTo 控制旋转动画
     animateTo({
       duration: 1000,
@@ -125,13 +117,6 @@ export struct WearTruthOrDare {
     this.resultType = isHonest ? 'honest' : 'challenge';
     this.showResult = true;
     this.isSpinning = false;
-
-    // 震动反馈
-    try {
-      VibratorManager.vibrateResult();
-    } catch (e) {
-      // 静默失败
-    }
   }
 
   /**
