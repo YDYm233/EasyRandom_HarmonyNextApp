@@ -40,10 +40,8 @@ export struct WearTruthOrDare {
   @State lastChallengeIndex: number = -1;
 
   // === 配色方案（参考 default 真心话大冒险页面）===
-  private readonly HONEST_BG: number = 0xFF7299;         // 粉色 - 真心话区域（同 default）
-  private readonly HONEST_RESULT_BG: number = 0xCC5A7A;   // 深粉 - 弹窗背景
-  private readonly CHALLENGE_BG: number = 0x23ADE5;       // 蓝色 - 大冒险区域（同 default）
-  private readonly CHALLENGE_RESULT_BG: number = 0x1A8AB8; // 深蓝 - 弹窗背景
+  private readonly HONEST_BG: number = 0xFF7299;     // 粉色 - 真心话
+  private readonly CHALLENGE_BG: number = 0x23ADE5;   // 蓝色 - 大冒险
 
   /**
    * 从题库随机获取一条（防止连续重复）
@@ -130,24 +128,28 @@ export struct WearTruthOrDare {
     Stack() {
       // === 底层：左右分屏背景 ===
       Row() {
-        // 左半屏：真心话（粉色）
+        // 左半屏：真心话（粉色）- 纵向排列
         Column() {
-          Text('真心话')
-            .fontSize(WearScreenUtil.buttonFontSize)
+          Text('真\n心\n话')
+            .fontSize(WearScreenUtil.subFontSize + 6)
             .fontColor(Color.White)
             .fontWeight(FontWeight.Bold)
+            .textAlign(TextAlign.Center)
+            .lineHeight(WearScreenUtil.subFontSize + 10)
         }
         .width('50%')
         .height('100%')
         .backgroundColor(this.HONEST_BG)
         .justifyContent(FlexAlign.Center)
 
-        // 右半屏：大冒险（蓝色）
+        // 右半屏：大冒险（蓝色）- 纵向排列
         Column() {
-          Text('大冒险')
-            .fontSize(WearScreenUtil.buttonFontSize)
+          Text('大\n冒\n险')
+            .fontSize(WearScreenUtil.subFontSize + 6)
             .fontColor(Color.White)
             .fontWeight(FontWeight.Bold)
+            .textAlign(TextAlign.Center)
+            .lineHeight(WearScreenUtil.subFontSize + 10)
         }
         .width('50%')
         .height('100%')
@@ -182,42 +184,50 @@ export struct WearTruthOrDare {
               this.closeResult();
             })
 
-          // 结果卡片（居中悬浮，onClick 空函数阻止事件冒泡）
+          // 结果卡片（居中悬浮，点击关闭）
           Column() {
             Text(this.resultType === 'honest' ? '💗 真心话' : '🔥 大冒险')
               .fontSize(WearScreenUtil.subFontSize)
               .fontColor(Color.White)
               .fontWeight(FontWeight.Bold)
-              .margin({ bottom: 12 })
+              .margin({ bottom: 10 })
 
             Text(this.resultText)
-              .fontSize(WearScreenUtil.subFontSize - 2)
+              .fontSize(WearScreenUtil.subFontSize - 1)
               .fontColor(Color.White)
               .textAlign(TextAlign.Center)
               .maxLines(4)
               .textOverflow({ overflow: TextOverflow.Ellipsis })
-              .width('85%')
+              .width('90%')
 
-            // 关闭按钮
-            Button('知道了')
-              .width(WearScreenUtil.scaledSize(80))
-              .height(WearScreenUtil.scaledSize(28))
-              .fontSize(WearScreenUtil.subFontSize - 2)
-              .backgroundColor(0x66FFFFFF)
-              .margin({ top: 16 })
-              .onClick(() => {
-                this.closeResult();
-              })
+            // 关闭提示
+            Text('点击关闭')
+              .fontSize(WearScreenUtil.subFontSize - 4)
+              .fontColor(0x99FFFFFF)
+              .margin({ top: 14 })
           }
-          .onClick(() => {})
-          .width('80%')
+          .onClick(() => {
+            this.closeResult();
+          })
+          .width('78%')
           .backgroundColor(
             this.resultType === 'honest'
-              ? this.HONEST_RESULT_BG
-              : this.CHALLENGE_RESULT_BG
+              ? this.HONEST_BG
+              : this.CHALLENGE_BG
           )
-          .borderRadius(WearScreenUtil.scaledSize(12))
-          .padding(WearScreenUtil.scaledSize(16))
+          .borderRadius(WearScreenUtil.scaledSize(14))
+          .padding({
+            top: WearScreenUtil.scaledSize(18),
+            bottom: WearScreenUtil.scaledSize(14),
+            left: WearScreenUtil.scaledSize(12),
+            right: WearScreenUtil.scaledSize(12)
+          })
+          .shadow({
+            radius: WearScreenUtil.scaledSize(16),
+            color: this.resultType === 'honest' ? 0x44FF7299 : 0x4423ADE5,
+            offsetX: 0,
+            offsetY: WearScreenUtil.scaledSize(4)
+          })
         }
         .width('100%')
         .height('100%')
