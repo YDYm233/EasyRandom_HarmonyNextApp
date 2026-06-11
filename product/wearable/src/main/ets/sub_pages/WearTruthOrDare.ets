@@ -159,16 +159,11 @@ export struct WearTruthOrDare {
 
       // === 中间层：指针（可旋转）===
       Column() {
-        Text('▼')
-          .fontSize(WearScreenUtil.buttonFontSize + 8)
-          .fontColor(Color.White)
-          .fontWeight(FontWeight.Bold)
-          .shadow({
-            radius: 4,
-            color: 0x66000000,
-            offsetX: 0,
-            offsetY: 2
-          })
+        Image($r("app.media.pointer_m"))
+          .width(WearScreenUtil.scaledSize(40))
+          .height(WearScreenUtil.scaledSize(40))
+          .fillColor(Color.White)
+          .aspectRatio(1)
       }
       .rotate({ angle: this.rotateAngle })
       .onClick(() => {
