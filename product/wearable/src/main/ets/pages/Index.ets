@@ -1,11 +1,7 @@
 // product/wearable/src/main/ets/pages/Index.ets
 import {
   ArcSwiper,
-  ArcSwiperController,
-  ArcDotIndicator,
-  ArcDirection,
-  SwiperController,
-  DotIndicator
+  ArcSwiperController
 } from '@kit.ArkUI'
 import WearScreenUtil from '../utils/WearScreenUtil'
 import { WearNavPanel } from '../sub_pages/WearNavPanel'
@@ -19,7 +15,7 @@ import { WearDevineBaGua } from '../sub_pages/WearDevineBaGua'
 import { WearRandomColors } from '../sub_pages/WearRandomColors'
 
 // ══════════════════════════════════════════════════
-//  页面索引常量（供负一屏导航 + buildAllPages 引用）
+//  页面索引常量
 // ══════════════════════════════════════════════════
 interface PageIndexMap {
   NAV: number
@@ -45,15 +41,16 @@ const PAGE_INDEX: PageIndexMap = {
   RANDOM_COLORS: 8,
 }
 
+const TOTAL_PAGES: number = 9
+
 /**
- * 手表端主页 — 圆/方屏双适配 + 负一屏导航
+ * 手表端主页 — 圆/方屏双适配 + 自动隐藏导航点
  *
- * 四层适配模型中「第 2 层：容器层」的唯一分叉点。
- * 圆形屏 → ArcSwiper（弧形轮播 + 表冠交互）
- * 方形屏 → Swiper（标准线性轮播）
+ * 指示器用自定义圆点实现（非内置 ArcDotIndicator / DotIndicator），
+ * 通过 opacity 动画控制显隐，响应 @State showIndicator 变化。
  *
- * 页面排列：[0]负一屏 ← [1]幸运转盘★(默认) → [2]木鱼 → [3]真心话 → ...
- * API < 18 的设备默认走方形屏路线。
+ * - 首次加载：显示 3 秒后淡出
+ * - 滑动/表冠转动：立即淡入，停止后 2 秒淡出
  */
 @Entry
 @Component
@@ -63,24 +60,11 @@ struct Index {
   @State showIndicator: boolean = true
   private hideTimer: number = 0
 
-  // 控制器（两种屏各一个）
   private arcController: ArcSwiperController = new ArcSwiperController()
   private swiperController: SwiperController = new SwiperController()
 
-  // ══════════ 方形屏 DotIndicator ══════════
-  private dotIndicator: DotIndicator = new DotIndicator()
-    .color(0x33FFFFFF)
-    .selectedColor(0xFFD4A017)
-
-  // ══════════ 圆形屏 ArcDotIndicator ══════════
-  private arcIndicator: ArcDotIndicator = new ArcDotIndicator()
-    .arcDirection(ArcDirection.SIX_CLOCK_DIRECTION)
-    .itemColor(0x66FFFFFF)
-    .selectedItemColor(0xFFD4A017)
-
   aboutToAppear(): void {
     this.isRound = WearScreenUtil.isRoundScreen()
-    // 首次加载显示 3 秒后自动隐藏
     this.scheduleHide(3000)
   }
 
@@ -90,14 +74,11 @@ struct Index {
     }
   }
 
-  /**
-   * 启动隐藏定时器
-   * @param delay 延迟毫秒数，默认 1500（滑动结束后 1.5 秒隐藏）
-   */
-  private scheduleHide(delay: number = 1500): void {
+  private scheduleHide(delay: number = 2000): void {
     if (this.hideTimer) {
       clearTimeout(this.hideTimer)
     }
+    this.showIndicator = true
     this.hideTimer = setTimeout(() => {
       this.showIndicator = false
     }, delay) as number
@@ -111,11 +92,11 @@ struct Index {
     }
   }
 
-  // ═════════════════════════════════════════════
-  //  导航回调（传给 WearNavPanel，供其跳转页面）
-  //  ArcSwiperController 无 changeIndex，用 showNext/showPrevious 模拟
-  // ═════════════════════════════════════════════
+  // ═══════════════════════════════════════════
+  //  导航回调
+  // ═══════════════════════════════════════════
   private onNavigate = (targetIndex: number): void => {
+    this.scheduleHide(2000)
     if (this.isRound) {
       const diff = targetIndex - this.currentIndex
       if (diff > 0) {
@@ -129,71 +110,99 @@ struct Index {
       }
       this.currentIndex = targetIndex
     } else {
-      this.swiperController.changeIndex(targetIndex)
+      this.swiperController.changeIndex(targetIndex, true)
     }
   }
 
-  // ═════════════════════════════════════════════
-  //  圆形屏布局（ArcSwiper）
-  //  指示器：滑动时显示，停止后 1.5 秒自动隐藏
-  // ═════════════════════════════════════════════
+  // ═══════════════════════════════════════════
+  //  自定义指示器（9 个圆点）
+  //  opacity 绑定 @State showIndicator，带动画
+  // ═══════════════════════════════════════════
   @Builder
-  buildRoundLayout() {
-    ArcSwiper(this.arcController) {
-      this.buildAllPages()
+  buildCustomIndicator() {
+    Row({ space: 4 }) {
+      ForEach([0, 1, 2, 3, 4, 5, 6, 7, 8], (i: number) => {
+        Circle()
+          .width(6)
+          .height(6)
+          .fill(i === this.currentIndex ? 0xFFD4A017 : 0x33FFFFFF)
+      })
     }
     .width('100%')
-    .height('100%')
-    .index(PAGE_INDEX.ROLL_WHEEL)
-    .indicator(this.showIndicator ? this.arcIndicator : undefined)
-    .vertical(false)
-    .duration(300)
-    .digitalCrownSensitivity(CrownSensitivity.MEDIUM)
-    .effectMode(EdgeEffect.Spring)
-    .disableSwipe(false)
-    .onAnimationStart(() => {
-      // 滑动开始：立即显示，清除待隐藏定时器
-      if (this.hideTimer) clearTimeout(this.hideTimer)
-      this.showIndicator = true
-    })
-    .onAnimationEnd(() => {
-      // 滑动结束：1.5 秒后隐藏
-      this.scheduleHide(1500)
-    })
-    .onChange((index: number) => {
-      this.currentIndex = index
-    })
+    .justifyContent(FlexAlign.Center)
+    .opacity(this.showIndicator ? 1 : 0)
+    .animation({ duration: 400, curve: Curve.EaseOut })
   }
 
-  // ═════════════════════════════════════════════
-  //  方形屏布局（标准 Swiper）
-  //  指示器：滑动时显示，停止后 1.5 秒自动隐藏
-  // ═════════════════════════════════════════════
+  // ═══════════════════════════════════════════
+  //  圆形屏布局：ArcSwiper + 自定义指示器
+  // ═══════════════════════════════════════════
+  @Builder
+  buildRoundLayout() {
+    Stack() {
+      ArcSwiper(this.arcController) {
+        this.buildAllPages()
+      }
+      .width('100%')
+      .height('100%')
+      .index(PAGE_INDEX.ROLL_WHEEL)
+      .vertical(false)
+      .duration(300)
+      .digitalCrownSensitivity(CrownSensitivity.MEDIUM)
+      .effectMode(EdgeEffect.Spring)
+      .disableSwipe(false)
+      .onChange((index: number) => {
+        this.currentIndex = index
+        this.scheduleHide(2000)
+      })
+
+      // 自定义指示器：6 点钟方向
+      Stack() {
+        this.buildCustomIndicator()
+      }
+      .position({ x: '50%', y: '89%' })
+      .translate({ x: '-50%', y: 0 })
+    }
+  }
+
+  // ═══════════════════════════════════════════
+  //  方形屏布局：Swiper + 自定义指示器
+  // ═══════════════════════════════════════════
   @Builder
   buildSquareLayout() {
-    Swiper(this.swiperController) {
-      this.buildAllPages()
+    Stack() {
+      Swiper(this.swiperController) {
+        this.buildAllPages()
+      }
+      .loop(false)
+      .index(PAGE_INDEX.ROLL_WHEEL)
+      .itemSpace(0)
+      .duration(300)
+      .onAnimationStart(() => {
+        // 滑动开始：立即显示
+        this.showIndicator = true
+        if (this.hideTimer) clearTimeout(this.hideTimer)
+      })
+      .onAnimationEnd(() => {
+        // 滑动结束：2 秒后隐藏
+        this.scheduleHide(2000)
+      })
+      .onChange((index: number) => {
+        this.currentIndex = index
+      })
+
+      // 自定义指示器：底部
+      Stack() {
+        this.buildCustomIndicator()
+      }
+      .position({ x: '50%', y: '92%' })
+      .translate({ x: '-50%', y: 0 })
     }
-    .loop(false)
-    .index(PAGE_INDEX.ROLL_WHEEL)
-    .indicator(this.showIndicator ? this.dotIndicator : undefined)
-    .itemSpace(0)
-    .duration(300)
-    .onAnimationStart(() => {
-      if (this.hideTimer) clearTimeout(this.hideTimer)
-      this.showIndicator = true
-    })
-    .onAnimationEnd(() => {
-      this.scheduleHide(1500)
-    })
-    .onChange((index: number) => {
-      this.currentIndex = index
-    })
   }
 
-  // ═════════════════════════════════════════════
-  //  共用的 9 个页面（按 Swiper 从左到右排列）
-  // ═════════════════════════════════════════════
+  // ═══════════════════════════════════════════
+  //  共用的 9 个页面
+  // ═══════════════════════════════════════════
   @Builder
   buildAllPages() {
     WearNavPanel({ onNavigate: this.onNavigate })
