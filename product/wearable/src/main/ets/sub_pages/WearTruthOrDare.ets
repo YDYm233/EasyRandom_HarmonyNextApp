@@ -128,29 +128,30 @@ export struct WearTruthOrDare {
     Stack() {
       // === 底层：左右分屏背景 ===
       Row() {
-        // 左半屏：真心话（粉色）- 纵向排列
+        // 左半屏：真心话（粉色）- 纵向排列，放大一倍
         Column() {
           Text('真\n心\n话')
-            .fontSize(WearScreenUtil.subFontSize + 6)
+            .fontSize((WearScreenUtil.subFontSize + 6) * 2)
             .fontColor(Color.White)
             .fontWeight(FontWeight.Bold)
             .textAlign(TextAlign.Center)
-            .lineHeight(WearScreenUtil.subFontSize + 10)
+            .lineHeight((WearScreenUtil.subFontSize + 10) * 2)
         }
         .width('50%')
         .height('100%')
         .backgroundColor(this.HONEST_BG)
         .justifyContent(FlexAlign.Center)
 
-        // 右半屏：大冒险（蓝色）- 纵向排列
+        // 右半屏：大冒险（蓝色）- 纵向排列，反向旋转180°
         Column() {
           Text('大\n冒\n险')
-            .fontSize(WearScreenUtil.subFontSize + 6)
+            .fontSize((WearScreenUtil.subFontSize + 6) * 2)
             .fontColor(Color.White)
             .fontWeight(FontWeight.Bold)
             .textAlign(TextAlign.Center)
-            .lineHeight(WearScreenUtil.subFontSize + 10)
+            .lineHeight((WearScreenUtil.subFontSize + 10) * 2)
         }
+        .rotate({ angle: 180 })
         .width('50%')
         .height('100%')
         .backgroundColor(this.CHALLENGE_BG)
@@ -237,5 +238,6 @@ export struct WearTruthOrDare {
     }
     .width('100%')
     .height('100%')
+    .rotate({ angle: -30 })
   }
 }
