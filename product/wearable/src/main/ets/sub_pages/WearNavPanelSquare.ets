@@ -40,6 +40,12 @@ export struct WearNavPanelSquare {
 
   build() {
     List() {
+      // ── 顶部占位 ──
+      ListItem() {
+        Text()
+      }
+      .height(60)
+
       // ── 顶部大标题 ──
       ListItem() {
         Text('随易手表端')
@@ -48,7 +54,7 @@ export struct WearNavPanelSquare {
           .fontWeight(FontWeight.Bold)
           .width('100%')
       }
-      .padding({ left: 14, right: 14, bottom: 4 })
+      .padding({ left: 14, right: 14, bottom: 1 })
 
       // ── 公告 Section ──
       ListItemGroup({ header: this.sectionHeader('公告') }) {
@@ -73,7 +79,7 @@ export struct WearNavPanelSquare {
         .borderRadius(14)
         .margin({ top: 8 })
       }
-      .margin({ top: 1 })
+      .margin({ top: 0 })
 
       // ── 快捷跳转 Section ──
       ListItemGroup({ header: this.sectionHeader('快捷跳转') }) {
@@ -105,7 +111,7 @@ export struct WearNavPanelSquare {
         .backgroundColor(CARD_BG)
         .borderRadius(14)
       }
-      .margin({ top: 3 })
+      .margin({ top: 1 })
 
       // ── 设置 Section ──
       ListItemGroup({ header: this.sectionHeader('设置') }) {
@@ -128,7 +134,7 @@ export struct WearNavPanelSquare {
         .backgroundColor(CARD_BG)
         .borderRadius(14)
       }
-      .margin({ top: 3 })
+      .margin({ top: 1 })
 
       // ── 关于 Section ──
       ListItemGroup({ header: this.sectionHeader('关于') }) {
@@ -180,7 +186,13 @@ export struct WearNavPanelSquare {
         .borderRadius(14)
         .margin({ top: 8 })
       }
-      .margin({ top: 3, bottom: 16 })
+      .margin({ top: 1, bottom: 16 })
+
+      // ── 底部占位 ──
+      ListItem() {
+        Text()
+      }
+      .height(60)
     }
     .width('100%')
     .height('100%')
