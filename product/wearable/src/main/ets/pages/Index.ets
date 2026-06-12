@@ -16,9 +16,9 @@ import { WearRandomABCD } from '../sub_pages/WearRandomABCD'
 import { WearDevineBaGua } from '../sub_pages/WearDevineBaGua'
 import { WearRandomColors } from '../sub_pages/WearRandomColors'
 
-// ══════════════════════════════════════════
+// ════════════════════════════════════════
 //  页面索引常量
-// ══════════════════════════════════════════
+// ════════════════════════════════════════
 interface PageIndexMap {
   NAV: number
   ROLL_WHEEL: number
@@ -52,6 +52,7 @@ const INDICATOR_NORMAL: number   = 0x66FFFFFF
  *
  * - 圆形屏：使用系统 ArcDotIndicator，onGestureSwipe 即时显示
  * - 方形屏：使用系统 DotIndicator，onGestureSwipe 即时显示
+ * - 圆形屏每页外包圆形裁切，避免方形页面切换时突兀
  * - 首次加载：显示 1.5s 后隐藏
  * - 滑动/表冠：即时淡入，停止后 1.5s 淡出
  */
@@ -66,7 +67,7 @@ struct Index {
   private arcController: ArcSwiperController = new ArcSwiperController()
   private swiperController: SwiperController = new SwiperController()
 
-  // 方形屏系统指示器（DotIndicator 颜色方法名与 ArcDotIndicator 不同）
+  // 方形屏系统指示器
   private squareIndicator: DotIndicator = new DotIndicator()
     .color(INDICATOR_NORMAL)
     .selectedColor(INDICATOR_SELECTED)
@@ -110,9 +111,9 @@ struct Index {
     }
   }
 
-  // ══════════════════════════════════════════
+  // ════════════════════════════════════════
   //  导航回调
-  // ══════════════════════════════════════════
+  // ════════════════════════════════════════
   private onNavigate = (targetIndex: number): void => {
     this.scheduleHide(1500)
     if (this.isRound) {
@@ -132,14 +133,15 @@ struct Index {
     }
   }
 
-  // ══════════════════════════════════════════
+  // ════════════════════════════════════════
   //  圆形屏布局：ArcSwiper + 系统 ArcDotIndicator
-  // ══════════════════════════════════════════
+  //  每页外包圆形裁切，避免方形页面切换突兀
+  // ════════════════════════════════════════
   @Builder
   buildRoundLayout() {
     Stack() {
       ArcSwiper(this.arcController) {
-        this.buildAllPages()
+        this.buildRoundPages()
       }
       .width('100%')
       .height('100%')
@@ -150,8 +152,6 @@ struct Index {
       .effectMode(EdgeEffect.Spring)
       .disableSwipe(false)
       .indicator(this.showIndicator ? this.arcIndicator : false)
-      .borderRadius(WearScreenUtil.screenWidth / 2)
-      .clip(true)
       .onGestureSwipe((index: number) => {
         this.showIndicator = true
         if (this.hideTimer) {
@@ -170,18 +170,16 @@ struct Index {
     }
     .width('100%')
     .height('100%')
-    .borderRadius(WearScreenUtil.screenWidth / 2)
-    .clip(true)
     .backgroundColor(0x00000000)
   }
 
-  // ══════════════════════════════════════════
-  //  方形屏布局：Swiper + 系统指示器（与圆屏统一 onGestureSwipe 时序）
-  // ══════════════════════════════════════════
+  // ════════════════════════════════════════
+  //  方形屏布局：Swiper + 系统 DotIndicator
+  // ════════════════════════════════════════
   @Builder
   buildSquareLayout() {
     Swiper(this.swiperController) {
-      this.buildAllPages()
+      this.buildSquarePages()
     }
     .loop(false)
     .index(this.currentIndex)
@@ -205,15 +203,85 @@ struct Index {
     })
   }
 
-  // ══════════════════════════════════════════
-  //  共用的 9 个页面
-  // ══════════════════════════════════════════
+  // ════════════════════════════════════════
+  //  圆形屏页面：每页外包圆形裁切容器
+  // ════════════════════════════════════════
   @Builder
-  buildAllPages() {
+  buildRoundPages() {
+    // 导航面板
+    Stack() { WearNavPanel({ onNavigate: this.onNavigate }) }
+      .width('100%')
+      .height('100%')
+      .borderRadius(WearScreenUtil.screenWidth / 2)
+      .clip(true)
+
+    // 幸运转盘
+    Stack() { WearRollWheel() }
+      .width('100%')
+      .height('100%')
+      .borderRadius(WearScreenUtil.screenWidth / 2)
+      .clip(true)
+
+    // 祝福木鱼
+    Stack() { WearBlessingMuyu() }
+      .width('100%')
+      .height('100%')
+      .borderRadius(WearScreenUtil.screenWidth / 2)
+      .clip(true)
+
+    // 真心话大冒险
+    Stack() { WearTruthOrDare() }
+      .width('100%')
+      .height('100%')
+      .borderRadius(WearScreenUtil.screenWidth / 2)
+      .clip(true)
+
+    // 掷骰子
+    Stack() { WearRollDices() }
+      .width('100%')
+      .height('100%')
+      .borderRadius(WearScreenUtil.screenWidth / 2)
+      .clip(true)
+
+    // 丢硬币
+    Stack() { WearFlipCoin() }
+      .width('100%')
+      .height('100%')
+      .borderRadius(WearScreenUtil.screenWidth / 2)
+      .clip(true)
+
+    // ABCD 选择
+    Stack() { WearRandomABCD() }
+      .width('100%')
+      .height('100%')
+      .borderRadius(WearScreenUtil.screenWidth / 2)
+      .clip(true)
+
+    // 八卦占卜
+    Stack() { WearDevineBaGua() }
+      .width('100%')
+      .height('100%')
+      .borderRadius(WearScreenUtil.screenWidth / 2)
+      .clip(true)
+
+    // 随机颜色
+    Stack() { WearRandomColors() }
+      .width('100%')
+      .height('100%')
+      .borderRadius(WearScreenUtil.screenWidth / 2)
+      .clip(true)
+  }
+
+  // ════════════════════════════════════════
+  //  方形屏页面：不裁切
+  // ════════════════════════════════════════
+  @Builder
+  buildSquarePages() {
     WearNavPanel({ onNavigate: this.onNavigate })
     WearRollWheel()
     WearBlessingMuyu()
     WearTruthOrDare()
+    WearRollDices()
     WearFlipCoin()
     WearRandomABCD()
     WearDevineBaGua()
