@@ -6,7 +6,8 @@ import {
   ArcDirection
 } from '@kit.ArkUI'
 import WearScreenUtil from '../utils/WearScreenUtil'
-import { WearNavPanel } from '../sub_pages/WearNavPanel'
+import { WearNavPanelRound } from '../sub_pages/WearNavPanelRound'
+import { WearNavPanelSquare } from '../sub_pages/WearNavPanelSquare'
 import { WearRollWheel } from '../sub_pages/WearRollWheel'
 import { WearBlessingMuyu } from '../sub_pages/WearBlessingMuyu'
 import { WearTruthOrDare } from '../sub_pages/WearTruthOrDare'
@@ -206,8 +207,8 @@ struct Index {
   // ════════════════════════════════════════
   @Builder
   buildRoundPages() {
-    // 导航面板
-    Stack() { WearNavPanel({ onNavigate: this.onNavigate }) }
+    // 导航面板（圆形屏 ArcList 版本）
+    Stack() { WearNavPanelRound({ onNavigate: this.onNavigate }) }
       .width('100%')
       .height('100%')
       .borderRadius(WearScreenUtil.screenWidth / 2)
@@ -269,7 +270,7 @@ struct Index {
   // ════════════════════════════════════════
   @Builder
   buildSquarePages() {
-    WearNavPanel({ onNavigate: this.onNavigate })
+    WearNavPanelSquare({ onNavigate: this.onNavigate })
     WearRollWheel()
     WearBlessingMuyu()
     WearTruthOrDare()
