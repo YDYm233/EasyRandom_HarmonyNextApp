@@ -22,11 +22,12 @@ export struct WearRandomABCD {
     $r("app.color.FontIcon_Fore1")
   ];
 
-  private readonly CARD: number = WearScreenUtil.scaledSize(140);
+  private readonly CARD: number = WearScreenUtil.scaledSize(216);
   private readonly QUAD: number = this.CARD / 2;
-  private readonly PNTR: number = WearScreenUtil.scaledSize(50);
-  private readonly BORDER: number = WearScreenUtil.scaledSize(3);
-  private readonly RADIUS: number = WearScreenUtil.scaledSize(10);
+  private readonly PNTR: number = WearScreenUtil.scaledSize(72);
+  private readonly BORDER: number = WearScreenUtil.scaledSize(5);
+  private readonly RADIUS: number = WearScreenUtil.scaledSize(20);
+  private readonly FONT_SIZE: number = WearScreenUtil.scaledSize(43);
 
   build() {
     Column() {
@@ -40,13 +41,13 @@ export struct WearRandomABCD {
             .backgroundColor(this.colors[0])
             .fontColor(this.fontColors[0])
             .fontWeight(FontWeight.Bold)
-            .fontSize(WearScreenUtil.subFontSize + 8)
+            .fontSize(this.FONT_SIZE)
             .textAlign(TextAlign.Center)
             .border({
               style: BorderStyle.Solid,
               width: this.BORDER,
               color: $r("app.color.Comp_Bg2"),
-              radius: this.RADIUS
+              radius: { topLeft: this.RADIUS }
             })
             .clip(true)
             .position({ x: 0, y: 0 })
@@ -58,13 +59,13 @@ export struct WearRandomABCD {
             .backgroundColor(this.colors[1])
             .fontColor(this.fontColors[1])
             .fontWeight(FontWeight.Bold)
-            .fontSize(WearScreenUtil.subFontSize + 8)
+            .fontSize(this.FONT_SIZE)
             .textAlign(TextAlign.Center)
             .border({
               style: BorderStyle.Solid,
               width: this.BORDER,
               color: $r("app.color.Comp_Bg2"),
-              radius: this.RADIUS
+              radius: { topRight: this.RADIUS }
             })
             .clip(true)
             .position({ x: this.QUAD, y: 0 })
@@ -76,13 +77,13 @@ export struct WearRandomABCD {
             .backgroundColor(this.colors[2])
             .fontColor(this.fontColors[2])
             .fontWeight(FontWeight.Bold)
-            .fontSize(WearScreenUtil.subFontSize + 8)
+            .fontSize(this.FONT_SIZE)
             .textAlign(TextAlign.Center)
             .border({
               style: BorderStyle.Solid,
               width: this.BORDER,
               color: $r("app.color.Comp_Bg2"),
-              radius: this.RADIUS
+              radius: { bottomLeft: this.RADIUS }
             })
             .clip(true)
             .position({ x: 0, y: this.QUAD })
@@ -94,13 +95,13 @@ export struct WearRandomABCD {
             .backgroundColor(this.colors[3])
             .fontColor(this.fontColors[3])
             .fontWeight(FontWeight.Bold)
-            .fontSize(WearScreenUtil.subFontSize + 8)
+            .fontSize(this.FONT_SIZE)
             .textAlign(TextAlign.Center)
             .border({
               style: BorderStyle.Solid,
               width: this.BORDER,
               color: $r("app.color.Comp_Bg2"),
-              radius: this.RADIUS
+              radius: { bottomRight: this.RADIUS }
             })
             .clip(true)
             .position({ x: this.QUAD, y: this.QUAD })
@@ -108,25 +109,17 @@ export struct WearRandomABCD {
         .width(this.CARD)
         .height(this.CARD)
 
-        // 旋转指针
+        // 旋转指针（居中显示）
         Image($r("app.media.pointer_m"))
           .width(this.PNTR)
           .aspectRatio(1)
           .fillColor($r("app.color.FontIcon_Fore2"))
           .rotate({ angle: this.angle })
           .animation({ duration: this.duration, curve: Curve.Ease })
-          .position({
-            x: (this.CARD - this.PNTR) / 2,
-            y: (this.CARD - this.PNTR) / 2
-          })
       }
       .width(this.CARD)
       .height(this.CARD)
-
-      Text('点击转盘')
-        .fontSize(WearScreenUtil.subFontSize)
-        .fontColor($r("app.color.FontIcon_Fore2"))
-        .margin({ top: WearScreenUtil.scaledSize(12) })
+      .alignContent(Alignment.Center)
     }
     .width('100%')
     .height('100%')

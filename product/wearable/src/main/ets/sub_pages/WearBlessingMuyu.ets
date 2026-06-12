@@ -35,15 +35,16 @@ export struct WearBlessingMuyu {
   @State opacityArray: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   @State scaleArray: number[] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
   @State zIndexArray: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  @State muyuScale: number = 1
   private maxZIndex: number = 0
 
-  // 累计计数 + 防连击版本号
-  @State tapCount: number = 0
-  private tapVersion: number = 0
+  // TODO: 累计计数后续版本恢复
+  // @State tapCount: number = 0
+  private tapVersion: number = 0  // 防连击
 
   build() {
     Column() {
-      // ── 祝福语叠加区（10 个独立元素，纯文字无背景）──
+      // ── 祝福语叠加区（10 个独立元素，半透明黑底卡片）──
       Stack() {
         ForEach(this.BLESSINGS, (blessing: string, index: number) => {
           Column() {
@@ -67,35 +68,31 @@ export struct WearBlessingMuyu {
           .zIndex(this.zIndexArray[index])
         }, (blessing: string, index: number) => index.toString())
       }
-      .height(WearScreenUtil.scaledSize(60))
+      .height(WearScreenUtil.scaledSize(100))  // 增大动画区，避免祝福文字被圆形裁切吃掉
       .width('100%')
       .alignContent(Alignment.Center)
       .clip(false)
 
-      Blank()
-
-      // ── 木鱼图片（主交互区）──
-      Image($r('app.media.MuYu'))
-        .width(WearScreenUtil.mainImageWidth)
-        .aspectRatio(1)
-        .objectFit(ImageFit.Contain)
-        .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
-        .onClick(() => this.onTapMuyu())
-
-      Blank()
-
-      // ── 累计计数 ──
-      Text('累计: ' + this.tapCount)
-        .fontSize(WearScreenUtil.subFontSize)
-        .fontColor(0x66FFFFFF)
+      // ── 木鱼图片（居中）──
+      Row() {
+        Image($r('app.media.MuYu'))
+          .width(WearScreenUtil.mainImageWidth)
+          .aspectRatio(1)
+          .objectFit(ImageFit.Contain)
+          .scale({ x: this.muyuScale, y: this.muyuScale })
+          .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+          .onClick(() => this.onTapMuyu())
+      }
+      .layoutWeight(1)
+      .justifyContent(FlexAlign.Center)
+      .alignItems(VerticalAlign.Center)
     }
     .width('100%')
     .height('100%')
     .padding({
-      top: WearScreenUtil.safePadding,
-      bottom: WearScreenUtil.safePadding
+      top: WearScreenUtil.scaledSize(10),
+      bottom: WearScreenUtil.scaledSize(10)
     })
-    .justifyContent(FlexAlign.Center)
     .alignItems(HorizontalAlign.Center)
   }
 
@@ -105,6 +102,16 @@ export struct WearBlessingMuyu {
   private onTapMuyu(): void {
     const ver = ++this.tapVersion
 
+    // ── 木鱼缩放回弹动效 ──
+    animateTo({ duration: 80, curve: Curve.FastOutSlowIn }, () => {
+      this.muyuScale = 0.82
+    })
+    animateTo({ duration: 250, curve: Curve.EaseOut }, () => {
+      if (this.tapVersion === ver) {
+        this.muyuScale = 1.0
+      }
+    })
+
     // 随机祝福语 + 幸运值 + 颜色
     const idx = Random(0, this.BLESSINGS.length - 1, true)
     const luckVal = this.LUCK[Random(0, this.LUCK.length - 1, true)]
@@ -112,18 +119,23 @@ export struct WearBlessingMuyu {
     this.randomValues[idx] = luckVal
     this.colorArray[idx] = this.COLOR_PRESETS[colorIdx]
 
+    // ── 关键：强制瞬间 reset 到起始态，避免上一轮动画未结束导致起始位置漂移 ──
+    animateTo({ duration: 0 }, () => {
+      this.translateY[idx] = WearScreenUtil.scaledSize(50)
+      this.scaleArray[idx] = 0.7
+      this.opacityArray[idx] = 0
+    })
+
+    this.zIndexArray[idx] = ++this.maxZIndex
+
     // 随机时长
     const riseMs = Random(300, 450, true)
     const holdMs = Random(700, 1100, true)
 
-    // 起始态
-    this.translateY[idx] = WearScreenUtil.scaledSize(28)
-    this.scaleArray[idx] = 0.7
-    this.opacityArray[idx] = 0
-    this.zIndexArray[idx] = ++this.maxZIndex
-
     // 阶段 1：升起 + 放大过冲
     animateTo({ duration: riseMs, curve: Curve.FastOutSlowIn }, () => {
+      // 防连击：如果 tapVersion 已变化，说明新一轮已启动，放弃本次后续阶段
+      if (this.tapVersion !== ver) return
       this.translateY[idx] = 0
       this.scaleArray[idx] = 1.05
       this.opacityArray[idx] = 1
@@ -131,17 +143,19 @@ export struct WearBlessingMuyu {
 
     // 阶段 2：回弹（自然回稳）
     animateTo({ duration: 160, curve: Curve.EaseIn, delay: riseMs }, () => {
+      if (this.tapVersion !== ver) return
       this.scaleArray[idx] = 1.0
     })
 
-    // 阶段 3：上浮 + 微缩 + 淡出
+    // 阶段 3：上浮 + 微缩 + 淡出（收窄浮空距离，避免被圆形裁切）
     animateTo({ duration: 500, curve: Curve.EaseOut, delay: riseMs + 160 + holdMs }, () => {
-      this.translateY[idx] = -WearScreenUtil.scaledSize(20)
+      if (this.tapVersion !== ver) return
+      this.translateY[idx] = -WearScreenUtil.scaledSize(15)
       this.scaleArray[idx] = 0.88
       this.opacityArray[idx] = 0
     })
 
-    // 累计计数
-    this.tapCount++
+    // TODO: 累计计数后续版本恢复
+    // this.tapCount++
   }
 }

@@ -143,39 +143,41 @@ export struct WearTruthOrDare {
     Stack() {
       // === 底层：左右分屏背景 ===
       Row() {
-        // 左半屏：真心话（粉色）- 纵向排列，放大一倍
+        // 左半屏：真心话（粉色）- 纵向排列
         Column() {
           Text('真\n心\n话')
-            .fontSize((WearScreenUtil.subFontSize + 6) * 2)
+            .fontSize((WearScreenUtil.subFontSize + 6) * 2.4)
             .fontColor(Color.White)
-            .fontWeight(FontWeight.Bold)
+            .fontWeight(900)
             .textAlign(TextAlign.Center)
-            .lineHeight((WearScreenUtil.subFontSize + 10) * 2)
+            .lineHeight((WearScreenUtil.subFontSize + 10) * 2.4)
         }
         .width('50%')
         .height('100%')
         .backgroundColor(this.HONEST_BG)
         .justifyContent(FlexAlign.Center)
         .alignItems(HorizontalAlign.End)    // 文字靠右，靠近中心
+        .padding({ right: WearScreenUtil.scaledSize(38) })
 
-        // 右半屏：大冒险（蓝色）- 纵向排列，反向旋转180°
+        // 右半屏：大冒险（蓝色）- 纵向排列，反向旋转180°，靠近中心
         Column() {
           Text('大\n冒\n险')
-            .fontSize((WearScreenUtil.subFontSize + 6) * 2)
+            .fontSize((WearScreenUtil.subFontSize + 6) * 2.4)
             .fontColor(Color.White)
-            .fontWeight(FontWeight.Bold)
+            .fontWeight(900)
             .textAlign(TextAlign.Center)
-            .lineHeight((WearScreenUtil.subFontSize + 10) * 2)
+            .lineHeight((WearScreenUtil.subFontSize + 10) * 2.4)
         }
         .rotate({ angle: 180 })
         .width('50%')
         .height('100%')
         .backgroundColor(this.CHALLENGE_BG)
         .justifyContent(FlexAlign.Center)
-        .alignItems(HorizontalAlign.Start)  // 文字靠左，靠近中心
+        .alignItems(HorizontalAlign.End)    // 180°旋转后 End→视觉靠左靠近中心
+        .padding({ right: WearScreenUtil.scaledSize(38) })  // 旋转后 right→视觉靠中心侧
       }
-      .width('135%')      // 放大到 135%，覆盖旋转 -30° 后的四角
-      .height('135%')
+      .width('145%')      // 放大到 145%，覆盖旋转 -30° 后的四角
+      .height('145%')
       .rotate({ angle: this.bgRotation })
 
       // === 中间层：指针（可旋转）===
@@ -208,7 +210,7 @@ export struct WearTruthOrDare {
             Text(this.resultType === 'honest' ? '💗 真心话' : '🔥 大冒险')
               .fontSize(WearScreenUtil.subFontSize)
               .fontColor(Color.White)
-              .fontWeight(FontWeight.Bold)
+              .fontWeight(900)
               .margin({ bottom: 10 })
 
             Text(this.resultText)
