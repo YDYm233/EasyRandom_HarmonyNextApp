@@ -12,7 +12,7 @@ interface QuickEntry {
 const QUICK_ENTRIES: QuickEntry[] = [
   { emoji: '🎡', label: '幸运转盘', targetIndex: 1 },
   { emoji: '🎯', label: '真心话', targetIndex: 3 },
-  { emoji: '☯️', label: '八卦', targetIndex: 7 },
+  { emoji: '☯️', label: '八卦', targetIndex: 6 },
 ]
 
 // 主题色

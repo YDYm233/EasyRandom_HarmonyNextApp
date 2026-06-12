@@ -24,7 +24,6 @@ interface PageIndexMap {
   ROLL_WHEEL: number
   MUYU: number
   TRUTH_DARE: number
-  ROLL_DICES: number
   FLIP_COIN: number
   RANDOM_ABCD: number
   DEVINE_BAGUA: number
@@ -36,11 +35,10 @@ const PAGE_INDEX: PageIndexMap = {
   ROLL_WHEEL: 1,
   MUYU: 2,
   TRUTH_DARE: 3,
-  ROLL_DICES: 4,
-  FLIP_COIN: 5,
-  RANDOM_ABCD: 6,
-  DEVINE_BAGUA: 7,
-  RANDOM_COLORS: 8,
+  FLIP_COIN: 4,
+  RANDOM_ABCD:5,
+  DEVINE_BAGUA: 6,
+  RANDOM_COLORS: 7,
 }
 
 // 指示器颜色（与圆形屏系统 ArcDotIndicator 保持一致）
@@ -237,12 +235,6 @@ struct Index {
       .clip(true)
 
     // 掷骰子
-    Stack() { WearRollDices() }
-      .width('100%')
-      .height('100%')
-      .borderRadius(WearScreenUtil.screenWidth / 2)
-      .clip(true)
-
     // 丢硬币
     Stack() { WearFlipCoin() }
       .width('100%')
@@ -281,7 +273,6 @@ struct Index {
     WearRollWheel()
     WearBlessingMuyu()
     WearTruthOrDare()
-    WearRollDices()
     WearFlipCoin()
     WearRandomABCD()
     WearDevineBaGua()
