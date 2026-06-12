@@ -241,7 +241,6 @@ struct Index {
     WearRollWheel()
     WearBlessingMuyu()
     WearTruthOrDare()
-    WearRollDices()
     WearFlipCoin()
     WearRandomABCD()
     WearDevineBaGua()

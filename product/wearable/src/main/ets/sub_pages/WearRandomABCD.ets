@@ -3,53 +3,30 @@ import WearScreenUtil from '../utils/WearScreenUtil';
 
 /**
  * ABCD 随机选择 — 2x2 四象限 + 旋转指针
- * 参考 default 项目 ABCDCard
+ * 参考 default 项目 ABCDCardDisplay
  */
 @Component
 export struct WearRandomABCD {
-  @State angle: number = 0;
-  @State activeIndex: number = -1;
+  @State angle: number = 30;
+  @State duration: number = 800;
+  @State colors: Resource[] = [
+    $r("app.color.Comp_Bg4"),
+    $r("app.color.Comp_Bg4"),
+    $r("app.color.Comp_Bg4"),
+    $r("app.color.Comp_Bg4")
+  ];
+  @State fontColors: Resource[] = [
+    $r("app.color.FontIcon_Fore1"),
+    $r("app.color.FontIcon_Fore1"),
+    $r("app.color.FontIcon_Fore1"),
+    $r("app.color.FontIcon_Fore1")
+  ];
 
-  private readonly CARD: number = WearScreenUtil.scaledSize(150);
+  private readonly CARD: number = WearScreenUtil.scaledSize(140);
   private readonly QUAD: number = this.CARD / 2;
-  private readonly PNTR: number = WearScreenUtil.scaledSize(56);
-  private readonly BG_NORMAL: number = 0xFF444444;
-  private readonly BG_ACTIVE: number = 0xFFD4A017;
-
-  /** 获取象限背景色 */
-  private getQuadBg(idx: number): number {
-    return idx === this.activeIndex ? this.BG_ACTIVE : this.BG_NORMAL;
-  }
-
-  /** 点击旋转 */
-  private spin(): void {
-    this.activeIndex = -1;
-
-    const extra: number = Random(1, 360, true) + 360 * 3;
-    this.angle += extra;
-    if (this.angle > 36000000) {
-      this.angle = Random(1, 360, true) + 360 * 3;
-    }
-
-    animateTo({
-      duration: 1000,
-      curve: Curve.Ease,
-      onFinish: () => {
-        let norm: number = Math.round(this.angle % 360);
-        if (norm < 0) norm += 360;
-
-        if (norm < 90) {
-          this.activeIndex = 1; // B
-        } else if (norm < 180) {
-          this.activeIndex = 3; // D
-        } else if (norm < 270) {
-          this.activeIndex = 2; // C
-        } else {
-          this.activeIndex = 0; // A
-        }
-      }
-    }, () => { });
-  }
+  private readonly PNTR: number = WearScreenUtil.scaledSize(50);
+  private readonly BORDER: number = WearScreenUtil.scaledSize(3);
+  private readonly RADIUS: number = WearScreenUtil.scaledSize(10);
 
   build() {
     Column() {
@@ -57,75 +34,87 @@ export struct WearRandomABCD {
         // 四象限背景
         Stack() {
           // A — 左上
-          Column() {
-            Text('A')
-              .fontSize(WearScreenUtil.subFontSize + 6)
-              .fontColor(Color.White)
-              .fontWeight(FontWeight.Bold)
-          }
-          .width(this.QUAD)
-          .height(this.QUAD)
-          .backgroundColor(this.getQuadBg(0))
-          .justifyContent(FlexAlign.Center)
-          .alignItems(HorizontalAlign.Center)
-          .borderRadius({ topLeft: WearScreenUtil.scaledSize(12) })
-          .position({ x: 0, y: 0 })
+          Text('A')
+            .width(this.QUAD)
+            .height(this.QUAD)
+            .backgroundColor(this.colors[0])
+            .fontColor(this.fontColors[0])
+            .fontWeight(FontWeight.Bold)
+            .fontSize(WearScreenUtil.subFontSize + 8)
+            .textAlign(TextAlign.Center)
+            .border({
+              style: BorderStyle.Solid,
+              width: this.BORDER,
+              color: $r("app.color.Comp_Bg2"),
+              radius: this.RADIUS
+            })
+            .clip(true)
+            .position({ x: 0, y: 0 })
 
           // B — 右上
-          Column() {
-            Text('B')
-              .fontSize(WearScreenUtil.subFontSize + 6)
-              .fontColor(Color.White)
-              .fontWeight(FontWeight.Bold)
-          }
-          .width(this.QUAD)
-          .height(this.QUAD)
-          .backgroundColor(this.getQuadBg(1))
-          .justifyContent(FlexAlign.Center)
-          .alignItems(HorizontalAlign.Center)
-          .borderRadius({ topRight: WearScreenUtil.scaledSize(12) })
-          .position({ x: this.QUAD, y: 0 })
+          Text('B')
+            .width(this.QUAD)
+            .height(this.QUAD)
+            .backgroundColor(this.colors[1])
+            .fontColor(this.fontColors[1])
+            .fontWeight(FontWeight.Bold)
+            .fontSize(WearScreenUtil.subFontSize + 8)
+            .textAlign(TextAlign.Center)
+            .border({
+              style: BorderStyle.Solid,
+              width: this.BORDER,
+              color: $r("app.color.Comp_Bg2"),
+              radius: this.RADIUS
+            })
+            .clip(true)
+            .position({ x: this.QUAD, y: 0 })
 
           // C — 左下
-          Column() {
-            Text('C')
-              .fontSize(WearScreenUtil.subFontSize + 6)
-              .fontColor(Color.White)
-              .fontWeight(FontWeight.Bold)
-          }
-          .width(this.QUAD)
-          .height(this.QUAD)
-          .backgroundColor(this.getQuadBg(2))
-          .justifyContent(FlexAlign.Center)
-          .alignItems(HorizontalAlign.Center)
-          .borderRadius({ bottomLeft: WearScreenUtil.scaledSize(12) })
-          .position({ x: 0, y: this.QUAD })
+          Text('C')
+            .width(this.QUAD)
+            .height(this.QUAD)
+            .backgroundColor(this.colors[2])
+            .fontColor(this.fontColors[2])
+            .fontWeight(FontWeight.Bold)
+            .fontSize(WearScreenUtil.subFontSize + 8)
+            .textAlign(TextAlign.Center)
+            .border({
+              style: BorderStyle.Solid,
+              width: this.BORDER,
+              color: $r("app.color.Comp_Bg2"),
+              radius: this.RADIUS
+            })
+            .clip(true)
+            .position({ x: 0, y: this.QUAD })
 
           // D — 右下
-          Column() {
-            Text('D')
-              .fontSize(WearScreenUtil.subFontSize + 6)
-              .fontColor(Color.White)
-              .fontWeight(FontWeight.Bold)
-          }
-          .width(this.QUAD)
-          .height(this.QUAD)
-          .backgroundColor(this.getQuadBg(3))
-          .justifyContent(FlexAlign.Center)
-          .alignItems(HorizontalAlign.Center)
-          .borderRadius({ bottomRight: WearScreenUtil.scaledSize(12) })
-          .position({ x: this.QUAD, y: this.QUAD })
+          Text('D')
+            .width(this.QUAD)
+            .height(this.QUAD)
+            .backgroundColor(this.colors[3])
+            .fontColor(this.fontColors[3])
+            .fontWeight(FontWeight.Bold)
+            .fontSize(WearScreenUtil.subFontSize + 8)
+            .textAlign(TextAlign.Center)
+            .border({
+              style: BorderStyle.Solid,
+              width: this.BORDER,
+              color: $r("app.color.Comp_Bg2"),
+              radius: this.RADIUS
+            })
+            .clip(true)
+            .position({ x: this.QUAD, y: this.QUAD })
         }
         .width(this.CARD)
         .height(this.CARD)
-        .borderRadius(WearScreenUtil.scaledSize(12))
 
         // 旋转指针
         Image($r("app.media.pointer_m"))
           .width(this.PNTR)
-          .height(this.PNTR)
-          .fillColor(0xFFD4A017)
+          .aspectRatio(1)
+          .fillColor($r("app.color.FontIcon_Fore2"))
           .rotate({ angle: this.angle })
+          .animation({ duration: this.duration, curve: Curve.Ease })
           .position({
             x: (this.CARD - this.PNTR) / 2,
             y: (this.CARD - this.PNTR) / 2
@@ -136,15 +125,48 @@ export struct WearRandomABCD {
 
       Text('点击转盘')
         .fontSize(WearScreenUtil.subFontSize)
-        .fontColor(0x66FFFFFF)
-        .margin({ top: 16 })
+        .fontColor($r("app.color.FontIcon_Fore2"))
+        .margin({ top: WearScreenUtil.scaledSize(12) })
     }
     .width('100%')
     .height('100%')
     .justifyContent(FlexAlign.Center)
     .alignItems(HorizontalAlign.Center)
     .onClick(() => {
-      this.spin();
+      // 重置所有颜色
+      this.colors[0] = $r("app.color.Comp_Bg4");
+      this.colors[1] = $r("app.color.Comp_Bg4");
+      this.colors[2] = $r("app.color.Comp_Bg4");
+      this.colors[3] = $r("app.color.Comp_Bg4");
+      this.fontColors[0] = $r("app.color.FontIcon_Fore1");
+      this.fontColors[1] = $r("app.color.FontIcon_Fore1");
+      this.fontColors[2] = $r("app.color.FontIcon_Fore1");
+      this.fontColors[3] = $r("app.color.FontIcon_Fore1");
+
+      // 旋转指针
+      this.angle += Random(1, 360, true) + 360 * 3;
+      if (this.angle > 36000000) {
+        this.angle = Random(1, 360, true) + 360 * 3;
+      }
+
+      // 延迟高亮结果
+      animateTo({
+        duration: 1,
+        iterations: 1,
+        curve: Curve.EaseIn,
+        delay: 1000
+      }, () => {
+        const normAngle = this.angle % 360;
+        if (normAngle < 90) {
+          this.colors[1] = $r("app.color.Brand"); // B
+        } else if (normAngle < 180) {
+          this.colors[3] = $r("app.color.Brand"); // D
+        } else if (normAngle < 270) {
+          this.colors[2] = $r("app.color.Brand"); // C
+        } else {
+          this.colors[0] = $r("app.color.Brand"); // A
+        }
+      });
     })
   }
 }
