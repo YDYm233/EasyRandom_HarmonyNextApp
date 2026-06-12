@@ -39,6 +39,10 @@ export struct WearTruthOrDare {
   @State lastHonestIndex: number = -1;
   @State lastChallengeIndex: number = -1;
 
+  // === 屏幕形状适配 ===
+  private bgRotation: number = 0;       // 背景旋转角度（圆形屏 -30°，方形屏 0°）
+  private angleOffset: number = 0;       // 判定角度补偿（与 bgRotation 绝对值相同）
+
   // === 配色方案（参考 default 真心话大冒险页面）===
   private readonly HONEST_BG: number = 0xFF7299;     // 粉色 - 真心话
   private readonly CHALLENGE_BG: number = 0x23ADE5;   // 蓝色 - 大冒险
@@ -97,10 +101,12 @@ export struct WearTruthOrDare {
       normalizedAngle += 360;
     }
 
-    // 判定逻辑（背景整体旋转 -30°，分界线从 0°/180° 偏移至 330°/150°）：
-    //   150~329 度 → 指针指向左侧（真心话区域，旋转后偏移）
-    //   330~149 度 → 指针指向右侧（大冒险区域，旋转后偏移）
-    const isHonest: boolean = normalizedAngle >= 150 && normalizedAngle < 330;
+    // 判定逻辑：根据背景旋转角度动态补偿
+    //   angleOffset = 0   → 分界线在 0°/180°（方形屏，无旋转）
+    //   angleOffset = 30  → 分界线在 330°/150°（圆形屏，背景 -30°）
+    // 补偿方式：将指针角度 + offset 后取模，再与 180° 比较
+    const adjustedAngle: number = (normalizedAngle + this.angleOffset) % 360;
+    const isHonest: boolean = adjustedAngle >= 180;
     const source: string[] = isHonest ? honests : challenges;
     const lastIdx: number = isHonest ? this.lastHonestIndex : this.lastChallengeIndex;
     const result: IRandomTextResult = this.getRandomText(source, lastIdx);
@@ -122,6 +128,21 @@ export struct WearTruthOrDare {
    */
   private closeResult(): void {
     this.showResult = false;
+  }
+
+  /**
+   * 组件出现时，根据屏幕形状决定是否旋转背景
+   * 圆形屏：旋转 -30°（视觉效果），判定需补偿 +30°
+   * 方形屏：不旋转（避免内容被裁剪），判定无需补偿
+   */
+  aboutToAppear(): void {
+    if (WearScreenUtil.isRoundScreen()) {
+      this.bgRotation = -30;
+      this.angleOffset = 30;
+    } else {
+      this.bgRotation = 0;
+      this.angleOffset = 0;
+    }
   }
 
   build() {
@@ -159,7 +180,7 @@ export struct WearTruthOrDare {
       }
       .width('100%')
       .height('100%')
-      .rotate({ angle: -30 })
+      .rotate({ angle: this.bgRotation })
 
       // === 中间层：指针（可旋转）===
       Column() {
