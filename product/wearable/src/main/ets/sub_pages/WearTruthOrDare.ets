@@ -97,10 +97,10 @@ export struct WearTruthOrDare {
       normalizedAngle += 360;
     }
 
-    // 判定逻辑（pointer_m.svg 默认指向右侧，即 0° = 右/大冒险）：
-    //   180~359 度 → 指针指向左侧（真心话区域）
-    //   0~179 度   → 指针指向右侧（大冒险区域）
-    const isHonest: boolean = normalizedAngle >= 180;
+    // 判定逻辑（背景整体旋转 -30°，分界线从 0°/180° 偏移至 330°/150°）：
+    //   150~329 度 → 指针指向左侧（真心话区域，旋转后偏移）
+    //   330~149 度 → 指针指向右侧（大冒险区域，旋转后偏移）
+    const isHonest: boolean = normalizedAngle >= 150 && normalizedAngle < 330;
     const source: string[] = isHonest ? honests : challenges;
     const lastIdx: number = isHonest ? this.lastHonestIndex : this.lastChallengeIndex;
     const result: IRandomTextResult = this.getRandomText(source, lastIdx);
