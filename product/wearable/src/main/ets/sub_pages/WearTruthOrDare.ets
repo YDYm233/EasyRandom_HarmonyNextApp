@@ -156,6 +156,7 @@ export struct WearTruthOrDare {
         .height('100%')
         .backgroundColor(this.HONEST_BG)
         .justifyContent(FlexAlign.Center)
+        .alignItems(HorizontalAlign.End)    // 文字靠右，靠近中心
 
         // 右半屏：大冒险（蓝色）- 纵向排列，反向旋转180°
         Column() {
@@ -171,9 +172,10 @@ export struct WearTruthOrDare {
         .height('100%')
         .backgroundColor(this.CHALLENGE_BG)
         .justifyContent(FlexAlign.Center)
+        .alignItems(HorizontalAlign.Start)  // 文字靠左，靠近中心
       }
-      .width('125%')      // 放大到 125%，覆盖旋转 -30° 后的四角
-      .height('125%')
+      .width('135%')      // 放大到 135%，覆盖旋转 -30° 后的四角
+      .height('135%')
       .rotate({ angle: this.bgRotation })
 
       // === 中间层：指针（可旋转）===
