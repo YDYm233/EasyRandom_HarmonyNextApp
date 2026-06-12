@@ -11,8 +11,9 @@ export struct WearFlipCoin {
   @State showFront: boolean = true; // true 显示正面，false 显示反面
   private isFlipping: boolean = false;
 
-  private readonly COIN_SIZE: number = WearScreenUtil.scaledSize(195);
-  private readonly BORDER: number = WearScreenUtil.scaledSize(8);
+  // 参照 ABCD：CARD=216，圆形视觉略小故用 220 + 边框补偿
+  private readonly COIN_SIZE: number = WearScreenUtil.scaledSize(220);
+  private readonly BORDER: number = WearScreenUtil.scaledSize(5);
 
   build() {
     Column() {
@@ -37,11 +38,11 @@ export struct WearFlipCoin {
       .border({
         style: BorderStyle.Solid,
         width: this.BORDER,
-        color: 0xFFD4A017
+        color: $r("app.color.Brand")
       })
       .shadow({
         radius: WearScreenUtil.scaledSize(18),
-        color: 0x60D4A017,
+        color: 0x60007AFF,
         offsetX: 0,
         offsetY: WearScreenUtil.scaledSize(9)
       })
@@ -50,7 +51,7 @@ export struct WearFlipCoin {
       Text('点击抛硬币')
         .fontSize(WearScreenUtil.subFontSize)
         .fontColor($r("app.color.FontIcon_Fore2"))
-        .margin({ top: WearScreenUtil.scaledSize(24) })
+        .margin({ top: WearScreenUtil.scaledSize(14) })
     }
     .width('100%')
     .height('100%')

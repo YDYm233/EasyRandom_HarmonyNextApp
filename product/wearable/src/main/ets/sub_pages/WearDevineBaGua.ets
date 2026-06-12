@@ -12,7 +12,8 @@ export struct WearDevineBaGua {
   @State currentGua: string = '';
   @State isRolling: boolean = false;
 
-  private readonly BAGUA_SIZE: number = WearScreenUtil.scaledSize(160);
+  // 参照 ABCD：CARD=216，圆形视觉略小故用 220 补偿
+  private readonly BAGUA_SIZE: number = WearScreenUtil.scaledSize(220);
   private readonly DURATION: number = 2000;
 
   // 八卦名称（索引0是太极，1-8是八卦）
@@ -41,7 +42,7 @@ export struct WearDevineBaGua {
       Text(this.isRolling ? '占卜中...' : '点击占卜')
         .fontSize(WearScreenUtil.subFontSize)
         .fontColor($r("app.color.FontIcon_Fore2"))
-        .margin({ top: WearScreenUtil.scaledSize(20) })
+        .margin({ top: WearScreenUtil.scaledSize(14) })
     }
     .width('100%')
     .height('100%')

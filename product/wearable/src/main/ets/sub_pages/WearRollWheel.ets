@@ -16,18 +16,12 @@ export struct WearRollWheel {
   @State isSpinning: boolean = false;
   @State currentIndex: number = 0;
   @State showResult: string = '';
-  @State pointerSize: number = 75; // 指针尺寸，默认值
+  // 参照 ABCD：CARD=216，圆形视觉略小故用 230 补偿
+  private readonly WHEEL_SIZE: number = WearScreenUtil.scaledSize(230);
+  private readonly PNTR_SIZE: number = WearScreenUtil.scaledSize(72);
 
   private arcController: ArcSwiperController = new ArcSwiperController();
   private swiperController: SwiperController = new SwiperController();
-
-  private get wheelSize(): number {
-    return WearScreenUtil.scaledSize(247);
-  }
-
-  aboutToAppear(): void {
-    this.pointerSize = WearScreenUtil.scaledSize(75);
-  }
 
   build() {
     if (WearScreenUtil.isRoundScreen()) {
@@ -77,38 +71,37 @@ export struct WearRollWheel {
   @Builder
   buildSingleWheel(roll: Roll, index: number) {
     Column() {
-      // 转盘 + 指针：Stack 叠加
+      // 转盘 + 指针：Stack 叠加（参照 ABCD Stack 居中模式）
       Stack({ alignContent: Alignment.Center }) {
         // 底层：转盘（仅它旋转）
         RollBox({ roll: roll })
-          .width(this.wheelSize)
+          .width(this.WHEEL_SIZE)
           .aspectRatio(1)
           .rotate({ angle: this.rotateAngles[index] })
 
         // 顶层：指针 SVG（居中叠加，固定不动）
         Image($r("app.media.pointer_m"))
-          .width(this.pointerSize)
-          .height(this.pointerSize)
+          .width(this.PNTR_SIZE)
+          .aspectRatio(1)
       }
-      .width(this.wheelSize)
-      .height(this.wheelSize)
-      .margin({ top: 4 })
+      .width(this.WHEEL_SIZE)
+      .height(this.WHEEL_SIZE)
 
-      // 结果/提示文字（淡入动效）
+      // 结果/提示文字
       Column() {
         if (this.showResult.length > 0 && this.currentIndex === index) {
           Text(this.showResult)
             .fontSize(WearScreenUtil.subFontSize)
-            .fontColor(0xFF00FF00)
+            .fontColor($r("app.color.Brand"))
         } else {
           Text('点击转盘开始')
             .fontSize(WearScreenUtil.subFontSize - 2)
             .fontColor(0x66FFFFFF)
         }
       }
-      .height(28)
+      .height(WearScreenUtil.scaledSize(24))
       .justifyContent(FlexAlign.Center)
-      .margin({ top: 4 })
+      .margin({ top: WearScreenUtil.scaledSize(6) })
     }
     .width('100%')
     .height('100%')

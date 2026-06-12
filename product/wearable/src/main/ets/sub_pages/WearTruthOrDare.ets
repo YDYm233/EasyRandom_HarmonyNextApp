@@ -189,9 +189,7 @@ export struct WearTruthOrDare {
           .aspectRatio(1)
       }
       .rotate({ angle: this.rotateAngle })
-      .onClick(() => {
-        this.startSpin();
-      })
+      .hitTestBehavior(HitTestMode.None)  // 让触摸穿透到外层 Stack
 
       // === 弹窗层：结果显示 ===
       if (this.showResult) {
@@ -259,5 +257,9 @@ export struct WearTruthOrDare {
     .width('100%')
     .height('100%')
     .clip(true)      // 裁掉背景放大旋转后超出屏幕的部分
+    .onClick(() => {  // 整页点击触发指针旋转
+      if (this.showResult) return;  // 弹窗显示时不触发
+      this.startSpin();
+    })
   }
 }

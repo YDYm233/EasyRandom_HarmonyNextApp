@@ -44,7 +44,7 @@ const PAGE_INDEX: PageIndexMap = {
 }
 
 // 指示器颜色（与圆形屏系统 ArcDotIndicator 保持一致）
-const INDICATOR_SELECTED: number = 0xFFD4A017
+const INDICATOR_SELECTED: number = 0xFF007AFF  // 应用主题蓝
 const INDICATOR_NORMAL: number   = 0x66FFFFFF
 
 /**
