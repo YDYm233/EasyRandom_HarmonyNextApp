@@ -82,7 +82,7 @@ struct Index {
 
   aboutToAppear(): void {
     this.isRound = WearScreenUtil.isRoundScreen()
-    this.scheduleHide(3000)
+    this.scheduleHide(1500)
   }
 
   aboutToDisappear(): void {
@@ -133,7 +133,7 @@ struct Index {
   //  导航回调
   // ══════════════════════════════════════════
   private onNavigate = (targetIndex: number): void => {
-    this.scheduleHide(2000)
+    this.scheduleHide(1500)
     if (this.isRound) {
       const diff = targetIndex - this.currentIndex
       if (diff > 0) {
@@ -163,16 +163,28 @@ struct Index {
       }
       .width('100%')
       .height('100%')
-      .index(PAGE_INDEX.ROLL_WHEEL)
+      .index(this.currentIndex)
       .vertical(false)
       .duration(300)
       .digitalCrownSensitivity(CrownSensitivity.MEDIUM)
       .effectMode(EdgeEffect.Spring)
       .disableSwipe(false)
-      .indicator(this.arcIndicator)
+      .indicator(this.showIndicator ? this.arcIndicator : false)
       .borderRadius(WearScreenUtil.screenWidth / 2)
       .clip(true)
+      .onGestureSwipe((index: number) => {
+        this.showIndicator = true
+        if (this.hideTimer) {
+          clearTimeout(this.hideTimer)
+        }
+      })
+      .onAnimationEnd(() => {
+        this.scheduleHide(1500)
+      })
       .onChange((index: number) => {
+        if (index === this.currentIndex) {
+          return  // 跳过重建触发的重复回调
+        }
         this.currentIndex = index
       })
     }
