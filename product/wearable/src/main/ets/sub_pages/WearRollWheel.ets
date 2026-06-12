@@ -15,7 +15,9 @@ export struct WearRollWheel {
   @State rotateAngles: number[] = Array(defaultRolls.length).fill(0);
   @State isSpinning: boolean = false;
   @State currentIndex: number = 0;
-  @State showResult: string = '';
+  @State showResults: string[] = Array(defaultRolls.length).fill('');
+  @State spinningIndex: number = -1;
+  @State hasInteracted: boolean = false;  // 是否已交互过（点击或切换后不再显示「点击以开始」）
   // 参照 ABCD：CARD=216，圆形视觉略小故用 230 补偿
   private readonly WHEEL_SIZE: number = WearScreenUtil.scaledSize(230);
   private readonly PNTR_SIZE: number = WearScreenUtil.scaledSize(72);
@@ -44,6 +46,7 @@ export struct WearRollWheel {
     .digitalCrownSensitivity(CrownSensitivity.MEDIUM)
     .onChange((idx: number) => {
       this.currentIndex = idx;
+      this.hasInteracted = true;
     })
     .width('100%')
     .height('100%')
@@ -62,6 +65,7 @@ export struct WearRollWheel {
     .indicator(false)
     .onChange((idx: number) => {
       this.currentIndex = idx;
+      this.hasInteracted = true;
     })
     .width('100%')
     .height('100%')
@@ -87,16 +91,28 @@ export struct WearRollWheel {
       .width(this.WHEEL_SIZE)
       .height(this.WHEEL_SIZE)
 
-      // 结果/提示文字
+      // 结果/提示文字（三态：初始→点击以开始 | 交互后无结果→转盘名称 | 结果→显示结果值）
       Column() {
-        if (this.showResult.length > 0 && this.currentIndex === index) {
-          Text(this.showResult)
+        if (this.showResults[index].length > 0 && this.currentIndex === index) {
+          // 状态3：已出结果
+          Text(this.showResults[index])
             .fontSize(WearScreenUtil.subFontSize)
             .fontColor($r("app.color.Brand"))
-        } else {
-          Text('点击转盘开始')
+        } else if (this.isSpinning && this.spinningIndex === index && this.currentIndex === index) {
+          // 状态2：旋转中，显示转盘名称
+          Text(roll.rollName)
+            .fontSize(WearScreenUtil.subFontSize)
+            .fontColor(0xAAFFFFFF)
+        } else if (!this.hasInteracted) {
+          // 状态1：页面刚加载，未交互过
+          Text('点击以开始')
             .fontSize(WearScreenUtil.subFontSize - 2)
             .fontColor(0x66FFFFFF)
+        } else {
+          // 状态1b：已交互过，无结果时显示转盘名称（而非「点击以开始」）
+          Text(roll.rollName)
+            .fontSize(WearScreenUtil.subFontSize)
+            .fontColor(0xAAFFFFFF)
         }
       }
       .height(WearScreenUtil.scaledSize(24))
@@ -118,7 +134,9 @@ export struct WearRollWheel {
       return;
     }
     this.isSpinning = true;
-    this.showResult = '';
+    this.spinningIndex = index;
+    this.showResults[index] = '';
+    this.hasInteracted = true;
 
     const oldAngle = this.rotateAngles[index];
     const randomOffset = Random(0, 360, true);
@@ -129,7 +147,7 @@ export struct WearRollWheel {
       duration: 1000,
       curve: Curve.Ease,
       onFinish: () => {
-        this.calculateResult(roll, newAngle);
+        this.calculateResult(roll, newAngle, index);
       }
     }, () => {
       const updated = [...this.rotateAngles];
@@ -139,15 +157,17 @@ export struct WearRollWheel {
   }
 
   // ════════ 结果判定（权重感知 + 同 default 模块绘制逻辑） ════════
-  private calculateResult(roll: Roll, finalAngle: number): void {
+  private calculateResult(roll: Roll, finalAngle: number, index: number): void {
     const items = roll.rollItems;
     if (!items || items.length === 0) {
+      this.spinningIndex = -1;
       this.isSpinning = false;
       return;
     }
 
     const totalWeight = items.reduce((s: number, item: RollItem) => s + item.weight, 0);
     if (totalWeight <= 0) {
+      this.spinningIndex = -1;
       this.isSpinning = false;
       return;
     }
@@ -189,7 +209,8 @@ export struct WearRollWheel {
       sectorStartDeg = sectorEndDeg;
     }
 
-    this.showResult = `${items[hitIndex].text}`;
+    this.showResults[index] = `${items[hitIndex].text}`;
+    this.spinningIndex = -1;
     this.isSpinning = false;
   }
 

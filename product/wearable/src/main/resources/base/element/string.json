@@ -1,16 +1,24 @@
 {
   "string": [
     {
+      "name": "app_name",
+      "value": "随易手表端"
+    },
+    {
       "name": "module_desc",
-      "value": "module description"
+      "value": "面向生活的实用工具箱"
     },
     {
       "name": "WearableAbility_desc",
-      "value": "description"
+      "value": "面向生活的实用工具箱"
     },
     {
       "name": "WearableAbility_label",
-      "value": "随yi"
+      "value": "随易手表端"
+    },
+    {
+      "name": "wearable_version",
+      "value": "v0.0.1"
     },
     {
       "name": "vibrate_reason",

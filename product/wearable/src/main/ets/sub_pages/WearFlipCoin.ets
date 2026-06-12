@@ -38,11 +38,11 @@ export struct WearFlipCoin {
       .border({
         style: BorderStyle.Solid,
         width: this.BORDER,
-        color: $r("app.color.Brand")
+        color: 0xFFD4A017
       })
       .shadow({
         radius: WearScreenUtil.scaledSize(18),
-        color: 0x60007AFF,
+        color: 0x60D4A017,
         offsetX: 0,
         offsetY: WearScreenUtil.scaledSize(9)
       })
