@@ -172,8 +172,8 @@ export struct WearTruthOrDare {
         .backgroundColor(this.CHALLENGE_BG)
         .justifyContent(FlexAlign.Center)
       }
-      .width('116%')      // 放大到 116%，覆盖旋转 -30° 后的四角
-      .height('116%')
+      .width('125%')      // 放大到 125%，覆盖旋转 -30° 后的四角
+      .height('125%')
       .rotate({ angle: this.bgRotation })
 
       // === 中间层：指针（可旋转）===
