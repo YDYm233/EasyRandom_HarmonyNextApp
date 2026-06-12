@@ -50,10 +50,10 @@ const INDICATOR_NORMAL: number   = 0x66FFFFFF
 /**
  * 手表端主页 — 圆/方屏双适配 + 自动隐藏导航点
  *
- * - 圆形屏：使用系统 ArcDotIndicator，6 点钟方向
- * - 方形屏：自定义圆点指示器，颜色/动效对齐系统
- * - 首次加载：显示 3 秒后淡出
- * - 滑动/表冠：立即淡入，停止后 2 秒淡出
+ * - 圆形屏：使用系统 ArcDotIndicator，onGestureSwipe 即时显示
+ * - 方形屏：使用系统 DotIndicator，onGestureSwipe 即时显示
+ * - 首次加载：显示 1.5s 后隐藏
+ * - 滑动/表冠：即时淡入，停止后 1.5s 淡出
  */
 @Entry
 @Component
@@ -63,12 +63,13 @@ struct Index {
   @State showIndicator: boolean = true
   private hideTimer: number = 0
 
-  // 方形屏指示器 spring 动效
-  @State private dotScale: number = 1.0
-  private springLock: boolean = false
-
   private arcController: ArcSwiperController = new ArcSwiperController()
   private swiperController: SwiperController = new SwiperController()
+
+  // 方形屏系统指示器（DotIndicator 颜色方法名与 ArcDotIndicator 不同）
+  private squareIndicator: DotIndicator = new DotIndicator()
+    .color(INDICATOR_NORMAL)
+    .selectedColor(INDICATOR_SELECTED)
 
   // 圆形屏系统指示器（maskColor 全透明 → 去除 ArcSwiper 环形阴影）
   private arcIndicator: ArcDotIndicator = new ArcDotIndicator()
@@ -101,26 +102,6 @@ struct Index {
     }, delay) as number
   }
 
-  // 方形屏指示器：触发 spring 动效（先跳到峰值渲染一帧，再回弹）
-  private triggerSpring(): void {
-    if (this.isRound || this.springLock) {
-      return
-    }
-    this.springLock = true
-    // 立即跳到峰值（同帧渲染）
-    this.dotScale = 1.5
-    // 等一帧让 1.5x 先渲染出来，再 animateTo 回弹
-    setTimeout(() => {
-      animateTo({
-        duration: 300,
-        curve: Curve.EaseOut,
-      }, () => {
-        this.dotScale = 1.0
-        this.springLock = false
-      })
-    }, 16)
-  }
-
   build() {
     if (this.isRound) {
       this.buildRoundLayout()
@@ -148,7 +129,6 @@ struct Index {
       this.currentIndex = targetIndex
     } else {
       this.swiperController.changeIndex(targetIndex, true)
-      // changeIndex 会触发 onChange → triggerSpring()
     }
   }
 
@@ -196,53 +176,33 @@ struct Index {
   }
 
   // ══════════════════════════════════════════
-  //  方形屏布局：Swiper + 自定义指示器（spring 动效）
+  //  方形屏布局：Swiper + 系统指示器（与圆屏统一 onGestureSwipe 时序）
   // ══════════════════════════════════════════
   @Builder
   buildSquareLayout() {
-    Stack() {
-      Swiper(this.swiperController) {
-        this.buildAllPages()
-      }
-      .loop(false)
-      .index(PAGE_INDEX.ROLL_WHEEL)
-      .itemSpace(0)
-      .duration(300)
-      .indicator(false)
-      .onAnimationStart(() => {
-        this.showIndicator = true
-        if (this.hideTimer) clearTimeout(this.hideTimer)
-      })
-      .onAnimationEnd(() => {
-        this.scheduleHide(2000)
-      })
-      .onChange((index: number) => {
-        this.currentIndex = index
-        this.triggerSpring()
-      })
-
-      // 自定义指示器：贴底居中
-      Stack() {
-        Row({ space: 5 }) {
-          ForEach([0, 1, 2, 3, 4, 5, 6, 7, 8], (i: number) => {
-            Circle()
-              .width(i === this.currentIndex ? 7 : 5)
-              .height(i === this.currentIndex ? 7 : 5)
-              .fill(i === this.currentIndex ? INDICATOR_SELECTED : INDICATOR_NORMAL)
-              .shadow({ radius: 0 })
-              .scale({
-                x: i === this.currentIndex ? this.dotScale : 1.0,
-                y: i === this.currentIndex ? this.dotScale : 1.0,
-              })
-          }, (i: number) => i.toString())
-        }
-        .justifyContent(FlexAlign.Center)
-      }
-      .opacity(this.showIndicator ? 1 : 0)
-      .animation({ duration: 400, curve: Curve.EaseOut })
-      .position({ x: '50%', y: '96%' })
-      .translate({ x: '-50%', y: 0 })
+    Swiper(this.swiperController) {
+      this.buildAllPages()
     }
+    .loop(false)
+    .index(this.currentIndex)
+    .itemSpace(0)
+    .duration(300)
+    .indicator(this.showIndicator ? this.squareIndicator : false)
+    .onGestureSwipe((index: number, extraInfo: SwiperAnimationEvent) => {
+      this.showIndicator = true
+      if (this.hideTimer) {
+        clearTimeout(this.hideTimer)
+      }
+    })
+    .onAnimationEnd(() => {
+      this.scheduleHide(1500)
+    })
+    .onChange((index: number) => {
+      if (index === this.currentIndex) {
+        return
+      }
+      this.currentIndex = index
+    })
   }
 
   // ══════════════════════════════════════════
