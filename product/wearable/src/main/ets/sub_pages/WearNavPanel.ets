@@ -24,13 +24,8 @@ const TEXT_SECONDARY: number = 0xFFCCCCCC
 
 /**
  * 导航面板 — 圆/方屏双适配
- *
- * 结构：
- *   标题 "随易手表端"
- *   公告 label → 2 张子卡片（共用 label）
- *   快捷跳转 label → 1 张卡片（3 按钮）
- *   设置 label → 1 张卡片
- *   关于 label → 1 张卡片
+ * 使用 Scroll + Column 替代 List + ListItem，避免 ListItem 对子组件的
+ * 高度和圆角约束。borderRadius 直接用于 Column（已验证模式，参考 Muyu）。
  */
 @Component
 export struct WearNavPanel {
@@ -56,15 +51,18 @@ export struct WearNavPanel {
   @Builder
   buildRoundPanel() {
     Stack() {
-      List({ space: WearScreenUtil.listItemSpace }) {
-        this.buildContent()
+      Scroll() {
+        Column({ space: this.secGap }) {
+          this.buildAllSections()
+        }
+        .width('100%')
+        .padding({ top: 24, bottom: 36 })
+        .alignItems(HorizontalAlign.Center)
       }
       .width(WearScreenUtil.contentWidthRatio)
       .height('100%')
-      .alignListItem(ListItemAlign.Center)
       .scrollBar(BarState.Off)
       .edgeEffect(EdgeEffect.Spring)
-      .padding({ top: 24, bottom: 36 })
     }
     .width('100%')
     .height('100%')
@@ -74,43 +72,51 @@ export struct WearNavPanel {
   // ═══════ 方形屏 ═══════
   @Builder
   buildSquarePanel() {
-    List({ space: 14 }) {
-      this.buildContent()
+    Scroll() {
+      Column({ space: this.secGap }) {
+        this.buildAllSections()
+      }
+      .width('100%')
+      .padding({ left: 14, right: 14, top: 22, bottom: 36 })
+      .alignItems(HorizontalAlign.Center)
     }
     .width('100%')
     .height('100%')
     .scrollBar(BarState.Off)
     .edgeEffect(EdgeEffect.Spring)
-    .padding({ left: 14, right: 14, top: 22, bottom: 36 })
   }
 
-  // ═══════ 内容区 ═══════
+  // ═══════ 全部 Section ═══════
   @Builder
-  buildContent() {
-    // 标题
-    ListItem() { this.buildTitle() }
+  buildAllSections() {
+    this.buildTitle()
 
-    // 公告 Section（一个 label 下两张子卡片）
-    ListItem() { this.buildAnnouncementSection() }
+    // 公告 Section
+    this.sectionLabel('公告')
+    this.announcementCard('欢迎使用随易手表端公测版！')
+    this.announcementCard('功能预告：下个版本将支持从手机端同步数据')
 
     // 快捷跳转 Section
-    ListItem() { this.buildQuickJumpSection() }
+    this.sectionLabel('快捷跳转')
+    this.buildQuickJumpCard()
 
     // 设置 Section
-    ListItem() { this.buildSettingSection() }
+    this.sectionLabel('设置')
+    this.buildSettingCard()
 
     // 关于 Section
-    ListItem() { this.buildAboutSection() }
+    this.sectionLabel('关于')
+    this.buildAboutCard()
   }
 
-  // ═══════ 尺寸 & 圆角 ═══════
-  private get boxPadding(): number   { return this.isRound ? 14 : 12 }
-  private get boxRadius(): number    { return this.isRound ? 24 : 16 }
-  private get subRadius(): number    { return this.isRound ? 18 : 12 }
-  private get labelSize(): number    { return WearScreenUtil.subFontSize }
-  private get labelGap(): number     { return 8 }
-  private get cardMinH(): number     { return this.isRound ? 56 : 48 }
-  private get subMinH(): number      { return this.isRound ? 48 : 40 }
+  // ═══════ 尺寸 & 圆角（计算属性） ═══════
+  private get pad(): number      { return this.isRound ? 16 : 14 }
+  private get r(): number        { return this.isRound ? 24 : 16 }
+  private get rSub(): number     { return this.isRound ? 18 : 12 }
+  private get minH(): number     { return this.isRound ? 72 : 64 }
+  private get subH(): number     { return this.isRound ? 60 : 52 }
+  private get secGap(): number   { return this.isRound ? 20 : 16 }
+  private get itemGap(): number  { return 8 }
 
   // ═══════ 标题 ═══════
   @Builder
@@ -124,151 +130,124 @@ export struct WearNavPanel {
       .margin({ top: 10, bottom: 16 })
   }
 
-  // ═══════ Section label 建造器 ═══════
+  // ═══════ 统一 Section Label ═══════
   @Builder
   sectionLabel(text: string) {
     Text(text)
-      .fontSize(this.labelSize)
+      .fontSize(WearScreenUtil.subFontSize)
       .fontColor(BRAND_BLUE)
       .fontWeight(FontWeight.Bold)
       .textAlign(TextAlign.Center)
       .width('100%')
-      .margin({ bottom: this.labelGap })
+      .margin({ bottom: 8 })
   }
 
-  // ═══════ 公告 Section — 1 个 label + 2 张子卡片 ═══════
+  // ═══════ 公告子卡片 (单条) ═══════
   @Builder
-  buildAnnouncementSection() {
+  announcementCard(content: string) {
     Column() {
-      this.sectionLabel('公告')
-
-      // 子卡片 1
-      Text('欢迎使用随易手表端公测版！')
+      Text(content)
         .fontSize(13)
         .fontColor(TEXT_PRIMARY)
         .width('100%')
-        .constraintSize({ minHeight: this.subMinH })
-        .padding(this.boxPadding)
-        .borderRadius(this.subRadius)
-        .backgroundColor(SUB_BG)
-
-      // 子卡片 2
-      Text('功能预告：下个版本将支持从手机端同步数据')
-        .fontSize(13)
-        .fontColor(TEXT_PRIMARY)
-        .width('100%')
-        .constraintSize({ minHeight: this.subMinH })
-        .padding(this.boxPadding)
-        .borderRadius(this.subRadius)
-        .backgroundColor(SUB_BG)
-        .margin({ top: 8 })
     }
     .width('100%')
+    .height(this.subH)
+    .padding(this.pad)
+    .backgroundColor(SUB_BG)
+    .borderRadius(this.rSub)
+    .justifyContent(FlexAlign.Center)
+    .margin({ bottom: this.itemGap })
   }
 
-  // ═══════ 快捷跳转 Section — 1 个 label + 1 张卡片（3 按钮） ═══════
+  // ═══════ 快捷跳转卡片 ═══════
   @Builder
-  buildQuickJumpSection() {
-    Column() {
-      this.sectionLabel('快捷跳转')
-
-      Row({ space: this.isRound ? 10 : 8 }) {
-        ForEach(QUICK_ENTRIES, (entry: QuickEntry) => {
-          Column() {
-            Text(entry.emoji)
-              .fontSize(this.isRound ? 24 : 22)
-            Text(entry.label)
-              .fontSize(11)
-              .fontColor(TEXT_PRIMARY)
-              .margin({ top: 4 })
-          }
-          .layoutWeight(1)
-          .height(this.isRound ? 60 : 54)
-          .borderRadius(this.subRadius)
-          .backgroundColor(SUB_BG)
-          .justifyContent(FlexAlign.Center)
-          .alignItems(HorizontalAlign.Center)
-          .scale({ x: this.tapIdx === entry.targetIndex ? 0.94 : 1.0,
-                   y: this.tapIdx === entry.targetIndex ? 0.94 : 1.0 })
-          .onClick(() => {
-            this.playTapFeedback(entry.targetIndex)
-            this.onNavigate(entry.targetIndex)
-          })
-        }, (entry: QuickEntry) => entry.label)
-      }
-      .width('100%')
-      .constraintSize({ minHeight: this.cardMinH })
-      .padding(this.boxPadding)
-      .borderRadius(this.boxRadius)
-      .backgroundColor(CARD_BG)
-    }
-    .width('100%')
-  }
-
-  // ═══════ 设置 Section ═══════
-  @Builder
-  buildSettingSection() {
-    Column() {
-      this.sectionLabel('设置')
-
-      Row() {
-        Text('震动反馈')
-          .fontSize(13)
-          .fontColor(TEXT_PRIMARY)
-
-        Blank()
-
-        Toggle({ type: ToggleType.Switch, isOn: this.hapticEnabled })
-          .selectedColor(BRAND_BLUE)
-          .onChange((isOn: boolean) => {
-            this.hapticEnabled = isOn
-          })
-      }
-      .width('100%')
-      .alignItems(VerticalAlign.Center)
-      .constraintSize({ minHeight: this.cardMinH })
-      .padding(this.boxPadding)
-      .borderRadius(this.boxRadius)
-      .backgroundColor(CARD_BG)
-    }
-    .width('100%')
-  }
-
-  // ═══════ 关于 Section ═══════
-  @Builder
-  buildAboutSection() {
-    Column() {
-      this.sectionLabel('关于')
-
-      Row({ space: 10 }) {
-        Image($r('app.media.app_icon'))
-          .width(40)
-          .height(40)
-          .borderRadius(10)
-
+  buildQuickJumpCard() {
+    Row({ space: this.isRound ? 10 : 8 }) {
+      ForEach(QUICK_ENTRIES, (entry: QuickEntry) => {
         Column() {
-          Text($r('app.string.app_name'))
-            .fontSize(14)
+          Text(entry.emoji)
+            .fontSize(this.isRound ? 24 : 22)
+          Text(entry.label)
+            .fontSize(11)
             .fontColor(TEXT_PRIMARY)
-            .fontWeight(FontWeight.Medium)
-          Text($r('app.string.module_desc'))
-            .fontSize(11)
-            .fontColor(TEXT_SECONDARY)
-            .margin({ top: 2 })
-          Text($r('app.string.wearable_version'))
-            .fontSize(11)
-            .fontColor(TEXT_SECONDARY)
-            .margin({ top: 1 })
+            .margin({ top: 4 })
         }
-        .alignItems(HorizontalAlign.Start)
-      }
-      .width('100%')
-      .constraintSize({ minHeight: this.cardMinH })
-      .padding(this.boxPadding)
-      .borderRadius(this.boxRadius)
-      .backgroundColor(CARD_BG)
+        .layoutWeight(1)
+        .height(this.isRound ? 60 : 54)
+        .backgroundColor(SUB_BG)
+        .borderRadius(this.rSub)
+        .justifyContent(FlexAlign.Center)
+        .alignItems(HorizontalAlign.Center)
+        .scale({ x: this.tapIdx === entry.targetIndex ? 0.94 : 1.0,
+                 y: this.tapIdx === entry.targetIndex ? 0.94 : 1.0 })
+        .onClick(() => {
+          this.playTapFeedback(entry.targetIndex)
+          this.onNavigate(entry.targetIndex)
+        })
+      }, (entry: QuickEntry) => entry.label)
     }
     .width('100%')
+    .height(this.minH)
+    .padding(this.pad)
+    .backgroundColor(CARD_BG)
+    .borderRadius(this.r)
+  }
+
+  // ═══════ 设置卡片 ═══════
+  @Builder
+  buildSettingCard() {
+    Row() {
+      Text('震动反馈')
+        .fontSize(13)
+        .fontColor(TEXT_PRIMARY)
+
+      Blank()
+
+      Toggle({ type: ToggleType.Switch, isOn: this.hapticEnabled })
+        .selectedColor(BRAND_BLUE)
+        .onChange((isOn: boolean) => {
+          this.hapticEnabled = isOn
+        })
+    }
+    .width('100%')
+    .height(this.minH)
+    .padding(this.pad)
+    .backgroundColor(CARD_BG)
+    .borderRadius(this.r)
+    .alignItems(VerticalAlign.Center)
+  }
+
+  // ═══════ 关于卡片 ═══════
+  @Builder
+  buildAboutCard() {
+    Row({ space: 10 }) {
+      Image($r('app.media.app_icon'))
+        .width(40)
+        .height(40)
+        .borderRadius(10)
+
+      Column() {
+        Text($r('app.string.app_name'))
+          .fontSize(14)
+          .fontColor(TEXT_PRIMARY)
+          .fontWeight(FontWeight.Medium)
+        Text($r('app.string.module_desc'))
+          .fontSize(11)
+          .fontColor(TEXT_SECONDARY)
+          .margin({ top: 2 })
+        Text($r('app.string.wearable_version'))
+          .fontSize(11)
+          .fontColor(TEXT_SECONDARY)
+          .margin({ top: 1 })
+      }
+      .alignItems(HorizontalAlign.Start)
+    }
+    .width('100%')
+    .height(this.minH)
+    .padding(this.pad)
+    .backgroundColor(CARD_BG)
+    .borderRadius(this.r)
   }
 
   // ═══════ 点击反馈 ═══════

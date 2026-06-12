@@ -70,14 +70,15 @@ struct Index {
   private arcController: ArcSwiperController = new ArcSwiperController()
   private swiperController: SwiperController = new SwiperController()
 
-  // 圆形屏系统指示器
+  // 圆形屏系统指示器（maskColor 全透明 → 去除 ArcSwiper 环形阴影）
   private arcIndicator: ArcDotIndicator = new ArcDotIndicator()
     .arcDirection(ArcDirection.SIX_CLOCK_DIRECTION)
     .itemColor(INDICATOR_NORMAL)
     .selectedItemColor(INDICATOR_SELECTED)
-    .maskColor({
-      colors: [['#00000000', 0], ['#00000000', 1]]
-    })
+    .maskColor(new LinearGradient([
+      { color: '#00000000', offset: 0 },
+      { color: '#00000000', offset: 1 },
+    ]))
 
   aboutToAppear(): void {
     this.isRound = WearScreenUtil.isRoundScreen()
