@@ -131,18 +131,12 @@ export struct WearTruthOrDare {
   }
 
   /**
-   * 组件出现时，根据屏幕形状决定是否旋转背景
-   * 圆形屏：旋转 -30°（视觉效果），判定需补偿 +30°
-   * 方形屏：不旋转（避免内容被裁剪），判定无需补偿
+   * 组件出现时，统一设置背景旋转 -30°（方案3：放大背景+裁切）
+   * 圆形屏和方形屏都旋转，通过放大背景+裁切避免内容丢失
    */
   aboutToAppear(): void {
-    if (WearScreenUtil.isRoundScreen()) {
-      this.bgRotation = -30;
-      this.angleOffset = 30;
-    } else {
-      this.bgRotation = 0;
-      this.angleOffset = 0;
-    }
+    this.bgRotation = -30;
+    this.angleOffset = 30;
   }
 
   build() {
@@ -178,8 +172,8 @@ export struct WearTruthOrDare {
         .backgroundColor(this.CHALLENGE_BG)
         .justifyContent(FlexAlign.Center)
       }
-      .width('100%')
-      .height('100%')
+      .width('116%')      // 放大到 116%，覆盖旋转 -30° 后的四角
+      .height('116%')
       .rotate({ angle: this.bgRotation })
 
       // === 中间层：指针（可旋转）===
@@ -260,5 +254,6 @@ export struct WearTruthOrDare {
     }
     .width('100%')
     .height('100%')
+    .clip(true)      // 裁掉背景放大旋转后超出屏幕的部分
   }
 }
