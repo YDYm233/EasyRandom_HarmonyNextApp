@@ -89,3 +89,4 @@ coverage/
 .claude
 .workbuddy
 /push_all.bat
+/.deveco/
