@@ -32,7 +32,7 @@
       {
         "name": "default",
         "signingConfig": "debug",
-        "compatibleSdkVersion": "5.0.1(13)",
+        "compatibleSdkVersion": "5.1.0(18)",
         "runtimeOS": "HarmonyOS",
         "targetSdkVersion": "6.1.0(23)"
       }
@@ -63,13 +63,21 @@
       "name": "basic",
       "srcPath": "./common/basic"
     },
-    {
-      "name": "VitalUI",
-      "srcPath": "./common/VitalUI"
-    },
+//    {
+//      "name": "VitalUI",
+//      "srcPath": "./common/VitalUI"
+//    },
     {
       "name": "wearable",
-      "srcPath": "./product/wearable"
+      "srcPath": "./product/wearable",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
     },
     {
       "name": "HarmonySystemUtils",
