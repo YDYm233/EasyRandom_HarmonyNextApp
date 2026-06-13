@@ -1,6 +1,6 @@
 {
   "module": {
-    "name": "basic",
+    "name": "BasicUtils",
     "type": "har",
     "deviceTypes": [
       "default",

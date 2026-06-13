@@ -1,5 +1,5 @@
 {
-  "name": "basic",
+  "name": "basicutils",
   "version": "1.0.0",
   "description": "公共静态库",
   "main": "Index.ets",

@@ -60,8 +60,8 @@
       ]
     },
     {
-      "name": "basic",
-      "srcPath": "./common/basic"
+      "name": "BasicUtils",
+      "srcPath": "./common/BasicUtils"
     },
 //    {
 //      "name": "VitalUI",
@@ -80,8 +80,8 @@
       ]
     },
     {
-      "name": "HarmonySystemUtils",
-      "srcPath": "./common/HarmonySystemUtils"
+      "name": "SystemUtils",
+      "srcPath": "./common/SystemUtils"
     }
   ]
 }

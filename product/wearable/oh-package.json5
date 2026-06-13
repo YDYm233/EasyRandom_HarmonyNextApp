@@ -6,7 +6,7 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "@ohos/common": "file:../../common/basic"
+    "@ohos/common": "file:../../common/BasicUtils"
   }
 }
 

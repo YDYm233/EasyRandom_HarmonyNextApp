@@ -6,8 +6,8 @@
   "author": "$string.app_author",
   "license": "",
   "dependencies": {
-    "@ohos/common": "file:../../common/basic",
+    "@ohos/common": "file:../../common/BasicUtils",
 //    "@ohos/vitalui": "file:../../common/VitalUI",
-    "@ohos/vibratorutil": "file:../../common/HarmonySystemUtils"
+    "@ohos/vibratorutil": "file:../../common/SystemUtils"
   }
 }

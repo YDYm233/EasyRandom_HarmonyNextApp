@@ -1,6 +1,6 @@
 {
   "module": {
-    "name": "HarmonySystemUtils_test",
+    "name": "SystemUtils_test",
     "type": "feature",
     "deviceTypes": [
       "default",
