@@ -233,34 +233,84 @@ export { MainPage } from './src/main/ets/Demo/MainPage'
 
 ## 3. 执行步骤
 
-### Phase 1: 创建新模块骨架
+### Phase 0: 已完成（手动操作）
 
-1. 创建 `common/BasicUtils/` 完整骨架（Index.ets, oh-package.json5, build-profile.json5, module.json5, hvigorfile.ts）
-2. 创建 `common/SystemUtils/` 完整骨架
-3. 更新 `common/VitalUI/` 骨架（已存在，需更新 Index.ets、oh-package.json5、module.json5）
-4. 在根 `build-profile.json5` 的 modules 中注册 BasicUtils、SystemUtils，取消 VitalUI 注释
-5. 在根 `oh-package.json5` 中注册新模块
+> 以下步骤已由开发者手动完成，代码已就位。
 
-### Phase 2: 迁移文件
+- [x] 复制 `common/basic/` → `common/BasicUtils/`（含所有文件）
+- [x] 复制 `common/HarmonySystemUtils/` → `common/SystemUtils/`（含 VibratorManager）
+- [x] 根 `build-profile.json5` 注册 BasicUtils、SystemUtils（VitalUI 仍注释）
+- [x] BasicUtils/module.json5 name 已改为 `BasicUtils`
+- [x] SystemUtils/module.json5 name 已改为 `SystemUtils`，含 wearable deviceType
 
-| 源 | 目标 | 操作 |
-|----|------|------|
-| `basic/src/main/ets/utils/Logger.ets` | `BasicUtils/src/main/ets/utils/Logger.ets` | 移动 |
-| `basic/src/main/ets/utils/CommonConstants.ets` | `BasicUtils/src/main/ets/utils/CommonConstants.ets` | 移动 |
-| `basic/src/main/ets/utils/GlobalContext.ets` | `BasicUtils/src/main/ets/utils/GlobalContext.ets` | 移动 |
-| `basic/src/main/ets/utils/Math.ets` | `BasicUtils/src/main/ets/algo/Math.ets` | 移动（注意目录变化 utils→algo） |
-| `HarmonySystemUtils/src/main/ets/utils/VibratorManager.ets` | `SystemUtils/src/main/ets/VibratorManager.ets` | 移动 |
-| `basic/src/main/ets/utils/BreakPointSystem.ets` | `SystemUtils/src/main/ets/BreakPointSystem.ets` | 移动 |
-| `default/src/main/ets/utils/ApiVersionUtil.ets` | `SystemUtils/src/main/ets/ApiVersionUtil.ets` | 移动 |
-| `basic/src/main/ets/components/ColorPickerComponent/` | `VitalUI/src/main/ets/components/ColorPickerComponent/` | 移动 |
-| `VitalUI/src/main/ets/chart/` | `VitalUI/src/main/ets/components/chart/` | 重命名目录（chart→components/chart） |
-| `VitalUI/src/main/ets/utils/ColorCode.ets` | — | **删除**（与Math.ets完全重复，无需合并） |
-| `VitalUI/src/main/ets/utils/Random.ets` | — | **删除**（与Math.ets重复，VitalUI不应含非UI逻辑） |
-| `basic/src/main/ets/components/MainPage.ets` | — | **删除**（Hello World模板） |
+### Phase 1: 配置修正（仍需执行）
 
-### Phase 3: 更新消费方 import 语句
+| 操作 | 说明 |
+|------|------|
+| BasicUtils oh-package.json5 `name` | `basicutils` → `@ohos/basic-utils` |
+| SystemUtils oh-package.json5 `name` | `systemutils` → `@ohos/system-utils` |
+| BasicUtils module.json5 deviceTypes | 添加 `wearable` |
+| SystemUtils oh-package.json5 dependencies | 添加 `"@ohos/basic-utils": "file:../BasicUtils"` |
+| VitalUI oh-package.json5 `name` | `vitalui` → `@ohos/vital-ui` |
+| 根 build-profile.json5 | 取消 VitalUI 注释，移除 basic、HarmonySystemUtils |
 
-**product/default/oh-package.json5 新依赖：**
+### Phase 2: 文件迁移与清理
+
+**BasicUtils 内部清理（从 basic 复制来的多余文件）：**
+
+| 文件 | 操作 | 去向 |
+|------|------|------|
+| `BasicUtils/.../BreakPointSystem.ets` | 从 BasicUtils 移出 | → `SystemUtils/.../BreakPointSystem.ets` |
+| `BasicUtils/.../ColorPickerComponent/` | 从 BasicUtils 移出 | → `VitalUI/.../components/ColorPickerComponent/` |
+| `BasicUtils/.../MainPage.ets` | 删除 | Hello World 模板，无实际用途 |
+| `BasicUtils/.../Math.ets` | 移动 | `utils/Math.ets` → `algo/Math.ets`（目录重组织） |
+
+**SystemUtils 补充文件：**
+
+| 文件 | 操作 | 来源 |
+|------|------|------|
+| BreakPointSystem.ets | 迁入 | ← BasicUtils（见上） |
+| ApiVersionUtil.ets | 迁入 | ← `product/default/src/main/ets/utils/` |
+
+**VitalUI 清理与重组：**
+
+| 文件 | 操作 | 说明 |
+|------|------|------|
+| `VitalUI/.../chart/` | 重命名 | → `VitalUI/.../components/chart/` |
+| `VitalUI/.../utils/ColorCode.ets` | 删除 | 与 Math.ets 完全重复 |
+| `VitalUI/.../utils/Random.ets` | 删除 | 与 Math.ets 重复，VitalUI 不应含非UI逻辑 |
+| ColorPickerComponent/ | 迁入 | ← BasicUtils（见上） |
+
+### Phase 3: 更新 Index.ets 导出
+
+**BasicUtils/Index.ets — 改为：**
+```typescript
+export { default as Logger } from './src/main/ets/utils/Logger'
+export { default as CommonConstants } from './src/main/ets/utils/CommonConstants'
+export { GlobalContext } from './src/main/ets/utils/GlobalContext'
+export { Random, Randoms, ExColor, rgbaToHex8 } from './src/main/ets/algo/Math'
+```
+
+**SystemUtils/Index.ets — 改为：**
+```typescript
+export { VibratorManager, VibrationUsage, HapticEffect } from './src/main/ets/utils/VibratorManager'
+export { BreakpointSystem, Breakpoint, BreakpointOptions, BreakpointType, BreakpointState } from './src/main/ets/utils/BreakPointSystem'
+export { ApiVersionUtil, ToolWithApiVersion } from './src/main/ets/utils/ApiVersionUtil'
+```
+
+**VitalUI/Index.ets — 改为：**
+```typescript
+export { ColorPickerView, ColorPickerButton } from './src/main/ets/components/ColorPickerComponent/ColorPickerDialog'
+export { PieChartData, Chart as PieChartBase, PieChart } from './src/main/ets/components/chart/PieChart'
+export { PieChartData as PieChartData_V3, Chart as PieChartBaseV3, PieChart_V3 } from './src/main/ets/components/chart/PieChart_V3'
+export { ChartData as RoseData, Chart as RoseBase, RoseChartClass, QRoseChart } from './src/main/ets/components/chart/QuarterRoseChart'
+export { ChartData as RadarData, ChartClass, RadarChartClass, RoseChart as RadarRoseChart } from './src/main/ets/components/chart/RadarChart'
+export { ChartData as RoseChartData, Chart as RoseChartBase, RoseChartClass as RoseChartCore, RoseChart } from './src/main/ets/components/chart/RoseChart'
+```
+
+### Phase 4: 更新消费方依赖与 import
+
+**product/default/oh-package.json5 — 改为：**
 ```json5
 "dependencies": {
   "@ohos/basic-utils": "file:../../common/BasicUtils",
@@ -269,7 +319,7 @@ export { MainPage } from './src/main/ets/Demo/MainPage'
 }
 ```
 
-**product/wearable/oh-package.json5 新依赖：**
+**product/wearable/oh-package.json5 — 改为：**
 ```json5
 "dependencies": {
   "@ohos/basic-utils": "file:../../common/BasicUtils"
@@ -296,13 +346,13 @@ export { MainPage } from './src/main/ets/Demo/MainPage'
 | `import { Random } from '@ohos/common'` | `import { Random } from '@ohos/basic-utils'` | ~9 |
 | `import { ExColor } from '@ohos/common'` | `import { ExColor } from '@ohos/basic-utils'` | 1 |
 
-### Phase 4: 删除旧模块
+### Phase 5: 删除旧模块
 
-1. 删除 `common/basic/` 目录（所有内容已迁出）
-2. 删除 `common/HarmonySystemUtils/` 目录（所有内容已迁出）
-3. 从根 `build-profile.json5` modules 中移除 basic、HarmonySystemUtils 的配置
+1. 删除 `common/basic/` 目录
+2. 删除 `common/HarmonySystemUtils/` 目录
+3. 确认根 `build-profile.json5` modules 中已无 basic、HarmonySystemUtils
 
-### Phase 5（可选）: default 模块内部目录规范化
+### Phase 6（可选）: default 模块内部目录规范化
 
 | 操作 | 说明 |
 |------|------|
