@@ -1,4 +1,4 @@
-﻿import { Random } from '@ohos/common'
+﻿import { Random } from '@ohos/basic-utils'
 import router from '@ohos.router';
 import { placeAttraction, placesArray } from '../../static_datas/places'
 import { promptAction } from '@kit.ArkUI'

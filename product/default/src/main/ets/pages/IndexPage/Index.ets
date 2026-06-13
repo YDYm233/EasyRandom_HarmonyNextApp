@@ -6,7 +6,7 @@
 import router from '@ohos.router'
 import { BusinessError } from '@kit.BasicServicesKit'
 import { promptAction } from '@kit.ArkUI'
-import { CommonConstants, GlobalContext, Logger } from '@ohos/common'
+import { CommonConstants, GlobalContext, Logger } from '@ohos/basic-utils'
 import { webview } from '@kit.ArkWeb'
 import { preferences } from '@kit.ArkData'
 import deviceInfo from '@ohos.deviceInfo'

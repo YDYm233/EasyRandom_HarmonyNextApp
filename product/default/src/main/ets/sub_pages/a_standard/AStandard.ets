@@ -2,7 +2,7 @@
 // 页面名称要注册进 file:../AppScope/resources/base/element/page_desc.json
 // 页面入口要写进 file:../product/default/src/main/ets/pages/ToolsPage.ets
 
-import { Random } from '@ohos/common';
+import { Random } from '@ohos/basic-utils';
 import router from '@ohos.router';
 
 class Params {

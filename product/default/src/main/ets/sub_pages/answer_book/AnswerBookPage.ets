@@ -1,4 +1,4 @@
-﻿import { Random } from '@ohos/common';
+﻿import { Random } from '@ohos/basic-utils';
 import { answers } from '../../static_datas/answers';
 import { resourceManager } from '@kit.LocalizationKit';
 import router from '@ohos.router';

@@ -1,4 +1,4 @@
-import { ChartData, RadarChartClass, RoseChart } from '../chart/RadarChart'
+import { ChartData, RadarChartClass, RoseChart } from '../components/chart/RadarChart'
 
 const RadarChartDemoData: Array<RadarChartClass> = [//所有转盘
   new RadarChartClass('属性', [

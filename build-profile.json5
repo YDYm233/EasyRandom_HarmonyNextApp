@@ -63,10 +63,10 @@
       "name": "BasicUtils",
       "srcPath": "./common/BasicUtils"
     },
-//    {
-//      "name": "VitalUI",
-//      "srcPath": "./common/VitalUI"
-//    },
+    {
+      "name": "VitalUI",
+      "srcPath": "./common/VitalUI"
+    },
     {
       "name": "wearable",
       "srcPath": "./product/wearable",

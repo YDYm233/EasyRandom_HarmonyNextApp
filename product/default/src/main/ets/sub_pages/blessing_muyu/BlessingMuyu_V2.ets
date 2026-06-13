@@ -1,5 +1,5 @@
 ﻿import { preferences } from '@kit.ArkData'
-import { Random } from '@ohos/common'
+import { Random } from '@ohos/basic-utils'
 import { hilog } from '@kit.PerformanceAnalysisKit'
 import router from '@ohos.router';
 

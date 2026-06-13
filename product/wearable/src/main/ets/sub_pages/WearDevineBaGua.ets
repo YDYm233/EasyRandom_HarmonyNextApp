@@ -1,4 +1,4 @@
-import { Random } from '@ohos/common';
+import { Random } from '@ohos/basic-utils';
 import WearScreenUtil from '../utils/WearScreenUtil';
 import { promptAction } from '@kit.ArkUI';
 

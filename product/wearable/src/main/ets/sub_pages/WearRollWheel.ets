@@ -6,7 +6,7 @@
 // ═════════════════════════════════════════════════
 
 import { ArcSwiper, ArcSwiperController } from '@kit.ArkUI';
-import { Random } from '@ohos/common';
+import { Random } from '@ohos/basic-utils';
 import WearScreenUtil from '../utils/WearScreenUtil';
 import { Roll, RollItem, defaultRolls } from '../utils/WearRollDataManager';
 

@@ -1,4 +1,4 @@
-﻿import {Random} from '@ohos/common'
+﻿import {Random} from '@ohos/basic-utils'
 @Entry
 @Component
 struct FlipCoinCard {

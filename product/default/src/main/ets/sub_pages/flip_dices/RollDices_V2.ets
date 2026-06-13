@@ -1,6 +1,6 @@
-﻿import { Random } from '@ohos/common';
+﻿import { Random } from '@ohos/basic-utils';
 import router from '@ohos.router';
-import { VibratorManager } from '@ohos/vibratorutil';
+import { VibratorManager } from '@ohos/system-utils';
 
 class Params {
   type: string

@@ -7,7 +7,7 @@ import { Illustrate } from './MoreOpt';
 import { CopyRight } from './CopyRight';
 import { AnnouncementPage } from './AnnouncementPage';
 import { promptAction } from '@kit.ArkUI';
-import { BreakpointState, BreakpointSystem } from '@ohos/common';
+import { BreakpointState, BreakpointSystem } from '@ohos/system-utils';
 import { resourceManager } from '@kit.LocalizationKit';
 
 // ============ 类型定义 ============

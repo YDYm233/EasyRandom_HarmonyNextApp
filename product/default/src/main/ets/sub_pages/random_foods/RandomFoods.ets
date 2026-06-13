@@ -1,4 +1,4 @@
-﻿import { Random } from '@ohos/common'
+﻿import { Random } from '@ohos/basic-utils'
 import router from '@ohos.router';
 import { foodsArray } from '../../static_datas/foods'
 

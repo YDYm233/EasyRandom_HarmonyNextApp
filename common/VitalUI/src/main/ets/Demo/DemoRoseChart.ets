@@ -1,6 +1,6 @@
-//import{PieChart,PieChartData,Chart} from '../chart/PieChart'
-import { ChartData, RoseChart, RoseChartClass } from '../chart/RoseChart'
-import { QRoseChart} from '../chart/QuarterRoseChart'
+//import{PieChart,PieChartData,Chart} from '../components/chart/PieChart'
+import { ChartData, RoseChart, RoseChartClass } from '../components/chart/RoseChart'
+import { QRoseChart} from '../components/chart/QuarterRoseChart'
 
 const RoseChartDemoData: RoseChartClass[] = [//所有转盘
   new RoseChartClass('属性', [

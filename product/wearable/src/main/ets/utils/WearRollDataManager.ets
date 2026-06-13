@@ -3,7 +3,7 @@
 //  仅包含默认数据 + 核心工具函数，不引入 Preferences 持久化
 // ═══════════════════════════════════════════
 
-import { Random } from '@ohos/common';
+import { Random } from '@ohos/basic-utils';
 
 // ── 常量 ──
 export const COLOR_PRESETS: string[] = [

@@ -2,7 +2,7 @@
 // 指针旋转方案：屏幕左右分屏，中间指针旋转，停止后弹窗显示结果
 // 参照: docs/wearable-page-impl.md §6
 
-import { Random } from '@ohos/common';
+import { Random } from '@ohos/basic-utils';
 import WearScreenUtil from '../utils/WearScreenUtil';
 import { honests, challenges } from '../utils/WearTruthOrDareData';
 

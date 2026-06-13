@@ -1,4 +1,4 @@
-import { Random } from '@ohos/common'
+import { Random } from '@ohos/basic-utils'
 import { Roll, RollItem, defaultRolls, initRollsData } from '../pages/RollPage/RollDataManager';
 
 // @Entry

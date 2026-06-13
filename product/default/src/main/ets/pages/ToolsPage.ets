@@ -1,6 +1,6 @@
-﻿import { BreakpointState, BreakpointSystem } from '@ohos/common';
+﻿import { BreakpointState, BreakpointSystem } from '@ohos/system-utils';
 import router from '@ohos.router';
-import { ApiVersionUtil } from '../utils/ApiVersionUtil';
+import { ApiVersionUtil } from '@ohos/system-utils';
 
 class ToolItem {
   emoji: string

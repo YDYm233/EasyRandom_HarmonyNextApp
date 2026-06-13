@@ -3,7 +3,7 @@ import { hilog } from '@kit.PerformanceAnalysisKit'
 import { window } from '@kit.ArkUI'
 import { BusinessError } from '@kit.BasicServicesKit'
 import { preferences } from '@kit.ArkData'
-import { CommonConstants } from '@ohos/common'
+import { CommonConstants } from '@ohos/basic-utils'
 
 export default class EntryAbility extends UIAbility {
   private mainWindow: window.Window | null = null

@@ -1,14 +1,15 @@
-﻿import { BreakpointState, BreakpointSystem, Random } from '@ohos/common';
+﻿import { BreakpointState, BreakpointSystem } from '@ohos/system-utils';
+import { Random } from '@ohos/basic-utils';
 import{RollWheel}from './RollWheel'
 import { Roll, defaultRolls, initRollsData } from './RollDataManager';
 import { RollEditSheet } from './RollEditor';
-import { VibratorManager } from '@ohos/vibratorutil';
+import { VibratorManager } from '@ohos/system-utils';
 import { formProvider, formInfo } from '@kit.FormKit'
 import { Want } from '@kit.AbilityKit'
 import { preferences } from '@kit.ArkData'
 import { hilog } from '@kit.PerformanceAnalysisKit'
 import { BusinessError } from '@kit.BasicServicesKit'
-import { ApiVersionUtil } from '../../utils/ApiVersionUtil'
+import { ApiVersionUtil } from '@ohos/system-utils'
 import { promptAction } from '@kit.ArkUI'
 import { RollWheelCardAddSheet } from './RollWheelCardAddSheet'
 

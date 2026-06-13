@@ -1,4 +1,4 @@
-﻿import { Randoms } from '@ohos/common';
+﻿import { Randoms } from '@ohos/basic-utils';
 import router from '@ohos.router';
 import { CounterComponent, CounterType } from '@kit.ArkUI';
 

@@ -1,8 +1,8 @@
-﻿import { Random } from '@ohos/common'
+﻿import { Random } from '@ohos/basic-utils'
 import router from '@ohos.router';
 import { promptAction } from '@kit.ArkUI';
-import { BreakpointState, BreakpointSystem } from '@ohos/common';
-import { VibratorManager } from '@ohos/vibratorutil';
+import { BreakpointState, BreakpointSystem } from '@ohos/system-utils';
+import { VibratorManager } from '@ohos/system-utils';
 
 class Params {
   type: string

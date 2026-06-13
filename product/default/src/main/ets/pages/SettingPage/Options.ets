@@ -2,8 +2,8 @@
 import { preferences } from '@kit.ArkData'
 import { ConfigurationConstant, common } from '@kit.AbilityKit'
 import { window } from '@kit.ArkUI'
-import { CommonConstants } from '@ohos/common'
-import { VibratorManager } from '@ohos/vibratorutil'
+import { CommonConstants } from '@ohos/basic-utils'
+import { VibratorManager } from '@ohos/system-utils'
 
 const PREF_NAME = CommonConstants.PREFERENCES_FILE_NAME
 const KEY_COLOR_MODE = CommonConstants.PREFERENCES_KEY_COLOR_MODE

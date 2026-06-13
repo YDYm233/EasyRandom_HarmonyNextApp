@@ -5,7 +5,7 @@ import {
   writeRollsToPrefs, saveRollsToPrefs,
   removeRollItem, removeRoll, addRollItem
 } from './RollDataManager'
-import { ColorPickerButton } from '@ohos/common'
+import { ColorPickerButton } from '@ohos/vital-ui'
 
 @Component
 export struct RollDetailEditor {
