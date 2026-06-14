@@ -1,5 +1,6 @@
 import { Random } from '@ohos/basic-utils';
 import WearScreenUtil from '../utils/WearScreenUtil';
+import { VibratorManager } from '@ohos/system-utils';
 
 /**
  * 掷骰子 — 点击随机切换骰子面
@@ -37,6 +38,7 @@ export struct WearRollDices {
     .justifyContent(FlexAlign.Center)
     .alignItems(HorizontalAlign.Center)
     .onClick(() => {
+      VibratorManager.vibrateTap();
       this.face = this.FACES[Random(0, 5, true)];
 
       // 弹跳动画：放大 → 回弹

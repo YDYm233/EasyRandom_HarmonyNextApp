@@ -1,10 +1,7 @@
-// 真心话大冒险页面 - P0 功能
-// 指针旋转方案：屏幕左右分屏，中间指针旋转，停止后弹窗显示结果
-// 参照: docs/wearable-page-impl.md §6
-
 import { Random } from '@ohos/basic-utils';
 import WearScreenUtil from '../utils/WearScreenUtil';
 import { honests, challenges } from '../utils/WearTruthOrDareData';
+import { VibratorManager } from '@ohos/system-utils';
 
 /**
  * 随机文本结果接口
@@ -80,12 +77,13 @@ export struct WearTruthOrDare {
     const targetAngle: number = this.rotateAngle + extraTurns * 360 + randomOffset;
 
     // 使用 animateTo 控制旋转动画
-    animateTo({
-      duration: 1000,
-      curve: Curve.Ease,
-      onFinish: () => {
-        this.onSpinFinish(targetAngle);
-      }
+        animateTo({
+          duration: 1000,
+          curve: Curve.Ease,
+          onFinish: () => {
+            this.onSpinFinish(targetAngle);
+            VibratorManager.vibrateResult();
+          }
     }, () => {
       this.rotateAngle = targetAngle;
     });

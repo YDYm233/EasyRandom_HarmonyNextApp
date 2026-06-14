@@ -1,5 +1,6 @@
 import { Random } from '@ohos/basic-utils'
 import WearScreenUtil from '../utils/WearScreenUtil'
+import { VibratorManager } from '@ohos/system-utils';
 
 /**
  * 手表端祝福木鱼 — 结合 BlessingMuyu.ets (4段动画) + BlessingMuyuCardDisplay (随机色)
@@ -100,6 +101,7 @@ export struct WearBlessingMuyu {
    * 敲击木鱼 — 4 阶段动画（参照 BlessingMuyu 页面）+ 随机色（参照 CardDisplay）
    */
   private onTapMuyu(): void {
+    VibratorManager.vibrateMuyu();
     const ver = ++this.tapVersion
 
     // ── 木鱼缩放回弹动效 ──

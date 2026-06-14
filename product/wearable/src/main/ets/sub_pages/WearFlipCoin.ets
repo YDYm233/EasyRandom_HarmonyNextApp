@@ -1,5 +1,6 @@
 import { Random } from '@ohos/basic-utils';
 import WearScreenUtil from '../utils/WearScreenUtil';
+import { VibratorManager } from '@ohos/system-utils';
 
 /**
  * 抛硬币 — 点击触发纵向翻转动画，随机显示正/反
@@ -78,6 +79,7 @@ export struct WearFlipCoin {
       }
 
       // 执行翻转动画
+      VibratorManager.vibrateTap();
       this.performFlip(flipCount, finalResult);
     })
   }
@@ -85,11 +87,12 @@ export struct WearFlipCoin {
   // 执行翻转动画
   private performFlip(remainingFlips: number, finalResult: boolean): void {
     if (remainingFlips <= 0) {
-      // 翻转结束，确保显示最终结果
-      this.showFront = finalResult;
-      this.scaleY = 1;
-      this.isFlipping = false;
-      return;
+        // 翻转结束，确保显示最终结果
+        this.showFront = finalResult;
+        this.scaleY = 1;
+        this.isFlipping = false;
+        VibratorManager.vibrateResult();
+        return;
     }
 
     // 第一阶段：缩小到 0（翻转一半）

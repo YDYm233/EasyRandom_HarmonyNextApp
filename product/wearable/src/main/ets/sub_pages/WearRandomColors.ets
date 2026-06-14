@@ -1,5 +1,6 @@
 import { Random, ExColor } from '@ohos/basic-utils';
 import WearScreenUtil from '../utils/WearScreenUtil';
+import { VibratorManager } from '@ohos/system-utils';
 
 /**
  * 随机颜色 — 点击生成随机颜色并显示颜色代码
@@ -26,6 +27,7 @@ export struct WearRandomColors {
     .alignItems(HorizontalAlign.Center)
     .animation({ duration: 400, curve: Curve.Ease })
     .onClick(() => {
+      VibratorManager.vibrateTap();
       this.generateRandomColor();
     })
   }

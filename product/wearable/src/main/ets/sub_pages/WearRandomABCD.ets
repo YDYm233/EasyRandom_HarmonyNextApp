@@ -1,5 +1,6 @@
 import { Random } from '@ohos/basic-utils';
 import WearScreenUtil from '../utils/WearScreenUtil';
+import { VibratorManager } from '@ohos/system-utils';
 
 /**
  * ABCD 随机选择 — 2x2 四象限 + 旋转指针
@@ -126,6 +127,7 @@ export struct WearRandomABCD {
     .justifyContent(FlexAlign.Center)
     .alignItems(HorizontalAlign.Center)
     .onClick(() => {
+      VibratorManager.vibrateTap();
       // 重置所有颜色
       this.colors[0] = $r("app.color.Comp_Bg4");
       this.colors[1] = $r("app.color.Comp_Bg4");

@@ -1,6 +1,7 @@
 import { Random } from '@ohos/basic-utils';
 import WearScreenUtil from '../utils/WearScreenUtil';
 import { promptAction } from '@kit.ArkUI';
+import { VibratorManager } from '@ohos/system-utils';
 
 /**
  * 八卦占卜 — 点击触发旋转动画，随机指向一个卦象
@@ -50,6 +51,7 @@ export struct WearDevineBaGua {
     .alignItems(HorizontalAlign.Center)
     .onClick(() => {
       if (this.isRolling) return;
+      VibratorManager.vibrateTap();
       this.startDivine();
     })
   }

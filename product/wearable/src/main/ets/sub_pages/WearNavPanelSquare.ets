@@ -1,5 +1,4 @@
-
-// 主题色
+import { VibratorManager } from '@ohos/system-utils'
 const BRAND_BLUE: number = 0xFF007AFF
 const CARD_BG: number = 0x1AFFFFFF
 const SUB_BG: number = 0x14FFFFFF
@@ -26,7 +25,11 @@ const QUICK_ENTRIES: QuickEntry[] = [
 export struct WearNavPanelSquare {
   onNavigate: (index: number) => void = () => {}
 
-  @StorageProp('hapticEnabled') hapticEnabled: boolean = true
+  @StorageProp('hapticEnabled') hapticEnabled: boolean = false
+
+  aboutToAppear(): void {
+    VibratorManager.setEnabled(this.hapticEnabled)
+  }
 
   @Builder
   sectionHeader(title: string) {
@@ -101,6 +104,7 @@ export struct WearNavPanelSquare {
               .justifyContent(FlexAlign.Center)
               .alignItems(HorizontalAlign.Center)
               .onClick(() => {
+                VibratorManager.vibrateTap()
                 this.onNavigate(entry.targetIndex)
               })
             }, (entry: QuickEntry) => entry.label)
@@ -125,6 +129,8 @@ export struct WearNavPanelSquare {
               .selectedColor(BRAND_BLUE)
               .onChange((isOn: boolean) => {
                 this.hapticEnabled = isOn
+                VibratorManager.setEnabled(isOn)
+                VibratorManager.vibrateTap()
               })
           }
           .justifyContent(FlexAlign.SpaceBetween)

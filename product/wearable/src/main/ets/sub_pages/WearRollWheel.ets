@@ -9,6 +9,7 @@ import { ArcSwiper, ArcSwiperController } from '@kit.ArkUI';
 import { Random } from '@ohos/basic-utils';
 import WearScreenUtil from '../utils/WearScreenUtil';
 import { Roll, RollItem, defaultRolls } from '../utils/WearRollDataManager';
+import { VibratorManager } from '@ohos/system-utils';
 
 @Component
 export struct WearRollWheel {
@@ -124,6 +125,7 @@ export struct WearRollWheel {
     .justifyContent(FlexAlign.Center)
     .alignItems(HorizontalAlign.Center)
     .onClick(() => {
+      VibratorManager.vibrateTap();
       this.spinWheel(roll, index);
     })
   }
