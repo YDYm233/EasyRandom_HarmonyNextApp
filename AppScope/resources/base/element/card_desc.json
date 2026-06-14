@@ -114,6 +114,24 @@
     {
       "name": "ABCDCard_desc",
       "value": "遇事不决，量子力学"
+    },
+    {
+      "name": "TruthOrDareCard_display_name",
+      "value": "真心话大冒险",
+      "comment": "功能卡片名 - 真心话大冒险",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
+    },
+    {
+      "name": "TruthOrDareCard_desc",
+      "value": "和朋友一起玩",
+      "comment": "功能卡片描述 - 真心话大冒险",
+      "attr": {
+        "translatable": true,
+        "priority": "LT"
+      }
     }
   ]
 }

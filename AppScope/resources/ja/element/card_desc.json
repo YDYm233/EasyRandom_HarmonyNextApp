@@ -56,6 +56,14 @@
     {
       "name": "ABCDCard_desc",
       "value": "迷ったら量子力学"
+    },
+    {
+      "name": "TruthOrDareCard_display_name",
+      "value": "真実か挑戦か"
+    },
+    {
+      "name": "TruthOrDareCard_desc",
+      "value": "真実か挑戦か？"
     }
   ]
 }

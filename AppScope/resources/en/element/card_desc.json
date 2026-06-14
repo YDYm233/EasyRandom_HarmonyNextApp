@@ -57,6 +57,14 @@
     {
       "name": "ABCDCard_desc",
       "value": "When in doubt, quantum mechanics"
+    },
+    {
+      "name": "TruthOrDareCard_display_name",
+      "value": "Truth or Dare"
+    },
+    {
+      "name": "TruthOrDareCard_desc",
+      "value": "Truth or dare?"
     }
   ]
 }

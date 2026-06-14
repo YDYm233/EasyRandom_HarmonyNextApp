@@ -5,6 +5,7 @@ import {FlipCoinCardDisplay} from '../form_display/FlipCoinCardDisplay'
 import {RandomColorsCardDisplay} from '../form_display/RandomColorsCardDisplay'
 import {RollDiceCardDisplay} from '../form_display/RollDiceCardDisplay'
 import {RollWheelCardDisplay} from '../form_display/RollWheelCardDisplay'
+import {TruthOrDareCardDisplay} from '../form_display/TruthOrDareCardDisplay'
 
 import { AddFormMenuItem, promptAction } from '@kit.ArkUI'
 import { formBindingData } from '@kit.FormKit'
@@ -289,6 +290,39 @@ struct AllasOne {
             }
             .aspectRatio(10/12)
             .bindContextMenu(this.AddFormMenu('ABCDCard', 'card_ABCD', 2), ResponseType.LongPress, {
+              placement: Placement.TopLeft
+            })
+
+            //真心话大冒险
+            GridCol({
+              span: 2,
+              offset: 0
+            }) {
+              Column() {
+                TruthOrDareCardDisplay()
+                  .width('100%')
+                  .aspectRatio(1)
+                  .backgroundColor($r("app.color.Comp_Bg1"))
+                  .borderRadius(this.cardRadius)
+                  .clip(true)
+                  .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+                  .id('card_truthOrDare')
+                Row() {
+                  Text($r("app.string.TruthOrDareCard_display_name"))
+                    .textAlign(TextAlign.Center)
+                    .fontSize(16)
+                    .fontColor($r("app.color.FontIcon_Fore1"))
+                }
+                .width('100%')
+                .aspectRatio(5)
+                .justifyContent(FlexAlign.Center)
+                .alignItems(VerticalAlign.Center)
+              }
+              .width('100%')
+              .height('100%')
+            }
+            .aspectRatio(10/12)
+            .bindContextMenu(this.AddFormMenu('TruthOrDareCard', 'card_truthOrDare', 2), ResponseType.LongPress, {
               placement: Placement.TopLeft
             })
 
