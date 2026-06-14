@@ -2,6 +2,7 @@
 import { Random } from '@ohos/basic-utils'
 import { hilog } from '@kit.PerformanceAnalysisKit'
 import router from '@ohos.router';
+import { VibratorManager } from '@ohos/system-utils'
 
 class Params {
   type: string
@@ -193,6 +194,8 @@ struct RollBlessingsBox_V2 {
    * 2. 写入 Preferences（持久化）
    */
   private onMuyuClick(): void {
+    VibratorManager.vibrateMuyu()
+
     animateTo({ duration: 80, curve: Curve.Sharp }, () => {
       this.muyuScale = 0.88
     })
