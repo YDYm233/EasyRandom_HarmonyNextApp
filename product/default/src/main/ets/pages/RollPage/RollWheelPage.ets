@@ -1,7 +1,7 @@
 ﻿import { BreakpointState, BreakpointSystem } from '@ohos/system-utils';
 import { Random } from '@ohos/basic-utils';
 import{RollWheel}from './RollWheel'
-import { Roll, defaultRolls, initRollsData } from './RollDataManager';
+import { Roll, RollItem, defaultRolls, initRollsData } from './RollDataManager';
 import { RollEditSheet } from './RollEditor';
 import { VibratorManager } from '@ohos/system-utils';
 import { formProvider, formInfo } from '@kit.FormKit'
@@ -58,16 +58,28 @@ struct RollWheelsShow {
   @State isSheetShow: boolean = false
   @State dataVersion: number = 0
   @State sheetType: 'edit' | 'cardAdd' = 'edit' // 弹出层类型
+  @State showResults: string[] = Array(defaultRolls.length).fill('') // 存储每个转盘的结果
+  @State hasInteracted: boolean = false // 是否已交互过（用于显示"点击以开始"提示）
   private swiperController: SwiperController = new SwiperController()
 
   aboutToAppear() {
     if (this.dataList.length > 0) {
       this.title = this.dataList[0].rollName
+      // showResults数组已在定义时用defaultRolls.length初始化
+      // 如果dataList与defaultRolls长度不同，onDataListChange会处理
     }
   }
 
   onDataListChange() {
     this.dataVersion++
+    // 更新showResults数组，保持与dataList长度一致
+    const newResults = new Array<string>(this.dataList.length).fill('')
+    // 保留已有的结果（如果索引有效）
+    for (let i: number = 0; i < Math.min(this.showResults.length, this.dataList.length); i++) {
+      newResults[i] = this.showResults[i]
+    }
+    this.showResults = newResults
+    
     if (this.swiperIndex < this.dataList.length) {
       this.title = this.dataList[this.swiperIndex].rollName
     } else if (this.dataList.length > 0) {
@@ -76,6 +88,63 @@ struct RollWheelsShow {
     } else {
       this.title = ''
     }
+  }
+
+  // 计算转盘结果（参考手表端 WearRollWheel.calculateResult）
+  private calculateResult(finalAngle: number): void {
+    const currentIndex = this.swiperIndex
+    const roll = this.dataList[currentIndex]
+    if (!roll || !roll.rollItems || roll.rollItems.length === 0) {
+      return
+    }
+
+    const items = roll.rollItems
+    const totalWeight = items.reduce((sum: number, item: RollItem) => sum + item.weight, 0)
+    if (totalWeight <= 0) {
+      return
+    }
+
+    // 指针在 12 点钟方向，canvas 中对应 -90°（或 270°）
+    // 转盘旋转 finalAngle 度，指针等效于反向移动
+    let pointerDeg = (-90 - finalAngle) % 360
+    if (pointerDeg < 0) {
+      pointerDeg += 360
+    }
+
+    // 扇区边界（与 RollWheel 绘制逻辑保持一致）
+    // 第一个扇区起始角 = -w0/totalW * 180 + 90
+    let sectorStartDeg = -(items[0].weight / totalWeight) * 180 + 90
+    let hitIndex = 0
+
+    for (let i: number = 0; i < items.length; i++) {
+      const sectorSizeDeg = (items[i].weight / totalWeight) * 360
+      const sectorEndDeg = sectorStartDeg + sectorSizeDeg
+
+      // 归一化到 [0, 360)
+      const startNorm = ((sectorStartDeg % 360) + 360) % 360
+      const endNorm = ((sectorEndDeg % 360) + 360) % 360
+
+      if (startNorm <= endNorm) {
+        // 扇区不跨越 0°
+        if (pointerDeg >= startNorm && pointerDeg < endNorm) {
+          hitIndex = i
+          break
+        }
+      } else {
+        // 扇区跨越 360°/0°
+        if (pointerDeg >= startNorm || pointerDeg < endNorm) {
+          hitIndex = i
+          break
+        }
+      }
+
+      sectorStartDeg = sectorEndDeg
+    }
+
+    // 更新结果
+    const newResults = [...this.showResults]
+    newResults[currentIndex] = `${items[hitIndex].text}`
+    this.showResults = newResults
   }
 
   @Builder
@@ -111,13 +180,43 @@ struct RollWheelsShow {
         .layoutWeight(1)
 
         Row() {
-          Text(this.title)
-            .fontColor($r("app.color.FontIcon_Fore1"))
-            .fontWeight(800)
-            .height('100%')
-            .aspectRatio(3)
-            .textAlign(TextAlign.Center)
+          if (this.showResults[this.swiperIndex] && this.showResults[this.swiperIndex].length > 0) {
+            // 状态3：已出结果
+            Text(this.showResults[this.swiperIndex])
+              .fontColor($r("app.color.Brand"))
+              .fontWeight(FontWeight.Bold)
+              .height('100%')
+              .aspectRatio(3)
+              .textAlign(TextAlign.Center)
+          } else if (this.isRoll) {
+            // 状态2：旋转中，显示转盘名称
+            Text(this.dataList.length > 0 && this.swiperIndex < this.dataList.length ? this.dataList[this.swiperIndex].rollName : '')
+              .fontColor(Color.Red)  // 改为红色测试
+              .fontWeight(800)
+              .height('100%')
+              .aspectRatio(3)
+              .textAlign(TextAlign.Center)
+          } else if (!this.hasInteracted) {
+            // 状态1：页面刚加载，未交互过
+            Text('点击以开始')
+              .fontColor(Color.Red)  // 改为红色测试
+              .fontWeight(800)
+              .height('100%')
+              .aspectRatio(3)
+              .textAlign(TextAlign.Center)
+          } else {
+            // 状态1b：已交互过，无结果时显示转盘名称
+            Text(this.dataList.length > 0 && this.swiperIndex < this.dataList.length ? this.dataList[this.swiperIndex].rollName : '')
+              .fontColor(Color.Red)  // 改为红色测试
+              .fontWeight(800)
+              .height('100%')
+              .aspectRatio(3)
+              .textAlign(TextAlign.Center)
+          }
         }
+        .height('100%')
+        .aspectRatio(3)
+        .layoutWeight(8)
         .height('100%')
         .aspectRatio(3)
         .layoutWeight(8)
@@ -188,9 +287,11 @@ struct RollWheelsShow {
       .itemSpace(0)
       .onClick(() => {
         this.showPoint = !this.showPoint;
+        this.hasInteracted = true;
       })
       .onChange((newIndex: number) => {
         this.swiperIndex = newIndex
+        this.hasInteracted = true
         if (newIndex < this.dataList.length) {
           this.title = this.dataList[newIndex].rollName
         }
@@ -199,6 +300,7 @@ struct RollWheelsShow {
         this.duration = 0;
         this.rotateAngle = 0;
       })
+
 
       // 底部控制区
       Row() {
@@ -283,12 +385,25 @@ struct RollWheelsShow {
             VibratorManager.vibrateRoll();
             this.duration = 1600
             this.isRoll = true;
-            this.rotateAngle = Random(0, 360, true) + 360 * 18;
+            this.hasInteracted = true;
+            
+            // 清空当前转盘的结果
+            const currentIndex = this.swiperIndex
+            if (currentIndex >= 0 && currentIndex < this.showResults.length) {
+              const newResults = [...this.showResults]
+              newResults[currentIndex] = ''
+              this.showResults = newResults
+            }
+            
+            const finalAngle = Random(0, 360, true) + 360 * 18;
+            this.rotateAngle = finalAngle;
             setTimeout(() => {
               this.isRoll = false;
               this.duration = 0;
-              this.rotateAngle = this.rotateAngle - 360 * 18
+              this.rotateAngle = finalAngle - 360 * 18
               VibratorManager.vibrateVictory();
+              // 计算并显示结果
+              this.calculateResult(finalAngle);
             }, this.duration);
           })
           .backgroundColor($r("app.color.Brand"))
