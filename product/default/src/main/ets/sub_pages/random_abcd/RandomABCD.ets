@@ -134,7 +134,7 @@ struct ABCD {
             style: BorderStyle.Solid,
             width: 5,
             color: $r("app.color.Comp_Bg2"),
-            radius: 12
+            radius: { topLeft: 12 }
           })
           .clip(true)
           .fontWeight(FontWeight.Bold)
@@ -150,7 +150,7 @@ struct ABCD {
             style: BorderStyle.Solid,
             width: 5,
             color: $r("app.color.Comp_Bg2"),
-            radius: 12
+            radius: { topRight: 12 }
           })
           .clip(true)
           .fontWeight(FontWeight.Bold)
@@ -166,7 +166,7 @@ struct ABCD {
             style: BorderStyle.Solid,
             width: 5,
             color: $r("app.color.Comp_Bg2"),
-            radius: 12
+            radius: { bottomLeft: 12 }
           })
           .clip(true)
           .fontWeight(FontWeight.Bold)
@@ -182,7 +182,7 @@ struct ABCD {
             style: BorderStyle.Solid,
             width: 5,
             color: $r("app.color.Comp_Bg2"),
-            radius: 12
+            radius: { bottomRight: 12 }
           })
           .clip(true)
           .fontWeight(FontWeight.Bold)
