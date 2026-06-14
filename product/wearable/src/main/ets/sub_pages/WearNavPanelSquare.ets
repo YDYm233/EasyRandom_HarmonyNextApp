@@ -62,7 +62,7 @@ export struct WearNavPanelSquare {
       // ── 公告 Section ──
       ListItemGroup({ header: this.sectionHeader('公告') }) {
         ListItem() {
-          Text('测试文本1')
+          Text('公告📢：欢迎体验随易手表端首个版本')
             .fontSize(13)
             .fontColor(TEXT_PRIMARY)
             .width('100%')
@@ -72,7 +72,7 @@ export struct WearNavPanelSquare {
         .borderRadius(14)
 
         ListItem() {
-          Text('测试文本2')
+          Text('版本预告：下阶段将实现主应用与手表端的数据同步功能，支持用户自定义数据加载。')
             .fontSize(13)
             .fontColor(TEXT_PRIMARY)
             .width('100%')
