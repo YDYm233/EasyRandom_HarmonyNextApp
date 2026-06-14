@@ -191,7 +191,7 @@ struct RollWheelsShow {
           } else if (this.isRoll) {
             // 状态2：旋转中，显示转盘名称
             Text(this.dataList.length > 0 && this.swiperIndex < this.dataList.length ? this.dataList[this.swiperIndex].rollName : '')
-              .fontColor(Color.Red)  // 改为红色测试
+              .fontColor($r("app.color.FontIcon_Fore1"))
               .fontWeight(800)
               .height('100%')
               .aspectRatio(3)
@@ -199,7 +199,7 @@ struct RollWheelsShow {
           } else if (!this.hasInteracted) {
             // 状态1：页面刚加载，未交互过
             Text('点击以开始')
-              .fontColor(Color.Red)  // 改为红色测试
+              .fontColor($r("app.color.FontIcon_Fore1"))
               .fontWeight(800)
               .height('100%')
               .aspectRatio(3)
@@ -207,7 +207,7 @@ struct RollWheelsShow {
           } else {
             // 状态1b：已交互过，无结果时显示转盘名称
             Text(this.dataList.length > 0 && this.swiperIndex < this.dataList.length ? this.dataList[this.swiperIndex].rollName : '')
-              .fontColor(Color.Red)  // 改为红色测试
+              .fontColor($r("app.color.FontIcon_Fore1"))
               .fontWeight(800)
               .height('100%')
               .aspectRatio(3)
