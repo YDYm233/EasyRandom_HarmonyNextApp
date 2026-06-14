@@ -1,4 +1,4 @@
-import { ArcList, ArcListItem, LengthMetrics } from '@kit.ArkUI'
+import { ArcList, ArcListItem, LengthMetrics, ArcScrollBar } from '@kit.ArkUI'
 import { VibratorManager } from '@ohos/system-utils'
 import WearScreenUtil from '../utils/WearScreenUtil'
 
@@ -8,6 +8,7 @@ const SUB_BG: number = 0x14FFFFFF
 const TEXT_PRIMARY: number = 0xFFE0E0E0
 const TEXT_SECONDARY: number = 0xFF888888
 const TEXT_SECTION_LABEL: number = 0xFF555555
+const CARD_H: number = 42
 
 interface QuickEntry {
   emoji: string
@@ -26,6 +27,7 @@ export struct WearNavPanelRound {
   onNavigate: (index: number) => void = () => {}
   @StorageProp('hapticEnabled') hapticEnabled: boolean = false
   @State showSupportCode: boolean = false
+  private arcScroller: Scroller = new Scroller()
 
   aboutToAppear(): void {
     VibratorManager.setEnabled(this.hapticEnabled)
@@ -33,186 +35,220 @@ export struct WearNavPanelRound {
 
   build() {
     Stack() {
-      ArcList() {
-        ArcListItem() {
-          Text()
-        }
-        .height(20)
-
-        ArcListItem() {
-          Text('随易手表端')
-            .fontSize(18)
-            .fontColor(TEXT_PRIMARY)
-            .fontWeight(FontWeight.Bold)
-            .textAlign(TextAlign.Center)
-            .width('100%')
-        }
-
-        ArcListItem() {
-          Text('公告')
-            .fontSize(11)
-            .fontColor(TEXT_SECTION_LABEL)
-            .fontWeight(FontWeight.Medium)
-            .textAlign(TextAlign.Center)
-            .width('100%')
-        }
-
-        ArcListItem() {
-          Text('公告📢：欢迎体验随易手表端首个版本')
-            .fontSize(12)
-            .fontColor(TEXT_PRIMARY)
-            .width('100%')
-            .padding({ left: WearScreenUtil.safePadding, right: WearScreenUtil.safePadding, top: 10, bottom: 10 })
-        }
-        .borderRadius(22)
-        .backgroundColor(CARD_BG)
-
-        ArcListItem() {
-          Text('版本预告：下阶段将实现数据同步功能')
-            .fontSize(12)
-            .fontColor(TEXT_SECONDARY)
-            .width('100%')
-            .padding({ left: WearScreenUtil.safePadding, right: WearScreenUtil.safePadding, top: 10, bottom: 10 })
-        }
-        .borderRadius(22)
-        .backgroundColor(CARD_BG)
-
-        ArcListItem() {
-          Text('快捷跳转')
-            .fontSize(11)
-            .fontColor(TEXT_SECTION_LABEL)
-            .fontWeight(FontWeight.Medium)
-            .textAlign(TextAlign.Center)
-            .width('100%')
-        }
-
-        ArcListItem() {
-          Row({ space: 6 }) {
-            ForEach(QUICK_ENTRIES, (entry: QuickEntry) => {
-              Column() {
-                Text(entry.emoji)
-                  .fontSize(16)
-                Text(entry.label)
-                  .fontSize(9)
-                  .fontColor(TEXT_PRIMARY)
-                  .margin({ top: 2 })
-              }
-              .layoutWeight(1)
-              .height(28)
-              .backgroundColor(SUB_BG)
-              .borderRadius(12)
-              .justifyContent(FlexAlign.Center)
-              .alignItems(HorizontalAlign.Center)
-              .onClick(() => {
-                VibratorManager.vibrateTap()
-                this.onNavigate(entry.targetIndex)
-              })
-            }, (entry: QuickEntry) => entry.label)
+      Stack() {
+        ArcList({ scroller: this.arcScroller }) {
+          ArcListItem() {
+            Text()
           }
-          .width('100%')
-          .padding({ left: WearScreenUtil.safePadding, right: WearScreenUtil.safePadding, top: 5, bottom: 5 })
-        }
-        .borderRadius(22)
-        .backgroundColor(CARD_BG)
+          .height(20)
 
-        ArcListItem() {
-          Text('设置')
-            .fontSize(11)
-            .fontColor(TEXT_SECTION_LABEL)
-            .fontWeight(FontWeight.Medium)
-            .textAlign(TextAlign.Center)
-            .width('100%')
-        }
-
-        ArcListItem() {
-          Row() {
-            Text('震动反馈')
-              .fontSize(12)
+          ArcListItem() {
+            Text('随易手表端')
+              .fontSize(18)
               .fontColor(TEXT_PRIMARY)
-            Toggle({ type: ToggleType.Switch, isOn: this.hapticEnabled })
-              .selectedColor(BRAND_BLUE)
-              .onChange((isOn: boolean) => {
-                this.hapticEnabled = isOn
-                VibratorManager.setEnabled(isOn)
-                VibratorManager.vibrateTap()
-              })
+              .fontWeight(FontWeight.Bold)
+              .textAlign(TextAlign.Center)
+              .width('100%')
           }
-          .justifyContent(FlexAlign.SpaceBetween)
-          .width('100%')
-          .padding({ left: WearScreenUtil.safePadding, right: WearScreenUtil.safePadding, top: 5, bottom: 5 })
-        }
-        .borderRadius(22)
-        .backgroundColor(CARD_BG)
 
-        ArcListItem() {
-          Text('关于')
-            .fontSize(11)
-            .fontColor(TEXT_SECTION_LABEL)
-            .fontWeight(FontWeight.Medium)
-            .textAlign(TextAlign.Center)
-            .width('100%')
-        }
+          ArcListItem() {
+            Text('公告')
+              .fontSize(11)
+              .fontColor(TEXT_SECTION_LABEL)
+              .fontWeight(FontWeight.Medium)
+              .textAlign(TextAlign.Center)
+              .width('100%')
+          }
 
-        ArcListItem() {
-          Row({ space: 6 }) {
-            Image($r('app.media.app_icon_wear'))
-              .width(22)
-              .height(22)
-              .borderRadius(5)
+          ArcListItem() {
             Column() {
-              Text('随易手表端')
+              Text('公告📢：欢迎体验随易手表端首个版本')
+                .fontSize(12)
+                .fontColor(TEXT_PRIMARY)
+                .textAlign(TextAlign.Center)
+                .width('100%')
+            }
+            .width('100%')
+            .height(CARD_H)
+            .justifyContent(FlexAlign.Center)
+            .padding({ left: WearScreenUtil.safePadding, right: WearScreenUtil.safePadding })
+          }
+          .borderRadius(22)
+          .backgroundColor(CARD_BG)
+
+          ArcListItem() {
+            Column() {
+              Text('版本预告：下阶段将实现数据同步功能')
+                .fontSize(12)
+                .fontColor(TEXT_SECONDARY)
+                .textAlign(TextAlign.Center)
+                .width('100%')
+            }
+            .width('100%')
+            .height(CARD_H)
+            .justifyContent(FlexAlign.Center)
+            .padding({ left: WearScreenUtil.safePadding, right: WearScreenUtil.safePadding })
+          }
+          .borderRadius(22)
+          .backgroundColor(CARD_BG)
+
+          ArcListItem() {
+            Text('快捷跳转')
+              .fontSize(11)
+              .fontColor(TEXT_SECTION_LABEL)
+              .fontWeight(FontWeight.Medium)
+              .textAlign(TextAlign.Center)
+              .width('100%')
+          }
+
+          ArcListItem() {
+            Column() {
+              Row({ space: 6 }) {
+                ForEach(QUICK_ENTRIES, (entry: QuickEntry) => {
+                  Column() {
+                    Text(entry.emoji)
+                      .fontSize(16)
+                    Text(entry.label)
+                      .fontSize(9)
+                      .fontColor(TEXT_PRIMARY)
+                      .margin({ top: 2 })
+                  }
+                  .layoutWeight(1)
+                  .height(28)
+                  .backgroundColor(SUB_BG)
+                  .borderRadius(12)
+                  .justifyContent(FlexAlign.Center)
+                  .alignItems(HorizontalAlign.Center)
+                  .onClick(() => {
+                    VibratorManager.vibrateTap()
+                    this.onNavigate(entry.targetIndex)
+                  })
+                }, (entry: QuickEntry) => entry.label)
+              }
+              .width('100%')
+            }
+            .width('100%')
+            .height(CARD_H)
+            .justifyContent(FlexAlign.Center)
+            .padding({ left: WearScreenUtil.safePadding, right: WearScreenUtil.safePadding })
+          }
+          .borderRadius(22)
+          .backgroundColor(CARD_BG)
+
+          ArcListItem() {
+            Text('设置')
+              .fontSize(11)
+              .fontColor(TEXT_SECTION_LABEL)
+              .fontWeight(FontWeight.Medium)
+              .textAlign(TextAlign.Center)
+              .width('100%')
+          }
+
+          ArcListItem() {
+            Column() {
+              Row() {
+                Text('震动反馈')
+                  .fontSize(12)
+                  .fontColor(TEXT_PRIMARY)
+                Toggle({ type: ToggleType.Switch, isOn: this.hapticEnabled })
+                  .selectedColor(BRAND_BLUE)
+                  .onChange((isOn: boolean) => {
+                    this.hapticEnabled = isOn
+                    VibratorManager.setEnabled(isOn)
+                    VibratorManager.vibrateTap()
+                  })
+              }
+              .justifyContent(FlexAlign.SpaceBetween)
+              .width('100%')
+            }
+            .width('100%')
+            .height(CARD_H)
+            .justifyContent(FlexAlign.Center)
+            .padding({ left: WearScreenUtil.safePadding, right: WearScreenUtil.safePadding })
+          }
+          .borderRadius(22)
+          .backgroundColor(CARD_BG)
+
+          ArcListItem() {
+            Text('关于')
+              .fontSize(11)
+              .fontColor(TEXT_SECTION_LABEL)
+              .fontWeight(FontWeight.Medium)
+              .textAlign(TextAlign.Center)
+              .width('100%')
+          }
+
+          ArcListItem() {
+            Column() {
+              Row({ space: 6 }) {
+                Image($r('app.media.app_icon_wear'))
+                  .width(22)
+                  .height(22)
+                  .borderRadius(5)
+                Column() {
+                  Text('随易手表端')
+                    .fontSize(11)
+                    .fontColor(TEXT_PRIMARY)
+                    .fontWeight(FontWeight.Medium)
+                  Text('V0.0.1')
+                    .fontSize(9)
+                    .fontColor(TEXT_SECONDARY)
+                }
+                .justifyContent(FlexAlign.SpaceBetween)
+                .alignItems(HorizontalAlign.Start)
+                .height(22)
+                .layoutWeight(1)
+              }
+              .width('100%')
+              .alignItems(VerticalAlign.Center)
+            }
+            .width('100%')
+            .height(CARD_H)
+            .justifyContent(FlexAlign.Center)
+            .padding({ left: WearScreenUtil.safePadding, right: WearScreenUtil.safePadding })
+          }
+          .borderRadius(22)
+          .backgroundColor(CARD_BG)
+
+          ArcListItem() {
+            Column() {
+              Text('作者 闫东阳')
                 .fontSize(11)
                 .fontColor(TEXT_PRIMARY)
-                .fontWeight(FontWeight.Medium)
-              Text('V0.0.1')
+              Text('支持开发者')
                 .fontSize(9)
-                .fontColor(TEXT_SECONDARY)
+                .fontColor(0xFF00BEFF)
+                .margin({ top: 1 })
             }
-            .justifyContent(FlexAlign.SpaceBetween)
-            .alignItems(HorizontalAlign.Start)
-            .height(22)
-            .layoutWeight(1)
+            .alignItems(HorizontalAlign.Center)
+            .width('100%')
+            .height(CARD_H)
+            .justifyContent(FlexAlign.Center)
+            .padding({ left: WearScreenUtil.safePadding, right: WearScreenUtil.safePadding })
           }
-          .width('100%')
-          .alignItems(VerticalAlign.Top)
-          .padding({ left: WearScreenUtil.safePadding, right: WearScreenUtil.safePadding, top: 5, bottom: 5 })
-        }
-        .borderRadius(22)
-        .backgroundColor(CARD_BG)
+          .onClick(() => {
+            VibratorManager.vibrateTap()
+            this.showSupportCode = !this.showSupportCode
+          })
 
-        ArcListItem() {
-          Column() {
-            Text('作者 闫东阳')
-              .fontSize(11)
-              .fontColor(TEXT_PRIMARY)
-            Text('支持开发者')
-              .fontSize(9)
-              .fontColor(0xFF00BEFF)
-              .margin({ top: 1 })
+          ArcListItem() {
+            Text()
           }
-          .alignItems(HorizontalAlign.Center)
-          .width('100%')
-          .padding({ left: WearScreenUtil.safePadding, right: WearScreenUtil.safePadding, top: 5, bottom: 5 })
+          .height(20)
         }
-        .onClick(() => {
-          VibratorManager.vibrateTap()
-          this.showSupportCode = !this.showSupportCode
-        })
+        .width(WearScreenUtil.screenWidth)
+        .height(WearScreenUtil.screenHeight)
+        .borderRadius(WearScreenUtil.screenWidth)
+        .space(LengthMetrics.px(6))
+        .fadingEdge(true)
+        .focusable(true)
+        .focusOnTouch(true)
+        .defaultFocus(true)
+        .scrollBar(BarState.Off)
 
-        ArcListItem() {
-          Text()
-        }
-        .height(20)
+        ArcScrollBar({ scroller: this.arcScroller, state: BarState.Auto })
       }
-      .width(WearScreenUtil.screenWidth)
-      .height(WearScreenUtil.screenHeight)
-      .borderRadius(WearScreenUtil.screenWidth)
-      .space(LengthMetrics.px(6))
-      .fadingEdge(true)
-      .focusable(true)
-      .focusOnTouch(true)
-      .defaultFocus(true)
-      .scrollBar(BarState.Off)
+      .alignContent(Alignment.Start)
 
       if (this.showSupportCode) {
         Column() {
