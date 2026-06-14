@@ -1,6 +1,6 @@
 
 @Component
- export struct AppLinkQR {
+export struct AppLinkQR {
   private appLink: string = 'https://appgallery.huawei.com/app/detail?id=ydy.App.EasyRandom&channelId=SHARE&source=appshare'
 
   build() {
