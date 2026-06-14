@@ -6,10 +6,12 @@ import { PrivacyPolicy } from './PrivacyPolicy';
 import { Illustrate } from './MoreOpt';
 import { CopyRight } from './CopyRight';
 import { AnnouncementPage } from './AnnouncementPage';
+import { VersionHistory } from './VersionHistory';
 import { promptAction } from '@kit.ArkUI';
 import { BreakpointState, BreakpointSystem, ShareManager } from '@ohos/system-utils';
 import type { common } from '@kit.AbilityKit';
 import { resourceManager } from '@kit.LocalizationKit';
+
 
 // ============ 类型定义 ============
 
@@ -95,11 +97,13 @@ class Item {
   title: string
   icon: Resource
   color: Color
+  isSymbol?: boolean = false
 
-  constructor(title: string, icon: Resource, color: Color) {
+  constructor(title: string, icon: Resource, color: Color, isSymbol?: boolean) {
     this.title = title
     this.icon = icon
     this.color = color
+    this.isSymbol = isSymbol || false
   }
 }
 
@@ -114,6 +118,7 @@ let illustrate = new Item('更多信息', $r("app.media.illustrate"), 0xbeff00)
 let addOil = new Item('赞赏我们', $r("app.media.addoil_flower"), 0xffbe00)
 let moreOpt = new Item ('更多操作',$r("app.media.func_more"),0xFFBBEE)
 let announcement = new Item('公告与功能', $r("app.media.illustrate"), 0x00BEFF)
+let versionHistory = new Item('版本更新', $r("sys.symbol.clock_fill"), 0xFF9800, true)
 
 // ============ 主组件 ============
 
@@ -183,56 +188,89 @@ struct Setting {
   @Builder
   itemHead(text: string) {
     Text(text)
-      .fontSize(20)
+      .fontSize(13)
+      .fontWeight(500)
+      .fontColor($r("app.color.FontIcon_Fore2"))
       .width("100%")
-      .padding(10)
-      .fontColor($r("app.color.FontIcon_Fore1"))
+      .padding({ left: 4, top: 8, bottom: 4 })
   }
 
   @Builder
   SettingItem(item: Item) {
     Row() {
+      // 图标容器 - 支持系统图标和普通图片
       Row() {
-        Image(item.icon).fillColor(Color.White).width('70%').margin('15%')
+        if (item.isSymbol) {
+          SymbolGlyph(item.icon)
+            .fontSize(20)
+            .fontColor(Color.White)
+        } else {
+          Image(item.icon)
+            .fillColor(Color.White)
+            .width(20)
+            .height(20)
+        }
       }
-      .aspectRatio(1)
-      .height('60%')
-      .borderRadius('50%')
+      .width(36)
+      .height(36)
+      .borderRadius(18)
       .backgroundColor(item.color)
+      .justifyContent(FlexAlign.Center)
+      .alignItems(VerticalAlign.Center)
 
+      // 标题
       Text(item.title)
-        .width("60%")
-        .height('100%')
         .fontSize(16)
         .fontWeight(500)
-        .textAlign(TextAlign.Start)
-        .margin({ left: 8 })
         .fontColor($r("app.color.FontIcon_Fore1"))
-      Row() {
-        Image($r("app.media.func_next")).width('60%').margin('20%').fillColor($r("app.color.FontIcon_Fore1"))
-      }
-      .aspectRatio(1)
-      .height('60%')
-      .borderRadius('50%')
+        .margin({ left: 12 })
+        .layoutWeight(1)
 
+      // 箭头
+      Image($r("app.media.func_next"))
+        .width(16)
+        .height(16)
+        .fillColor($r("app.color.FontIcon_Fore2"))
     }
     .onClick(() => {
       this.pageInfos.pushPath({ name: item.title })
       console.info(`[SettingPage] 打开页面: ${item.title}`)
     })
-    .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+    .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.95 })
     .width('100%')
-    .height(50)
+    .height(52)
     .borderRadius(12)
-    .padding({ left: 24, right: 24 })
+    .padding({ left: 16, right: 16 })
     .backgroundColor($r("app.color.Comp_Bg1"))
     .justifyContent(FlexAlign.SpaceBetween)
     .alignItems(VerticalAlign.Center)
   }
 
+  @Builder
+  navDestinationBuilder(name: string, params: Object) {
+    if (name === '公告与功能') {
+      AnnouncementPage()
+    } else if (name === '版本更新') {
+      VersionHistory()
+    } else if (name === '开发者团队') {
+      AboutUs()
+    } else if (name === '隐私政策') {
+      PrivacyPolicy()
+    } else if (name === '通用设置') {
+      Options()
+    } else if (name === '更多信息') {
+      Illustrate()
+    } else if (name === '问题反馈') {
+      ContactUs()
+    } else if (name === '版权声明') {
+      CopyRight()
+    }
+  }
+
   build() {
-      Navigation(this.pageInfos) {
-        Column(){
+    Navigation(this.pageInfos) {
+      Column(){
+        // ── 顶部导航栏 ──
         Row() {
           Row() {
             Image($r("app.media.func_back")).height(24).width(24).fillColor($r("app.color.FontIcon_Fore1"))
@@ -265,67 +303,61 @@ struct Setting {
         .alignItems(VerticalAlign.Center)
         .justifyContent(FlexAlign.SpaceBetween)
         .backgroundColor($r("app.color.Comp_Bg1"))
+        .padding({ left: 16, right: 16 })
 
+        // ── 滚动列表 ──
         List({ space: 12 }) {
+          // App 图标 + 名称
           ListItem() {
             Column() {
               Image($r("app.media.app_icon"))
-                .width('40%')
-                .aspectRatio(1)
-                .margin({
-                  left: '30%',
-                  right: '30%',
-                  top: '10%',
-                  bottom: '10%'
-                })
-              Row() {
-                Text(this.appInfoText)
-                  .textAlign(TextAlign.End)
-                  .fontWeight(600)
-                  .fontSize(16)
-                  .fontColor($r("app.color.FontIcon_Fore1"))
-              }
-              .justifyContent(FlexAlign.SpaceAround)
-              .alignItems(VerticalAlign.Center)
-              .margin({
-                bottom: '4%'
-              })
-              .height(30)
-              .width('100%')
+                .width(72)
+                .height(72)
+                .margin({ top: 24, bottom: 12 })
+              Text(this.appInfoText)
+                .fontWeight(600)
+                .fontSize(16)
+                .fontColor($r("app.color.FontIcon_Fore1"))
             }
+            .width('100%')
+            .alignItems(HorizontalAlign.Center)
           }
+          .padding({ bottom: 8 })
 
+          // 关于分组
           ListItemGroup({ header: this.itemHead('关于'), space: 8 }) {
-            ListItem() {
-              this.SettingItem(announcement)
-            }
-            ListItem() {
-              this.SettingItem(aboutUs)
-            }
-            ListItem() {
-              this.SettingItem(privacyPolicy)
-            }
-          }
-          ListItemGroup({ header: this.itemHead('通用'), space: 8 }) {
-            ListItem() {
-              this.SettingItem(options)
-            }
-            ListItem() {
-              this.SettingItem(moreOpt)
-            }
+            ListItem() { this.SettingItem(announcement) }
+            ListItem() { this.SettingItem(versionHistory) }
+            ListItem() { this.SettingItem(aboutUs) }
+            ListItem() { this.SettingItem(privacyPolicy) }
           }
 
-          //列表底部抬高
-          .margin({bottom:120})
+          // 通用分组
+          ListItemGroup({ header: this.itemHead('通用'), space: 8 }) {
+            ListItem() { this.SettingItem(options) }
+            ListItem() { this.SettingItem(moreOpt) }
+          }
         }
-        .padding({
-          left: 12,
-          right: 12,
-          top: 0,
-          bottom: 0
-        })
         .width("100%")
-        .height('100%')
+        .layoutWeight(1)
+        .edgeEffect(EdgeEffect.Spring)
+        .chainAnimation(true)
+        .scrollBar(BarState.Auto)
+        .padding({ left: 12, right: 12 })
+
+        // ── 底部版权 ──
+        Column() {
+          Text('Copyright © 2024 - 2026')
+            .fontSize(11)
+            .fontColor($r("app.color.FontIcon_Fore2"))
+          Text('Develop By 闫东阳💗')
+            .fontSize(11)
+            .fontColor($r("app.color.FontIcon_Fore2"))
+            .margin({ top: 2 })
+        }
+        .width('100%')
+        .alignItems(HorizontalAlign.Center)
+        .padding({ top: 8, bottom: 24 })
       }
       .width('100%')
       .height('100%')
@@ -340,6 +372,7 @@ struct Setting {
     .hideToolBar(true)
     .minContentWidth('420vp')
     .backButtonIcon(this.currentBreakpoint.value=='sm'?$r("app.media.func_back"):null)
+    .navDestination(this.navDestinationBuilder)
   }
 }
 
