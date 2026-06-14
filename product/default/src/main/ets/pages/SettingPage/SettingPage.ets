@@ -198,12 +198,11 @@ struct Setting {
   @Builder
   SettingItem(item: Item) {
     Row() {
-      // 图标容器 - 支持系统图标和普通图片
       Row() {
         if (item.isSymbol) {
           SymbolGlyph(item.icon)
             .fontSize(20)
-            // .fontColor(rgba(255,255,255,1))
+            .fontColor([Color.White])
         } else {
           Image(item.icon)
             .fillColor(Color.White)
@@ -218,7 +217,6 @@ struct Setting {
       .justifyContent(FlexAlign.Center)
       .alignItems(VerticalAlign.Center)
 
-      // 标题
       Text(item.title)
         .fontSize(16)
         .fontWeight(500)
@@ -226,7 +224,6 @@ struct Setting {
         .margin({ left: 12 })
         .layoutWeight(1)
 
-      // 箭头
       Image($r("app.media.func_next"))
         .width(16)
         .height(16)
@@ -239,9 +236,7 @@ struct Setting {
     .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.95 })
     .width('100%')
     .height(52)
-    .borderRadius(12)
     .padding({ left: 16, right: 16 })
-    .backgroundColor($r("app.color.Comp_Bg1"))
     .justifyContent(FlexAlign.SpaceBetween)
     .alignItems(VerticalAlign.Center)
   }
@@ -306,7 +301,7 @@ struct Setting {
         .padding({ left: 16, right: 16 })
 
         // ── 滚动列表 ──
-        List({ space: 12 }) {
+        List({ space: 16 }) {
           // App 图标 + 名称
           ListItem() {
             Column() {
@@ -322,28 +317,39 @@ struct Setting {
             .width('100%')
             .alignItems(HorizontalAlign.Center)
           }
-          .padding({ bottom: 8 })
 
           // 关于分组
-          ListItemGroup({ header: this.itemHead('关于'), space: 8 }) {
+          ListItem() {
+            this.itemHead('关于')
+          }
+          ListItemGroup({ space: 0 }) {
             ListItem() { this.SettingItem(announcement) }
             ListItem() { this.SettingItem(versionHistory) }
             ListItem() { this.SettingItem(aboutUs) }
             ListItem() { this.SettingItem(privacyPolicy) }
           }
+          .backgroundColor($r("app.color.Comp_Bg1"))
+          .borderRadius(16)
+          .divider({ strokeWidth: 0.5, color: $r("app.color.Comp_Bg3"), startMargin: 52, endMargin: 16 })
 
           // 通用分组
-          ListItemGroup({ header: this.itemHead('通用'), space: 8 }) {
+          ListItem() {
+            this.itemHead('通用')
+          }
+          ListItemGroup({ space: 0 }) {
             ListItem() { this.SettingItem(options) }
             ListItem() { this.SettingItem(moreOpt) }
           }
+          .backgroundColor($r("app.color.Comp_Bg1"))
+          .borderRadius(16)
+          .divider({ strokeWidth: 0.5, color: $r("app.color.Comp_Bg3"), startMargin: 52, endMargin: 16 })
         }
         .width("100%")
         .layoutWeight(1)
         .edgeEffect(EdgeEffect.Spring)
         .chainAnimation(true)
         .scrollBar(BarState.Auto)
-        .padding({ left: 12, right: 12 })
+        .padding({ left: 16, right: 16 })
 
         // ── 底部版权 ──
         Column() {
