@@ -19,6 +19,7 @@ struct BlessingMuyuCard {
   @State blessingColor: string = this.COLOR_PRESETS[0]
   @State bubbleScale: number = 1
   @State bubbleTranslateY: number = 0
+  @State muyuScale: number = 1
   @State tapVersion: number = 0
   @State tapCount: number = 0
 
@@ -39,8 +40,18 @@ struct BlessingMuyuCard {
           .width('80%')
           .aspectRatio(1)
           .objectFit(ImageFit.Contain)
+          .scale({ x: this.muyuScale, y: this.muyuScale })
           .onClick(() => {
-            // ── 本地动画 ──
+            // ── 木鱼点击缩放 ──
+            animateTo({ duration: 100, curve: Curve.Sharp, onFinish: () => {
+              animateTo({ duration: 150, curve: Curve.EaseOut }, () => {
+                this.muyuScale = 1.0
+              })
+            }}, () => {
+              this.muyuScale = 0.88
+            })
+
+            // ── 祝福文字动画 ──
             this.tapVersion++
             let version = this.tapVersion
             let idx = Random(0, this.BLESSINGS.length - 1, true)

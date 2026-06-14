@@ -141,12 +141,16 @@ export struct ABCDCard {
           const normAngle = this.angle % 360
           if (normAngle < 90) {
             this.colors[1] = $r("app.color.Brand")
+            this.fontColors[1] = $r("app.color.FontIcon_Back1")
           } else if (normAngle < 180) {
             this.colors[3] = $r("app.color.Brand")
+            this.fontColors[3] = $r("app.color.FontIcon_Back1")
           } else if (normAngle < 270) {
             this.colors[2] = $r("app.color.Brand")
+            this.fontColors[2] = $r("app.color.FontIcon_Back1")
           } else {
             this.colors[0] = $r("app.color.Brand")
+            this.fontColors[0] = $r("app.color.FontIcon_Back1")
           }
         }
       }, () => {

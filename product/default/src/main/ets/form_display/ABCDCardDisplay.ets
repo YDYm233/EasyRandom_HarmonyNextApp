@@ -2,16 +2,17 @@
 import { DEFAULT } from '@ohos/hypium'
 
 /**
- * ABCD 随机选择卡片展示 — 2x2 四象限 + 旋转指针
+ * ABCD 随机选择卡片 — 2x2 四象限 + 旋转指针
  * 优化UI细节，参考wearable版本
  */
+
 @Component
 export struct ABCDCardDisplay {
   @State angle: number = 30
   @State duration: number = 800
   @State colors: Resource[] = [
     $r("app.color.Comp_Bg4"),
-    $r("app.color.Comp_Bg4"), 
+    $r("app.color.Comp_Bg4"),
     $r("app.color.Comp_Bg4"),
     $r("app.color.Comp_Bg4")
   ]
@@ -39,9 +40,9 @@ export struct ABCDCardDisplay {
             .textAlign(TextAlign.Center)
             .border({
               style: BorderStyle.Solid,
-              width: 5,
+              width: 4,
               color: $r("app.color.Comp_Bg2"),
-              radius: { topLeft: 12 }
+              radius: { topLeft: $r('sys.float.ohos_id_corner_radius_card') }
             })
             .clip(true)
             .position({ x: 0, y: 0 })
@@ -57,9 +58,9 @@ export struct ABCDCardDisplay {
             .textAlign(TextAlign.Center)
             .border({
               style: BorderStyle.Solid,
-              width: 5,
+              width: 4,
               color: $r("app.color.Comp_Bg2"),
-              radius: { topRight: 12 }
+              radius: { topRight: $r('sys.float.ohos_id_corner_radius_card') }
             })
             .clip(true)
             .position({ x: '50%', y: 0 })
@@ -75,9 +76,9 @@ export struct ABCDCardDisplay {
             .textAlign(TextAlign.Center)
             .border({
               style: BorderStyle.Solid,
-              width: 5,
+              width: 4,
               color: $r("app.color.Comp_Bg2"),
-              radius: { bottomLeft: 12 }
+              radius: { bottomLeft: $r('sys.float.ohos_id_corner_radius_card') }
             })
             .clip(true)
             .position({ x: 0, y: '50%' })
@@ -93,9 +94,9 @@ export struct ABCDCardDisplay {
             .textAlign(TextAlign.Center)
             .border({
               style: BorderStyle.Solid,
-              width: 5,
+              width: 4,
               color: $r("app.color.Comp_Bg2"),
-              radius: { bottomRight: 12 }
+              radius: { bottomRight: $r('sys.float.ohos_id_corner_radius_card') }
             })
             .clip(true)
             .position({ x: '50%', y: '50%' })
@@ -104,7 +105,7 @@ export struct ABCDCardDisplay {
         .height('100%')
 
         // 旋转指针（居中显示）
-        Image($r("app.media.needle"))
+        Image($r("app.media.pointer_m"))
           .width('60%')
           .aspectRatio(1)
           .fillColor($r("app.color.FontIcon_Fore2"))
@@ -119,6 +120,8 @@ export struct ABCDCardDisplay {
     .height('100%')
     .justifyContent(FlexAlign.Center)
     .alignItems(HorizontalAlign.Center)
+    .backgroundColor($r("app.color.Comp_Bg2"))
+    .padding(4)
     .onClick(() => {
       // 重置所有颜色
       this.colors[0] = $r("app.color.Comp_Bg4")
@@ -130,31 +133,32 @@ export struct ABCDCardDisplay {
       this.fontColors[2] = $r("app.color.FontIcon_Fore1")
       this.fontColors[3] = $r("app.color.FontIcon_Fore1")
 
-      // 旋转指针
-      this.angle += Random(1, 360, true) + 360 * 3
-      if (this.angle > 36000000) {
-        this.angle = Random(1, 360, true) + 360 * 3
-      }
-
-      // 延迟高亮结果
+      // 旋转指针，动画结束后高亮结果
       animateTo({
-        duration: 1,
-        iterations: 1,
-        curve: Curve.EaseIn,
-        delay: 1000
+        duration: this.duration,
+        curve: Curve.Ease,
+        onFinish: () => {
+          const normAngle = this.angle % 360
+          if (normAngle < 90) {
+            this.colors[1] = $r("app.color.Brand")
+            this.fontColors[1] = $r("app.color.FontIcon_Back1")
+          } else if (normAngle < 180) {
+            this.colors[3] = $r("app.color.Brand")
+            this.fontColors[3] = $r("app.color.FontIcon_Back1")
+          } else if (normAngle < 270) {
+            this.colors[2] = $r("app.color.Brand")
+            this.fontColors[2] = $r("app.color.FontIcon_Back1")
+          } else {
+            this.colors[0] = $r("app.color.Brand")
+            this.fontColors[0] = $r("app.color.FontIcon_Back1")
+          }
+        }
       }, () => {
-        const normAngle = this.angle % 360
-        if (normAngle < 90) {
-          this.colors[1] = $r("app.color.Brand") // B
-        } else if (normAngle < 180) {
-          this.colors[3] = $r("app.color.Brand") // D
-        } else if (normAngle < 270) {
-          this.colors[2] = $r("app.color.Brand") // C
-        } else {
-          this.colors[0] = $r("app.color.Brand") // A
+        this.angle += Random(1, 360, true) + 360 * 3
+        if (this.angle > 36000000) {
+          this.angle = Random(1, 360, true) + 360 * 3
         }
       })
     })
   }
 }
-// export default ABCDCard

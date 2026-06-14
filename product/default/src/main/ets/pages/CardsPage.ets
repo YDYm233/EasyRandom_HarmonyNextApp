@@ -16,7 +16,7 @@ const MODULE_NAME = 'default'
 @Entry
 @Component
 struct AllasOne {
-  private readonly cardRadius = 24
+  private readonly cardRadius = $r("sys.float.ohos_id_corner_radius_card")
   @StorageLink('cardAddedToDesktop') cardAddedToDesktop: boolean = false
 
   @Builder AddFormMenu(formName: string, compId: string, dim: number) {

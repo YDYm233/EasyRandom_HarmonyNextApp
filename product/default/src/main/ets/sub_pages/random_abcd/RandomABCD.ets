@@ -118,8 +118,9 @@ struct ABCD {
   @State angle: number = 30
   @State duration: number = 2200
   @State colors: Resource[] =
-    [$r("app.color.view_bgc_3"), $r("app.color.view_bgc_3"), $r("app.color.view_bgc_3"), $r("app.color.view_bgc_3")]
-  @State fontColors: Color[] = [0x333333, 0x333333, 0x333333, 0x333333]
+    [$r("app.color.Comp_Bg4"), $r("app.color.Comp_Bg4"), $r("app.color.Comp_Bg4"), $r("app.color.Comp_Bg4")]
+  @State fontColors: Resource[] =
+    [$r("app.color.FontIcon_Fore1"), $r("app.color.FontIcon_Fore1"), $r("app.color.FontIcon_Fore1"), $r("app.color.FontIcon_Fore1")]
 
   build() {
     Column() {
@@ -192,8 +193,7 @@ struct ABCD {
           .width('60%')
           .aspectRatio(1)
           .position({ left: '20%', top: '20%' })
-          .fillColor($r("app.color.view_bgc_1"))
-          //.backgroundColor($r("app.color.view_bgc_2"))
+          .fillColor($r("app.color.FontIcon_Fore2"))
           .rotate({ angle: this.angle })
           .animation({ duration: this.duration, curve: Curve.Ease })
       }
@@ -211,14 +211,14 @@ struct ABCD {
           .backgroundColor($r('app.color.brand'))
           .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .onClick(() => {
-            this.colors[0] = $r("app.color.view_bgc_3")
-            this.colors[1] = $r("app.color.view_bgc_3")
-            this.colors[2] = $r("app.color.view_bgc_3")
-            this.colors[3] = $r("app.color.view_bgc_3")
-            this.fontColors[0] = 0x333333;
-            this.fontColors[1] = 0x333333;
-            this.fontColors[2] = 0x333333;
-            this.fontColors[3] = 0x333333;
+            this.colors[0] = $r("app.color.Comp_Bg4")
+            this.colors[1] = $r("app.color.Comp_Bg4")
+            this.colors[2] = $r("app.color.Comp_Bg4")
+            this.colors[3] = $r("app.color.Comp_Bg4")
+            this.fontColors[0] = $r("app.color.FontIcon_Fore1");
+            this.fontColors[1] = $r("app.color.FontIcon_Fore1");
+            this.fontColors[2] = $r("app.color.FontIcon_Fore1");
+            this.fontColors[3] = $r("app.color.FontIcon_Fore1");
             this.angle += Random(1, 360, true) + 360 * 3;
             if (this.angle > 36000000) {
               this.angle = Random(1, 360, true) + 360 * 3;
@@ -226,16 +226,16 @@ struct ABCD {
             setTimeout(() => {
               if (this.angle % 360 < 90) {
                 this.colors[1] = $r("app.color.Brand")
-                this.fontColors[1] = 0xffffff;
+                this.fontColors[1] = $r("app.color.FontIcon_Back1");
               } else if (this.angle % 360 > 90 && this.angle % 360 < 180) {
                 this.colors[3] = $r("app.color.Brand")
-                this.fontColors[3] = 0xffffff;
+                this.fontColors[3] = $r("app.color.FontIcon_Back1");
               } else if (this.angle % 360 > 180 && this.angle % 360 < 270) {
                 this.colors[2] = $r("app.color.Brand")
-                this.fontColors[2] = 0xffffff;
+                this.fontColors[2] = $r("app.color.FontIcon_Back1");
               } else {
                 this.colors[0] = $r("app.color.Brand")
-                this.fontColors[0] = 0xffffff;
+                this.fontColors[0] = $r("app.color.FontIcon_Back1");
               }
             }, this.duration)
 

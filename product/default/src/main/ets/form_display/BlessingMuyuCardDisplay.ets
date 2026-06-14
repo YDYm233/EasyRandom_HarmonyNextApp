@@ -1,9 +1,5 @@
 ﻿import { Random } from '@ohos/basic-utils'
-import { preferences } from '@kit.ArkData'
-import { hilog } from '@kit.PerformanceAnalysisKit'
 
-const PREF_NAME: string = 'blessing_muyu'
-const KEY_CLICK_COUNT: string = 'click_count'
 
 @Component
 export struct BlessingMuyuCardDisplay {
@@ -23,23 +19,9 @@ export struct BlessingMuyuCardDisplay {
   @State blessingColor: string = this.COLOR_PRESETS[0]
   @State bubbleScale: number = 1
   @State bubbleTranslateY: number = 0
+  @State muyuScale: number = 1
   @State tapVersion: number = 0
   @State tapCount: number = 0
-  private pref?: preferences.Preferences
-  private appCtx?: Context
-
-  aboutToAppear(): void {
-    try {
-      this.appCtx = getContext(this).getApplicationContext()
-      this.pref = preferences.getPreferencesSync(this.appCtx, { name: PREF_NAME })
-      const saved = this.pref.getSync(KEY_CLICK_COUNT, 0) as number
-      if (saved > this.tapCount) {
-        this.tapCount = saved
-      }
-    } catch (_e) {
-      // fallback
-    }
-  }
 
   build() {
     Stack() {
@@ -50,7 +32,7 @@ export struct BlessingMuyuCardDisplay {
           .fontColor(this.blessingColor)
           .scale({ x: this.bubbleScale, y: this.bubbleScale })
           .translate({ y: this.bubbleTranslateY })
-          // .shadow({ radius: 4, color: '#40000000', offsetX: 0, offsetY: 2 })
+        // .shadow({ radius: 4, color: '#40000000', offsetX: 0, offsetY: 2 })
 
         Blank()
 
@@ -58,8 +40,18 @@ export struct BlessingMuyuCardDisplay {
           .width('80%')
           .aspectRatio(1)
           .objectFit(ImageFit.Contain)
+          .scale({ x: this.muyuScale, y: this.muyuScale })
           .onClick(() => {
-            // ── 本地动画 ──
+            // ── 木鱼点击缩放 ──
+            animateTo({ duration: 100, curve: Curve.Sharp, onFinish: () => {
+              animateTo({ duration: 150, curve: Curve.EaseOut }, () => {
+                this.muyuScale = 1.0
+              })
+            }}, () => {
+              this.muyuScale = 0.88
+            })
+
+            // ── 祝福文字动画 ──
             this.tapVersion++
             let version = this.tapVersion
             let idx = Random(0, this.BLESSINGS.length - 1, true)
@@ -79,17 +71,13 @@ export struct BlessingMuyuCardDisplay {
               this.bubbleTranslateY = -2
             })
 
-            // ── 计数：持久化 Preferences + hilog ──
+            // ── 计数：message → DefaultFormAbility.onFormEvent → Preferences ──
             this.tapCount++
-            hilog.info(0x0000, 'testTag', '祝福木鱼[组件]总数：%{public}d', this.tapCount)
-            try {
-              if (this.appCtx && this.pref) {
-                this.pref.putSync(KEY_CLICK_COUNT, this.tapCount)
-                this.pref.flushSync()
-              }
-            } catch (_e) {
-              // fallback
-            }
+            console.info('祝福木鱼[卡片]总数：' + this.tapCount)
+            postCardAction(this, {
+              action: 'message',
+              params: { event: 'blessing_muyu_click', source: 'card' }
+            })
           })
       }
       .width('100%')
@@ -104,3 +92,5 @@ export struct BlessingMuyuCardDisplay {
     .clip(true)
   }
 }
+
+
