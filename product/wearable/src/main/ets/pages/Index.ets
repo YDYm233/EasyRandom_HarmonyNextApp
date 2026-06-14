@@ -16,6 +16,7 @@ import { WearFlipCoin } from '../sub_pages/WearFlipCoin'
 import { WearRandomABCD } from '../sub_pages/WearRandomABCD'
 import { WearDevineBaGua } from '../sub_pages/WearDevineBaGua'
 import { WearRandomColors } from '../sub_pages/WearRandomColors'
+import { AppLinkQR } from '../sub_pages/AppLinkQR'
 
 // ════════════════════════════════════════
 //  页面索引常量
@@ -29,6 +30,7 @@ interface PageIndexMap {
   RANDOM_ABCD: number
   DEVINE_BAGUA: number
   RANDOM_COLORS: number
+  APP_LINK_QR: number
 }
 
 const PAGE_INDEX: PageIndexMap = {
@@ -40,6 +42,7 @@ const PAGE_INDEX: PageIndexMap = {
   RANDOM_ABCD:5,
   DEVINE_BAGUA: 6,
   RANDOM_COLORS: 7,
+  APP_LINK_QR: 8,
 }
 
 // 指示器颜色（与圆形屏系统 ArcDotIndicator 保持一致）
@@ -263,6 +266,13 @@ struct Index {
       .height('100%')
       .borderRadius(WearScreenUtil.screenWidth / 2)
       .clip(true)
+
+    // 随易 App 二维码
+    Stack() { AppLinkQR() }
+      .width('100%')
+      .height('100%')
+      .borderRadius(WearScreenUtil.screenWidth / 2)
+      .clip(true)
   }
 
   // ════════════════════════════════════════
@@ -278,5 +288,6 @@ struct Index {
     WearRandomABCD()
     WearDevineBaGua()
     WearRandomColors()
+    AppLinkQR()
   }
 }
