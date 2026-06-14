@@ -3,7 +3,7 @@ struct Container {
   build() {
     Column() {
       Text('邮箱：3014551329@qq.com')    . fontColor($r("app.color.FontIcon_Fore1"))
-      Image('http://m233.top/easyrandom/weixin.jpg').width('100%')
+      Image($r("app.media.qqcode")).width('100%')
       Text('您还可以尝试通过以下链接来留言告知我')         . fontColor($r("app.color.FontIcon_Fore1"))
       Hyperlink('https://www.bilibili.com/opus/971320804050468900?spm_id_from=333.1365.0.0','B站')
       Hyperlink('https://weibo.com/5858421461/OuE5WnqyO','微博')
