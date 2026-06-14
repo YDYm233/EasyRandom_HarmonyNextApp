@@ -39,12 +39,11 @@ struct AnnouncementPageComponent {
           .margin({ bottom: 12 })
 
           // 开发进度
-          this.SectionHeader('🚀 开发进度')
+          this.SectionHeader('🚀 api18+新特性开发进度')
           Column() {
             this.ProgressItem('主页面 UI 重构(api23+)', true)
             this.ProgressItem('液态玻璃效果适配(api23+)', true)
-            this.ProgressItem('震动反馈', true)
-            this.ProgressItem('手表端(预计下版本推出V1.0.0)', false)
+            this.ProgressItem('手表端[于主应用1.0.19版本推出公测版]', true)
             this.ProgressItem('折叠屏深度适配', false)
             this.ProgressItem('PC 端 (2in1) 大屏适配', false)
           }
@@ -64,7 +63,8 @@ struct AnnouncementPageComponent {
             this.FeatureItem('☯️ 八卦卡片', '2×2 / 4×4 | 八卦占卜结果')
             this.FeatureItem('🎨 颜色卡片', '2×2尺寸 | 随机颜色展示')
             this.FeatureItem('🔤 ABCD 卡片', '2×2尺寸 | 四选一抽选')
-            this.FeatureItem('🐟 木鱼卡片', '2×2尺寸 | 敲木鱼快捷入口')
+            this.FeatureItem('🐟 祝福木鱼卡片', '2×2尺寸 | 获得祝福的木鱼')
+            this.FeatureItem('🎯 真心话大冒险', '2×2尺寸 | 便捷的真心话大冒险卡片')
             this.ProgressItem('🐾 电子宠物卡片 (2×2 / 4×4 | 桌面养成互动)', false)
           }
           .alignItems(HorizontalAlign.Start)

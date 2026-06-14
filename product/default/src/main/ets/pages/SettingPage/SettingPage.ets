@@ -7,7 +7,8 @@ import { Illustrate } from './MoreOpt';
 import { CopyRight } from './CopyRight';
 import { AnnouncementPage } from './AnnouncementPage';
 import { promptAction } from '@kit.ArkUI';
-import { BreakpointState, BreakpointSystem } from '@ohos/system-utils';
+import { BreakpointState, BreakpointSystem, ShareManager } from '@ohos/system-utils';
+import type { common } from '@kit.AbilityKit';
 import { resourceManager } from '@kit.LocalizationKit';
 
 // ============ 类型定义 ============
@@ -250,14 +251,13 @@ struct Setting {
           }.height('100%').aspectRatio(1).alignItems(VerticalAlign.Center).justifyContent(FlexAlign.Center)
 
           Row() {
-          //   Image($r("app.media.func_share")).height(24).width(24).fillColor($r("app.color.FontIcon_Fore1"))
-          //
-          // } .onClick(() => {
-          //   promptAction.showToast({
-          //     message: '功能开发中'
-          //   })
+            Image($r("app.media.func_share")).height(24).width(24).fillColor($r("app.color.FontIcon_Fore1"))
           }
-          // .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
+          .onClick(() => {
+            const context = getContext(this) as common.UIAbilityContext
+            ShareManager.shareAppLink(context)
+          })
+          .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.9 })
           .height('100%').aspectRatio(1).alignItems(VerticalAlign.Center).justifyContent(FlexAlign.Center)
         }
         .width('100%')
