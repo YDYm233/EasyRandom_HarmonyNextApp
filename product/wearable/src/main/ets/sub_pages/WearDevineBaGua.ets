@@ -27,7 +27,7 @@ export struct WearDevineBaGua {
     Column() {
       // 父容器裁切成圆形
       Stack() {
-        Image($r("app.media.BaGua"))
+        Image($r("app.media.BaGua_wear"))
           .width('100%')
           .height('100%')
           .objectFit(ImageFit.Contain)

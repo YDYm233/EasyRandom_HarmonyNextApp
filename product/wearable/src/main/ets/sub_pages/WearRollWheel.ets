@@ -84,7 +84,7 @@ export struct WearRollWheel {
           .rotate({ angle: this.rotateAngles[index] })
 
         // 顶层：指针 SVG（居中叠加，固定不动）
-        Image($r("app.media.pointer_m"))
+        Image($r("app.media.pointer_m_wear"))
           .width(this.PNTR_SIZE)
           .aspectRatio(1)
       }

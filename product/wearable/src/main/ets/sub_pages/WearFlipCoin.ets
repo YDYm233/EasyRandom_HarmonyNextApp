@@ -20,12 +20,12 @@ export struct WearFlipCoin {
       // 硬币可视化
       Stack() {
         if (this.showFront) {
-          Image($r("app.media.coin1"))
+          Image($r("app.media.coin1_wear"))
             .width('100%')
             .aspectRatio(1)
             .objectFit(ImageFit.Contain)
         } else {
-          Image($r("app.media.coin2"))
+          Image($r("app.media.coin2_wear"))
             .width('100%')
             .aspectRatio(1)
             .objectFit(ImageFit.Contain)

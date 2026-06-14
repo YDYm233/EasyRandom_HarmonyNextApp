@@ -141,7 +141,7 @@ export struct WearNavPanelSquare {
         // 卡片 1：应用信息
         ListItem() {
           Row({ space: 10 }) {
-            Image($r('app.media.app_icon'))
+            Image($r('app.media.app_icon_wear'))
               .width(36)
               .height(36)
               .borderRadius(8)

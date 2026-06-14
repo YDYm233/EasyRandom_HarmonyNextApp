@@ -110,7 +110,7 @@ export struct WearRandomABCD {
         .height(this.CARD)
 
         // 旋转指针（居中显示）
-        Image($r("app.media.pointer_m"))
+        Image($r("app.media.pointer_m_wear"))
           .width(this.PNTR)
           .aspectRatio(1)
           .fillColor($r("app.color.FontIcon_Fore2"))

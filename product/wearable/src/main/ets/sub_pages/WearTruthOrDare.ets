@@ -182,7 +182,7 @@ export struct WearTruthOrDare {
 
       // === 中间层：指针（可旋转）===
       Column() {
-        Image($r("app.media.pointer_m"))
+        Image($r("app.media.pointer_m_wear"))
           .width(WearScreenUtil.scaledSize(80))
           .height(WearScreenUtil.scaledSize(80))
           .fillColor(Color.White)

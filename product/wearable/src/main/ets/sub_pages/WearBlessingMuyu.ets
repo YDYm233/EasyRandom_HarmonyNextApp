@@ -75,7 +75,7 @@ export struct WearBlessingMuyu {
 
       // ── 木鱼图片（居中）──
       Row() {
-        Image($r('app.media.MuYu'))
+        Image($r('app.media.MuYu_wear'))
           .width(WearScreenUtil.mainImageWidth)
           .aspectRatio(1)
           .objectFit(ImageFit.Contain)
