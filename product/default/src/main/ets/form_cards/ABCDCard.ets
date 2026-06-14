@@ -40,7 +40,7 @@ export struct ABCDCard {
             .textAlign(TextAlign.Center)
             .border({
               style: BorderStyle.Solid,
-              width: 5,
+              width: 4,
               color: $r("app.color.Comp_Bg2"),
               radius: { topLeft: $r('sys.float.ohos_id_corner_radius_card') }
             })
@@ -58,7 +58,7 @@ export struct ABCDCard {
             .textAlign(TextAlign.Center)
             .border({
               style: BorderStyle.Solid,
-              width: 5,
+              width: 4,
               color: $r("app.color.Comp_Bg2"),
               radius: { topRight: $r('sys.float.ohos_id_corner_radius_card') }
             })
@@ -76,7 +76,7 @@ export struct ABCDCard {
             .textAlign(TextAlign.Center)
             .border({
               style: BorderStyle.Solid,
-              width: 5,
+              width: 4,
               color: $r("app.color.Comp_Bg2"),
               radius: { bottomLeft: $r('sys.float.ohos_id_corner_radius_card') }
             })
@@ -94,7 +94,7 @@ export struct ABCDCard {
             .textAlign(TextAlign.Center)
             .border({
               style: BorderStyle.Solid,
-              width: 5,
+              width: 4,
               color: $r("app.color.Comp_Bg2"),
               radius: { bottomRight: $r('sys.float.ohos_id_corner_radius_card') }
             })
@@ -105,7 +105,7 @@ export struct ABCDCard {
         .height('100%')
 
         // 旋转指针（居中显示）
-        Image($r("app.media.needle"))
+        Image($r("app.media.pointer_m"))
           .width('60%')
           .aspectRatio(1)
           .fillColor($r("app.color.FontIcon_Fore2"))
@@ -121,6 +121,7 @@ export struct ABCDCard {
     .justifyContent(FlexAlign.Center)
     .alignItems(HorizontalAlign.Center)
     .backgroundColor($r("app.color.Comp_Bg2"))
+    .padding(4)
     .onClick(() => {
       // 重置所有颜色
       this.colors[0] = $r("app.color.Comp_Bg4")
@@ -132,28 +133,26 @@ export struct ABCDCard {
       this.fontColors[2] = $r("app.color.FontIcon_Fore1")
       this.fontColors[3] = $r("app.color.FontIcon_Fore1")
 
-      // 旋转指针
-      this.angle += Random(1, 360, true) + 360 * 3
-      if (this.angle > 36000000) {
-        this.angle = Random(1, 360, true) + 360 * 3
-      }
-
-      // 延迟高亮结果
+      // 旋转指针，动画结束后高亮结果
       animateTo({
-        duration: 1,
-        iterations: 1,
-        curve: Curve.EaseIn,
-        delay: 1000
+        duration: this.duration,
+        curve: Curve.Ease,
+        onFinish: () => {
+          const normAngle = this.angle % 360
+          if (normAngle < 90) {
+            this.colors[1] = $r("app.color.Brand")
+          } else if (normAngle < 180) {
+            this.colors[3] = $r("app.color.Brand")
+          } else if (normAngle < 270) {
+            this.colors[2] = $r("app.color.Brand")
+          } else {
+            this.colors[0] = $r("app.color.Brand")
+          }
+        }
       }, () => {
-        const normAngle = this.angle % 360
-        if (normAngle < 90) {
-          this.colors[1] = $r("app.color.Brand") // B
-        } else if (normAngle < 180) {
-          this.colors[3] = $r("app.color.Brand") // D
-        } else if (normAngle < 270) {
-          this.colors[2] = $r("app.color.Brand") // C
-        } else {
-          this.colors[0] = $r("app.color.Brand") // A
+        this.angle += Random(1, 360, true) + 360 * 3
+        if (this.angle > 36000000) {
+          this.angle = Random(1, 360, true) + 360 * 3
         }
       })
     })
