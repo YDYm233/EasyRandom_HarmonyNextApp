@@ -8,7 +8,7 @@ export function AboutUs() {
 struct AboutUsComponent {
   @State isShowQR:boolean =false
   @State qrSrc:string[] = ['https://gitee.com/Yan_m233/app_EasyRandom',"https://www.bilibili.com/opus/971320804050468900?spm_id_from=333.1365.0.0","https://weibo.com/5858421461/OuE5WnqyO"]
-  @State popupTitle:string[]=['官方网站','哔哩哔哩','微博']
+  @State popupTitle:string[]=['项目网站','哔哩哔哩','微博']
   @State themeColor:Color[] =[0xFF00BEFF,0xFF7299,0xFFEB00]
   @State themeIcon:Resource[]=[$r("app.media.link_myself"),$r("app.media.link_bilibili"),$r("app.media.link_weibo")]
   @State index:number = 0
@@ -71,7 +71,7 @@ struct AboutUsComponent {
           })
       }.width(300)
       Row(){
-        Text('个人介绍：闫东阳，个人开发者、大四在读 \n社媒昵称：门二三三')          .fontColor($r("app.color.FontIcon_Fore1"))
+        Text('个人介绍：闫东阳，个人开发者、大五在读 \n社媒昵称：闫东阳、门二三三')          .fontColor($r("app.color.FontIcon_Fore1"))
       }
       .width('100%')
       .height(80)
