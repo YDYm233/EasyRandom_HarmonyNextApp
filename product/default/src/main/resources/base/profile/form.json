@@ -37,7 +37,7 @@
       },
       "colorMode": "auto",
       "isDynamic": true,
-      "isDefault": false,
+      "isDefault": true,
       "updateEnabled": false,
       "scheduledUpdateTime": "10:30",
       "updateDuration": 1,
@@ -50,10 +50,10 @@
       "metadata": []
     },
     {
-      "name": "RollDiceCard",
-      "displayName": "$string:RollDiceCard_display_name",
-      "description": "$string:RollDiceCard_desc",
-      "src": "./ets/form_cards/RollDiceCard.ets",
+      "name": "TruthOrDareCard",
+      "displayName": "$string:TruthOrDareCard_display_name",
+      "description": "$string:TruthOrDareCard_desc",
+      "src": "./ets/form_cards/TruthOrDareCard.ets",
       "uiSyntax": "arkts",
       "window": {
         "designWidth": 720,
@@ -61,14 +61,15 @@
       },
       "colorMode": "auto",
       "isDynamic": true,
-      "isDefault": true,
+      "isDefault": false,
       "updateEnabled": false,
       "scheduledUpdateTime": "10:30",
       "updateDuration": 1,
       "defaultDimension": "2*2",
       "supportDimensions": [
         "2*2"
-      ], "formConfigAbility": "ability://defaultformability",
+      ],
+      "formConfigAbility": "ability://defaultformability",
       "dataProxyEnabled": false,
       "transparencyEnabled": false,
       "metadata": []
@@ -172,10 +173,10 @@
       "metadata": []
     },
     {
-      "name": "TruthOrDareCard",
-      "displayName": "$string:TruthOrDareCard_display_name",
-      "description": "$string:TruthOrDareCard_desc",
-      "src": "./ets/form_cards/TruthOrDareCard.ets",
+      "name": "RollDiceCard",
+      "displayName": "$string:RollDiceCard_display_name",
+      "description": "$string:RollDiceCard_desc",
+      "src": "./ets/form_cards/RollDiceCard.ets",
       "uiSyntax": "arkts",
       "window": {
         "designWidth": 720,
@@ -190,8 +191,7 @@
       "defaultDimension": "2*2",
       "supportDimensions": [
         "2*2"
-      ],
-      "formConfigAbility": "ability://defaultformability",
+      ], "formConfigAbility": "ability://defaultformability",
       "dataProxyEnabled": false,
       "transparencyEnabled": false,
       "metadata": []
