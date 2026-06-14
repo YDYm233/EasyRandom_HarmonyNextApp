@@ -15,7 +15,7 @@ interface QuickEntry {
 const QUICK_ENTRIES: QuickEntry[] = [
   { emoji: '🎡', label: '幸运转盘', targetIndex: 1 },
   { emoji: '🎯', label: '真心话',   targetIndex: 3 },
-  { emoji: '☯️', label: '八卦',     targetIndex: 7 },
+  { emoji: '☯️', label: '八卦',     targetIndex: 6 },
 ]
 
 /**
@@ -72,7 +72,7 @@ export struct WearNavPanelSquare {
         .borderRadius(14)
 
         ListItem() {
-          Text('版本预告：下阶段将实现主应用与手表端的数据同步功能，支持用户自定义数据加载。')
+          Text('版本预告：下阶段将实现主应用与手表端的数据同步功能。')
             .fontSize(13)
             .fontColor(TEXT_PRIMARY)
             .width('100%')
