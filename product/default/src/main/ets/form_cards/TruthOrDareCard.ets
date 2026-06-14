@@ -102,22 +102,25 @@ struct TruthOrDareCard {
             .textAlign(TextAlign.Center)
             .lineHeight(34)
         }
+        .rotate({ angle: 180 })
         .width('50%')
         .height('100%')
         .backgroundColor(this.CHALLENGE_BG)
         .justifyContent(FlexAlign.Center)
-        .alignItems(HorizontalAlign.Start)
-        .padding({ left: 28 })
+        .alignItems(HorizontalAlign.End)
+        .padding({ right: 28 })
       }
       .width('100%')
       .height('100%')
 
-      Image($r("app.media.pointer_m"))
-        .width('40%')
-        .aspectRatio(1)
-        .fillColor($r("app.color.FontIcon_Fore2"))
-        .rotate({ angle: this.rotateAngle })
-        .animation({ duration: this.DURATION, curve: Curve.Ease })
+      Column() {
+        Image($r("app.media.pointer_m"))
+          .width('40%')
+          .aspectRatio(1)
+          .fillColor(Color.White)
+      }
+      .rotate({ angle: this.rotateAngle })
+      .hitTestBehavior(HitTestMode.None)
 
       if (this.showResult) {
         Stack() {
