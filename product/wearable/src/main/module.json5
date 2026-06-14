@@ -27,9 +27,9 @@
         "name": "WearableAbility",
         "srcEntry": "./ets/wearableability/WearableAbility.ets",
         "description": "$string:WearableAbility_desc",
-        "icon": "$media:layered_image",
+        "icon": "$media:app_icon_wear",
         "label": "$string:app_name",
-        "startWindowIcon": "$media:layered_image",
+        "startWindowIcon": "$media:app_icon_wear",
         "startWindowBackground": "$color:start_window_background",
         "exported": true,
         "skills": [

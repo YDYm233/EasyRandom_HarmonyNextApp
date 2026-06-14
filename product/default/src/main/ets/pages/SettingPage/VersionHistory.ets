@@ -19,18 +19,19 @@ struct VersionHistoryComponent {
   // 版本数据（倒序：最新的在前面，内容与 CHANGELOG.md 保持一致）
   private versions: VersionInfo[] = [
     {
-      version: 'V1.0.20',
-      date: '2026-06-14',
+      version: '版本预告',
+      date: '约7个工作日',
       features: [
         '🔜 手表端正式版发布',
-        '🔜 优化服务卡片数据同步',
-        '🔜 新增历史记录功能',
-        '🔜 电子宠物卡片',
+        '🔜 优化应用数据自定义',
+        '🔜 优化卡片也可像幸运转盘一样刷新/同步数据',
+        '🔜 支持手表端与APP数据同步',
+        '🔜 新增大量新功能',
       ],
       isPrerelease: true,
     },
     {
-      version: 'V1.0.19',
+      version: 'V1.0.19【当前版本】',
       date: '2026-06-05',
       features: [
         '完成随易手表端 V0.0.1',
@@ -223,8 +224,289 @@ struct VersionHistoryComponent {
     NavDestination() {
       Scroll() {
         Column() {
-          // 版本列表
-          ForEach(this.versions, (versionInfo: VersionInfo) => {
+          // Image($r("app.media.wear_all"))
+          //   .width('100%')
+          //   .borderRadius(20)
+          //
+          Column() {
+            Row() {
+              Text('版本预告')
+                .fontSize(16)
+                .fontWeight(FontWeight.Bold)
+                .fontColor($r("app.color.FontIcon_Fore2"))
+              Blank()
+              Text('约7个工作日')
+                .fontSize(11)
+                .fontColor($r("app.color.FontIcon_Fore2"))
+            }
+            .width('100%')
+            .margin({ bottom: 8 })
+
+            Column() {
+              Row() {
+                Text('•')
+                  .fontSize(12)
+                  .fontColor($r("app.color.FontIcon_Fore2"))
+                  .margin({ right: 8 })
+                Text('🔜 手表端正式版发布')
+                  .fontSize(14)
+                  .fontColor($r("app.color.FontIcon_Fore1"))
+                  .opacity(0.9)
+                  .layoutWeight(1)
+              }
+              .width('100%')
+              .margin({ bottom: 6 })
+              .alignItems(VerticalAlign.Top)
+
+              Row() {
+                Text('•')
+                  .fontSize(12)
+                  .fontColor($r("app.color.FontIcon_Fore2"))
+                  .margin({ right: 8 })
+                Text('🔜 优化应用数据自定义')
+                  .fontSize(14)
+                  .fontColor($r("app.color.FontIcon_Fore1"))
+                  .opacity(0.9)
+                  .layoutWeight(1)
+              }
+              .width('100%')
+              .margin({ bottom: 6 })
+              .alignItems(VerticalAlign.Top)
+
+              Row() {
+                Text('•')
+                  .fontSize(12)
+                  .fontColor($r("app.color.FontIcon_Fore2"))
+                  .margin({ right: 8 })
+                Text('🔜 优化卡片也可像幸运转盘一样刷新/同步数据')
+                  .fontSize(14)
+                  .fontColor($r("app.color.FontIcon_Fore1"))
+                  .opacity(0.9)
+                  .layoutWeight(1)
+              }
+              .width('100%')
+              .margin({ bottom: 6 })
+              .alignItems(VerticalAlign.Top)
+
+              Row() {
+                Text('•')
+                  .fontSize(12)
+                  .fontColor($r("app.color.FontIcon_Fore2"))
+                  .margin({ right: 8 })
+                Text('🔜 支持手表端与APP数据同步')
+                  .fontSize(14)
+                  .fontColor($r("app.color.FontIcon_Fore1"))
+                  .opacity(0.9)
+                  .layoutWeight(1)
+              }
+              .width('100%')
+              .margin({ bottom: 6 })
+              .alignItems(VerticalAlign.Top)
+
+              Row() {
+                Text('•')
+                  .fontSize(12)
+                  .fontColor($r("app.color.FontIcon_Fore2"))
+                  .margin({ right: 8 })
+                Text('🔜 新增大量新功能')
+                  .fontSize(14)
+                  .fontColor($r("app.color.FontIcon_Fore1"))
+                  .opacity(0.9)
+                  .layoutWeight(1)
+              }
+              .width('100%')
+              .margin({ bottom: 6 })
+              .alignItems(VerticalAlign.Top)
+            }
+            .width('100%')
+          }
+          .width('100%')
+          .padding(16)
+          .backgroundColor($r("app.color.Comp_Bg1"))
+          .borderRadius(20)
+          .margin({ top: 12 })
+          .border({ width: 1, color: $r("app.color.FontIcon_Fore4"), style: BorderStyle.Dashed })
+
+          Column() {
+            Row() {
+              Text('V1.0.19【当前版本】')
+                .fontSize(16)
+                .fontWeight(FontWeight.Bold)
+                .fontColor($r("app.color.FontIcon_Fore1"))
+              Blank()
+              Text('2026-06-05')
+                .fontSize(11)
+                .fontColor($r("app.color.FontIcon_Fore2"))
+            }
+            .width('100%')
+            .margin({ bottom: 8 })
+
+            Image($r("app.media.wear_all"))
+              .width('100%')
+              .borderRadius(16)
+              .margin({ bottom: 8 })
+
+            Column() {
+              Row() {
+                Text('•')
+                  .fontSize(12)
+                  .fontColor($r("app.color.FontIcon_Fore2"))
+                  .margin({ right: 8 })
+                Text('完成随易手表端 V0.0.1')
+                  .fontSize(14)
+                  .fontColor($r("app.color.FontIcon_Fore1"))
+                  .opacity(0.9)
+                  .layoutWeight(1)
+              }
+              .width('100%')
+              .margin({ bottom: 6 })
+              .alignItems(VerticalAlign.Top)
+
+              Row() {
+                Text('•')
+                  .fontSize(12)
+                  .fontColor($r("app.color.FontIcon_Fore2"))
+                  .margin({ right: 8 })
+                Text('实现手表端幸运转盘、祝福木鱼、真心话大冒险、抛硬币、八卦、随机颜色等新页面')
+                  .fontSize(14)
+                  .fontColor($r("app.color.FontIcon_Fore1"))
+                  .opacity(0.9)
+                  .layoutWeight(1)
+              }
+              .width('100%')
+              .margin({ bottom: 6 })
+              .alignItems(VerticalAlign.Top)
+
+              Row() {
+                Text('•')
+                  .fontSize(12)
+                  .fontColor($r("app.color.FontIcon_Fore2"))
+                  .margin({ right: 8 })
+                Text('实现手表端方形屏与圆形屏解耦分层适配')
+                  .fontSize(14)
+                  .fontColor($r("app.color.FontIcon_Fore1"))
+                  .opacity(0.9)
+                  .layoutWeight(1)
+              }
+              .width('100%')
+              .margin({ bottom: 6 })
+              .alignItems(VerticalAlign.Top)
+
+              Row() {
+                Text('•')
+                  .fontSize(12)
+                  .fontColor($r("app.color.FontIcon_Fore2"))
+                  .margin({ right: 8 })
+                Text('实现手表端设置页与 AppLink 页')
+                  .fontSize(14)
+                  .fontColor($r("app.color.FontIcon_Fore1"))
+                  .opacity(0.9)
+                  .layoutWeight(1)
+              }
+              .width('100%')
+              .margin({ bottom: 6 })
+              .alignItems(VerticalAlign.Top)
+
+              Row() {
+                Text('•')
+                  .fontSize(12)
+                  .fontColor($r("app.color.FontIcon_Fore2"))
+                  .margin({ right: 8 })
+                Text('增加震动功能及应用级震动管理开关，并优化页面震动功能')
+                  .fontSize(14)
+                  .fontColor($r("app.color.FontIcon_Fore1"))
+                  .opacity(0.9)
+                  .layoutWeight(1)
+              }
+              .width('100%')
+              .margin({ bottom: 6 })
+              .alignItems(VerticalAlign.Top)
+
+              Row() {
+                Text('•')
+                  .fontSize(12)
+                  .fontColor($r("app.color.FontIcon_Fore2"))
+                  .margin({ right: 8 })
+                Text('优化设置页面布局，添加版本更新页面')
+                  .fontSize(14)
+                  .fontColor($r("app.color.FontIcon_Fore1"))
+                  .opacity(0.9)
+                  .layoutWeight(1)
+              }
+              .width('100%')
+              .margin({ bottom: 6 })
+              .alignItems(VerticalAlign.Top)
+
+              Row() {
+                Text('•')
+                  .fontSize(12)
+                  .fontColor($r("app.color.FontIcon_Fore2"))
+                  .margin({ right: 8 })
+                Text('实现应用分享功能')
+                  .fontSize(14)
+                  .fontColor($r("app.color.FontIcon_Fore1"))
+                  .opacity(0.9)
+                  .layoutWeight(1)
+              }
+              .width('100%')
+              .margin({ bottom: 6 })
+              .alignItems(VerticalAlign.Top)
+
+              Row() {
+                Text('•')
+                  .fontSize(12)
+                  .fontColor($r("app.color.FontIcon_Fore2"))
+                  .margin({ right: 8 })
+                Text('增加真心话大冒险服务卡片（新的 2×2 卡片）')
+                  .fontSize(14)
+                  .fontColor($r("app.color.FontIcon_Fore1"))
+                  .opacity(0.9)
+                  .layoutWeight(1)
+              }
+              .width('100%')
+              .margin({ bottom: 6 })
+              .alignItems(VerticalAlign.Top)
+
+              Row() {
+                Text('•')
+                  .fontSize(12)
+                  .fontColor($r("app.color.FontIcon_Fore2"))
+                  .margin({ right: 8 })
+                Text('优化幸运转盘、祝福木鱼、ABCD 页面与服务卡片')
+                  .fontSize(14)
+                  .fontColor($r("app.color.FontIcon_Fore1"))
+                  .opacity(0.9)
+                  .layoutWeight(1)
+              }
+              .width('100%')
+              .margin({ bottom: 6 })
+              .alignItems(VerticalAlign.Top)
+
+              Row() {
+                Text('•')
+                  .fontSize(12)
+                  .fontColor($r("app.color.FontIcon_Fore2"))
+                  .margin({ right: 8 })
+                Text('优化工程分层架构，代码重构，优化模块依赖，API 版本提升至 18+')
+                  .fontSize(14)
+                  .fontColor($r("app.color.FontIcon_Fore1"))
+                  .opacity(0.9)
+                  .layoutWeight(1)
+              }
+              .width('100%')
+              .margin({ bottom: 6 })
+              .alignItems(VerticalAlign.Top)
+            }
+            .width('100%')
+          }
+          .width('100%')
+          .padding(16)
+          .backgroundColor($r("app.color.Comp_Bg1"))
+          .borderRadius(20)
+          .margin({ top: 12 })
+
+          // 历史版本列表
+          ForEach(this.versions.slice(2), (versionInfo: VersionInfo) => {
             this.VersionCard(versionInfo)
           }, (versionInfo: VersionInfo) => versionInfo.version)
 
@@ -304,7 +586,7 @@ struct VersionHistoryComponent {
     .width('100%')
     .padding(16)
     .backgroundColor($r("app.color.Comp_Bg1"))
-    .borderRadius(16)
+    .borderRadius(20)
     .margin({ bottom: 12 })
     .border(versionInfo.isPrerelease ? {
       width: 1,
