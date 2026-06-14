@@ -19,6 +19,8 @@ export struct TruthOrDareCardDisplay {
   private readonly HONEST_BG: number = 0xFF7299
   private readonly CHALLENGE_BG: number = 0x23ADE5
   private readonly DURATION: number = 800
+  private readonly BG_ROTATION: number = -30
+  private readonly ANGLE_OFFSET: number = 30
 
   private getRandomText(source: string[], lastIndex: number): IRandomTextResult {
     if (source.length <= 1) {
@@ -58,7 +60,8 @@ export struct TruthOrDareCardDisplay {
       normalizedAngle += 360
     }
 
-    const isHonest = normalizedAngle >= 180
+    const adjustedAngle = (normalizedAngle + this.ANGLE_OFFSET) % 360
+    const isHonest = adjustedAngle >= 180
     const source = isHonest ? honests : challenges
     const lastIdx = isHonest ? this.lastHonestIndex : this.lastChallengeIndex
     const result = this.getRandomText(source, lastIdx)
@@ -109,8 +112,9 @@ export struct TruthOrDareCardDisplay {
         .alignItems(HorizontalAlign.End)
         .padding({ right: 28 })
       }
-      .width('100%')
-      .height('100%')
+      .width('145%')
+      .height('145%')
+      .rotate({ angle: this.BG_ROTATION })
 
       Column() {
         Image($r("app.media.pointer_m"))
