@@ -4,12 +4,15 @@ import { window } from '@kit.ArkUI'
 import { BusinessError } from '@kit.BasicServicesKit'
 import { preferences } from '@kit.ArkData'
 import { CommonConstants } from '@ohos/basic-utils'
+import { VibratorManager } from '@ohos/system-utils'
 
 export default class EntryAbility extends UIAbility {
   private mainWindow: window.Window | null = null
 
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate')
+    // 从 Preferences 加载振动开关状态到 AppStorage，供 VibratorManager 使用
+    VibratorManager.initEnabled(this.context)
   }
 
   onDestroy(): void {

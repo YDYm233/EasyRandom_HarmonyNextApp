@@ -1,9 +1,15 @@
 import { vibrator } from '@kit.SensorServiceKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
+import { preferences } from '@kit.ArkData';
+import type { Context } from '@kit.AbilityKit';
 
 const TAG = 'VibratorManager';
 const DOMAIN = 0xFF00;
+/** AppStorage 中振动开关的键名，与 CommonConstants.PREFERENCES_KEY_VIBRATION 保持一致 */
+const STORAGE_KEY_VIBRATION = 'isVibrationEnabled';
+/** 持久化存储文件名，与 CommonConstants.PREFERENCES_FILE_NAME 保持一致 */
+const PREF_NAME = 'myStore';
 
 /**
  * 振动反馈场景类型
@@ -48,6 +54,47 @@ export class VibratorManager {
   private static readonly DEBOUNCE_MS = 50;
   /** 上次震动时间戳(ms)，用于防抖 */
   private static lastVibrateMs: number = 0;
+
+  // ═══════════════════════════════════════════════════════════════
+  //  振动开关
+  // ═══════════════════════════════════════════════════════════════
+
+  /**
+   * 查询应用内振动开关是否开启
+   * 从 AppStorage 读取，默认 true（开启）
+   */
+  static isEnabled(): boolean {
+    const value = AppStorage.get<boolean>(STORAGE_KEY_VIBRATION)
+    return value ?? true
+  }
+
+  /**
+   * 设置应用内振动开关状态
+   * 同步写入 AppStorage（立即生效）并持久化到 Preferences
+   * @param enabled true 开启振动，false 关闭振动
+   */
+  static setEnabled(enabled: boolean): void {
+    AppStorage.setOrCreate(STORAGE_KEY_VIBRATION, enabled)
+    hilog.info(DOMAIN, TAG, `setEnabled: ${enabled}`)
+  }
+
+  /**
+   * 应用启动时调用，从 Preferences 加载振动开关状态到 AppStorage
+   * 应在 EntryAbility.onWindowStageCreate 或首页 aboutToAppear 中调用
+   * @param context 应用上下文，用于读取 Preferences
+   */
+  static initEnabled(context: Context): void {
+    try {
+      const pref = preferences.getPreferencesSync(context, { name: PREF_NAME })
+      const saved = pref.getSync(STORAGE_KEY_VIBRATION, true) as boolean
+      AppStorage.setOrCreate(STORAGE_KEY_VIBRATION, saved)
+      hilog.info(DOMAIN, TAG, `initEnabled: ${saved}`)
+    } catch (e) {
+      // 读取失败时默认开启振动
+      AppStorage.setOrCreate(STORAGE_KEY_VIBRATION, true)
+      hilog.warn(DOMAIN, TAG, `initEnabled failed, default to true: ${JSON.stringify(e)}`)
+    }
+  }
 
   /**
    * 记录振动方法执行日志
@@ -97,6 +144,9 @@ export class VibratorManager {
    * @param usage 振动场景，默认TOUCH
    */
   static vibrateTime(duration: number, usage: VibrationUsage = VibrationUsage.TOUCH): void {
+    if (!VibratorManager.isEnabled()) {
+      return;
+    }
     VibratorManager.logExecution(`vibrateTime(${duration}ms)`);
     try {
       vibrator.startVibration(
@@ -122,6 +172,9 @@ export class VibratorManager {
     intensity: number = 100,
     usage: VibrationUsage = VibrationUsage.TOUCH
   ): void {
+    if (!VibratorManager.isEnabled()) {
+      return;
+    }
     VibratorManager.logExecution(`vibratePreset(${effectId}, count=${count}, intensity=${intensity})`);
     try {
       vibrator.startVibration(
@@ -146,6 +199,9 @@ export class VibratorManager {
     count: number = 1,
     usage: VibrationUsage = VibrationUsage.TOUCH
   ): void {
+    if (!VibratorManager.isEnabled()) {
+      return;
+    }
     VibratorManager.logExecution(`vibratePattern([${durations.join(',')}], count=${count})`);
     if (!durations || durations.length === 0) {
       hilog.warn(DOMAIN, TAG, 'vibratePattern: durations is empty, skipped');
@@ -332,6 +388,9 @@ export class VibratorManager {
    * 专为高频连击场景设计，自动跳过过快的重复触发，避免振动重叠
    */
   static vibrateMuyu(): void {
+    if (!VibratorManager.isEnabled()) {
+      return;
+    }
     if (VibratorManager.shouldDebounce()) {
       return;
     }

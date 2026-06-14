@@ -37,12 +37,11 @@ struct VersionHistoryComponent {
     },
     {
       version: 'V1.0.18',
-      date: '2026-05-~',
+      date: '2026-06-05',
       features: [
         '优化卡片数据同步链路，转盘服务卡片可根据选中数据添加',
         '木鱼卡片功德数同步',
         '增加手持弹幕功能',
-        '应用商店打包测试',
       ],
     },
     {
@@ -52,7 +51,6 @@ struct VersionHistoryComponent {
         'Api升级到6.1.0（API 23）',
         '悬浮页签+沉浸光感（api>23时显示）',
         '增加功能：一键全屏',
-        '应用打包测试',
       ],
     },
     {
@@ -62,7 +60,7 @@ struct VersionHistoryComponent {
         '优化重构整体界面',
         '增加功能：暗色模式可手动切换应用暗色/亮色/跟随系统',
         '优化祝福木鱼、ABCD、幸运转盘的页面与服务卡片',
-        '应用商店更新',
+        '📱 应用商店更新 (2026-05-22)',
       ],
     },
     {
@@ -72,7 +70,6 @@ struct VersionHistoryComponent {
         '优化ABCD服务卡片与ABCD页面',
         '优化应用图标为双层layer',
         '解决已知问题',
-        '应用打包测试',
       ],
     },
     {
@@ -82,7 +79,7 @@ struct VersionHistoryComponent {
         '适配暗夜模式!!!',
         '优化整体布局',
         '添加ABCD页面与服务卡片[测试]',
-        '应用商店更新',
+        '📱 应用商店更新 (2024-11-03)',
       ],
     },
     {
@@ -92,7 +89,6 @@ struct VersionHistoryComponent {
         '修复抛硬币动效问题',
         '优化整体布局',
         '重构八卦页面',
-        '应用打包测试',
       ],
     },
     {
@@ -102,7 +98,6 @@ struct VersionHistoryComponent {
         '修复推荐景观页面',
         '修复吃什么页面显示异常',
         '转盘添加指针',
-        '应用打包测试',
       ],
     },
     {
@@ -110,7 +105,7 @@ struct VersionHistoryComponent {
       date: '2024-10-13',
       features: [
         '优化整体页面布局',
-        '应用商店更新',
+        '📱 应用商店更新 (2024-10-22)',
       ],
     },
     {
@@ -119,7 +114,7 @@ struct VersionHistoryComponent {
       features: [
         '重构设置页面',
         '优化动画',
-        '应用商店更新',
+        '📱 应用商店更新 (2024-10-17)',
       ],
     },
     {
@@ -128,7 +123,6 @@ struct VersionHistoryComponent {
       features: [
         '修复异常',
         '添加随机景点功能页面',
-        '应用打包测试',
       ],
     },
     {
@@ -140,7 +134,7 @@ struct VersionHistoryComponent {
         '修复bug',
         '优化动画',
         '添加文字/链接转二维码功能页面',
-        '应用正式上架!!!',
+        '📱 应用正式上架 (2024-09-08)',
       ],
     },
     {
@@ -210,7 +204,6 @@ struct VersionHistoryComponent {
         '申请电子版权',
         '制作幸运转盘、答案之书、热门功能、更多功能四个一级页面',
         '制作真心话大冒险、祝福木鱼、扔硬币、随机颜色、掷骰子、随机数、抽签子页面',
-        '应用打包测试',
       ],
     },
   ];

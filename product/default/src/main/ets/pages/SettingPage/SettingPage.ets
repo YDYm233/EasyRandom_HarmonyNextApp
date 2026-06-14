@@ -203,7 +203,7 @@ struct Setting {
         if (item.isSymbol) {
           SymbolGlyph(item.icon)
             .fontSize(20)
-            .fontColor(Color.White)
+            // .fontColor(rgba(255,255,255,1))
         } else {
           Image(item.icon)
             .fillColor(Color.White)

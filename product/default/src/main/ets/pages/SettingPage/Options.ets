@@ -189,33 +189,7 @@ struct FullScreenToggle{
 
 @Component
 struct VibrationToggle {
-  @State isOn: boolean = true
-
-  aboutToAppear(): void {
-    this.loadVibrationSetting()
-  }
-
-  loadVibrationSetting(): void {
-    try {
-      const ctx = getContext(this) as common.UIAbilityContext
-      const pref = preferences.getPreferencesSync(ctx, { name: PREF_NAME })
-      this.isOn = pref.getSync(KEY_VIBRATION, true) as boolean
-    } catch (e) {
-      console.error('VibrationToggle load failed:', JSON.stringify(e))
-      this.isOn = true
-    }
-  }
-
-  applyVibrationSetting(enabled: boolean): void {
-    try {
-      const ctx = getContext(this) as common.UIAbilityContext
-      const pref = preferences.getPreferencesSync(ctx, { name: PREF_NAME })
-      pref.putSync(KEY_VIBRATION, enabled)
-      pref.flush()
-    } catch (e) {
-      console.error('VibrationToggle save failed:', JSON.stringify(e))
-    }
-  }
+  @StorageProp(KEY_VIBRATION) isOn: boolean = true
 
   build() {
     Row() {
@@ -226,8 +200,17 @@ struct VibrationToggle {
       Toggle({ type: ToggleType.Switch, isOn: this.isOn })
         .selectedColor('#007DFF')
         .onChange((isOn: boolean) => {
-          this.isOn = isOn
-          this.applyVibrationSetting(isOn)
+          // 同步写入 AppStorage（VibratorManager 即时生效）并持久化
+          VibratorManager.setEnabled(isOn)
+          try {
+            const ctx = getContext(this) as common.UIAbilityContext
+            const pref = preferences.getPreferencesSync(ctx, { name: PREF_NAME })
+            pref.putSync(KEY_VIBRATION, isOn)
+            pref.flush()
+          } catch (e) {
+            console.error('VibrationToggle save failed:', JSON.stringify(e))
+          }
+          // 开启时给一次振动反馈，让用户确认开关已生效
           if (isOn) {
             VibratorManager.vibrateTap()
           }
@@ -259,10 +242,10 @@ struct Container{
         }
         .width('100%')
 
-        // ListItem() {
-        //   VibrationToggle()
-        // }
-        // .width('100%')
+        ListItem() {
+          VibrationToggle()
+        }
+        .width('100%')
 
         ListItem() {
 
