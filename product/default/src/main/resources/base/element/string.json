@@ -5,6 +5,14 @@
       "value": "随易APP"
     },
     {
+      "name": "camera_reason",
+      "value": "用于摩斯密码手电筒闪烁功能"
+    },
+    {
+      "name": "vibrator_reason",
+      "value": "用于功能页面震动功能，可在应用设置里关闭应用震动反馈"
+    },
+    {
       "name": "EntryAbility_desc",
       "value": "UIAbility组件"
     },
