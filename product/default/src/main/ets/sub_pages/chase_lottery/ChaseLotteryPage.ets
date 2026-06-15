@@ -183,7 +183,8 @@ struct ChaseLotteryPage {
 
   showResult(): void {
     this.resultText = `${this.cells[this.highlightIndex]}`
-    VibratorManager.vibrateResult() // 结果振动反馈
+    this.isDecelerating = false
+    VibratorManager.vibrateResult()
   }
 
   changeCount(n: number): void {
