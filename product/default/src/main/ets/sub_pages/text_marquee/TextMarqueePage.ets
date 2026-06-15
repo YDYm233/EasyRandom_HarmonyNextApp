@@ -608,7 +608,7 @@ struct MarqueeEditor {
             return
           }
           router.pushUrl({
-            url: 'sub_pages/text_marquee/DisplayMarquee',
+            url: 'sub_pages/text_marquee/DisplayMarqueePage',
             params: {
               text: this.text,
               fontColor: this.fontColor,

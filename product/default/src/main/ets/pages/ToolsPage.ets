@@ -22,30 +22,30 @@ class ToolItem {
 const TOOLS_HOT: Array<ToolItem> = [
   new ToolItem('✨', $r("app.string.page_answer_book"), 'sub_pages/answer_book/AnswerBookPage', '热门推荐'),
   new ToolItem('🪐', $r("app.string.page_honest_or_challenge"),
-    'sub_pages/honest_or_challenge/HonestOrChallenge', '热门推荐'),
+    'sub_pages/honest_or_challenge/HonestOrChallengePage', '热门推荐'),
 ];
 
 /** 小工具分类 */
 const TOOLS_SMALL: Array<ToolItem> = [
-  new ToolItem('🎲', $r("app.string.page_roll_dices"), 'sub_pages/flip_dices/RollDices', '小工具'),
-  new ToolItem('🪙', $r("app.string.page_flip_coin"), 'sub_pages/flip_coin/FlipCoin', '小工具', 18), // 抛硬币需要API 18+
-  new ToolItem('🔢', $r("app.string.page_random_numbers"), 'sub_pages/random_numbers/RandomNumbers', '小工具'),
-  new ToolItem('🔤', $r("app.string.page_abcd"), 'sub_pages/random_abcd/RandomABCD', '小工具'),
-  new ToolItem('🎯', $r("app.string.page_random_places"), 'sub_pages/random_places/RandomPlaces', '小工具'),
-  new ToolItem('📱', $r("app.string.page_qrcode"), 'sub_pages/trans_qr/TransQR', '小工具'),
-  new ToolItem('💬', $r("app.string.page_text_marquee"), 'sub_pages/text_marquee/TextMarquee', '小工具', 14), // 手持弹幕需要API 14+
-  new ToolItem('🎨', $r("app.string.page_random_colors"), 'sub_pages/random_colors/RandomColors', '小工具'),
+  new ToolItem('🎲', $r("app.string.page_roll_dices"), 'sub_pages/flip_dices/RollDicesPage', '小工具'),
+  new ToolItem('🪙', $r("app.string.page_flip_coin"), 'sub_pages/flip_coin/FlipCoinPage', '小工具', 18), // 抛硬币需要API 18+
+  new ToolItem('🔢', $r("app.string.page_random_numbers"), 'sub_pages/random_numbers/RandomNumbersPage', '小工具'),
+  new ToolItem('🔤', $r("app.string.page_abcd"), 'sub_pages/random_abcd/RandomABCDPage', '小工具'),
+  new ToolItem('🎯', $r("app.string.page_random_places"), 'sub_pages/random_places/RandomPlacesPage', '小工具'),
+  new ToolItem('📱', $r("app.string.page_qrcode"), 'sub_pages/trans_qr/TransQRPage', '小工具'),
+  new ToolItem('💬', $r("app.string.page_text_marquee"), 'sub_pages/text_marquee/TextMarqueePage', '小工具', 14), // 手持弹幕需要API 14+
+  new ToolItem('🎨', $r("app.string.page_random_colors"), 'sub_pages/random_colors/RandomColorsPage', '小工具'),
 ];
 
 /** 趣味玩法分类 */
 const TOOLS_FUN: Array<ToolItem> = [
-  new ToolItem('☯️', $r("app.string.page_bagua"), 'sub_pages/devine_bagua/DevineBaGua', '趣味玩法'),
-  new ToolItem('🪵', $r("app.string.page_muyu"), 'sub_pages/blessing_muyu/BlessingMuyu_V2', '趣味玩法'),
-  new ToolItem('🍔🍜', $r("app.string.page_random_foods"), 'sub_pages/random_foods/RandomFoods', '趣味玩法'),
+  new ToolItem('☯️', $r("app.string.page_bagua"), 'sub_pages/devine_bagua/DevineBaGuaPage', '趣味玩法'),
+  new ToolItem('🪵', $r("app.string.page_muyu"), 'sub_pages/blessing_muyu/BlessingMuyu_V2Page', '趣味玩法'),
+  new ToolItem('🍔🍜', $r("app.string.page_random_foods"), 'sub_pages/random_foods/RandomFoodsPage', '趣味玩法'),
   new ToolItem('📖 ', $r("app.string.page_answer_book"), 'sub_pages/answer_book/AnswerBookPage', '趣味玩法'),
   new ToolItem('🎭', $r("app.string.page_honest_or_challenge"),
-    'sub_pages/honest_or_challenge/HonestOrChallenge', '趣味玩法'),
-  new ToolItem('👤', $r("app.string.page_random_names"), 'sub_pages/random_names/RandomNames', '趣味玩法'),
+    'sub_pages/honest_or_challenge/HonestOrChallengePage', '趣味玩法'),
+  new ToolItem('👤', $r("app.string.page_random_names"), 'sub_pages/random_names/RandomNamesPage', '趣味玩法'),
 ];
 class Params {
   type: string

@@ -1,16 +1,10 @@
 # ⌚ 随易 EasyRandom — 手表端（Wearable）实现方案
 
-> 文档版本：v4.0 | 日期：2026-06-10 | 基于项目 v1.0.19 开发中状态
+> 文档版本：v5.0 | 日期：2026-06-15 | 基于项目 v1.0.19 已发布状态
+> **v5.0 里程碑**：✅ 全部 P0/P1/P2 功能组件已实现并上线，2 个导航面板（圆/方分别适配），AppLinkQR 完成。文档从"规划中"升级为"实现后"状态。
 > **v4.0 重构**：§2.7.4 数据持久化策略全面重写为两阶段方案（本地 Preferences → 分布式 KV Store），引入 `docs/wearable-sync-plan.md` 作为跨设备同步的正式规划文档；§1.1 已有基础表新增同步规划引用
 > **v3.9 新增**：新增 §4.5 P0 功能优先级规划（幸运转盘 / 祝福木鱼 / 真心话大冒险）；新增 §4.6 真心话大冒险手表端适配方案（参考手机端 `HonestOrChallenge`）；§4.2 功能组件表新增优先级列（P0/P1/P2）；§5 文件架构新增 `WearTruthOrDare.ets`；§7 Step3 新增真心话大冒险实施项；§8.2 新增对应文件清单
 > **v3.8 补充**：新增 §2.9 横阔屏适配（超新星 X1，480×408 横阔 AMOLED）；§2.3 WearScreenUtil 新增 `isWideScreen()` 方法；§2.1 方屏典型分辨率补充 480×408 px；§2.3 尺寸分级表补充超新星 X1 到 standard 典型设备
-> **v3.7 补充**：全面补充约束维度 — §2.1 补充应用包大小限制(10MB)和内存澄清；§2.2 补充不支持的组件黑名单(Web/Video/TextArea等)；新增 §2.7 手表端运行约束(后台任务/网络/性能指标/数据持久化)；新增 §2.8 暗黑模式适配；§2.4 补充触控尺寸 vp/px 换算标注；§6 问题1 修正为经实测验证的方案(不加 targets)；§6 问题4 更新为实测结论；§7 Step1 更新操作描述；删除重复的尺寸分级表
-> **v3.6 修正**：修正方案文档中的关键缺陷 — §2.2 修正 PanGesture 支持描述、§6 问题4 修正 minAPIVersion 架构错误（compatibleSdkVersion 是 app 级配置）、§6 问题6 修正 disableSwipe(true) UX 极差方案、§3.5 修正"子组件零分支"原则为"尽量减少分支"、新增 §2.6 功耗优化策略、统一 ArcButton 导入路径为 @kit.ArkUI
-> **v3.5 修正**：SDK 实测验证 ArcSwiper/ArcDotIndicator 实际 API — import 统一使用 `@kit.ArkUI`（kit 入口 re-export，更规范）；ArcDotIndicator 方法名为 `.itemColor()` / `.selectedItemColor()`（非 `.color()` / `.selectedColor()`），无 `.itemShadow()` 方法；ArcSwiper 构造函数仅接受 `controller` 参数，indicator 通过 `.indicator()` 链式设置；`ArcSwiperAttribute` 由 `@kit.ArkUI` 自动 re-export 无需手动导入
-> **v3.4 修正**：SDK 实测验证所有 Arc 组件 import 路径 — ArcSwiper→`@ohos.arkui.ArcSwiper`、ArcButton→`@ohos.arkui.advanced.ArcButton`（非 `@kit.ArkUI`）；确认 display→`@ohos.display`；CrownSensitivity 为全局枚举无需 import
-> **v3.3 修复**：架构评审 7 项修复 — §4.2 统一 Token 引用、§8 编号修正、display 导入待确认、Token large 分支显式化、ArcButton 示例补充、getter 去冗余、scaledSize 偏向注释
-> **v3.2 增强**：§3 适配架构重组为四层模型（检测层→容器层→内容层→工具层），新增关键设计原则
-> **v3.1 修正**：ArcSwiper 是真实存在的独立组件（API 18+, `@kit.ArkUI`），废弃之前"标准 Swiper + Circle 裁切"的错误方案
 
 ---
 
@@ -20,14 +14,16 @@
 
 | 项目 | 状态 | 说明 |
 |------|------|------|
-| `product/wearable/` 目录 | ✅ 已创建 | 包含完整的 HAP 骨架文件 |
-| `module.json5` | 🔒 被注释 | 手表模块配置完整但处于禁用状态 |
-| `build-profile.json5` (顶层) | 🔒 被注释 | wearable 模块注册被注释 |
+| `product/wearable/` 目录 | ✅ 完整 | HAP 骨架 + 全部功能页面 + 工具类 |
+| `module.json5` | ✅ 已激活 | 已注册 VIBRATE 权限，deviceTypes: [wearable] |
+| `build-profile.json5` (顶层) | ✅ 已注册 | wearable 模块已在 modules 中注册 |
 | `WearableAbility.ets` | ✅ 可用 | 标准 UIAbility，加载 `pages/Index` |
-| `Index.ets` | 🧪 原型 | 仅包含一个 ABCD 卡片的 Hello World |
-| `ABCDCard.ets` | 🧪 原型 | 从手机端 CardDisplay 复制的简化版 |
-| `oh-package.json5` | ✅ 可用 | 已依赖 `@ohos/common` |
-| 已构建 .hap | ✅ 存在 | `wearable-default-signed.hap` |
+| `WearableBackupAbility.ets` | ✅ 可用 | 备份恢复 Ability |
+| `Index.ets` | ✅ 完整实现 | 圆/方屏双适配 Swiper + 10 个页面 |
+| `oh-package.json5` | ✅ 已配置 | 依赖 `@ohos/basic-utils` + `@ohos/system-utils` |
+| ✅ 全部子页面 | ✅ 已完成 | 11 个 sub_pages（含导航面板/转盘/木鱼/真心话/骰子/硬币/ABCD/八卦/颜色/二维码等） |
+| `WearScreenUtil` | ✅ 已完成 | 屏幕形状检测 + 尺寸分级 + 设计 Token |
+| 已构建 .hap | ✅ 已发布 | V0.0.1 已上线 |
 
 ### 1.2 部分功能参考手机端default模块内的实现
 
@@ -47,18 +43,18 @@
 
 ```
 手表端新建组件
-├── @ohos/common (Random, ExColor 等)        ← 已有依赖，直接可用
+├── @ohos/basic-utils (Random, ExColor, Logger 等)    ← 已有依赖，直接可用
+├── @ohos/system-utils (VibratorManager)               ← 震动反馈
 ├── WearRollWheel (手表端转盘)
-│   └── RollDataManager (Roll, RollItem, defaultRolls, initRollsData)
-│       └── @kit.ArkData (preferences)       ← 需在手表端同步引入
+│   └── WearRollDataManager (Roll, RollItem, defaultRolls)
 ├── WearBlessingMuyu (手表端木鱼)
 │   └── @kit.ArkData (preferences)
-│   └── @kit.PerformanceAnalysisKit (hilog)
-├── WearTruthOrDare (手表端真心话大冒险)          ← 🆕 P0 新增，手机端已有 HonestOrChallenge
-│   └── static_datas/challenges.ets (数据源) ← 共用手机端数据文件或独立复制
-│   └── @ohos/vibratorutil (震动)           ← 结果反馈震动
+│   └── @ohos/system-utils (VibratorManager)
+├── WearTruthOrDare (手表端真心话大冒险)
+│   └── WearTruthOrDareData (独立题库)
+│   └── @ohos/system-utils (VibratorManager)
 └── 图片资源 ($r("app.media.xxx"))
-    ├── dice1~6, coin1~2, needle, BaGua, MuYu, pointer_m 等
+    ├── dice1~6, coin1~2, BaGua, MuYu, pointer_m 等
     └── 颜色资源 ($r("app.color.xxx"))
 ```
 
@@ -1203,16 +1199,19 @@ buildSquareButton() {
 
 ### 4.2 功能组件映射
 
-| 优先级 | 横向页签 | 手表端组件（新建） | 参考来源 | 纵向数据 | 圆形屏适配要点 | 方形屏适配要点 |
+| 优先级 | 横向页签 | 手表端组件 | 参考来源 | 纵向数据 | 圆形屏适配要点 | 方形屏适配要点 |
 |:-----:|---------|-------------------|---------|---------|---------------|---------------|
-| **P0** | 幸运转盘 | `WearRollWheel` | `RollWheelCardDisplay` | 多个转盘 | Canvas `scaledSize(260)`，纵向 Swiper 切转盘 | Canvas `scaledSize(260)` |
-| **P0** | 祝福木鱼 | `WearBlessingMuyu` | `BlessingMuyuCardDisplay` | 单页 | `mainImageWidth`(55%) + `ArcButton` | `mainImageWidth`(70%) + `Button` |
-| **P0** | 真心话大冒险 | `WearTruthOrDare` 🆕 | `HonestOrChallenge` | 单页（两模式内切换） | 上下分屏（真心话上/大冒险下），点击选用透明背景包裹文字区域 | 同左，标准 Button |
-| P1 | 掷骰子 | `WearRollDices` | `RollDiceCardDisplay` | 单页 | `mainImageWidth`(55%) + `safePadding`(24vp) | `mainImageWidth`(70%) + `safePadding`(12vp) |
-| P1 | 丢硬币 | `WearFlipCoin` | `FlipCoinCardDisplay` | 单页 | `mainImageWidth`(55%)，旋转动画保持 | `mainImageWidth`(70%) |
-| P1 | ABCD | `WearRandomABCD` | `ABCDCardDisplay` | 单页 | 去掉指针，四格直铺点击，`resultFontSize`(48fp) | 四格直铺，`resultFontSize`(48fp) |
-| P2 | 八卦 | `WearDevineBaGua` | `BaGuaCardDisplay` | 单页 | `mainImageWidth`(55%) | `mainImageWidth`(70%) |
-| P2 | 随机颜色 | `WearRandomColors` | `RandomColorsCardDisplay` | 单页 | 全屏着色 + `safePadding` 安全区内文字 | 全屏着色 |
+| **P0** | 幸运转盘 | `WearRollWheel` (✅) | `RollWheelCardDisplay` | 多个转盘 | Canvas `scaledSize(260)`，纵向 ArcSwiper 切转盘 | Canvas `scaledSize(260)`，纵向 Swiper |
+| **P0** | 祝福木鱼 | `WearBlessingMuyu` (✅) | `BlessingMuyuCardDisplay` | 单页 | `mainImageWidth`(55%) + ArcList 列表 | `mainImageWidth`(70%) |
+| **P0** | 真心话大冒险 | `WearTruthOrDare` (✅) | `HonestOrChallenge` | 单页 | 上下分屏，点击直接出题 | 同左 |
+| P1 | 掷骰子 | `WearRollDices` (✅) | `RollDiceCardDisplay` | 单页 | `mainImageWidth`(55%) | `mainImageWidth`(70%) |
+| P1 | 丢硬币 | `WearFlipCoin` (✅) | `FlipCoinCardDisplay` | 单页 | `mainImageWidth`(55%) | `mainImageWidth`(70%) |
+| P1 | ABCD | `WearRandomABCD` (✅) | `ABCDCardDisplay` | 单页 | 四格直铺，`resultFontSize`(48fp) | 四格直铺 |
+| P2 | 八卦 | `WearDevineBaGua` (✅) | `BaGuaCardDisplay` | 单页 | `mainImageWidth`(55%) | `mainImageWidth`(70%) |
+| P2 | 随机颜色 | `WearRandomColors` (✅) | `RandomColorsCardDisplay` | 单页 | 全屏着色 | 全屏着色 |
+| — | 导航面板(圆) | `WearNavPanelRound` (✅) | — | — | ArcList 列表式快速入口 | — |
+| — | 导航面板(方) | `WearNavPanelSquare` (✅) | — | — | — | Grid 网格式快速入口 |
+| — | AppLink | `AppLinkQR` (✅) | — | 单页 | 二维码展示 | 二维码展示 |
 
 > ⚠️ 上表中括号内的数值为 **standard 尺寸**下的参考值（small 尺寸会自动缩小，见 §2.5 Token 查速表）。开发时直接引用 Token 名，不要硬编码数值。
 
@@ -1255,7 +1254,7 @@ buildSquareButton() {
 |------|------|:------:|---------|----------|
 | **幸运转盘** | `WearRollWheel` | ✅ 已实现 | 点击旋转 Canvas 转盘，纵向 Swiper 切换多个转盘 | `RollWheelCardDisplay` |
 | **祝福木鱼** | `WearBlessingMuyu` | ✅ 已实现 | 点击敲木鱼 + 计数持久化 + 祝福语气泡动画 | `BlessingMuyuCardDisplay` |
-| **真心话大冒险** | `WearTruthOrDare` 🆕 | 📋 规划中 | 上下分屏双模式，点击直接出结果 | `HonestOrChallenge` |
+| **真心话大冒险** | `WearTruthOrDare` | ✅ 已实现 | 上下分屏双模式，点击直接出题 | `HonestOrChallenge` |
 
 #### 为什么这三个是 P0？
 
@@ -1272,27 +1271,35 @@ buildSquareButton() {
 
 三个功能分别覆盖了手表随机工具的三个差异化维度：**多数据**（转盘）、**持久化**（木鱼）、**纯文本**（真心话大冒险）。
 
-#### P0 已实现优化项
+#### P0 已实现优化项（全部完成）
 
 | 优化项 | 涉及文件 | 状态 | 说明 |
 |--------|---------|:----:|------|
-| RollWheel 内部 Swiper 纵向化 | `WearRollWheel.ets` | ✅ v3.8 | 圆形屏 ArcSwiper(vertical) + 方形屏 Swiper(.vertical(true)) |
-| 圆/方屏双适配 | `Index.ets` + 全部子组件 | ✅ v3.5 | 容器层分叉，内容层共用 Token |
-| 功耗优化 | 各组件 `aboutToDisappear` | ⚠️ 部分 | 需在全部组件中补充 `aboutToDisappear` 资源释放 |
+| RollWheel 内部 Swiper 纵向化 | `WearRollWheel.ets` | ✅ | 圆形屏 ArcSwiper(vertical) + 方形屏 Swiper(.vertical(true)) |
+| 圆/方屏双适配 | `Index.ets` + 全部子组件 | ✅ | 容器层分叉，内容层共用 Token |
+| 功耗优化 | 各组件 `aboutToDisappear` | ✅ | 已在各组件中补充资源释放 |
+| 导航面板分屏适配 | `WearNavPanelRound` + `WearNavPanelSquare` | ✅ | 圆形屏 ArcList 列表式 / 方形屏 Grid 网格式 |
+| AppLink 二维码 | `AppLinkQR` | ✅ | 展示随易应用商店二维码 |
 
-#### P0 待实现
+#### P0 已无待实现项
 
-| 任务 | 优先级 | 说明 |
-|------|:------:|------|
-| 🆕 **WearTruthOrDare 组件开发** | P0 | 见 §4.6 详细方案 |
-| 🔧 RollWheel Canvas 旋转动画性能优化 | P0 | 当前动画可能掉帧，需 `OffscreenCanvas` + 帧率控制 |
-| 🔧 Muyu 震动反馈对接 | P0 | VIBRATE 权限已配置，需接入 `VibratorManager` |
-| ⚠️ 全部 P0 组件补充 `aboutToDisappear` 资源释放 | P0 | 遵循 §2.6 功耗优化策略 |
-| ⚠️ Index.ets 侧滑手势冲突验证 | P0 | 遵循 §6 问题6 方案验证 |
+> 全部 P0/P1/P2 功能组件已于 v1.0.19 完成开发和发布。后续迭代方向见 §10 后续迭代方向。
 
-### 4.6 真心话大冒险手表端适配方案 🆕
+### 4.6 真心话大冒险手表端适配方案（已实现）
 
-#### 4.6.1 手机端现状（参考）
+> ✅ 已完成开发并发布。本小节保留原设计文档供参考。
+
+#### 4.6.1 实际实现状态
+
+| 维度 | 实现 |
+|------|------|
+| 组件文件 | `product/wearable/.../sub_pages/WearTruthOrDare.ets` |
+| 数据源 | `utils/WearTruthOrDareData.ets`（独立复制手机端题库） |
+| 交互 | 上下分屏，点击真心话/大冒险区域直接出题 |
+| 震动 | `VibratorManager` from `@ohos/system-utils` |
+| 去重 | 连续两次不出同一结果 |
+
+#### 4.6.2 手机端参考
 
 | 维度 | 手机端 `HonestOrChallenge` | 手表端需改动 |
 |------|--------------------------|------------|
@@ -1389,10 +1396,10 @@ export const challenges: string[] = [
 
 ```typescript
 // product/wearable/src/main/ets/sub_pages/WearTruthOrDare.ets
-import { Random } from '@ohos/common';
+import { Random } from '@ohos/basic-utils';
 import WearScreenUtil from '../utils/WearScreenUtil';
 import { honests, challenges } from '../utils/WearTruthOrDareData';
-import { VibratorManager } from '@ohos/vibratorutil';
+import { VibratorManager } from '@ohos/system-utils';
 
 @Component
 export struct WearTruthOrDare {
@@ -1480,199 +1487,88 @@ export struct WearTruthOrDare {
 ```
 product/wearable/src/main/ets/
 ├── wearableability/
-│   └── WearableAbility.ets          # 已有：生命周期管理
+│   └── WearableAbility.ets          # 应用生命周期
 ├── wearablebackupability/
-│   └── WearableBackupAbility.ets    # 已有：备份恢复
+│   └── WearableBackupAbility.ets    # 备份恢复
 ├── pages/
-│   └── Index.ets                    # 重写：圆/方屏双适配 Swiper 主页
-├── sub_pages/                       # 手表端功能组件（参考手机端 CardDisplay 新建）
-│   ├── WearRollDices.ets            # 掷骰子（参考 RollDiceCardDisplay）
-│   ├── WearFlipCoin.ets             # 丢硬币（参考 FlipCoinCardDisplay）
-│   ├── WearRandomABCD.ets           # ABCD选择（参考 ABCDCardDisplay，去掉指针）
-│   ├── WearDevineBaGua.ets          # 八卦占卜（参考 BaGuaCardDisplay）
-│   ├── WearRollWheel.ets            # 🅿️ 幸运转盘（参考 RollWheelCardDisplay，含纵向Swiper+Canvas）
-│   ├── WearBlessingMuyu.ets         # 🅿️ 祝福木鱼（参考 BlessingMuyuCardDisplay）
-│   ├── WearTruthOrDare.ets          # 🆕 🅿️ 真心话大冒险（参考 HonestOrChallenge，简化分屏模式）
-│   └── WearRandomColors.ets         # 随机颜色（参考 RandomColorsCardDisplay）
+│   └── Index.ets                    # 圆/方屏双适配 Swiper 主页（含自动隐藏指示器）
+├── sub_pages/                       # 11 个手表端功能/导航组件（✅ 全部已实现）
+│   ├── WearNavPanelRound.ets        # 圆形屏导航面板（ArcList 列表式）
+│   ├── WearNavPanelSquare.ets       # 方形屏导航面板（Grid 网格式）
+│   ├── WearRollWheel.ets            # 幸运转盘（Canvas + 纵向 Swiper）
+│   ├── WearBlessingMuyu.ets         # 祝福木鱼（持久化计数）
+│   ├── WearTruthOrDare.ets          # 真心话大冒险（上下分屏）
+│   ├── WearRollDices.ets            # 掷骰子
+│   ├── WearFlipCoin.ets             # 丢硬币
+│   ├── WearRandomABCD.ets           # ABCD 选择
+│   ├── WearDevineBaGua.ets          # 八卦占卜
+│   ├── WearRandomColors.ets         # 随机颜色
+│   └── AppLinkQR.ets                # 随易 App 二维码
 └── utils/
-    ├── WearScreenUtil.ets           # 🆕 屏幕形状检测 + 适配工具类
-    ├── WearRollDataManager.ets      # 转盘数据管理（参考 RollDataManager，精简版）
-    └── WearTruthOrDareData.ets      # 🆕 真心话大冒险题库数据（独立复制手机端 challenges.ets）
-```
+    ├── WearScreenUtil.ets           # 屏幕形状检测 + 设计 Token 适配
+    ├── WearRollDataManager.ets      # 转盘数据管理（精简版）
+    └── WearTruthOrDareData.ets      # 真心话大冒险题库
 
 ---
 
-## 6. 需要解决的问题
+## 6. 已解决的问题（原实施问题清单）
 
-| # | 问题 | 影响范围 | 推荐方案 |
-|---|------|---------|---------|
-| 1 | **`build-profile.json5` 缺少 wearable 模块注册** | 整个模块 | **正确解决方案**：在顶层 `build-profile.json5` 的 `modules` 数组中添加 `{ "name": "wearable", "srcPath": "./product/wearable" }`（**不加 `targets` 字段**，与 `basic`、`VitalUI` 等公共模块一致，所有 product 构建都会自动包含）。注意：不要使用 `targets` 字段做 product 绑定，hvigor 在构建时会对 `targets` 做严格校验，容易报错（`Unknown target` 或 `target不能为空`） |
-| 2 | **RollDataManager 在 `product/default` 里，手表端无法直接 import** | 转盘功能 | 在 `wearable/utils/` 下新建 `WearRollDataManager.ets`，参考手机端逻辑独立实现 |
-| 3 | **图片资源需在 wearable resources 中补一份** | 全部有图片的组件 | 复制必要图片到 `product/wearable/src/main/resources/base/media/` |
-| 4 | **ArcSwiper / ArcList / ArcButton / ScreenShape 需要 API 18+** | 圆形屏全部 Arc 组件 + 屏幕形状检测 | **架构修正**：`compatibleSdkVersion` 是 app 级配置（products[].compatibleSdkVersion），不能为不同模块设置不同最低 API 版本。经实测验证，最简方案为 wearable 模块**不加 `targets`**（以通用模块模式参与构建），在 `WearScreenUtil` 里做运行时 try-catch 检测（低于 API 18 走标准 Swiper 方案），无需改动 `compatibleSdkVersion` |
-| 5 | ~~ArcSwiperAttribute 需手动导入~~ → **v3.5 已解决** | — | `@kit.ArkUI` 自动 re-export，无需手动导入 |
-| 6 | **横向 ArcSwiper 与系统侧滑返回的手势冲突** | 主页交互 | **UX 修正**：避免直接使用 `.disableSwipe(true)`（会完全禁用触摸滑动，体验极差）。推荐方案：① 缩小 ArcSwiper 触控热区（只在屏幕中部区域响应横滑，边缘留给系统侧滑返回）；② 提高手势识别阈值（通过 `gesture` 包裹，设置更大 `distance` 参数）；③ 接受侧滑返回（部分产品选择"放弃横向滑动，改用表冠+点击切换"） |
-| 7 | **`display` 模块 import 来源已确认** | 全部屏幕检测代码 | ✅ v3.4 确认：实际路径为 `@ohos.display`（手机端 DisplayMarquee.ets 已验证），非 `@kit.ArkUI` |
+> 以下问题已全部在 v1.0.19 版本中解决：
 
----
-
-## 7. 实施步骤
-
-### Step 1: 注册 wearable 模块
-
-在顶层 `build-profile.json5` 的 `modules` 数组中添加 wearable 模块注册。
-
-```
-操作清单：
-├── build-profile.json5 (顶层)
-│   └── 在 modules 数组中添加 { "name": "wearable", "srcPath": "./product/wearable" }
-│       ⚠️ 不加 targets 字段！与 basic/VitalUI 等公共模块一致
-├── product/wearable/src/main/module.json5
-│   └── 确认 deviceTypes 包含 "wearable"，确认 VIBRATE 权限已添加
-├── product/wearable/oh-package.json5
-│   └── 确认 @ohos/common 依赖已声明
-└── DevEco Studio 中构建，验证可编译
-```
-
-**配置示例（build-profile.json5 modules 数组）**：
-
-```json5
-// 在 modules 数组中添加（与 basic、VitalUI 同级）
-{
-  "name": "wearable",
-  "srcPath": "./product/wearable"
-  // ← 注意：不要加 targets 字段！
-  // targets 会导致 hvigor 构建时严格校验 product 绑定，
-  // 容易报错 "Unknown target" 或 "target不能为空"
-}
-```
-
-> **重要说明**：经实测验证，hvigor 构建系统对 `targets` 字段有严格校验——`targets[].name` 必须匹配模块自身 `build-profile.json5` 里定义的 target 名称（仅有 `"default"` 和 `"ohosTest"`），而 `applyToProducts` 不包含当前 product 时会报 `target不能为空`。最简方案是**不加 `targets`**，让模块以"通用模块"模式参与所有 product 构建。
-
-### Step 2: 新建屏幕适配工具类
-
-```
-新建文件：
-└── utils/WearScreenUtil.ets    # 屏幕形状 + 尺寸分级 + 设计 Token
-```
-
-`WearScreenUtil` 封装：
-- `isRoundScreen()` — 基于 `display.ScreenShape` 检测（API 18+，低版本默认方形）
-- `screenSize` — 基于 `display.width/height` 计算尺寸分级：small(<340vp) / standard / large(>460vp)
-- `screenWidth / screenHeight` — 屏幕物理尺寸 (vp)
-- 设计 Token（全部按 形状×尺寸 四象限取值）：
-  - `safePadding` / `contentWidthRatio` / `mainImageWidth` — 布局类
-  - `resultFontSize` / `subFontSize` / `buttonFontSize` — 字号类
-  - `listItemSpace` / `minTouchSize` — 间距类
-  - `scaledSize(基准值)` — Canvas 精确尺寸，按屏幕比例缩放
-
-### Step 3: 新建手表端功能组件
-
-在 `product/wearable/src/main/ets/sub_pages/` 下逐个创建功能组件（按 P0→P1→P2 优先级）：
-
-```
-新建文件清单（按优先级）：
-├── sub_pages/WearRollWheel.ets          # 🅿️ 参考 RollWheelCardDisplay（含纵向Swiper+Canvas）
-├── sub_pages/WearBlessingMuyu.ets       # 🅿️ 参考 BlessingMuyuCardDisplay
-├── sub_pages/WearTruthOrDare.ets        # 🆕 🅿️ 参考 HonestOrChallenge（简化分屏，见 §4.6）
-├── sub_pages/WearRollDices.ets          # 参考 RollDiceCardDisplay
-├── sub_pages/WearFlipCoin.ets           # 参考 FlipCoinCardDisplay
-├── sub_pages/WearRandomABCD.ets         # 参考 ABCDCardDisplay（去掉指针，四格直铺）
-├── sub_pages/WearDevineBaGua.ets        # 参考 BaGuaCardDisplay
-├── sub_pages/WearRandomColors.ets       # 参考 RandomColorsCardDisplay
-├── utils/WearRollDataManager.ets        # 参考 RollDataManager（精简版）
-└── utils/WearTruthOrDareData.ets        # 🆕 真心话大冒险题库（独立复制手机端 challenges.ets）
-```
-
-每个组件内部使用 `WearScreenUtil` 适配尺寸，圆形/方形屏自适应。
-
-### Step 4: 搭建手表主页
-
-重写手表端 Index.ets，实现 ArcSwiper（圆形屏）/ Swiper（方形屏）双适配布局。
-
-```
-操作清单：
-├── 重写 Index.ets → ArcSwiper（圆形）vs Swiper（方形）双布局
-├── 圆形屏配置：ArcSwiperController + ArcDotIndicator + CrownSensitivity
-├── 方形屏配置：标准 Swiper + indicator + loop
-├── main_pages.json 只保留 "pages/Index"
-├── oh-package.json5 确认依赖 @ohos/common（@kit.ArkUI 为系统 SDK，无需添加）
-└── 复制必要图片资源到 wearable/resources/base/media/
-```
-
-### Step 5: 适配手表端细节
-
-```
-适配清单：
-├── ArcSwiper 弧形排列效果验证（子组件分布、滑动路径）
-├── ArcDotIndicator 方向与颜色验证（6点钟方向，与背景对比度）
-├── digitalCrownSensitivity 表冠灵敏度微调（LOW/MEDIUM/HIGH）
-├── ArcButton 在圆形屏上贴合效果验证（如有操作按钮）
-├── 震动反馈接入（每次随机结果时 haptic）
-├── 验证 ArcSwiper 横向滑动与侧滑返回无冲突
-├── 方形屏 Swiper 布局验证（无裁切，四角可用）
-└── 圆/方屏尺寸 Token 数值微调（按实际设备调优）
-```
-
-### Step 6: 调试打包
-
-```
-操作清单：
-├── DevEco Studio 选择 wearable target 构建
-├── 圆形手表模拟器测试（Watch GT Pro 模拟器）
-├── 方形手表模拟器测试（Watch D 模拟器）
-└── 签名打包 .hap
-```
+| # | 问题 | 解决方案 |
+|---|------|---------|
+| 1 | `build-profile.json5` 缺少 wearable 模块注册 | ✅ 已添加，不加 targets 字段 |
+| 2 | RollDataManager 在 `product/default` 里，手表端无法直接 import | ✅ `utils/WearRollDataManager.ets` 已独立实现 |
+| 3 | 图片资源需在 wearable resources 中补一份 | ✅ 已复制必要资源 |
+| 4 | ArcSwiper 需要 API 18+ | ✅ `WearScreenUtil` 内运行时检测，低版本降级方形屏 |
+| 5 | ArcSwiperAttribute 需手动导入 | ✅ `@kit.ArkUI` 自动 re-export 已确认 |
+| 6 | 横向 ArcSwiper 与系统侧滑返回的手势冲突 | ✅ 通过 `onGestureSwipe` + 自动隐藏指示器方案缓解 |
+| 7 | `display` 模块 import 来源 | ✅ 确认为 `@ohos.display` |
 
 ---
 
-## 8. 文件变更清单
+## 7. 实施完成回顾
 
-### 8.1 修改的现有文件
+> 手表端 v1.0.19 (V0.0.1) 已于 2026-06 完成并发布。
 
-| 文件路径 | 变更内容 |
-|---------|---------|
-| `build-profile.json5` | 在 modules 数组中添加 wearable 模块注册（不加 targets） |
-| `product/wearable/src/main/module.json5` | 取消注释 + 添加 VIBRATE 权限 |
-| `product/wearable/src/main/ets/pages/Index.ets` | 重写为横向 Swiper 主页 |
-| `product/wearable/src/main/resources/base/profile/main_pages.json` | 只保留 Index |
-| `product/wearable/oh-package.json5` | 确认 @ohos/common 依赖（@kit.ArkUI 为 SDK 内置，无需额外添加） |
+### 完成内容
 
-### 8.2 新建的文件
+| 阶段 | 内容 | 状态 |
+|:----:|------|:----:|
+| Step 1 | 模块注册 + module.json5 + 依赖 | ✅ |
+| Step 2 | WearScreenUtil 屏幕适配工具 | ✅ |
+| Step 3 | 全部 11 个 sub_pages 组件 | ✅ |
+| Step 4 | Index.ets 双适配主页 | ✅ |
+| Step 5 | 震动反馈 + 资源复制 | ✅ |
+| Step 6 | 构建调试打包 | ✅ |
 
-| 文件路径 | 优先级 | 说明 | 参考来源 |
-|---------|:-----:|------|---------|
-| `product/wearable/src/main/ets/sub_pages/WearRollWheel.ets` | P0 | 幸运转盘 | `form_display/RollWheelCardDisplay.ets` |
-| `product/wearable/src/main/ets/sub_pages/WearBlessingMuyu.ets` | P0 | 祝福木鱼 | `form_display/BlessingMuyuCardDisplay.ets` |
-| `product/wearable/src/main/ets/sub_pages/WearTruthOrDare.ets` | 🆕 P0 | 真心话大冒险 | `sub_pages/honest_or_challenge/HonestOrChallenge.ets` |
-| `product/wearable/src/main/ets/utils/WearTruthOrDareData.ets` | 🆕 P0 | 真心话大冒险题库 | `static_datas/challenges.ets` |
-| `product/wearable/src/main/ets/sub_pages/WearRollDices.ets` | P1 | 掷骰子 | `form_display/RollDiceCardDisplay.ets` |
-| `product/wearable/src/main/ets/sub_pages/WearFlipCoin.ets` | P1 | 丢硬币 | `form_display/FlipCoinCardDisplay.ets` |
-| `product/wearable/src/main/ets/sub_pages/WearRandomABCD.ets` | P1 | ABCD选择 | `form_display/ABCDCardDisplay.ets` |
-| `product/wearable/src/main/ets/sub_pages/WearDevineBaGua.ets` | P2 | 八卦占卜 | `form_display/BaGuaCardDisplay.ets` |
-| `product/wearable/src/main/ets/sub_pages/WearRandomColors.ets` | P2 | 随机颜色 | `form_display/RandomColorsCardDisplay.ets` |
-| `product/wearable/src/main/ets/utils/WearRollDataManager.ets` | P0 | 转盘数据管理 | `pages/RollPage/RollDataManager.ets` |
-| `product/wearable/src/main/ets/utils/WearScreenUtil.ets` | P0 | 🆕 屏幕形状检测 + 设计 Token 适配 | `@ohos.display` API 18+ |
+---
 
-### 8.3 需要复制的资源文件
+## 8. 文件清单（当前实际状态）
 
-手表端需要独立拥有一份图片资源，以下资源需复制到 `product/wearable/src/main/resources/base/media/`：
+### 已有的文件
 
-```
-dice1.png ~ dice6.png     # 骰子图片
-coin1.png, coin2.png      # 硬币图片
-needle.svg                # ABCD 指针（如保留指针模式则需要）
-pointer_m.svg             # 转盘指针
-BaGua.png                 # 八卦图
-MuYu.png                  # 木鱼图片
-```
-
-颜色资源需复制到 `product/wearable/src/main/resources/base/element/`：
-
-```
-color.json                # 颜色 token（Comp_Bg1~4, Brand, FontIcon_Fore1~2 等）
-string.json               # 字符串资源
-```
+| 文件路径 | 说明 |
+|---------|------|
+| `product/wearable/src/main/module.json5` | 模块配置，含 VIBRATE 权限 |
+| `product/wearable/oh-package.json5` | 依赖 `@ohos/basic-utils`, `@ohos/system-utils` |
+| `product/wearable/src/main/ets/pages/Index.ets` | 圆/方屏双适配主线 |
+| `product/wearable/src/main/ets/sub_pages/WearNavPanelRound.ets` | 圆形屏导航面板 |
+| `product/wearable/src/main/ets/sub_pages/WearNavPanelSquare.ets` | 方形屏导航面板 |
+| `product/wearable/src/main/ets/sub_pages/WearRollWheel.ets` | 幸运转盘 |
+| `product/wearable/src/main/ets/sub_pages/WearBlessingMuyu.ets` | 祝福木鱼 |
+| `product/wearable/src/main/ets/sub_pages/WearTruthOrDare.ets` | 真心话大冒险 |
+| `product/wearable/src/main/ets/sub_pages/WearRollDices.ets` | 掷骰子 |
+| `product/wearable/src/main/ets/sub_pages/WearFlipCoin.ets` | 抛硬币 |
+| `product/wearable/src/main/ets/sub_pages/WearRandomABCD.ets` | ABCD 选择 |
+| `product/wearable/src/main/ets/sub_pages/WearDevineBaGua.ets` | 八卦占卜 |
+| `product/wearable/src/main/ets/sub_pages/WearRandomColors.ets` | 随机颜色 |
+| `product/wearable/src/main/ets/sub_pages/AppLinkQR.ets` | AppLink 二维码 |
+| `product/wearable/src/main/ets/utils/WearScreenUtil.ets` | 屏幕适配工具 |
+| `product/wearable/src/main/ets/utils/WearRollDataManager.ets` | 转盘数据管理 |
+| `product/wearable/src/main/ets/utils/WearTruthOrDareData.ets` | 真心话题库 |
+| `product/wearable/src/main/ets/wearableability/WearableAbility.ets` | 主 Ability |
+| `product/wearable/src/main/ets/wearablebackupability/WearableBackupAbility.ets` | 备份 Ability |
 
 ---
 
