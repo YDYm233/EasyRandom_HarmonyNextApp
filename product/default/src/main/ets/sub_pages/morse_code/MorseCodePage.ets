@@ -114,13 +114,18 @@ struct MorseCodePage {
           this.signalStart()
           await delay(this.dotMs)
           this.signalEnd()
-          await delay(GAP_SYMBOL)
+          await delay(this.dotMs)
           break
         case '-':
           this.signalStart()
           await delay(this.dotMs * 3)
           this.signalEnd()
-          await delay(GAP_SYMBOL)
+          await delay(this.dotMs)
+          break
+        case '/':
+          await delay(this.dotMs * 3)
+          break
+        default:
           break
       }
     }
@@ -136,6 +141,7 @@ struct MorseCodePage {
     this.setTorch(false)
     this.signalClear()
     this.currentSymbolIndex = -1
+    this.progressPercent = 0
   }
 
   build() {
@@ -291,7 +297,7 @@ struct MorseCodePage {
                   .width('100%').height(52)
                   .backgroundColor($r("app.color.Brand")).borderRadius(26)
                   .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.95 })
-                  .onClick(() => this.stopPlay())
+                  .onClick(() => { this.stopPlay() })
                 } else {
                   Button() {
                     Row({ space: 8 }) {
@@ -299,8 +305,12 @@ struct MorseCodePage {
                       Text('开始播放').fontSize(17).fontWeight(FontWeight.Bold).fontColor($r("app.color.control_fc_1"))
                     }
                   }
-                    .enabled(this.morseText.length > 0 && (this.useVibrate || this.useTorch || this.useScreenFlash))
-                    .opacity(this.morseText.length > 0 && (this.useVibrate || this.useTorch || this.useScreenFlash) ? 1 : 0.5)
+                  .width('100%').height(52)
+                  .backgroundColor($r("app.color.Brand")).borderRadius(26)
+                  .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.95 })
+                  .enabled(this.morseText.length > 0 && (this.useVibrate || this.useTorch || this.useScreenFlash))
+                  .opacity(this.morseText.length > 0 && (this.useVibrate || this.useTorch || this.useScreenFlash) ? 1 : 0.5)
+                  .onClick(() => { this.startPlay() })
                 }
 
               }
@@ -315,25 +325,19 @@ struct MorseCodePage {
       }
       .height('100%').backgroundColor($r("app.color.Comp_Bg3"))
 
-      // 全屏闪烁遮罩 — 白色（覆盖标题栏）
+      // 全屏闪烁遮罩 — 亮信号（覆盖标题栏）
       if (this.flashOn) {
         Column()
           .width('100%').height('100%')
-          .backgroundColor(0x3300BEFF)
-          .hitTestBehavior(HitTestMode.None)
+          .backgroundColor($r("app.color.Cont_Bg2"))
+          .hitTestBehavior(HitTestMode.Transparent)
       }
+      // 全屏闪烁遮罩 — 暗间隔（覆盖标题栏）
       if (this.flashOff) {
         Column()
           .width('100%').height('100%')
-          .backgroundColor(0x99000000)
-          .hitTestBehavior(HitTestMode.None)
-      }
-      // 全屏闪烁遮罩 — 黑色间隔（覆盖标题栏）
-      if (this.flashOff) {
-        Column()
-          .width('100%').height('100%')
-          .backgroundColor('#000000')
-          .hitTestBehavior(HitTestMode.None)
+          .backgroundColor($r("app.color.Comp_Bg3"))
+          .hitTestBehavior(HitTestMode.Transparent)
       }
     }
     .width('100%').height('100%')
