@@ -28,7 +28,7 @@ struct RadixConverterPage {
 
         GridCol({ span: { sm: 6, md: 8, lg: 10 } }) {
           Row() {
-            Text('进制转换').fontColor($r("app.color.FontIcon_Fore1"))
+            Text($r("app.string.page_radix_converter")).fontColor($r("app.color.FontIcon_Fore1"))
           }
           .width('100%').height($r("app.float.header_height"))
           .justifyContent(FlexAlign.Center).alignItems(VerticalAlign.Center)

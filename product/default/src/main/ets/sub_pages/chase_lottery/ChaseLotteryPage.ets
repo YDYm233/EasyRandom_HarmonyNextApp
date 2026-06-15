@@ -28,7 +28,7 @@ struct ChaseLotteryPage {
 
         GridCol({ span: { sm: 6, md: 8, lg: 10 } }) {
           Row() {
-            Text('跑灯抽奖').fontColor($r("app.color.FontIcon_Fore1"))
+            Text($r("app.string.page_chase_lottery")).fontColor($r("app.color.FontIcon_Fore1"))
           }
           .width('100%').height($r("app.float.header_height"))
           .justifyContent(FlexAlign.Center).alignItems(VerticalAlign.Center)

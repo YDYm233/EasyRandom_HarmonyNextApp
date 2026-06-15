@@ -1,4 +1,4 @@
-import router from '@ohos.router';
+﻿import router from '@ohos.router';
 
 class Params {
   type: string
@@ -28,7 +28,7 @@ struct PasswordGenPage {
 
         GridCol({ span: { sm: 6, md: 8, lg: 10 } }) {
           Row() {
-            Text('强密码生成').fontColor($r("app.color.FontIcon_Fore1"))
+            Text($r("app.string.page_password_gen")).fontColor($r("app.color.FontIcon_Fore1"))
           }
           .width('100%').height($r("app.float.header_height"))
           .justifyContent(FlexAlign.Center).alignItems(VerticalAlign.Center)
