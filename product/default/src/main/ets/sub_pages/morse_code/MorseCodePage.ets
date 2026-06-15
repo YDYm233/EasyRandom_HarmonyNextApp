@@ -33,6 +33,7 @@ struct MorseCodePage {
 
   aboutToAppear(): void {
     this.initTorch()
+    this.selectPreset('SOS')
   }
 
   async initTorch(): Promise<void> {
@@ -228,9 +229,9 @@ struct MorseCodePage {
                 Column({ space: 8 }) {
                   Text('输出方式').fontSize(14).fontWeight(FontWeight.Medium).fontColor($r("app.color.FontIcon_Fore1")).width('100%')
                   Row() {
-                    this.CheckBox('🔊 震动', this.useVibrate, (v: boolean) => { this.useVibrate = v })
-                    this.CheckBox('📸 手电筒', this.useTorch, (v: boolean) => { this.useTorch = v })
-                    this.CheckBox('💻 屏幕', this.useScreenFlash, (v: boolean) => { this.useScreenFlash = v })
+                    this.CheckBox('🔊 震动', this.useVibrate, this.isPlaying, (v: boolean) => { this.useVibrate = v })
+                    this.CheckBox('📸 手电筒', this.useTorch, this.isPlaying, (v: boolean) => { this.useTorch = v })
+                    this.CheckBox('💻 屏幕', this.useScreenFlash, this.isPlaying, (v: boolean) => { this.useScreenFlash = v })
                   }
                   .width('100%').justifyContent(FlexAlign.SpaceEvenly)
                   if (this.useTorch && !this.torchReady) {
@@ -268,10 +269,10 @@ struct MorseCodePage {
                 // ── 快捷短语 ──
                 Column({ space: 8 }) {
                   Text('快捷短语').fontSize(14).fontWeight(FontWeight.Medium).fontColor($r("app.color.FontIcon_Fore1")).width('100%')
-                  Row() {
+                  Flex({ wrap: FlexWrap.Wrap }) {
                     ForEach(PRESETS, (item: string) => {
                       Button(item).fontSize(13).type(ButtonType.Capsule)
-                        .onClick(() => this.selectPreset(item)).margin({ right: 10 })
+                        .onClick(() => this.selectPreset(item)).margin({ right: 10, bottom: 8 })
                         .backgroundColor($r("app.color.Comp_Bg2")).fontColor($r("app.color.FontIcon_Fore1"))
                     })
                   }
@@ -281,17 +282,23 @@ struct MorseCodePage {
 
                 // ── 播放按钮 ──
                 if (this.isPlaying) {
-                  Button('⏹ 停止播放')
-                    .width('100%').height(52).fontSize(17).fontWeight(FontWeight.Bold)
-                    .fontColor($r("app.color.control_fc_1")).backgroundColor($r("app.color.Brand")).borderRadius(26)
-                    .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.95 })
-                    .onClick(() => this.stopPlay())
+                  Button() {
+                    Row({ space: 8 }) {
+                      SymbolGlyph($r('sys.symbol.pause_fill')).fontSize(20).fontColor([$r("app.color.control_fc_1")])
+                      Text('停止播放').fontSize(17).fontWeight(FontWeight.Bold).fontColor($r("app.color.control_fc_1"))
+                    }
+                  }
+                  .width('100%').height(52)
+                  .backgroundColor($r("app.color.Brand")).borderRadius(26)
+                  .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.95 })
+                  .onClick(() => this.stopPlay())
                 } else {
-                  Button('▶ 开始播放')
-                    .width('100%').height(52).fontSize(17).fontWeight(FontWeight.Bold)
-                    .fontColor($r("app.color.control_fc_1")).backgroundColor($r("app.color.Brand")).borderRadius(26)
-                    .clickEffect({ level: ClickEffectLevel.MIDDLE, scale: 0.95 })
-                    .onClick(() => this.startPlay())
+                  Button() {
+                    Row({ space: 8 }) {
+                      SymbolGlyph($r('sys.symbol.play_fill')).fontSize(20).fontColor([$r("app.color.control_fc_1")])
+                      Text('开始播放').fontSize(17).fontWeight(FontWeight.Bold).fontColor($r("app.color.control_fc_1"))
+                    }
+                  }
                     .enabled(this.morseText.length > 0 && (this.useVibrate || this.useTorch || this.useScreenFlash))
                     .opacity(this.morseText.length > 0 && (this.useVibrate || this.useTorch || this.useScreenFlash) ? 1 : 0.5)
                 }
@@ -312,7 +319,13 @@ struct MorseCodePage {
       if (this.flashOn) {
         Column()
           .width('100%').height('100%')
-          .backgroundColor('#FFFFFF')
+          .backgroundColor(0x3300BEFF)
+          .hitTestBehavior(HitTestMode.None)
+      }
+      if (this.flashOff) {
+        Column()
+          .width('100%').height('100%')
+          .backgroundColor(0x99000000)
           .hitTestBehavior(HitTestMode.None)
       }
       // 全屏闪烁遮罩 — 黑色间隔（覆盖标题栏）
@@ -327,12 +340,15 @@ struct MorseCodePage {
   }
 
   @Builder
-  CheckBox(label: string, checked: boolean, onChange: (v: boolean) => void) {
+  CheckBox(label: string, checked: boolean, disabled: boolean, onChange: (v: boolean) => void) {
     Row({ space: 6 }) {
       Checkbox()
         .select(checked).selectedColor($r("app.color.Brand"))
+        .enabled(!disabled)
         .onChange((v: boolean) => onChange(v))
-      Text(label).fontSize(13).fontColor($r("app.color.FontIcon_Fore1"))
+      Text(label).fontSize(13)
+        .fontColor($r("app.color.FontIcon_Fore1"))
+        .opacity(disabled ? 0.5 : 1)
     }
   }
 }
