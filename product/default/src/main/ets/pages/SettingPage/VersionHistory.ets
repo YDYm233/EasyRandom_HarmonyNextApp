@@ -319,13 +319,17 @@ struct VersionHistoryComponent {
               .alignItems(VerticalAlign.Top)
             }
             .width('100%')
+            .padding(12)
+            .borderRadius(12)
+            .clip(true)
+            .backgroundColor($r("app.color.Comp_Bg2"))
           }
           .width('100%')
           .padding(16)
           .backgroundColor($r("app.color.Comp_Bg1"))
           .borderRadius(20)
+          .clip(true)
           .margin({ top: 12 })
-          .border({ width: 1, color: $r("app.color.FontIcon_Fore4"), style: BorderStyle.Dashed })
 
           Column() {
             Row() {
@@ -498,11 +502,16 @@ struct VersionHistoryComponent {
               .alignItems(VerticalAlign.Top)
             }
             .width('100%')
+            .padding(12)
+            .borderRadius(12)
+            .clip(true)
+            .backgroundColor($r("app.color.Comp_Bg2"))
           }
           .width('100%')
           .padding(16)
           .backgroundColor($r("app.color.Comp_Bg1"))
           .borderRadius(20)
+          .clip(true)
           .margin({ top: 12 })
 
           // 历史版本列表
@@ -582,16 +591,16 @@ struct VersionHistoryComponent {
         }, (feature: string) => feature)
       }
       .width('100%')
+      .padding(12)
+      .borderRadius(12)
+      .clip(true)
+      .backgroundColor($r("app.color.Comp_Bg2"))
     }
     .width('100%')
     .padding(16)
     .backgroundColor($r("app.color.Comp_Bg1"))
     .borderRadius(20)
+    .clip(true)
     .margin({ bottom: 12 })
-    .border(versionInfo.isPrerelease ? {
-      width: 1,
-      color: $r("app.color.FontIcon_Fore4"),
-      style: BorderStyle.Dashed
-    } : null)
   }
 }

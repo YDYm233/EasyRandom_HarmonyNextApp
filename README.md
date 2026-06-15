@@ -10,9 +10,9 @@
   <strong>面向生活的随机工具箱 · 纯血鸿蒙原生应用</strong>
 </p>
 <p align="center">
-  <img src="https://img.shields.io/badge/HarmonyOS-NEXT%205.0+-blue" alt="HarmonyOS"/>
-  <img src="https://img.shields.io/badge/API-13%2B-brightgreen" alt="API 13+"/>
-  <img src="https://img.shields.io/badge/Version-1.0.19-orange" alt="Version"/>
+  <img src="https://img.shields.io/badge/HarmonyOS-NEXT%206.1.0-blue" alt="HarmonyOS"/>
+  <img src="https://img.shields.io/badge/API-23%2B-brightgreen" alt="API 23+"/>
+  <img src="https://img.shields.io/badge/Version-1.0.20-orange" alt="Version"/>
   <img src="https://img.shields.io/badge/License-Apache%202.0-lightgrey" alt="License"/>
 </p>
 
@@ -37,14 +37,16 @@
 
 | 特性 | 说明 |
 |------|------|
-| 🧩 **多设备适配** | 支持手机、平板、2in1、车机，手表端开发中 |
-| 📱 **服务卡片** | 桌面服务卡片，无需打开应用即可使用 |
+| 🧩 **多设备适配** | 支持手机、平板、2in1、车机、手表（V0.0.1 已上线） |
+| 📱 **服务卡片** | 8 种桌面服务卡片，无需打开应用即可使用 |
 | 🔗 **元服务** | 提供轻量级元服务版本，即点即用 |
-| 🌐 **多语言** | 支持中文简体、English,部分支持Japanese，其他语言适配中 |
-| 🌙 **暗夜模式** | 完整适配深色主题 |
+| 🌐 **多语言** | 支持中文简体、English、部分支持 Japanese，其他语言适配中 |
+| 🌙 **暗夜模式** | 完整适配深色主题，支持手动切换暗色/亮色/跟随系统 |
 | 📐 **响应式布局** | 基于断点系统的自适应栅格布局 |
 | 🔒 **隐私合规** | 内置隐私政策弹窗，符合应用市场审核要求 |
 | 📊 **VitalUI 图表库** | 自研图表组件库（饼图、玫瑰图、雷达图等） |
+| 📳 **震动反馈** | 应用级震动管理开关，支持多种触觉反馈 |
+| 🔗 **应用分享** | 支持系统分享能力，快速分享应用 |
 
 ---
 
@@ -79,7 +81,7 @@
 
 - **语言**：ArkTS（TypeScript 超集）
 - **UI 框架**：ArkUI（声明式 UI）
-- **SDK 版本**：HarmonyOS NEXT (API 13+)
+- **SDK 版本**：HarmonyOS NEXT (API 23 / SDK 6.1.0)
 - **构建工具**：hvigor
 - **模块化方案**：HAP + HAR 多模块架构
 
@@ -87,18 +89,21 @@
 
 ```
 app_EasyRandom
-├── product/default         # 主入口模块 (HAP)  — 手机/平板/2in1/车机
-├── product/wearable        # 手表模块 (HAP)   — 开发中，暂未启用
-├── common/basic            # 公共基础库 (HAR)  — 通用组件、工具函数
-└── common/VitalUI          # 图表组件库 (HAR)  — 饼图、玫瑰图、雷达图
+├── product/default         # 主入口模块 (HAP) — 手机/平板/2in1/车机
+├── product/wearable        # 手表模块 (HAP)   — 已发布 V0.0.1
+├── common/BasicUtils       # 基础工具包 (HAR)  — 日志、常量、随机算法、颜色转换
+├── common/SystemUtils      # 系统能力封装 (HAR) — 震动、断点、API版本、分享
+└── common/VitalUI          # 图表组件库 (HAR)  — 饼图、玫瑰图、雷达图、颜色选择器
 ```
 
 ### 依赖关系
 
 ```
-product/default  ──→  @ohos/common (basic)
-                  ──→  @ohos/vitalui (VitalUI)
-product/wearable  ──→  @ohos/common (basic)
+product/default  ──→  @ohos/basic-utils, @ohos/system-utils, @ohos/vital-ui
+product/wearable  ──→  @ohos/basic-utils
+SystemUtils       ──→  BasicUtils (VibratorManager 使用 Logger)
+VitalUI           ──→  (暂无依赖)
+BasicUtils        ──→  (无依赖，最底层)
 ```
 
 ---
@@ -120,23 +125,29 @@ app_EasyRandom/
 │
 ├── build-profile.json5                    # 顶层构建配置（签名、产品、模块注册）
 │
-├── common/                                # 共享库目录
-│   ├── basic/                             # 公共基础库 (HAR) — @ohos/common
+├── common/                                # 共享库目录 — 3 个 HAR
+│   ├── BasicUtils/                        # 基础工具包 (HAR) — @ohos/basic-utils
 │   │   └── src/main/ets/
-│   │       ├── components/                # 公共 UI 组件
-│   │       │   ├── MainPage.ets           # 通用主页面框架
-│   │       │   └── ColorPickerComponent/  # 颜色选择器组件
-│   │       └── utils/                     # 工具函数
-│   │           ├── BreakPointSystem.ets   # 断点系统（响应式布局）
-│   │           ├── CommonConstants.ets    # 全局常量
-│   │           ├── GlobalContext.ets      # 全局上下文管理
-│   │           ├── Logger.ets             # 日志工具
-│   │           └── Math.ets              # 数学工具函数
-│   └── VitalUI/                           # 自研图表组件库 (HAR) — @ohos/vitalui
+│   │       ├── utils/                     # 通用基础设施
+│   │       │   ├── Logger.ets             # 日志工具
+│   │       │   ├── CommonConstants.ets    # 全局常量
+│   │       │   └── GlobalContext.ets      # 全局上下文
+│   │       └── algo/                      # 自定义业务逻辑
+│   │           └── Math.ets              # Random/Randoms/ExColor/rgbaToHex8
+│   │
+│   ├── SystemUtils/                       # 系统能力封装 (HAR) — @ohos/system-utils
+│   │   └── src/main/ets/utils/
+│   │       ├── VibratorManager.ets        # 震动控制
+│   │       ├── BreakPointSystem.ets       # 响应式断点系统
+│   │       ├── ApiVersionUtil.ets         # API 版本兼容
+│   │       └── ShareManager.ets           # 应用分享
+│   │
+│   └── VitalUI/                           # 自研图表组件库 (HAR) — @ohos/vital-ui
 │       └── src/main/ets/
-│           ├── chart/                     # 图表组件（饼图、玫瑰图、雷达图）
-│           ├── Demo/                      # 组件演示页面
-│           └── utils/                     # 图表工具函数
+│           ├── components/
+│           │   ├── ColorPickerComponent/  # 颜色选择器
+│           │   └── chart/                 # 图表组件（饼图、玫瑰图、雷达图）
+│           └── Demo/                      # 组件演示页面
 │
 ├── product/                               # 产品模块目录
 │   ├── default/                           # 主入口模块 (HAP) — 手机/平板/2in1/车机
@@ -147,20 +158,23 @@ app_EasyRandom/
 │   │       │   ├── defaultformability/    # 服务卡片 Ability
 │   │       │   ├── pages/                 # 主页面（Tab 根页面）
 │   │       │   │   ├── IndexPage/         # 应用壳页（导航入口）
-│   │       │   │   ├── RollPage/          # 幸运转盘主页
-│   │       │   │   ├── SettingPage/       # 设置页面
+│   │       │   │   │   ├── Index.ets      # TabBar 入口
+│   │       │   │   │   ├── HdsMainPage.ets# HDS 新主页
+│   │       │   │   │   └── LegacyMainPage.ets  # 旧版主页
+│   │       │   │   ├── RollPage/          # 幸运转盘主页（含编辑器/数据管理）
+│   │       │   │   ├── SettingPage/       # 设置页面（Navigation 导航组）
 │   │       │   │   ├── AnswerPage.ets     # 答案之书
 │   │       │   │   ├── CardsPage.ets      # 服务卡片展示页
 │   │       │   │   ├── MorePage.ets       # 更多功能页
 │   │       │   │   ├── RandomPage.ets     # 随机工具主页
 │   │       │   │   └── ToolsPage.ets      # 工具箱入口页
-│   │       │   ├── sub_pages/             # 子功能页面
-│   │       │   │   ├── a_standard/        # 规范示例/测试标准页
+│   │       │   ├── sub_pages/             # 子功能页面（router 跳转）
+│   │       │   │   ├── a_standard/        # A标抽取/测试标准
 │   │       │   │   ├── answer_book/       # 答案之书
-│   │       │   │   ├── blessing_muyu/     # 祝福木鱼
-│   │       │   │   ├── devine_bagua/      # 八卦占卜
-│   │       │   │   ├── flip_coin/         # 丢硬币
-│   │       │   │   ├── flip_dices/        # 掷骰子
+│   │       │   │   ├── blessing_muyu/     # 祝福木鱼（V1+V2）
+│   │       │   │   ├── devine_bagua/      # 八卦占卜 + 64卦
+│   │       │   │   ├── flip_coin/         # 抛硬币
+│   │       │   │   ├── flip_dices/        # 掷骰子（V1+V2）
 │   │       │   │   ├── honest_or_challenge/ # 真心话大冒险
 │   │       │   │   ├── random_abcd/       # ABCD 选择器
 │   │       │   │   ├── random_colors/     # 颜色搭配
@@ -168,17 +182,17 @@ app_EasyRandom/
 │   │       │   │   ├── random_names/      # 抽签
 │   │       │   │   ├── random_numbers/    # 随机数
 │   │       │   │   ├── random_places/     # 随机景点
-│   │       │   │   ├── roll_wheel/        # 幸运转盘（子页）
 │   │       │   │   ├── text_marquee/      # 手持弹幕
 │   │       │   │   └── trans_qr/          # 二维码转换
 │   │       │   ├── form_cards/            # 服务卡片 UI 组件
-│   │       │   │   ├── ABCDCard.ets
-│   │       │   │   ├── BaGuaCard.ets
-│   │       │   │   ├── BlessingMuyuCard.ets
-│   │       │   │   ├── FlipCoinCard.ets
-│   │       │   │   ├── RandomColorsCard.ets
-│   │       │   │   ├── RollDiceCard.ets
-│   │       │   │   └── RollWheelCard.ets
+│   │       │   │   ├── RollWheelCard.ets  # 转盘卡片
+│   │       │   │   ├── BlessingMuyuCard.ets # 木鱼卡片
+│   │       │   │   ├── TruthOrDareCard.ets # 真心话大冒险卡片
+│   │       │   │   ├── FlipCoinCard.ets   # 硬币卡片
+│   │       │   │   ├── RollDiceCard.ets   # 骰子卡片
+│   │       │   │   ├── ABCDCard.ets       # ABCD 卡片
+│   │       │   │   ├── BaGuaCard.ets      # 八卦卡片
+│   │       │   │   └── RandomColorsCard.ets # 颜色卡片
 │   │       │   ├── form_display/          # 卡片在应用内预览展示
 │   │       │   ├── design_privew/         # UI 设计预览/测试页
 │   │       │   ├── static_datas/          # 静态数据文件
@@ -192,26 +206,41 @@ app_EasyRandom/
 │   │       └── resources/                 # 模块资源
 │   │           └── base/profile/
 │   │               ├── main_pages.json    # 页面路由注册
-│   │               ├── route_map.json     # 路由映射
+│   │               ├── route_map.json     # 命名路由映射
 │   │               └── form.json          # 服务卡片配置
 │   │
-│   └── wearable/                          # 手表模块 (HAP) — 开发中
+│   └── wearable/                          # 手表模块 (HAP) — V0.0.1 已发布
 │       └── src/main/ets/
 │           ├── wearableability/           # 手表 Ability
 │           ├── wearablebackupability/     # 手表备份 Ability
-│           ├── Contexts/                  # 上下文管理
-│           └── pages/                     # 手表页面
+│           ├── pages/                     # 手表首页
+│           ├── sub_pages/                 # 手表功能子页面
+│           │   ├── WearFlipCoin.ets       #  抛硬币
+│           │   ├── WearRollDices.ets      #  掷骰子
+│           │   ├── WearRandomABCD.ets     #  ABCD 随机
+│           │   ├── WearRandomColors.ets   #  随机颜色
+│           │   ├── WearRollWheel.ets      #  转盘
+│           │   ├── WearBlessingMuyu.ets   #  电子木鱼
+│           │   ├── WearDevineBaGua.ets    #  八卦占卜
+│           │   ├── WearTruthOrDare.ets    #  真心话大冒险
+│           │   ├── WearNavPanelRound.ets  #  圆形导航面板
+│           │   ├── WearNavPanelSquare.ets #  方形导航面板
+│           │   └── AppLinkQR.ets          #  AppLink 二维码
+│           └── utils/                     # 穿戴专用工具
 │
 ├── docs/                                  # 项目文档
+│   ├── INDEX.md                           # 项目索引（推荐从这里开始）
+│   ├── architecture.md                    # 工程架构文档
 │   ├── PROJECT.md                         # 开发手册（命名规范、组件、路由等）
 │   ├── tutorial_build_version.md          # 构建版本号教程
 │   ├── wearable-plan.md                   # 手表端实现方案
-│   ├── api-update/                         # API 升级追踪文档
-│   │   ├── 12to13.md                       # API 12→13 变更分析
-│   │   └── 12to18.md                       # API 12→18 变更分析
+│   ├── wearable-page-impl.md              # 穿戴页面实现
+│   ├── wearable-sync-plan.md              # 穿戴同步方案
+│   ├── EasyRandom 分包分类管理规划.md      # 分包重构规划
+│   ├── api-update/                        # API 升级追踪文档
 │   └── feature-design/                    # 功能设计文档
-│       ├── VibratorManager.md              # 振动接入方案
-│       └── ...                             # 其他功能设计文档
+│       ├── VibratorManager.md             # 振动接入方案
+│       └── ...                            # 其他功能设计文档
 │
 ├── preview/                               # 应用预览截图
 ├── build/                                 # 构建产物 (.hap / .app)
@@ -270,6 +299,7 @@ app_EasyRandom/
 | 🎨 颜色卡片 | ✅ | 2×2 | 随机颜色展示 |
 | 🔤 ABCD 卡片 | ✅ | 2×2 | 四选一抽选 |
 | 🐟 木鱼卡片 | ✅ | 2×2 | 敲木鱼快捷入口 |
+| 🎯 真心话大冒险卡片 | ✅ | 2×2 | 桌面真心话大冒险 |
 | 🐾 电子宠物卡片 | 🚧 | 2×2 / 4×4 | 桌面养成互动 |
 
 ---
@@ -279,7 +309,8 @@ app_EasyRandom/
 - [x] 主页面 UI 重构
 - [x] 液态玻璃效果适配
 - [x] 震动反馈
-- [ ] 手表端 (wearable) 完整适配
+- [x] 手表端 (wearable) V0.0.1 已发布
+- [ ] 手表端更多功能完善
 - [ ] 折叠屏深度适配
 - [ ] PC 端 (2in1) 大屏适配
 
@@ -289,9 +320,9 @@ app_EasyRandom/
 
 ### 环境要求
 
-- **DevEco Studio**：5.0.0 及以上版本
-- **HarmonyOS SDK**：API 13+ (HarmonyOS NEXT)
-- **设备系统**：HarmonyOS NEXT 5.0.0+
+- **DevEco Studio**：5.1.0 及以上版本
+- **HarmonyOS SDK**：API 23 (HarmonyOS NEXT 6.1.0)
+- **设备系统**：HarmonyOS NEXT 5.1.0+
 
 ### 项目配置
 
