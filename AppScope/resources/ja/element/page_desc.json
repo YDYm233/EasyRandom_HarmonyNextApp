@@ -55,6 +55,50 @@
     {
       "name": "page_text_marquee",
       "value": "手持ち弾幕"
+    },
+    {
+      "name": "page_password_gen",
+      "value": "パスワード生成"
+    },
+    {
+      "name": "page_daily_quote",
+      "value": "今日の一言"
+    },
+    {
+      "name": "page_chase_lottery",
+      "value": "チェイス抽選"
+    },
+    {
+      "name": "page_slot_machine",
+      "value": "スロットマシン"
+    },
+    {
+      "name": "page_morse_code",
+      "value": "モールス信号"
+    },
+    {
+      "name": "page_vibration_demo",
+      "value": "振動デモ"
+    },
+    {
+      "name": "page_flashlight",
+      "value": "懐中電灯"
+    },
+    {
+      "name": "page_score_counter",
+      "value": "スコアカウンター"
+    },
+    {
+      "name": "page_metronome",
+      "value": "メトロノーム"
+    },
+    {
+      "name": "page_char_counter",
+      "value": "文字カウンター"
+    },
+    {
+      "name": "page_radix_converter",
+      "value": "進数変換"
     }
   ]
 }

@@ -7,7 +7,7 @@ class ToolItem {
   name: Resource
   url: string
   category: string
-  minApiVersion?: number  // 最低API版本要求（可选，默认为最低支持版本）
+  minApiVersion?: number
 
   constructor(emoji: string, name: Resource, url: string, category: string, minApiVersion?: number) {
     this.emoji = emoji;
@@ -23,18 +23,25 @@ const TOOLS_HOT: Array<ToolItem> = [
   new ToolItem('✨', $r("app.string.page_answer_book"), 'sub_pages/answer_book/AnswerBookPage', '热门推荐'),
   new ToolItem('🪐', $r("app.string.page_honest_or_challenge"),
     'sub_pages/honest_or_challenge/HonestOrChallengePage', '热门推荐'),
+  new ToolItem('🔑', $r("app.string.page_password_gen"), 'sub_pages/password_gen/PasswordGenPage', '热门推荐'),
+  new ToolItem('💬', $r("app.string.page_daily_quote"), 'sub_pages/daily_quote/DailyQuotePage', '热门推荐'),
 ];
 
 /** 小工具分类 */
 const TOOLS_SMALL: Array<ToolItem> = [
   new ToolItem('🎲', $r("app.string.page_roll_dices"), 'sub_pages/flip_dices/RollDicesPage', '小工具'),
-  new ToolItem('🪙', $r("app.string.page_flip_coin"), 'sub_pages/flip_coin/FlipCoinPage', '小工具', 18), // 抛硬币需要API 18+
+  new ToolItem('🪙', $r("app.string.page_flip_coin"), 'sub_pages/flip_coin/FlipCoinPage', '小工具', 18),
   new ToolItem('🔢', $r("app.string.page_random_numbers"), 'sub_pages/random_numbers/RandomNumbersPage', '小工具'),
   new ToolItem('🔤', $r("app.string.page_abcd"), 'sub_pages/random_abcd/RandomABCDPage', '小工具'),
   new ToolItem('🎯', $r("app.string.page_random_places"), 'sub_pages/random_places/RandomPlacesPage', '小工具'),
   new ToolItem('📱', $r("app.string.page_qrcode"), 'sub_pages/trans_qr/TransQRPage', '小工具'),
-  new ToolItem('💬', $r("app.string.page_text_marquee"), 'sub_pages/text_marquee/TextMarqueePage', '小工具', 14), // 手持弹幕需要API 14+
+  new ToolItem('💬', $r("app.string.page_text_marquee"), 'sub_pages/text_marquee/TextMarqueePage', '小工具', 14),
   new ToolItem('🎨', $r("app.string.page_random_colors"), 'sub_pages/random_colors/RandomColorsPage', '小工具'),
+  new ToolItem('🔦', $r("app.string.page_flashlight"), 'sub_pages/flashlight/FlashlightPage', '小工具'),
+  new ToolItem('✏️', $r("app.string.page_char_counter"), 'sub_pages/char_counter/CharCounterPage', '小工具'),
+  new ToolItem('🎵', $r("app.string.page_metronome"), 'sub_pages/metronome/MetronomePage', '小工具'),
+  new ToolItem('🔄', $r("app.string.page_radix_converter"), 'sub_pages/radix_converter/RadixConverterPage', '小工具'),
+  new ToolItem('📊', $r("app.string.page_score_counter"), 'sub_pages/score_counter/ScoreCounterPage', '小工具'),
 ];
 
 /** 趣味玩法分类 */
@@ -46,6 +53,14 @@ const TOOLS_FUN: Array<ToolItem> = [
   new ToolItem('🎭', $r("app.string.page_honest_or_challenge"),
     'sub_pages/honest_or_challenge/HonestOrChallengePage', '趣味玩法'),
   new ToolItem('👤', $r("app.string.page_random_names"), 'sub_pages/random_names/RandomNamesPage', '趣味玩法'),
+  new ToolItem('🎯', $r("app.string.page_chase_lottery"), 'sub_pages/chase_lottery/ChaseLotteryPage', '趣味玩法'),
+  new ToolItem('🎰', $r("app.string.page_slot_machine"), 'sub_pages/slot_machine/SlotMachinePage', '趣味玩法'),
+  new ToolItem('📡', $r("app.string.page_morse_code"), 'sub_pages/morse_code/MorseCodePage', '趣味玩法'),
+];
+
+/** 功能展示 */
+const TOOLS_SHOW: Array<ToolItem> = [
+  new ToolItem('📳', $r("app.string.page_vibration_demo"), 'sub_pages/vibration_demo/VibrationDemoPage', '功能展示'),
 ];
 class Params {
   type: string
@@ -60,6 +75,7 @@ struct ToolsPage {
   @State supportedToolsHot: Array<ToolItem> = []
   @State supportedToolsSmall: Array<ToolItem> = []
   @State supportedToolsFun: Array<ToolItem> = []
+  @State supportedToolsShow: Array<ToolItem> = []
 
   aboutToAppear() {
     BreakpointSystem.getInstance().attach(this.currentBreakpoint)
@@ -69,6 +85,7 @@ struct ToolsPage {
     this.supportedToolsHot = ApiVersionUtil.filterSupportedTools(TOOLS_HOT)
     this.supportedToolsSmall = ApiVersionUtil.filterSupportedTools(TOOLS_SMALL)
     this.supportedToolsFun = ApiVersionUtil.filterSupportedTools(TOOLS_FUN)
+    this.supportedToolsShow = ApiVersionUtil.filterSupportedTools(TOOLS_SHOW)
   }
 
   aboutToDisappear() {
@@ -175,6 +192,10 @@ struct ToolsPage {
           // 趣味玩法
           this.SectionHeader('🎮', '趣味玩法')
           this.CapsuleSection(this.supportedToolsFun, false)
+
+          // 功能展示
+          this.SectionHeader('⚙️', '功能展示')
+          this.CapsuleSection(this.supportedToolsShow, false)
 
           Blank().height(24)
           // Row() {

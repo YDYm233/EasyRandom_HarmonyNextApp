@@ -55,6 +55,50 @@
     {
       "name": "page_text_marquee",
       "value": "Text Marquee"
+    },
+    {
+      "name": "page_password_gen",
+      "value": "Password Generator"
+    },
+    {
+      "name": "page_daily_quote",
+      "value": "Daily Quote"
+    },
+    {
+      "name": "page_chase_lottery",
+      "value": "Chase Lottery"
+    },
+    {
+      "name": "page_slot_machine",
+      "value": "Slot Machine"
+    },
+    {
+      "name": "page_morse_code",
+      "value": "Morse Code"
+    },
+    {
+      "name": "page_vibration_demo",
+      "value": "Vibration Demo"
+    },
+    {
+      "name": "page_flashlight",
+      "value": "Flashlight"
+    },
+    {
+      "name": "page_score_counter",
+      "value": "Score Counter"
+    },
+    {
+      "name": "page_metronome",
+      "value": "Metronome"
+    },
+    {
+      "name": "page_char_counter",
+      "value": "Char Counter"
+    },
+    {
+      "name": "page_radix_converter",
+      "value": "Radix Converter"
     }
   ]
 }

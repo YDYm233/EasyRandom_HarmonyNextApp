@@ -21,6 +21,17 @@
     "sub_pages/text_marquee/TextMarqueePage",
     "sub_pages/random_abcd/RandomABCDPage",
     "sub_pages/answer_book/AnswerBookPage",
-    "sub_pages/text_marquee/DisplayMarqueePage"
+    "sub_pages/text_marquee/DisplayMarqueePage",
+    "sub_pages/password_gen/PasswordGenPage",
+    "sub_pages/daily_quote/DailyQuotePage",
+    "sub_pages/chase_lottery/ChaseLotteryPage",
+    "sub_pages/slot_machine/SlotMachinePage",
+    "sub_pages/morse_code/MorseCodePage",
+    "sub_pages/vibration_demo/VibrationDemoPage",
+    "sub_pages/flashlight/FlashlightPage",
+    "sub_pages/score_counter/ScoreCounterPage",
+    "sub_pages/metronome/MetronomePage",
+    "sub_pages/char_counter/CharCounterPage",
+    "sub_pages/radix_converter/RadixConverterPage"
   ]
 }

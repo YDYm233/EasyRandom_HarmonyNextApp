@@ -124,6 +124,72 @@
         "translatable": true,
         "priority": "LT"
       }
+    },
+    {
+      "name": "page_password_gen",
+      "value": "强密码生成",
+      "comment": "工具箱入口 - 强密码生成",
+      "attr": { "translatable": true, "priority": "LT" }
+    },
+    {
+      "name": "page_daily_quote",
+      "value": "每日一句",
+      "comment": "工具箱入口 - 每日一句",
+      "attr": { "translatable": true, "priority": "LT" }
+    },
+    {
+      "name": "page_chase_lottery",
+      "value": "跑灯抽奖",
+      "comment": "工具箱入口 - 跑灯抽奖",
+      "attr": { "translatable": true, "priority": "LT" }
+    },
+    {
+      "name": "page_slot_machine",
+      "value": "老虎机抽奖",
+      "comment": "工具箱入口 - 老虎机抽奖",
+      "attr": { "translatable": true, "priority": "LT" }
+    },
+    {
+      "name": "page_morse_code",
+      "value": "摩斯密码",
+      "comment": "工具箱入口 - 摩斯密码",
+      "attr": { "translatable": true, "priority": "LT" }
+    },
+    {
+      "name": "page_vibration_demo",
+      "value": "马达展示",
+      "comment": "工具箱入口 - 马达展示",
+      "attr": { "translatable": true, "priority": "LT" }
+    },
+    {
+      "name": "page_flashlight",
+      "value": "手电筒",
+      "comment": "工具箱入口 - 手电筒",
+      "attr": { "translatable": true, "priority": "LT" }
+    },
+    {
+      "name": "page_score_counter",
+      "value": "计分器",
+      "comment": "工具箱入口 - 计分器",
+      "attr": { "translatable": true, "priority": "LT" }
+    },
+    {
+      "name": "page_metronome",
+      "value": "节拍器",
+      "comment": "工具箱入口 - 节拍器",
+      "attr": { "translatable": true, "priority": "LT" }
+    },
+    {
+      "name": "page_char_counter",
+      "value": "文字计数",
+      "comment": "工具箱入口 - 文字计数",
+      "attr": { "translatable": true, "priority": "LT" }
+    },
+    {
+      "name": "page_radix_converter",
+      "value": "进制转换",
+      "comment": "工具箱入口 - 进制转换",
+      "attr": { "translatable": true, "priority": "LT" }
     }
   ]
 }
